@@ -6,7 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.util.List;
 @Entity
-@Table(name = "cat_owner")
+@Table(name = "cat_owner") // отдельная таблица
 
 public class CatOwner  extends PetOwner {
     public CatOwner() {

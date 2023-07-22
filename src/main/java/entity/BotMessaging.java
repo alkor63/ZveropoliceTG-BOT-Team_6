@@ -5,7 +5,7 @@ import org.springframework.data.annotation.Id;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
-// класс для создания базы переписки с хозяином
+// класс для обработки сообщения и создания базы переписки с хозяином
 @Entity
 @Table(name = "correspondence_with_owner")
 public class BotMessaging {

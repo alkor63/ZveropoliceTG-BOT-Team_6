@@ -7,7 +7,9 @@ import repository.BotMessagingRepository;
 import java.util.List;
 
 @Service
-public class BotMessageService {
+public class BotMessageService {// класс для обработки переписки
+    // вероятно обработка отчётов тоже будет здесь, а составление самого отчёа уже в классе отчёта
+
     private final BotMessagingRepository botMessagingRepository;
 
     public BotMessageService(BotMessagingRepository botMassagingRepository) {
