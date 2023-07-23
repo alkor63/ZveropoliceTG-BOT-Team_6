@@ -46,57 +46,12 @@ public class Volunteer {
         return num; // количество отчетов за 24 часа до 21:00 указанной даты
     }
 
-    public int endOfProbationPeriod(long petId, long ownerId) {
-
-// исходим из того, что запрос на "приговор" приходит в день окончагия испытательношо срока
-// т.е. дата = localDate.now()
-// просматриваем все отчеты этого усыновителя за испытательный период и присваиваем ему рейтинг
-        int numReport = 0;
-        int numOldReport = 0;
-        LocalDate today = LocalDate.now();
-        LocalDate before30 = today.minusDays(30);
-        LocalDate before60 = today.minusDays(61);
-        // list всех отчетов
-        List<OwnerReport> ownerReportList = new ArrayList<>();
-        // forich для всех отчетов
-        for (OwnerReport ownerReport : ownerReportList) {
-            LocalDate date = ownerReport.getDateTime().toLocalDate();
-            if (ownerReport.getPet().getPetId() == petId && ownerReport.getOwnerId() == ownerId) {
-                if(date.isBefore(before30) && date.isAfter(before60)) {
-                    numOldReport++;
-                    break;
-                }
-                if (date.isAfter(before30.minusDays(1))) numReport++;
-            }
-        }
-        if (numReport == 0) return 0;
-        else if (numReport <= 10 && numOldReport == 0) return 1;
-        else if (numReport <= 20 && numOldReport == 0) return 2;
-        else return 3;
-    }
-
-    // метод обработки "приговора", вызывающий endOfProbationPeriod() - перенести в listener Боту
-    public void ownersVerdict(long petId, long ownerId) {
-        int rating = endOfProbationPeriod(petId, ownerId);
-        switch (rating) {
-            case 0:
-                // вернуть животное в приют
-                System.out.println("За 30 дней Вы ни разу не прислали отчет. Вы должны вернуть животное в приют!");
-                break;
-            case 1:
-                // продлить испытательный срок на 30 дней
-                System.out.println("Вы очень редко присылали отчетыю Испытательный срок продлен на 30 дней");
-                break;
-            case 2:
-                // продлить испытательный срок на 14 дней
-                System.out.println("Вы присылали отчеты не регулярно. Испытательный срок продлен на 14 дней");
-                break;
-            case 3:
-                // поздравить с успешным прохождением испытательношо срока
-                System.out.println("Поздравляем с завершением испытательного срока! Ваш питомец остаётся с Вами навсегда");
-                break;
-            default:
-                System.out.println("Некорректное значение rating. Разработчик что-то накосячил");
-        }
-    }
+public class Volunteer { // класс волонтёра, возможно он должен быть интерфейсом
+    // метод добавление усыновителя в БД
+    // метод беседы с усыновмтелем
+    // номер телефона как ID ????
+    // метод просмотр отчётов
+    // отслеживание испыт. срока
+    // выдаёт рекомендации по содержанию -- это будет отдельный файл, с которого будут считываться рекомендации,
+    ///наверное нелогично писать текст прямо внутри метода
 }
