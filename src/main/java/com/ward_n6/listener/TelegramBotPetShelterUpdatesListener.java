@@ -27,11 +27,13 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
         this.telegramBot = telegramBot;
     }
 
+
     @PostConstruct
     public void init() {
         telegramBot.setUpdatesListener(this);
     }
 
+    boolean startSelected = false; // переменная для подтверждения старта
     @Override
     public int process(List<Update> updates) {
         try {
@@ -42,23 +44,36 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                         Message message = update.message(); // получаем сообщение из текущего обновления
                         Long chatId = message.chat().id(); // получаем идентификатор чата, к которому относится апдейт
                         String messageText = message.text(); // получаем текст сообщения
-
                         switch (messageText) {
-                            case "/start" ->
-                                    sendMessege(chatId, "Здравствуйте. Это чатбот приюта для животных. Какой приют Вас интересует?");
-
-                            case "/dogs" -> sendMessege(chatId, "Вы выбрали приют для собак.");
-                            case "/cats" -> sendMessege(chatId, "Вы выбрали приют для кошек.");
-
-                            default -> {
-                                if (messageText != null) { // проверяем, не пустой ли текст
-                                    saveMesseges(chatId, messageText);
+                            case "/start":
+                                startSelected = true;
+                                sendMessege(chatId, "Здравствуйте. Это чатбот приюта для животных. " +
+                                        "Какой приют Вас интересует?");
+                                break;
+                            case "/dogs":
+                                if (startSelected) {
+                                    sendMessege(chatId, "Вас приветствует приют для собак. " +
+                                            "Выберите интересующий Вас пункт меню.");
                                 }
+                                break;
+                            case "/cats":
+                                if (startSelected) {
+                                    sendMessege(chatId, "Вас приветствует приют для кошек. " +
+                                            "Выберите интересующий Вас пункт меню.");
+                                }
+                                break;
+                                case "/volun":
+                                    sendMessege(chatId,
+                                            "Вы позвали волонтёра приюта. Ожидайте, с Вами свяжутся " +
+                                                    "в течение 30 мин.");
+                                default:
+                                    if (messageText != null) { // проверяем, не пустой ли текст
+                                        saveMesseges(chatId, messageText);
+                                    }
+                                    break;
                             }
-                            }
-                        });
-        } catch (
-                Exception e) {
+                    });
+        } catch (Exception e) {
             logger.error(e.getMessage()); // ловим ошибку
         }
         return UpdatesListener.CONFIRMED_UPDATES_ALL; // успешно завершаем метод, без падения
@@ -86,4 +101,6 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
 
         }
     }
+
+
 }
