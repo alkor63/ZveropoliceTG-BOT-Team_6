@@ -1,4 +1,5 @@
 package entity.owners;
+
 import entity.pets.Pet;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -6,6 +7,7 @@ import lombok.Setter;
 import org.springframework.data.annotation.Id;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +18,8 @@ import java.util.Objects;
 @Table(name = "pet_owners")
 @Getter
 @Setter
-@Inheritance(strategy = InheritanceType.JOINED) // позволяет классам наследникам сопоставляться со своей собственной таблицей
+@Inheritance(strategy = InheritanceType.JOINED)
+// позволяет классам наследникам сопоставляться со своей собственной таблицей
 // общий класс для владельцев (нужно ли его делать АБСТРАКТНЫМ?)
 public abstract class PetOwner { // хозяин животного, его свойства
 // закончился испыталка? что делать
@@ -26,17 +29,16 @@ public abstract class PetOwner { // хозяин животного, его св
     @javax.persistence.Id
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-     private long id;
+    private long id;
 
-    @Column(name = "owner_id",nullable = false)
+    @Column(name = "owner_id", nullable = false)
     private long ownerId;
-
 
 
     @Column(name = "first_name")
     private String firstName;
 
-    @Column(name = "last-name")
+    @Column(name = "last_name")
     private String lastName;
 
     @Column(name = "owner_phone")
@@ -44,25 +46,47 @@ public abstract class PetOwner { // хозяин животного, его св
 
     private String eMale;
 
+    @Column(name = "pet_id", nullable = false)
+    private long petId;
+
     @Column(name = "adoption_start_date")
-    private LocalDateTime dateOfPetAdoption;
-    private LocalDateTime endOfOwnerProbationPeriod;
+    private LocalDate dateOfPetAdoption;
+    private LocalDate endOfOwnerProbationPeriod;
     private boolean probationPeriodIsPositive;
 
-   @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Pet> petOwnersList = new ArrayList<>();
 
-    public PetOwner(int ownerId, String firstName, String lastName, List<Pet> petOwnersList) {
+    public PetOwner(long ownerId, String firstName, String lastName, List<Pet> petOwnersList) {
         this.ownerId = ownerId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.petOwnersList = petOwnersList;
     }
 
+    public PetOwner(long ownerId, String firstName, String lastName, String phoneNumber) {
+        this.ownerId = ownerId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+    }
+
+    public PetOwner(long ownerId, String firstName, String lastName, String phoneNumber,
+                    long petId, LocalDate dateOfPetAdoption, LocalDate endOfOwnerProbationPeriod) {
+        this.ownerId = ownerId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+        this.petId = petId;
+        this.dateOfPetAdoption = dateOfPetAdoption;
+        this.endOfOwnerProbationPeriod = endOfOwnerProbationPeriod;
+
+    }
 
     public Long getId() {
         return id;
     }
+
     public long getOwnerId() {
         return ownerId;
     }
@@ -117,20 +141,19 @@ public abstract class PetOwner { // хозяин животного, его св
         return this;
     }
 
-    public LocalDateTime getDateOfPetAdoption() {
+    public LocalDate getDateOfPetAdoption() {
         return dateOfPetAdoption;
     }
 
 
-    public LocalDateTime getEndOfOwnerProbationPeriod() {
+    public LocalDate getEndOfOwnerProbationPeriod() {
         return endOfOwnerProbationPeriod;
     }
 
-    public PetOwner setEndOfOwnerProbationPeriod(LocalDateTime endOfOwnerProbationPeriod) {
+    public PetOwner setEndOfOwnerProbationPeriod(LocalDate endOfOwnerProbationPeriod) {
         this.endOfOwnerProbationPeriod = endOfOwnerProbationPeriod;
         return this;
     }
-
 
 
     public boolean isProbationPeriodIsPositive() {
@@ -166,7 +189,4 @@ public abstract class PetOwner { // хозяин животного, его св
                 ", pets=" + petOwnersList + '\'' +
                 '}';
     }
-
-
-
 }
