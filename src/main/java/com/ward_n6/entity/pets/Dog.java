@@ -1,6 +1,7 @@
 package com.ward_n6.entity.pets;
 
 import com.ward_n6.entity.owners.PetOwner;
+<<<<<<< HEAD
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -16,5 +17,39 @@ public class Dog extends Pet {
 
     public Dog() {
 
+=======
+import com.ward_n6.enums.PetsSex;
+import com.ward_n6.enums.PetsType;
+
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.Table;
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name = "dogs")
+@PrimaryKeyJoinColumn(name = "pets_type")
+@DiscriminatorValue("DOG")
+
+public class Dog extends Pet {
+    public Dog() {
+    }
+
+    public Dog(long id, PetsType petsType, PetsSex petsSex, String petName, LocalDateTime petBirthDay, int petAge, String bread, PetOwner petOwner) {
+        super(id, petsType, petsSex, petName, petBirthDay, petAge, bread, petOwner);
+    }
+
+    public Dog(PetsType petsType, PetsSex petsSex, String petName, LocalDateTime petBirthDay, int petAge, String bread, PetOwner petOwner) {
+        super(petsType, petsSex, petName, petBirthDay, petAge, bread, petOwner);
+    }
+
+    public Dog(PetsType petsType, PetsSex petsSex, String petName, LocalDateTime petBirthDay, String bread) {
+        super(petsType, petsSex, petName, petBirthDay, bread);
+    }
+
+    public Dog(long id, PetsType petsType, PetsSex petsSex, String petName, int petAge, String bread, PetOwner petOwner) {
+        super(id, petsType, petsSex, petName, petAge, bread, petOwner);
+>>>>>>> origin/feture-TimurA
     }
 }

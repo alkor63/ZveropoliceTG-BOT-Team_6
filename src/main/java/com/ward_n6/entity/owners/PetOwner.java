@@ -1,8 +1,13 @@
 package com.ward_n6.entity.owners;
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/feture-TimurA
 import com.ward_n6.entity.pets.Pet;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+<<<<<<< HEAD
 import org.springframework.data.annotation.Id;
 
 import javax.persistence.*;
@@ -10,29 +15,45 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+=======
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+>>>>>>> origin/feture-TimurA
 
 @Entity
 @NoArgsConstructor
 @Table(name = "pet_owners")
 @Getter
 @Setter
+<<<<<<< HEAD
 @Inheritance(strategy = InheritanceType.JOINED) // позволяет классам наследникам сопоставляться со своей собственной таблицей
+=======
+//@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS) // позволяет классам наследникам сопоставляться со своей собственной таблицей
+>>>>>>> origin/feture-TimurA
 // общий класс для владельцев (нужно ли его делать АБСТРАКТНЫМ?)
 public abstract class PetOwner { // хозяин животного, его свойства
 // закончился испыталка? что делать
     // через сколько времени удалять из базы
     // нужен ли чёрный список усыновителей
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/feture-TimurA
     @javax.persistence.Id
     @Column(name = "owner_id",nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+<<<<<<< HEAD
 //    @Column(name = "owner_id",nullable = false)
 //    private long ownerId;
 
 
+=======
+>>>>>>> origin/feture-TimurA
     @Column(name = "first_name")
     private String firstName;
 
@@ -42,6 +63,7 @@ public abstract class PetOwner { // хозяин животного, его св
     @Column(name = "owner_phone")
     private String phoneNumber;
 
+<<<<<<< HEAD
     private String eMale;
 
     @Column(name = "adoption_start_date")
@@ -129,10 +151,31 @@ public abstract class PetOwner { // хозяин животного, его св
     public PetOwner setEndOfOwnerProbationPeriod(LocalDateTime endOfOwnerProbationPeriod) {
         this.endOfOwnerProbationPeriod = endOfOwnerProbationPeriod;
         return this;
+=======
+//    private String eMale;
+
+//    @Column(name = "adoption_start_date")
+//    private LocalDateTime dateOfPetAdoption;
+//    private LocalDateTime endOfOwnerProbationPeriod;
+//    private boolean probationPeriodIsPositive;
+
+    @OneToMany(mappedBy = "petOwner", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Pet> petsOfOwnerList = new ArrayList<>();
+//    @Column(name = "pets_type")
+//    private PetsType petsType;
+
+
+    public PetOwner(Long id, String firstName, String lastName, String phoneNumber) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+>>>>>>> origin/feture-TimurA
     }
 
 
 
+<<<<<<< HEAD
     public boolean isProbationPeriodIsPositive() {
         return probationPeriodIsPositive;
     }
@@ -167,6 +210,21 @@ public abstract class PetOwner { // хозяин животного, его св
                 '}';
     }
 
+=======
+
+//    @Override
+//    public String toString() {
+//        return "PetOwner{" +
+//                "ownerId=" + id +
+//                ", firstName='" + firstName + '\'' +
+//                ", lastName='" + lastName + '\'' +
+//                ", phoneNumber='" + phoneNumber + '\'' +
+//                ", eMale='" + eMale +
+//                ", pets=" + petsOfOwnerList + '\'' +
+//                '}';
+//    }
+
+>>>>>>> origin/feture-TimurA
 
     public void setId(Long id) {
         this.id = id;

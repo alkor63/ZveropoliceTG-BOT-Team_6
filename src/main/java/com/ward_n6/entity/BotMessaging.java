@@ -1,4 +1,4 @@
-package com.ward_n6.entity;
+package entity;
 
 import org.springframework.data.annotation.Id;
 
@@ -9,7 +9,6 @@ import java.util.Objects;
 @Entity
 @Table(name = "correspondence_with_owner")
 public class BotMessaging {
-    @javax.persistence.Id
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -71,13 +70,5 @@ public class BotMessaging {
                 " Сообщение " + botMessage + '\'' +
                 ", дата и время: " + massageDateTime +
                 '}';
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getId() {
-        return id;
     }
 }
