@@ -1,39 +1,35 @@
-package entity;
+package com.ward_n6.entity;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.Id;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
+@Getter
+@Setter
 // класс для обработки сообщения и создания базы переписки с хозяином
 @Entity
 @Table(name = "correspondence_with_owner")
 public class BotMessaging {
+    @javax.persistence.Id
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column(name = "chat_id", nullable = false)
     private long chatId;
+    private String userName;
+
 
     @Column(name = "message", nullable = false)
     private String botMessage;
 
-    @Column(name = "message_date_time")
+    @Column(name = "message_date_time", nullable = false)
     private LocalDateTime massageDateTime;
 
 
-    public Long getChatId() {
-        return chatId;
-    }
-
-    public String getBotMessage() {
-        return botMessage;
-    }
-
-    public LocalDateTime getMassageDateTime() {
-        return massageDateTime;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -48,20 +44,7 @@ public class BotMessaging {
         return Objects.hash(getChatId(), getBotMessage(), getMassageDateTime());
     }
 
-    public BotMessaging setChatId(long chatId) {
-        this.chatId = chatId;
-        return this;
-    }
 
-    public BotMessaging setBotMessage(String botMessage) {
-        this.botMessage = botMessage;
-        return this;
-    }
-
-    public BotMessaging setMassageDateTime(LocalDateTime massageDateTime) {
-        this.massageDateTime = massageDateTime;
-        return this;
-    }
 
     @Override
     public String toString() {
@@ -71,4 +54,5 @@ public class BotMessaging {
                 ", дата и время: " + massageDateTime +
                 '}';
     }
+
 }

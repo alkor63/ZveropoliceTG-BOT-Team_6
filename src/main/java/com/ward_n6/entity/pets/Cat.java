@@ -1,14 +1,6 @@
 package com.ward_n6.entity.pets;
 
 import com.ward_n6.entity.owners.PetOwner;
-<<<<<<< HEAD
-
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import java.time.LocalDateTime;
-@Entity
-@Table(name = "cats")
-=======
 import com.ward_n6.enums.PetsSex;
 import com.ward_n6.enums.PetsType;
 
@@ -23,17 +15,10 @@ import java.time.LocalDateTime;
 @PrimaryKeyJoinColumn(name = "CAT")
 @DiscriminatorValue("CAT")
 
->>>>>>> origin/feture-TimurA
 public class Cat extends Pet {
     public Cat() {
     }
 
-<<<<<<< HEAD
-    public Cat(int petId, String typeOfPet, String petName, LocalDateTime petBirthDay, int petAge, String bread, PetOwner petOwner) {
-        super(petId, typeOfPet, petName, petBirthDay, petAge, bread, petOwner);
-    }
-}
-=======
     public Cat(long id, PetsType petsType, PetsSex petsSex, String petName, LocalDateTime petBirthDay, int petAge, String bread, PetOwner petOwner) {
         super(id, petsType, petsSex, petName, petBirthDay, petAge, bread, petOwner);
     }
@@ -50,5 +35,3 @@ public class Cat extends Pet {
         super(id, petsType, petsSex, petName, petAge, bread, petOwner);
     }
 }
-
->>>>>>> origin/feture-TimurA

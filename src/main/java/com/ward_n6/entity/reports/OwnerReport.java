@@ -1,14 +1,6 @@
 package com.ward_n6.entity.reports;
 
 import com.ward_n6.entity.pets.Pet;
-<<<<<<< HEAD
-
-import java.util.Objects;
-
-// нужно дклать класс абстрактным???
-public class OwnerReport {
-    private Pet pet;
-=======
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
@@ -44,7 +36,7 @@ public class OwnerReport {
     @Column(name = "pets_behavior", nullable = false)
     private String petsBehavior; // поведение
 
-//    @Column(name = "owners_pet", nullable = false)
+    //    @Column(name = "owners_pet", nullable = false)
 //    private Pet ownersPet = new Pet() { // питомец - вывод для БД: id, тип, имя, возраст, порода -> проверить
 //        @Override
 //        public String toString() {
@@ -53,17 +45,10 @@ public class OwnerReport {
 //    };
     @Column(name = "pet_id", nullable = false)
     private long petId; // id питомца
->>>>>>> origin/feture-TimurA
 
     public OwnerReport() {
     }
 
-<<<<<<< HEAD
-    public OwnerReport(Pet pet) {
-        this.pet = pet;
-    }
-    // фото
-=======
     public OwnerReport(long id, LocalDateTime reportDateTime, boolean havePhoto, String nutrition, String petsHealth, String petsBehavior, long petId) {
         this.id = id;
         this.reportDateTime = reportDateTime;
@@ -85,42 +70,20 @@ public class OwnerReport {
     }
 
 // фото
->>>>>>> origin/feture-TimurA
     //рацион
     //здоровье
     //изменение поведения - м.б. null?
 
 
-<<<<<<< HEAD
-    public Pet getPet() {
-        return pet;
-    }
-
-    public OwnerReport setPet(Pet pet) {
-        this.pet = pet;
-        return this;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof OwnerReport)) return false;
-        OwnerReport that = (OwnerReport) o;
-        return Objects.equals(getPet(), that.getPet());
-=======
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof OwnerReport that)) return false;
         return getId() == that.getId() && isHavePhoto() == that.isHavePhoto() && getPetId() == that.getPetId() && Objects.equals(getReportDateTime(), that.getReportDateTime()) && Objects.equals(getNutrition(), that.getNutrition()) && Objects.equals(getPetsHealth(), that.getPetsHealth()) && Objects.equals(getPetsBehavior(), that.getPetsBehavior());
->>>>>>> origin/feture-TimurA
     }
 
     @Override
     public int hashCode() {
-<<<<<<< HEAD
-        return Objects.hash(getPet());
-=======
         return Objects.hash(getId(), getReportDateTime(), getPetId());
     }
 
@@ -130,6 +93,5 @@ public class OwnerReport {
 
     public Long getId() {
         return id;
->>>>>>> origin/feture-TimurA
     }
 }

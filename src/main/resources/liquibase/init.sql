@@ -1,9 +1,9 @@
-CREATE TABLE pet_owners
+CREATE TABLE correspondence_with_owner
 (
-    owner_id           BIGSERIAL PRIMARY KEY,
-    first_name     CHAR NOT NULL,
-    last_name  CHAR NOT NULL,
-    owner_phone        CHAR NOT NULL,
-    adoption_start_date CHAR NOT NULL
+    id                BIGSERIAL PRIMARY KEY,
+    chat_id           BIGINT    NOT NULL,
+    message           TEXT      NOT NULL,
+
+    message_date_time TIMESTAMP NOT NULL
 
 );
