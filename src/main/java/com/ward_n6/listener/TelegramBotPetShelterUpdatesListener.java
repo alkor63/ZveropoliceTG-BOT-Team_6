@@ -47,7 +47,7 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
     @Override
     public int process(List<Update> updates) {
         try {
-            updates
+            updates.stream()
                     .forEach(update -> { // итерируемся по ним
                         logger.info("Processing update: {}", update); // записываем лог апдейтов на уровне инфо
 
@@ -67,7 +67,7 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                                             InlineKeyboardButton callVoluntier = new InlineKeyboardButton(EmojiParser.parseToUnicode("Позвать волонтёра "+":necktie:"));
                                             callVoluntier.callbackData("ВОЛОНТЁР");
 
-                                            Keyboard keyboard = new InlineKeyboardMarkup(dogHouseHowToTakeButton, dogHouseInfoButton, dogHouseOwnerReportButton,callVoluntier);
+                                            Keyboard keyboard = new InlineKeyboardMarkup().addRow(dogHouseHowToTakeButton,dogHouseInfoButton).addRow(dogHouseOwnerReportButton,callVoluntier);
 
                                             sendMessage.replyMarkup(keyboard);
                                             telegramBot.execute(sendMessage);
@@ -76,7 +76,7 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                                             SendMessage sendMessage = new SendMessage(chatId, "Вы выбрали приют для кошек");
                                             InlineKeyboardButton catHouseInfoButton = new InlineKeyboardButton(EmojiParser.parseToUnicode("Информация о приюте "+":information_source:"));
                                             catHouseInfoButton.callbackData("ИНФО");
-                                            InlineKeyboardButton catHouseHowToTakeButton = new InlineKeyboardButton(EmojiParser.parseToUnicode("Как взять собаку из приюта "+":cat:"));
+                                            InlineKeyboardButton catHouseHowToTakeButton = new InlineKeyboardButton(EmojiParser.parseToUnicode("Как взять кошку из приюта "+":cat:"));
                                             catHouseHowToTakeButton.callbackData("КАК_ЗАБРАТЬ_СОБАКУ");
                                             InlineKeyboardButton catHouseOwnerReportButton = new InlineKeyboardButton(EmojiParser.parseToUnicode("Прислать отчёт о питомце "+":memo:"));
                                             catHouseOwnerReportButton.callbackData("ОТЧЁТ");
