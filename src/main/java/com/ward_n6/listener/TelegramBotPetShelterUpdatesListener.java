@@ -6,6 +6,7 @@ import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.response.SendResponse;
+import com.ward_n6.Keyboard.Bot;
 import com.ward_n6.entity.BotMessaging;
 import com.ward_n6.service.BotMessageService;
 import org.slf4j.Logger;
@@ -33,7 +34,9 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
         telegramBot.setUpdatesListener(this);
     }
 
+    private Bot bot;
     boolean startSelected = false; // переменная для подтверждения старта
+
     @Override
     public int process(List<Update> updates) {
         try {
@@ -49,29 +52,30 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                                 startSelected = true;
                                 sendMessege(chatId, "Здравствуйте. Это чатбот приюта для животных. " +
                                         "Какой приют Вас интересует?");
+                                bot.createMenu(chatId);
                                 break;
-                            case "/dogs":
+                            case "/command1":
                                 if (startSelected) {
                                     sendMessege(chatId, "Вас приветствует приют для собак. " +
                                             "Выберите интересующий Вас пункт меню.");
                                 }
                                 break;
-                            case "/cats":
+                            case "/command2":
                                 if (startSelected) {
                                     sendMessege(chatId, "Вас приветствует приют для кошек. " +
                                             "Выберите интересующий Вас пункт меню.");
                                 }
                                 break;
-                                case "/volun":
-                                    sendMessege(chatId,
-                                            "Вы позвали волонтёра приюта. Ожидайте, с Вами свяжутся " +
-                                                    "в течение 30 мин.");
-                                default:
-                                    if (messageText != null) { // проверяем, не пустой ли текст
-                                        saveMesseges(chatId, messageText);
-                                    }
-                                    break;
-                            }
+                            case "/command3":
+                                sendMessege(chatId,
+                                        "Вы позвали волонтёра приюта. Ожидайте, с Вами свяжутся " +
+                                                "в течение 30 мин.");
+                            default:
+                                if (messageText != null) { // проверяем, не пустой ли текст
+                                    saveMesseges(chatId, messageText);
+                                }
+                                break;
+                        }
                     });
         } catch (Exception e) {
             logger.error(e.getMessage()); // ловим ошибку
