@@ -67,7 +67,7 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                                             InlineKeyboardButton callVoluntier = new InlineKeyboardButton(EmojiParser.parseToUnicode("Позвать волонтёра "+":necktie:"));
                                             callVoluntier.callbackData("ВОЛОНТЁР");
 
-                                            Keyboard keyboard = new InlineKeyboardMarkup().addRow(dogHouseHowToTakeButton,dogHouseInfoButton).addRow(dogHouseOwnerReportButton,callVoluntier);
+                                            Keyboard keyboard = new InlineKeyboardMarkup().addRow(dogHouseInfoButton).addRow(dogHouseHowToTakeButton).addRow(dogHouseOwnerReportButton).addRow(callVoluntier);
 
                                             sendMessage.replyMarkup(keyboard);
                                             telegramBot.execute(sendMessage);
@@ -77,13 +77,13 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                                             InlineKeyboardButton catHouseInfoButton = new InlineKeyboardButton(EmojiParser.parseToUnicode("Информация о приюте "+":information_source:"));
                                             catHouseInfoButton.callbackData("ИНФО");
                                             InlineKeyboardButton catHouseHowToTakeButton = new InlineKeyboardButton(EmojiParser.parseToUnicode("Как взять кошку из приюта "+":cat:"));
-                                            catHouseHowToTakeButton.callbackData("КАК_ЗАБРАТЬ_СОБАКУ");
+                                            catHouseHowToTakeButton.callbackData("КАК_ЗАБРАТЬ_КОШКУ");
                                             InlineKeyboardButton catHouseOwnerReportButton = new InlineKeyboardButton(EmojiParser.parseToUnicode("Прислать отчёт о питомце "+":memo:"));
                                             catHouseOwnerReportButton.callbackData("ОТЧЁТ");
                                             InlineKeyboardButton callVoluntier = new InlineKeyboardButton(EmojiParser.parseToUnicode("Позвать волонтёра "+":necktie:"));
                                             callVoluntier.callbackData("ВОЛОНТЁР");
 
-                                            Keyboard keyboard = new InlineKeyboardMarkup().addRow(catHouseHowToTakeButton,catHouseInfoButton).addRow(catHouseOwnerReportButton,callVoluntier);
+                                            Keyboard keyboard = new InlineKeyboardMarkup().addRow(catHouseInfoButton).addRow(catHouseHowToTakeButton).addRow(catHouseOwnerReportButton).addRow(callVoluntier);
 
                                             sendMessage.replyMarkup(keyboard);
                                             telegramBot.execute(sendMessage);
