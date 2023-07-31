@@ -106,7 +106,7 @@ public abstract class Pet {
     public String reportToString() {
         return "Pet{" +
                 "ID " + id +
-                ", животное " + petsType.getTitle() +
+                " " + petsType.getTitle() +
                 ", кличка " + petName + '\'' +
                 ", возраст, лет: " + petAge +
                 ", порода " + bread + '\'' +
