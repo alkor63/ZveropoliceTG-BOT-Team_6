@@ -43,7 +43,7 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
     }
 
     boolean startSelected = false; // переменная для подтверждения старта
-
+/** "прослушиваине боты, добавляет кнопки на экран и меню с первыми командами */
     @Override
     public int process(List<Update> updates) {
         try {
@@ -77,7 +77,7 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                                             InlineKeyboardButton catHouseInfoButton = new InlineKeyboardButton(EmojiParser.parseToUnicode("Информация о приюте "+":information_source:"));
                                             catHouseInfoButton.callbackData("ИНФО");
                                             InlineKeyboardButton catHouseHowToTakeButton = new InlineKeyboardButton(EmojiParser.parseToUnicode("Как взять собаку из приюта "+":cat:"));
-                                            catHouseHowToTakeButton.callbackData("КАК_ЗАБРАТЬ_СОБАКУ");
+                                            catHouseHowToTakeButton.callbackData("КАК_ЗАБРАТЬ_КОШКУ");
                                             InlineKeyboardButton catHouseOwnerReportButton = new InlineKeyboardButton(EmojiParser.parseToUnicode("Прислать отчёт о питомце "+":memo:"));
                                             catHouseOwnerReportButton.callbackData("ОТЧЁТ");
                                             InlineKeyboardButton callVoluntier = new InlineKeyboardButton(EmojiParser.parseToUnicode("Позвать волонтёра "+":necktie:"));
@@ -168,76 +168,5 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
         }
     }
 
-//******************************** ПРОБА КНОПОК (неудачно пока что) ************************************************
-//    @Override
-//    public int process(List<Update> updates) {
-//        try {
-//            updates.stream()
-//                    .filter(update -> update.message() != null)
-//                    .forEach(update -> {
-//                        logger.info("Processing update: {}", update);
-//                        Message message = update.message();
-//                        Long chatId = message.chat().id();
-//                        String messageText = message.text();
-//                        switch (messageText) {
-//                            case "/start":
-//                                startSelected = true;
-//                                sendMessage(chatId, "Здравствуйте. Это чатбот приюта для животных. " +
-//                                        "Какой приют Вас интересует?", getMainMenu());
-//
-//
-//                                break;
-//                            case "/dogs":
-//                                if (startSelected) {
-//                                    sendMessage(chatId, "Вас приветствует приют для собак. " +
-//                                            "Выберите интересующий Вас пункт меню.", getSheltersMenu());
-//
-//                                }
-//                                break;
-//                            case "/cats":
-//                                if (startSelected) {
-//                                    sendMessage(chatId, "Вас приветствует приют для кошек. " +
-//                                            "Выберите интересующий Вас пункт меню.", getSheltersMenu());
-//                                    getSheltersMenu();
-//                                }
-//                                break;
-//                            case "/volunteer":
-//                                sendMessage(chatId,
-//                                        "Вы позвали волонтёра приюта. Ожидайте, с Вами свяжутся " +
-//                                                "в течение 30 мин.", getMainMenu());
-//                                break;
-//                            default:
-//                                if (messageText != null) {
-//                                    saveMessages(chatId, messageText);
-//                                }
-//                                break;
-//                        }
-//                    });
-//        } catch (Exception e) {
-//            logger.error(e.getMessage());
-//        }
-//        return UpdatesListener.CONFIRMED_UPDATES_ALL;
-//    }
 
-    private ReplyKeyboardMarkup getMainMenu() {
-        ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
-        List<KeyboardRow> keyboard = new ArrayList<>();
-        KeyboardRow row1 = new KeyboardRow();
-        row1.add(new KeyboardButton("/dogs"));
-        row1.add(new KeyboardButton("/cats"));
-        keyboard.add(row1);
-        replyKeyboardMarkup.setKeyboard(keyboard);
-        return replyKeyboardMarkup;
-    }
-
-    private ReplyKeyboardMarkup getSheltersMenu() {
-        ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
-        List<KeyboardRow> keyboard = new ArrayList<>();
-        KeyboardRow row1 = new KeyboardRow();
-        row1.add(new KeyboardButton("Информация о приюте"));
-        row1.add(new KeyboardButton("Оформить пропуск"));
-        keyboard.add(row1);
-        replyKeyboardMarkup.setKeyboard(keyboard);
-        return replyKeyboardMarkup;
-    }
 }
