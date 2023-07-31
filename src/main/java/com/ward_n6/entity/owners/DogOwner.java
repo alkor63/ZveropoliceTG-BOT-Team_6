@@ -8,7 +8,7 @@ import javax.persistence.Table;
 @Table(name = "dog_owner")
 @PrimaryKeyJoinColumn(name = "pet_id")
 @DiscriminatorValue("pet_id")
-public class DogOwner extends PetOwner {
+public class DogOwner extends Owner {
     public DogOwner() {
     }
 

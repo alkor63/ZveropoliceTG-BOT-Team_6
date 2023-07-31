@@ -1,6 +1,6 @@
 package com.ward_n6.entity.pets;
 
-import com.ward_n6.entity.owners.PetOwner;
+import com.ward_n6.entity.owners.Owner;
 import com.ward_n6.enums.PetsSex;
 import com.ward_n6.enums.PetsType;
 
@@ -19,19 +19,19 @@ public class Dog extends Pet {
     public Dog() {
     }
 
-    public Dog(long id, PetsType petsType, PetsSex petsSex, String petName, LocalDateTime petBirthDay, int petAge, String bread, PetOwner petOwner) {
-        super(id, petsType, petsSex, petName, petBirthDay, petAge, bread, petOwner);
+    public Dog(long id, PetsType petsType, PetsSex petsSex, String petName, LocalDateTime petBirthDay, int petAge, String bread, Owner Owner) {
+        super(id, petsType, petsSex, petName, petBirthDay, petAge, bread, Owner);
     }
 
-    public Dog(PetsType petsType, PetsSex petsSex, String petName, LocalDateTime petBirthDay, int petAge, String bread, PetOwner petOwner) {
-        super(petsType, petsSex, petName, petBirthDay, petAge, bread, petOwner);
+    public Dog(PetsType petsType, PetsSex petsSex, String petName, LocalDateTime petBirthDay, int petAge, String bread, Owner Owner) {
+        super(petsType, petsSex, petName, petBirthDay, petAge, bread, Owner);
     }
 
     public Dog(PetsType petsType, PetsSex petsSex, String petName, LocalDateTime petBirthDay, String bread) {
         super(petsType, petsSex, petName, petBirthDay, bread);
     }
 
-    public Dog(long id, PetsType petsType, PetsSex petsSex, String petName, int petAge, String bread, PetOwner petOwner) {
-        super(id, petsType, petsSex, petName, petAge, bread, petOwner);
+    public Dog(long id, PetsType petsType, PetsSex petsSex, String petName, int petAge, String bread, Owner Owner) {
+        super(id, petsType, petsSex, petName, petAge, bread, Owner);
     }
 }
