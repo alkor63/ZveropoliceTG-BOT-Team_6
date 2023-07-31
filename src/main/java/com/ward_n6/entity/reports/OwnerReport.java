@@ -9,6 +9,11 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+/**имя
+ * фото
+ * рацион
+ * повередение
+ */
 @Getter
 @Setter
 @Entity

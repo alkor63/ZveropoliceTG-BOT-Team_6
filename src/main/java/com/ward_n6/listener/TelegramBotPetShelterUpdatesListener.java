@@ -43,7 +43,7 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
     }
 
     boolean startSelected = false; // переменная для подтверждения старта
-
+/** "прослушиваине боты, добавляет кнопки на экран и меню с первыми командами */
     @Override
     public int process(List<Update> updates) {
         try {

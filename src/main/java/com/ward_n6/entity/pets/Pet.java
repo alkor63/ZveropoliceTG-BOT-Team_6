@@ -11,7 +11,8 @@ import org.springframework.data.annotation.Id;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-// класс, содержащий общие свойства для кошек и собак и для создания БД
+/** класс, содержащий общие свойства для кошек и собак и для создания отдельных
+ *  для животных - на рассмотреии - сколько нужно таблицБД*/
 @Getter
 @Setter
 @NoArgsConstructor
