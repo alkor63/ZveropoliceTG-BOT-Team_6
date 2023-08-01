@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,23 +26,29 @@ import java.util.List;
         private Long id;
 
         @ManyToOne
-        @JoinColumn(name = "owner_id", insertable = false, updatable = false)
-        private Owner Owner;
+        @JoinColumn(name = "owner", insertable = false, updatable = false)
+        private Owner owner;
 
         @ManyToOne
-        @JoinColumn(name = "pet_id", insertable = false, updatable = false)
-        private Pet Pet;
+        @JoinColumn(name = "pet", insertable = false, updatable = false)
+        private Pet pet;
 
         @Column(name = "start_date")
-        private LocalDateTime startDate;
+        private LocalDate startDate;
 
         @Column(name = "end_date")
-        private LocalDateTime endDate;
+        private LocalDate endDate;
 
-        public PetsOwner(Long id, Owner owner, Pet pet) {
-            this.id = id;
-            Owner = owner;
-            Pet = pet;
+        public PetsOwner(Owner owner, Pet pet) {
+            this.owner = owner;
+            this.pet = pet;
+        }
+
+        public PetsOwner(Owner owner, Pet pet, LocalDate startDate, LocalDate endDate) {
+            this.owner = owner;
+            this.pet = pet;
+            this.startDate = startDate;
+            this.endDate = endDate;
         }
     }
 
