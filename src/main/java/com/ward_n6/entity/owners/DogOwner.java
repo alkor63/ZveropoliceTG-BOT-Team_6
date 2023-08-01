@@ -1,25 +1,18 @@
-package entity.owners;
+package com.ward_n6.entity.owners;
 
-import entity.pets.Pet;
-import lombok.NoArgsConstructor;
-
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
-import java.time.LocalDate;
-import java.util.List;
-
 @Entity
-@NoArgsConstructor
-
 @Table(name = "dog_owner")
-public class DogOwner extends PetOwner {
-
-    public DogOwner(int ownerId, String firstName, String lastName, List<Pet> petOwnersList) {
-        super(ownerId, firstName, lastName, petOwnersList);
+@PrimaryKeyJoinColumn(name = "pet_id")
+@DiscriminatorValue("pet_id")
+public class DogOwner extends Owner {
+    public DogOwner() {
     }
 
-    public DogOwner(long ownerId, String firstName, String lastName, String phoneNumber,
-                    long petId, LocalDate dateOfPetAdoption, LocalDate endOfOwnerProbationPeriod) {
-        super(ownerId, firstName, lastName, phoneNumber, petId, dateOfPetAdoption, endOfOwnerProbationPeriod);
+    public DogOwner(Long id, String firstName, String lastName, String phoneNumber) {
+        super(id, firstName, lastName, phoneNumber);
     }
 }
