@@ -8,11 +8,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor
-@Table(name = "pets_owner")
+@Table(name = "pets_owner_archive")
 @Getter
 @Setter
 public abstract class PetsOwnerArchive {
@@ -24,22 +25,19 @@ public abstract class PetsOwnerArchive {
 
     @ManyToOne
     @JoinColumn(name = "owner_id", insertable = false, updatable = false)
-    private Owner Owner;
+    private Owner owner;
 
     @ManyToOne
     @JoinColumn(name = "pet_id", insertable = false, updatable = false)
-    private com.ward_n6.entity.pets.Pet Pet;
-
-    @Column(name = "start_date")
-    private LocalDateTime startDate;
+    private Pet pet;
 
     @Column(name = "end_date")
-    private LocalDateTime endDate;
+    private LocalDate endDate;
 
-    public PetsOwnerArchive(Long id, Owner owner, Pet pet) {
-        this.id = id;
-        Owner = owner;
-        Pet = pet;
+    public PetsOwnerArchive(Owner owner, Pet pet, LocalDate endDate) {
+        this.owner = owner;
+        this.pet = pet;
+        this.endDate = endDate;
     }
 }
 
