@@ -1,5 +1,6 @@
 package com.ward_n6.entity.owners;
 
+import com.ward_n6.entity.pets.Pet;
 import com.ward_n6.enums.PetsSex;
 import com.ward_n6.enums.PetsType;
 import lombok.Getter;
@@ -11,49 +12,23 @@ import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor
-@Table(name = "pets_owner_archive")
+@Table(name = "pets_owner")
 @Getter
 @Setter
-//@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS) // позволяет классам наследникам сопоставляться со своей собственной таблицей
-// общий класс для владельцев (нужно ли его делать АБСТРАКТНЫМ?)
-public abstract class PetsOwnerArchive { // хозяин животного, его свойства
-// закончился испыталка? что делать
-    // через сколько времени удалять из базы
-    // нужен ли чёрный список усыновителей
+public abstract class PetsOwnerArchive {
 
     @javax.persistence.Id
-    @Column(name = "owner_id",nullable = false)
+    @Column(name = "id",nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "first_name")
-    private String firstName;
+    @ManyToOne
+    @JoinColumn(name = "owner_id", insertable = false, updatable = false)
+    private Owner Owner;
 
-    @Column(name = "last_name")
-    private String lastName;
-
-    @Column(name = "owner_phone")
-    private String phoneNumber;
-
-    @Column(name = "pet_id")
-    private Long pet_id;
-
-    @Column(name = "bread")
-    private String bread;
-
-    private int petAge;
-
-    @Column(name = "pet_birthday")
-    private LocalDateTime petBirthDay;
-
-    @Column(name = "pet_name")
-    private String petName;
-
-    @Column(name = "sex")
-    private PetsSex petsSex;
-
-    @Column(name = "pets_type", insertable = false, updatable = false)
-    private PetsType petsType;
+    @ManyToOne
+    @JoinColumn(name = "pet_id", insertable = false, updatable = false)
+    private com.ward_n6.entity.pets.Pet Pet;
 
     @Column(name = "start_date")
     private LocalDateTime startDate;
@@ -61,22 +36,10 @@ public abstract class PetsOwnerArchive { // хозяин животного, е�
     @Column(name = "end_date")
     private LocalDateTime endDate;
 
-    public PetsOwnerArchive(Long id, String firstName, String lastName, String phoneNumber, Long pet_id, String bread, int petAge, LocalDateTime petBirthDay, String petName, PetsSex petsSex, PetsType petsType) {
+    public PetsOwnerArchive(Long id, Owner owner, Pet pet) {
         this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.phoneNumber = phoneNumber;
-        this.pet_id = pet_id;
-        this.bread = bread;
-        this.petAge = petAge;
-        this.petBirthDay = petBirthDay;
-        this.petName = petName;
-        this.petsSex = petsSex;
-        this.petsType = petsType;
+        Owner = owner;
+        Pet = pet;
     }
-
-
-
-
 }
 

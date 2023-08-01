@@ -42,8 +42,8 @@ public abstract class Owner { // хозяин животного, его сво�
 //    private LocalDateTime endOfOwnerProbationPeriod;
 //    private boolean probationPeriodIsPositive;
 
-    @OneToMany(mappedBy = "Owner", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Pet> petsOfOwnerList = new ArrayList<>();
+//    @OneToMany(mappedBy = "Owner", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<Pet> petsOfOwnerList = new ArrayList<>();
 //    @Column(name = "pets_type")
 //    private PetsType petsType;
 
