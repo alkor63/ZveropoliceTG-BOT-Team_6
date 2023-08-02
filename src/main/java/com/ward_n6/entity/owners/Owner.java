@@ -11,12 +11,12 @@ import java.util.List;
 
 @Entity
 @NoArgsConstructor
-@Table(name = "pet_owners")
+@Table(name = "owner")
 @Getter
 @Setter
 //@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS) // позволяет классам наследникам сопоставляться со своей собственной таблицей
 // общий класс для владельцев (нужно ли его делать АБСТРАКТНЫМ?)
-public abstract class PetOwner { // хозяин животного, его свойства
+public abstract class Owner { // хозяин животного, его свойства
 // закончился испыталка? что делать
     // через сколько времени удалять из базы
     // нужен ли чёрный список усыновителей
@@ -42,13 +42,13 @@ public abstract class PetOwner { // хозяин животного, его св
 //    private LocalDateTime endOfOwnerProbationPeriod;
 //    private boolean probationPeriodIsPositive;
 
-    @OneToMany(mappedBy = "petOwner", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Pet> petsOfOwnerList = new ArrayList<>();
+//    @OneToMany(mappedBy = "Owner", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<Pet> petsOfOwnerList = new ArrayList<>();
 //    @Column(name = "pets_type")
 //    private PetsType petsType;
 
 
-    public PetOwner(Long id, String firstName, String lastName, String phoneNumber) {
+    public Owner(Long id, String firstName, String lastName, String phoneNumber) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;

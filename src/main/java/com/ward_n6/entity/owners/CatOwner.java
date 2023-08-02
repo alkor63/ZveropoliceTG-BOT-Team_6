@@ -9,7 +9,7 @@ import javax.persistence.Table;
 @PrimaryKeyJoinColumn(name = "pets_type")
 @DiscriminatorValue("pets_type")
 
-public class CatOwner  extends PetOwner {
+public class CatOwner  extends Owner {
 
     public CatOwner() {
     }

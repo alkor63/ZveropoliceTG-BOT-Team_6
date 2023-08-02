@@ -41,7 +41,7 @@ public class OwnerReport {
     @Column(name = "pets_behavior", nullable = false)
     private String petsBehavior; // поведение
 
-//    @Column(name = "owners_pet", nullable = false)
+    //    @Column(name = "owners_pet", nullable = false)
 //    private Pet ownersPet = new Pet() { // питомец - вывод для БД: id, тип, имя, возраст, порода -> проверить
 //        @Override
 //        public String toString() {
