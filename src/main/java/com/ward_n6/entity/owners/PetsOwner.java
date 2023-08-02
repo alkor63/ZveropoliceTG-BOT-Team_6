@@ -26,11 +26,11 @@ import java.util.List;
         private Long id;
 
         @ManyToOne
-        @JoinColumn(name = "owner_id", insertable = false, updatable = false)
+        @JoinColumn(name = "owner", insertable = false, updatable = false)
         private Owner owner;
 
         @ManyToOne
-        @JoinColumn(name = "pet_id", insertable = false, updatable = false)
+        @JoinColumn(name = "pet", insertable = false, updatable = false)
         private Pet pet;
 
         @Column(name = "start_date")
@@ -38,6 +38,11 @@ import java.util.List;
 
         @Column(name = "end_date")
         private LocalDate endDate;
+
+        public PetsOwner(Owner owner, Pet pet) {
+            this.owner = owner;
+            this.pet = pet;
+        }
 
         public PetsOwner(Owner owner, Pet pet, LocalDate startDate, LocalDate endDate) {
             this.owner = owner;

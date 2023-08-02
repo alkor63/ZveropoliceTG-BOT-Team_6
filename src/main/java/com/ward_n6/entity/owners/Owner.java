@@ -35,18 +35,6 @@ public abstract class Owner { // хозяин животного, его сво�
     @Column(name = "owner_phone")
     private String phoneNumber;
 
-//    private String eMale;
-
-//    @Column(name = "adoption_start_date")
-//    private LocalDateTime dateOfPetAdoption;
-//    private LocalDateTime endOfOwnerProbationPeriod;
-//    private boolean probationPeriodIsPositive;
-
-//    @OneToMany(mappedBy = "Owner", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<Pet> petsOfOwnerList = new ArrayList<>();
-//    @Column(name = "pets_type")
-//    private PetsType petsType;
-
 
     public Owner(Long id, String firstName, String lastName, String phoneNumber) {
         this.id = id;
@@ -55,25 +43,14 @@ public abstract class Owner { // хозяин животного, его сво�
         this.phoneNumber = phoneNumber;
     }
 
-
-
-
-//    @Override
-//    public String toString() {
-//        return "PetOwner{" +
-//                "ownerId=" + id +
-//                ", firstName='" + firstName + '\'' +
-//                ", lastName='" + lastName + '\'' +
-//                ", phoneNumber='" + phoneNumber + '\'' +
-//                ", eMale='" + eMale +
-//                ", pets=" + petsOfOwnerList + '\'' +
-//                '}';
-//    }
-
-
-    public void setId(Long id) {
-        this.id = id;
+    @Override
+    public String toString() {
+        return "PetOwner{" +
+                "ownerId=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                '}';
     }
-
 
 }

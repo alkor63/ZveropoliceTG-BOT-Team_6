@@ -18,7 +18,7 @@ import java.util.Objects;
 @Setter
 @Entity
 @Table(name="owner_report")
-// нужно дклать класс абстрактным???
+// нужно делать класс абстрактным???
 public class OwnerReport {
     @javax.persistence.Id
     @Column(name = "id", nullable = false)

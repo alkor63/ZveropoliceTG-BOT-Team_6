@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor
-@Table(name = "pets_owner_archive")
+@Table(name = "pets_owner")
 @Getter
 @Setter
 public abstract class PetsOwnerArchive {
@@ -24,19 +24,28 @@ public abstract class PetsOwnerArchive {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "owner_id", insertable = false, updatable = false)
+    @JoinColumn(name = "owner", insertable = false, updatable = false)
     private Owner owner;
 
     @ManyToOne
-    @JoinColumn(name = "pet_id", insertable = false, updatable = false)
-    private Pet pet;
+    @JoinColumn(name = "pet", insertable = false, updatable = false)
+    private com.ward_n6.entity.pets.Pet pet;
+
+    @Column(name = "start_date")
+    private LocalDate startDate;
 
     @Column(name = "end_date")
     private LocalDate endDate;
 
-    public PetsOwnerArchive(Owner owner, Pet pet, LocalDate endDate) {
+    public PetsOwnerArchive(Owner owner, Pet pet) {
         this.owner = owner;
         this.pet = pet;
+    }
+
+    public PetsOwnerArchive(Owner owner, Pet pet, LocalDate startDate, LocalDate endDate) {
+        this.owner = owner;
+        this.pet = pet;
+        this.startDate = startDate;
         this.endDate = endDate;
     }
 }

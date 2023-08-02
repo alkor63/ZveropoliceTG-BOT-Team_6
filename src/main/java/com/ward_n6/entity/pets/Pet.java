@@ -10,6 +10,7 @@ import org.springframework.data.annotation.Id;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 /** класс, содержащий общие свойства для кошек и собак и для создания отдельных
  *  для животных - на рассмотреии - сколько нужно таблицБД*/
@@ -118,4 +119,16 @@ public abstract class Pet {
 
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Pet pet = (Pet) o;
+        return petAge == pet.petAge && Objects.equals(id, pet.id) && Objects.equals(bread, pet.bread) && Objects.equals(petBirthDay, pet.petBirthDay) && Objects.equals(petName, pet.petName) && petsSex == pet.petsSex && petsType == pet.petsType && Objects.equals(Owner, pet.Owner);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, bread, petAge, petBirthDay, petName, petsSex, petsType, Owner);
+    }
 }
