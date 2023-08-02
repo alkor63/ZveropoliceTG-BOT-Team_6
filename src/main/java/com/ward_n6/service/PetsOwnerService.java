@@ -23,4 +23,6 @@ public interface PetsOwnerService {
     boolean deletePetWithOwnerById(int recordId) throws DeleteFromMapException;
 
     boolean deletePetWithOwnerByValue(PetWithOwner petWithOwner) throws DeleteFromMapException;
+
+    int idByValue(PetWithOwner petWithOwner);
 }

@@ -1,4 +1,4 @@
-package entity.people;
+package com.ward_n6.entity.people;
 
 import com.ward_n6.entity.PetWithOwner;
 import com.ward_n6.entity.owners.Owner;
@@ -6,7 +6,9 @@ import com.ward_n6.entity.owners.PetsOwnerArchive;
 import com.ward_n6.entity.pets.Pet;
 import com.ward_n6.entity.reports.OwnerReport;
 import com.ward_n6.service.Impl.DeleteFromMapException;
+import com.ward_n6.service.Impl.EditMapException;
 import com.ward_n6.service.Impl.PutToMapException;
+import com.ward_n6.service.PetService;
 import com.ward_n6.service.PetsOwnerArchiveService;
 import com.ward_n6.service.PetsOwnerService;
 
@@ -26,16 +28,16 @@ public class Volunteer {
     // Бот отслеживает испытательный срок и если срок подошел к концу - обращается к волонтёру за приговором
     // приговор в методе endOfProbationPeriod
     // вызов этого метода из Бота и его обработка - ниже, в ownersVerdict
+    private final PetService petService;
     private final PetsOwnerService petsOwnerService;
     private final PetsOwnerArchiveService petsOwnerArchiveService;
 
-    public Volunteer(PetsOwnerService petsOwnerService, PetsOwnerArchiveService petsOwnerArchiveService) {
+    public Volunteer(PetService petService, PetsOwnerService petsOwnerService, PetsOwnerArchiveService petsOwnerArchiveService) {
+        this.petService = petService;
         this.petsOwnerService = petsOwnerService;
         this.petsOwnerArchiveService = petsOwnerArchiveService;
     }
-//    public Volunteer(PetsOwnerArchiveService petsOwnerArchiveService) {
-//        this.petsOwnerArchiveService = petsOwnerArchiveService;
-//    }
+
     public String callVolunteer(String firstName) {
         // Волонтёр откликается на просьбу о связи от пользователя с именем firstName
         return "Привет, " + firstName + "! Я Игорь - волонтёр приюта для животных. Готов ответить на все вопросы";
@@ -58,7 +60,7 @@ public class Volunteer {
 
 
     public int viewAllReports(LocalDate date) {
-        // просмотр всех отчеиов за пршедшие сутки (с 21:00 предыдущего дня по 21:00 дня = date
+        // просмотр всех отчетов за прошедшие сутки (с 21:00 предыдущего дня по 21:00 дня = date
         int num = 0;
         LocalTime time = LocalTime.of(21, 00);
         // запрос на просмотр отчетов может прийти, например, в 21:01
@@ -93,8 +95,8 @@ public class Volunteer {
         // foreach для всех отчетов
         for (OwnerReport ownerReport : ownerReportList) {
             LocalDate date = ownerReport.getReportDateTime().toLocalDate();
-            if (ownerReport.getPetId() ==  petId) {
-                if(date.isBefore(before30) && date.isAfter(before60)) {
+            if (ownerReport.getPetId() == petId) {
+                if (date.isBefore(before30) && date.isAfter(before60)) {
                     numOldReport++;
                     break;
                 }
@@ -108,7 +110,7 @@ public class Volunteer {
     }
 
     // метод обработки "приговора", вызывающий endOfProbationPeriod() - перенести в listener Боту
-    public void ownersVerdict(PetWithOwner petWithOwner) throws PutToMapException, DeleteFromMapException {
+    public void ownersVerdict(PetWithOwner petWithOwner) throws PutToMapException, DeleteFromMapException, EditMapException {
         int rating = endOfProbationPeriod(petWithOwner);
         switch (rating) {
             case 0:
@@ -119,23 +121,27 @@ public class Volunteer {
             case 1:
                 // продлить испытательный срок на 30 дней
                 System.out.println("Вы очень редко присылали отчетыю Испытательный срок продлен на 30 дней");
+                int idFromMap = petsOwnerService.idByValue(petWithOwner);
                 LocalDate newEndDate30 = LocalDate.now().plusDays(30);
-                petWithOwner.setEndDate(newEndDate30);   // узнать его id
-                petsOwnerService.editPetWithOwnerById();  //лучше по value
-                        PetWithOwner editPetWithOwnerById(int recordId, PetWithOwner petWithOwner)
+                petWithOwner.setEndDate(newEndDate30);   //увеличили дату окончания исп.срока на 30 дней
+                petsOwnerService.editPetWithOwnerById(idFromMap, petWithOwner);//перезаписали с новой датой окончания исп.срока
                 break;
             case 2:
                 // продлить испытательный срок на 14 дней
                 System.out.println("Вы присылали отчеты не регулярно. Испытательный срок продлен на 14 дней");
                 LocalDate newEndDate14 = LocalDate.now().plusDays(14);
-                petWithOwner.setEndDate(newEndDate30);   // узнать его id
-
+                idFromMap = petsOwnerService.idByValue(petWithOwner);
+                petWithOwner.setEndDate(newEndDate14);   //увеличили дату окончания исп.срока на 14 дней
+                petsOwnerService.editPetWithOwnerById(idFromMap, petWithOwner);//перезаписали с новой датой окончания исп.срока
                 break;
             case 3:
-                // поздравить с успешным прохождением испытательношо срока
+                // поздравить с успешным прохождением испытательного срока
                 System.out.println("Поздравляем с завершением испытательного срока! Ваш питомец остаётся с Вами навсегда");
                 PetWithOwner petToOwner = removePetWithOwnerToArchive(petWithOwner);
-//                delete pet from pet_table
+//              перемещаем запись о животном и хозяине в архив
+//              удаляем запись о животном и хозяине из таблицы с испытательным сроком
+//              удаляем запись о животном из таблицы Pet - этого животного больше нет в приюте
+                petService.deletePetByValue(petToOwner.getPet());
                 break;
             default:
                 System.out.println("Некорректное значение rating. Разработчик что-то накосячил");

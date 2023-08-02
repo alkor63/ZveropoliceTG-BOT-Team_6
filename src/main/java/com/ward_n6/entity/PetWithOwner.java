@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.Objects;
+
 @Getter
 @Setter
 
@@ -22,4 +24,16 @@ public class PetWithOwner {
         this.endDate = endDate;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PetWithOwner that = (PetWithOwner) o;
+        return Objects.equals(owner, that.owner) && Objects.equals(pet, that.pet) && Objects.equals(startDate, that.startDate) && Objects.equals(endDate, that.endDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(owner, pet, startDate, endDate);
+    }
 }

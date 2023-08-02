@@ -21,7 +21,7 @@ public class PetsOwnerServiceImpl implements PetsOwnerService {
     @Override
     public PetWithOwner addToPetWithOwner(PetWithOwner petWithOwner) throws PutToMapException {
         petWithOwnerMap.putIfAbsent(mapId++, petWithOwner);
-        return petWithOwner;
+        return petWithOwnerMap.get(mapId-1);
     }
 
     @Override
@@ -38,7 +38,7 @@ public class PetsOwnerServiceImpl implements PetsOwnerService {
     public PetWithOwner editPetWithOwnerById(int recordId, PetWithOwner petWithOwner) throws EditMapException {
         if (petWithOwnerMap.containsKey(recordId)) {
             petWithOwnerMap.put(recordId, petWithOwner);
-            return petWithOwner;
+            return petWithOwnerMap.get(recordId);
         }
         return null;
     }
@@ -64,5 +64,10 @@ public class PetsOwnerServiceImpl implements PetsOwnerService {
         }
         return false;
     }
-
+    @Override
+    public int idByValue (PetWithOwner petWithOwner) {
+        for (Map.Entry<Integer, PetWithOwner> entry : petWithOwnerMap.entrySet())
+            if (entry.getValue().equals(petWithOwner)) return entry.getKey();
+        return -1;
+    }
 }

@@ -25,7 +25,7 @@ public class PetsOwnerArchiveServiceImpl implements PetsOwnerArchiveService {
     @Override
     public PetWithOwner addToArchivePetWithOwner(PetWithOwner petWithOwner) throws PutToMapException {
         petWithOwnerMap.putIfAbsent(mapId++, petWithOwner);
-        return petWithOwner;
+        return petWithOwnerMap.get(mapId-1);
     }
 
     @Override
@@ -42,7 +42,7 @@ public class PetsOwnerArchiveServiceImpl implements PetsOwnerArchiveService {
     public PetWithOwner editArchivePetWithOwnerById(int recordId, PetWithOwner petWithOwner) throws EditMapException {
         if (petWithOwnerMap.containsKey(recordId)) {
             petWithOwnerMap.put(recordId, petWithOwner);
-            return petWithOwner;
+            return petWithOwnerMap.get(recordId);
         }
         return null;
     }
