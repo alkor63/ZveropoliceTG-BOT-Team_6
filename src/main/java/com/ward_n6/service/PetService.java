@@ -12,7 +12,7 @@ public interface PetService {
 
     Pet addPet(Pet pet) throws PutToMapException;
 
-    Pet getFromPetById(int recordId);
+    Pet getPetById(int recordId);
 
     List<Pet> getAllPets();
 
