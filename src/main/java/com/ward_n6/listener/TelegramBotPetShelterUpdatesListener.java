@@ -51,7 +51,7 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                     .forEach(update -> { // итерируемся по ним
                         logger.info("Processing update: {}", update); // записываем лог апдейтов на уровне инфо
 
-                                if (update.callbackQuery() != null) {
+                                if (update.callbackQuery() != null) {//sadasdas
                                     Long chatId = update.callbackQuery().message().chat().id();
                                     CallbackQuery callbackQuery = update.callbackQuery();
                                     String data = callbackQuery.data();
