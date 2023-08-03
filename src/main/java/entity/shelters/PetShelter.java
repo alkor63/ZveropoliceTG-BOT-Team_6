@@ -10,7 +10,7 @@ public abstract class PetShelter {
     private String shelterName = "Приют «Мечта»"; //название приюта
     private String description = "Мы приветствуем вас в приюте «Мечта». Наш приют основан в 2015 году в г. Астана. За это время через наши руки прошло более 500 собак и 200 кошек. Мы являемся некоммерческой организацией, поэтому все средства к нашему существованию – это пожертвования неравнодушных жителей. Мы очень рады, что вы заглянули к нам! " +
             "Скажите, ваш вопрос связан с приютом для кошек или для собак?"; //описание приюта
-    private String shelterAddress = "«Усы, лапы, хвост» и его жители находятся по адресу: ул. Защитников Животных д.1. Мы открыты для посещений каждый день с 11:00 до 18:00."; //адрес, режим работы
+    private String shelterAddress = "«Мечта» и его жители находятся по адресу: ул. Защитников Животных д.1. Мы открыты для посещений каждый день с 11:00 до 18:00."; //адрес, режим работы
     private String securityContact = "Борис на связи +77894561230. Он поможет вам оформить пропуск, а также ответить на интересующие вас вопросы."; //контактные данные охраны
     private String safetyAdvice = "Напоминаем, что во время нахождения на территории приюта посетители обязаны следовать указаниям сотрудников. Безопасность питомцев и посетителей в наших с вами руках."; //рекомендации о технике безопасности на территории приюта
     private String helpShelter = "<b>Приют нуждается в физической и материальной помощи.</b> Требуются сотрудники для создания благоприятных условий. Приют нуждается в кормах и медикаментах, а также хозяйственных принадлежностях – тряпках, полотенцах, одеялах, амуниции и игрушек для животных. Пиар приветствуется. Помочь приюту можно переводом денежных средств по реквизитам карт в банках, номерам электронных кошельков. Для согласования оказания физической и материальной поддержки свяжитесь с волонтёром. Подробнее о нашей деятельности вы можете узнать в социальных сетях. Пожалуйста, присоединяйтесь к нашим сообществам Вконтакте, Одноклассники и т.д."; //помощь приюту
@@ -21,6 +21,9 @@ public abstract class PetShelter {
             "3.\tСемейные разногласия – нередко один член семьи готов завести питомца, а другой (другие) против. В таком случае мы отказываем.\n" +
             "4.\tОтказ усыновителя оформить документы и пройти испытательный срок. Желание ускорить процесс будет для нас «красным маркером».\n" +
             "5.\tЧасто мы отказываем в усыновлении, если в семье уже имеется какое-нибудь животное или несколько животных. В зависимости от характера нашего питомца, мы пристраиваем его в семьи без животных, либо с животными.\n";
+
+    private String callVolonteer = "Через некоторое время с Вами свяжется волонтёр и ответит на интересующие вопросы";
+
     public PetShelter() {
 
     }
@@ -73,6 +76,14 @@ public abstract class PetShelter {
         this.helpShelter = helpShelter;
     }
 
+    public String getCallVolonteer() {
+        return callVolonteer;
+    }
+
+    public void setCallVolonteer(String callVolonteer) {
+        this.callVolonteer = callVolonteer;
+    }
+
     public String getTakePet() {
         return takePet;
     }
@@ -89,31 +100,23 @@ public abstract class PetShelter {
         this.prohibitedTakePet = prohibitedTakePet;
     }
 
-    private Map<Integer, Pet> petsInSelter = new HashMap<Integer, Pet>(); // список питомцев в приюте
+    private Map<Integer, Pet> petsInShelter = new HashMap<Integer, Pet>(); // список питомцев в приюте
 
     public PetShelter(String shelterName, String shelterAdress, Map<Integer, Pet> petsInSelter) {
         this.shelterName = shelterName;
         this.shelterAddress = shelterAdress;
-        this.petsInSelter = petsInSelter;
+        this.petsInShelter = petsInSelter;
     }
 
-//    public String getShelterAddress() {
-//        return shelterAddress;
-//    }
-//
-//    public PetShelter setShelterAdress(String shelterAdress) {
-//        this.shelterAdress = shelterAdress;
-//        return this;
-//    }
-//
-//    public Map<Integer, Pet> getPetsInSelter() {
-//        return petsInSelter;
-//    }
-//
-//    public PetShelter setPetsInSelter(Map<Integer, Pet> petsInSelter) {
-//        this.petsInSelter = petsInSelter;
-//        return this;
-//    }
+
+    public Map<Integer, Pet> getPetsInShelter() {
+        return petsInShelter;
+    }
+
+    public PetShelter setPetsInShelter(Map<Integer, Pet> petsInSelter) {
+        this.petsInShelter = petsInSelter;
+        return this;
+    }
 
 
 }
