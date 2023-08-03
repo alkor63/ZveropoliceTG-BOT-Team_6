@@ -4,6 +4,10 @@ import com.ward_n6.entity.owners.Owner;
 import com.ward_n6.service.OwnerService;
 import org.springframework.stereotype.Service;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,6 +29,31 @@ public class OwnerServiceImpl implements OwnerService {
         ownerMap.putIfAbsent(mapId++, owner);
         return ownerMap.get(mapId - 1);
     }
+
+// добавление в БД
+//    @Override
+//    public Owner addOwnerToDB(Owner owner) {
+//        try {
+//            // Создаем подключение к базе данных
+//            Connection connection = DriverManager.getConnection(
+//                    "jdbc:mysql://localhost:5432/postgres",
+//                    "postgres", "1234");
+//
+//            // Создаем запрос на добавление записи в таблицу:
+//            String query = "INSERT INTO owner (fitstName, lastName, ownerPhne) VALUES (?, ?, ?)";
+//            PreparedStatement statement = connection.prepareStatement(query);
+//            statement.setString(1, owner.getFirstName());
+//            statement.setString(2, owner.getLastName());
+//            statement.setString(3, owner.getPhoneNumber());
+//
+//            // Выполняем запрос и закрываем соединение:
+//            statement.executeUpdate();
+//            statement.close();
+//            connection.close();
+//        } catch (SQLException e) {
+//            System.out.println("Ошибка при добавлении записи в базу данных: " + e.getMessage());
+//        } return owner;
+//    }
 
     @Override
     public Owner getOwnerById(int recordId) {

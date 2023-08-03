@@ -8,6 +8,7 @@ import com.ward_n6.service.Impl.PutToMapException;
 import com.ward_n6.service.OwnerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import liquibase.pro.packaged.O;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,7 +29,8 @@ public class OwnerController {
     @Operation(summary = "Добавление посетителя в список",
             description = "нужно заполнить все поля карточки посетителя в Body")
     public ResponseEntity<Owner> createOwner(@RequestBody Owner owner) throws JsonProcessingException, PutToMapException {
-        Owner newOwner = ownerService.addOwner(owner);
+      Owner newOwner = ownerService.addOwner(owner);
+        //  Owner newOwner = ownerService.addOwnerToDB(owner);
         return ResponseEntity.ok(newOwner);
     }
 

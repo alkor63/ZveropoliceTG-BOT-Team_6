@@ -17,10 +17,9 @@ import java.util.Objects;
 @Getter
 @Setter
 @NoArgsConstructor
-//@MappedSuperclass
 @Entity
 @Table(name = "pets")
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS) // каждому наследнику свою таблицу
 
 public abstract class Pet {
 

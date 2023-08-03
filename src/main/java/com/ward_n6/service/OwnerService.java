@@ -12,6 +12,9 @@ public interface OwnerService {
 
     Owner addOwner(Owner owner) throws PutToMapException;
 
+    // добавление в БД
+//    Owner addOwnerToDB(Owner owner);
+
     Owner getOwnerById(int recordId);
 
     List<Owner> getAllOwners();
