@@ -1,12 +1,12 @@
-package entity.shelters;
+package com.ward_n6.entity.shelters;
 
-import entity.pets.Cat;
-import entity.pets.Pet;
+import com.ward_n6.entity.pets.Cat;
+import com.ward_n6.entity.pets.Pet;
 
 import java.util.List;
 import java.util.Map;
 
-public class CatsShelter extends PetShelter{
+public class CatsShelter extends PetShelter {
     public CatsShelter() {
         super();
     }
