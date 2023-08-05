@@ -42,15 +42,13 @@ public class PetsOwnerServiceImpl implements PetsOwnerService {
 
     @Override
     public PetWithOwner editPetWithOwnerById(int recordId, PetWithOwner petWithOwner) throws EditMapException {
-        if (petWithOwnerMap.containsKey(recordId)) {
+        if (petWithOwnerMap.containsKey(recordId))
             petWithOwnerMap.put(recordId, petWithOwner);
             if (!petWithOwnerMap.get(recordId).equals(petWithOwner)) {
                 throw new EditMapException("ОШИБКА при попытке изменить запись о животном "
                         +petWithOwner.getPet().getBread()+" "+petWithOwner.getPet().getPetName()+
                         "и новом хозяине "+petWithOwner.getOwner().getFirstName()+" "
                         +petWithOwner.getOwner().getLastName() +" в МАПе petWithOwnerMap под id="+recordId);
-            }
-            return null;
         }
             return petWithOwner;
     }

@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 @Service
 public class PetsOwnerArchiveServiceImpl implements PetsOwnerArchiveService {
     private Map<Integer, PetWithOwner> petWithOwnerMap = new HashMap<>();
@@ -25,7 +26,13 @@ public class PetsOwnerArchiveServiceImpl implements PetsOwnerArchiveService {
     @Override
     public PetWithOwner addToArchivePetWithOwner(PetWithOwner petWithOwner) throws PutToMapException {
         petWithOwnerMap.putIfAbsent(mapId++, petWithOwner);
-        return petWithOwnerMap.get(mapId-1);
+        if (!petWithOwnerMap.get(mapId - 1).equals(petWithOwner)) {
+            throw new PutToMapException("ОШИБКА при попытке добавить животное "
+                    + petWithOwner.getPet().getBread() + " " + petWithOwner.getPet().getPetName() +
+                    "и нового хозяина " + petWithOwner.getOwner().getFirstName() + " "
+                    + petWithOwner.getOwner().getLastName() + " в АРХИВ petWithOwnerMap");
+        }
+        return petWithOwner;
     }
 
     @Override
@@ -42,9 +49,15 @@ public class PetsOwnerArchiveServiceImpl implements PetsOwnerArchiveService {
     public PetWithOwner editArchivePetWithOwnerById(int recordId, PetWithOwner petWithOwner) throws EditMapException {
         if (petWithOwnerMap.containsKey(recordId)) {
             petWithOwnerMap.put(recordId, petWithOwner);
-            return petWithOwnerMap.get(recordId);
+            if (!petWithOwnerMap.get(recordId).equals(petWithOwner)) {
+                throw new EditMapException("ОШИБКА при попытке изменить запись о животном "
+                        + petWithOwner.getPet().getBread() + " " + petWithOwner.getPet().getPetName() +
+                        "и новом хозяине " + petWithOwner.getOwner().getFirstName() + " "
+                        + petWithOwner.getOwner().getLastName() + " в АРХИВЕ petWithOwnerMap под id=" + recordId);
+            }
+            return null;
         }
-        return null;
+        return petWithOwner;
     }
 
     @Override
@@ -58,7 +71,7 @@ public class PetsOwnerArchiveServiceImpl implements PetsOwnerArchiveService {
             petWithOwnerMap.remove(recordId);
             return true;
         }
-        return false;
+        throw new DeleteFromMapException("ОШИБКА при попытке удалить запись из АРХИВА petWithOwnerMap под id=" + recordId);
     }
 
 }
