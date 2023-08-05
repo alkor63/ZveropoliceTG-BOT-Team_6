@@ -45,7 +45,11 @@ public class PetServiceImpl implements PetService {
     @Override
     public Pet addPet(Pet pet) throws PutToMapException {
         petMap.putIfAbsent(mapId++, pet);
-        return petMap.get(mapId-1);
+        if (!petMap.get(mapId-1).equals(pet)) {
+            throw new PutToMapException("ОШИБКА при попытке добавить животное "
+                    +pet.getBread()+" "+pet.getPetName()+" в МАПу petMap");
+        }
+        return pet;
     }
 
     @Override
@@ -62,6 +66,10 @@ public class PetServiceImpl implements PetService {
     public Pet editPetById(int recordId, Pet pet) throws EditMapException {
         if (petMap.containsKey(recordId)) {
             petMap.put(recordId, pet);
+            if (!petMap.get(recordId).equals(pet)) {
+                throw new EditMapException("ОШИБКА при попытке изменить запись о животном "
+                        +pet.getBread()+" "+pet.getPetName()+" в МАПе petMap под id="+recordId);
+            }
             return petMap.get(recordId);
         }
         return null;
@@ -78,7 +86,7 @@ public class PetServiceImpl implements PetService {
             petMap.remove(recordId);
             return true;
         }
-        return false;
+        throw new DeleteFromMapException("ОШИБКА при попытке удалить запись о животном в МАПе petMap под id="+recordId);
     }
     @Override
     public boolean deletePetByValue(Pet pet) throws DeleteFromMapException {
@@ -86,7 +94,8 @@ public class PetServiceImpl implements PetService {
             petMap.values().remove(pet);
             return true;
         }
-        return false;
+        throw new DeleteFromMapException("ОШИБКА при попытке удалить запись о животном "
+                +pet.getBread()+" "+pet.getPetName()+" в МАПе petMap");
     }
     @Override
     public int idPetByValue(Pet pet) {

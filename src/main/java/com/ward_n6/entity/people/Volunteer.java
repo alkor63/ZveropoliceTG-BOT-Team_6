@@ -120,7 +120,7 @@ public class Volunteer {
                 break;
             case 1:
                 // продлить испытательный срок на 30 дней
-                System.out.println("Вы очень редко присылали отчетыю Испытательный срок продлен на 30 дней");
+                System.out.println("Вы очень редко присылали отчеты Испытательный срок продлен на 30 дней");
                 int idFromMap = petsOwnerService.idByValue(petWithOwner);
                 LocalDate newEndDate30 = LocalDate.now().plusDays(30);
                 petWithOwner.setEndDate(newEndDate30);   //увеличили дату окончания исп.срока на 30 дней

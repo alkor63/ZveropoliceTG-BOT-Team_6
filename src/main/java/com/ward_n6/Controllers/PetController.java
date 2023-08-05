@@ -24,9 +24,15 @@ import java.util.List;
 
         @PostMapping
         @Operation(summary = "Добавление животного в список", description = "нужно заполнить все поля карточки животного в Body")
-        public ResponseEntity<Pet> createPet(@RequestBody Pet pet) throws JsonProcessingException, PutToMapException {
-            Pet newPet = petService.addPet(pet);
-            return ResponseEntity.ok(newPet);
+        public ResponseEntity<Pet> createPet(@RequestBody Pet pet) throws JsonProcessingException {
+           try {
+               Pet newPet = petService.addPet(pet);
+               return ResponseEntity.ok(newPet);
+           }
+           catch (PutToMapException e) {
+               System.out.println(e.getMessage());
+               return null;
+           }
         }
         //    @PostMapping("/json")
 //    @Operation(summary = "Добавление рецепта из файла в книгу", description = "будем читать файл pets.json")
