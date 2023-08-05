@@ -34,11 +34,6 @@ public class PetController {
         }
     }
 
-//    @PostMapping("/json")
-//    @Operation(summary = "Добавление рецепта из файла в книгу", description = "будем читать файл pets.json")
-//    public ResponseEntity<Pet> readPetFromJsonFile() {
-//        return ResponseEntity.ok().build();
-//    }
     @GetMapping("/{petId}")
     @Operation(summary = "Показать одно животное по id", description = "нужно указать id животного")
     public ResponseEntity<Pet> getPet(@PathVariable int petId) {
@@ -52,7 +47,7 @@ public class PetController {
     @PutMapping("/{petId}")
     @Operation(summary = "Отредактировать карточку животного",
             description = "нужно указать id и заполнить все поля карточки животного в Body")
-    public ResponseEntity<Pet> editPet(@PathVariable int petId, @RequestBody Pet pet) throws EditMapException {
+    public ResponseEntity<Pet> editPet(@PathVariable int petId, @RequestBody Pet pet) {
         try {
             Pet newPet = petService.editPetById(petId, pet);
             return ResponseEntity.ok(newPet);

@@ -3,39 +3,14 @@ package com.ward_n6.service.Impl;
 import com.ward_n6.entity.pets.Pet;
 import com.ward_n6.service.PetService;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.PostConstruct;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 @Service
 public class PetServiceImpl implements PetService {
-
- /*   public class RecipeServiceImpl implements RecipeService {
-        private static Map<Long, Recipe> recipes = new HashMap<>();
-        private Long recId;
-        private final IngredientService ingredientService;
-        private final FileService fileService;
-
-        public RecipeServiceImpl(IngredientService ingredientService, FileService fileService) {
-            this.ingredientService = ingredientService;
-            this.fileService = fileService;
-        }
-
-        @PostConstruct
-        private void init() {
-
-            File file = fileService.getRecipeFile();
-            if (file.exists()) {
-                readRecipesFromMapFile();
-            }
-        }
-*/
         private Map<Integer, Pet> petMap = new HashMap<>();
     private int mapId = 0;
-
 
     @Override
     public int getId() {
@@ -70,9 +45,9 @@ public class PetServiceImpl implements PetService {
                 throw new EditMapException("ОШИБКА при попытке изменить запись о животном "
                         +pet.getBread()+" "+pet.getPetName()+" в МАПе petMap под id="+recordId);
             }
-            return petMap.get(recordId);
+            return null;
         }
-        return null;
+        return petMap.get(recordId);
     }
 
     @Override
