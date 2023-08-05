@@ -43,19 +43,29 @@ public class Volunteer {
         return "Привет, " + firstName + "! Я Игорь - волонтёр приюта для животных. Готов ответить на все вопросы";
     }
 
-    public PetWithOwner createPetsOwner(Owner owner, Pet pet) throws PutToMapException {
+    public PetWithOwner createPetsOwner(Owner owner, Pet pet) {
         // собираем в одну таблицу PetWithOwner усыновителя owner, животное pat
         // и время начала и окончания испытательного срока
-        PetWithOwner petWithOwner = new PetWithOwner(owner, pet, LocalDate.now(), LocalDate.now().plusDays(30));
-        return petsOwnerService.addToPetWithOwner(petWithOwner);
+        try {
+            PetWithOwner petWithOwner = new PetWithOwner(owner, pet, LocalDate.now(), LocalDate.now().plusDays(30));
+            return petsOwnerService.addToPetWithOwner(petWithOwner);
+        } catch (PutToMapException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
     }
 
-    public PetWithOwner removePetWithOwnerToArchive(PetWithOwner petWithOwner) throws PutToMapException, DeleteFromMapException {
+    public Boolean removePetWithOwnerToArchive(PetWithOwner petWithOwner) {
         // убираем парочку из таблицы PetWithOwner и заносим в одноименный архив
         // после успешного прохождения (окончания) испытательного срока
-        petsOwnerArchiveService.addToArchivePetWithOwner(petWithOwner);
-        petsOwnerService.deletePetWithOwnerByValue(petWithOwner);
-        return petWithOwner; // может лучше return boolean или что-то более полезное?
+        try {
+            petsOwnerArchiveService.addToArchivePetWithOwner(petWithOwner);
+            petsOwnerService.deletePetWithOwnerByValue(petWithOwner);
+            return true;
+        } catch (PutToMapException | DeleteFromMapException e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
     }
 
 
@@ -110,43 +120,51 @@ public class Volunteer {
     }
 
     // метод обработки "приговора", вызывающий endOfProbationPeriod() - перенести в listener Боту
-    public void ownersVerdict(PetWithOwner petWithOwner) throws PutToMapException, DeleteFromMapException, EditMapException {
+    public String ownersVerdict(PetWithOwner petWithOwner) {
         int rating = endOfProbationPeriod(petWithOwner);
         switch (rating) {
             case 0:
                 // вернуть животное в приют
-                System.out.println("За 30 дней Вы ни разу не прислали отчет. Вы должны вернуть животное в приют!");
                 //         petsOwnerService.deletePetWithOwnerByValue(petWithOwner); ==> удалить запись из таблицы
-                break;
+                return "За 30 дней Вы ни разу не прислали отчет. Вы должны вернуть животное в приют!";
             case 1:
                 // продлить испытательный срок на 30 дней
-                System.out.println("Вы очень редко присылали отчеты Испытательный срок продлен на 30 дней");
                 int idFromMap = petsOwnerService.idByValue(petWithOwner);
                 LocalDate newEndDate30 = LocalDate.now().plusDays(30);
                 petWithOwner.setEndDate(newEndDate30);   //увеличили дату окончания исп.срока на 30 дней
-                petsOwnerService.editPetWithOwnerById(idFromMap, petWithOwner);//перезаписали с новой датой окончания исп.срока
-                break;
+                try {
+                    petsOwnerService.editPetWithOwnerById(idFromMap, petWithOwner);//перезаписали с новой датой окончания исп.срока
+                } catch (EditMapException e) {
+                    System.out.println(e.getMessage());
+                }
+                return "Вы очень редко присылали отчеты Испытательный срок продлен на 30 дней";
             case 2:
                 // продлить испытательный срок на 14 дней
-                System.out.println("Вы присылали отчеты не регулярно. Испытательный срок продлен на 14 дней");
                 LocalDate newEndDate14 = LocalDate.now().plusDays(14);
                 idFromMap = petsOwnerService.idByValue(petWithOwner);
                 petWithOwner.setEndDate(newEndDate14);   //увеличили дату окончания исп.срока на 14 дней
-                petsOwnerService.editPetWithOwnerById(idFromMap, petWithOwner);//перезаписали с новой датой окончания исп.срока
-                break;
+                try {
+                    petsOwnerService.editPetWithOwnerById(idFromMap, petWithOwner);//перезаписали с новой датой окончания исп.срока
+                } catch (EditMapException e) {
+                    System.out.println(e.getMessage());
+                }
+                return "Вы очень редко присылали отчеты Испытательный срок продлен на 14 дней";
             case 3:
                 // поздравить с успешным прохождением испытательного срока
-                System.out.println("Поздравляем с завершением испытательного срока! Ваш питомец остаётся с Вами навсегда");
-                PetWithOwner petToOwner = removePetWithOwnerToArchive(petWithOwner);
+                try {
+                    removePetWithOwnerToArchive(petWithOwner);
+                    // method is Boolean
 //              перемещаем запись о животном и хозяине в архив
 //              удаляем запись о животном и хозяине из таблицы с испытательным сроком
 //              удаляем запись о животном из таблицы Pet - этого животного больше нет в приюте
-                petService.deletePetByValue(petToOwner.getPet());
-                break;
+                    petService.deletePetByValue(petWithOwner.getPet());
+                } catch (DeleteFromMapException e) {
+                    System.out.println(e.getMessage());
+                }
+                return "Поздравляем с завершением испытательного срока! Ваш питомец остаётся с Вами навсегда";
             default:
-                System.out.println("Некорректное значение rating. Разработчик что-то накосячил");
+                return "Некорректное значение rating. Разработчик что-то накосячил";
         }
     }
-
 }
 

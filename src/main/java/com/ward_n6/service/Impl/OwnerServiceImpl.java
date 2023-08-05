@@ -23,9 +23,9 @@ public class OwnerServiceImpl implements OwnerService {
     @Override
     public Owner addOwner(Owner owner) throws PutToMapException {
         ownerMap.putIfAbsent(mapId++, owner);
-        if (!ownerMap.get(mapId-1).equals(owner)) {
+        if (!ownerMap.get(mapId - 1).equals(owner)) {
             throw new PutToMapException("ОШИБКА при попытке добавить гостя по имени "
-                   +owner.getFirstName()+" "+owner.getLastName()+" в МАПу ownerMap");
+                    + owner.getFirstName() + " " + owner.getLastName() + " в МАПу ownerMap");
         }
         return owner;
     }
@@ -46,11 +46,12 @@ public class OwnerServiceImpl implements OwnerService {
             ownerMap.put(recordId, owner);
             if (!ownerMap.get(recordId).equals(owner)) {
                 throw new EditMapException("ОШИБКА при попытке изменить запись о госте "
-                        +owner.getFirstName()+" "+owner.getLastName()+" в МАПе ownerMap под id="+recordId);
+                        + owner.getFirstName() + " " + owner.getLastName() + " в МАПе ownerMap под id=" + recordId);
             }
             return null;
         }
-        return ownerMap.get(recordId);    }
+        return ownerMap.get(recordId);
+    }
 
     @Override
     public void deleteAllFromOwner() {
@@ -63,7 +64,7 @@ public class OwnerServiceImpl implements OwnerService {
             ownerMap.remove(recordId);
             return true;
         }
-        throw new DeleteFromMapException("ОШИБКА при попытке удалить запись о госте в МАПе ownerMap под id="+recordId);
+        throw new DeleteFromMapException("ОШИБКА при попытке удалить запись о госте в МАПе ownerMap под id=" + recordId);
     }
 
     @Override
@@ -73,8 +74,7 @@ public class OwnerServiceImpl implements OwnerService {
             return true;
         }
         throw new DeleteFromMapException("ОШИБКА при попытке удалить запись о госте "
-                +owner.getFirstName()+" "+owner.getLastName()+" из МАПы ownerMap");
-
+                + owner.getFirstName() + " " + owner.getLastName() + " из МАПы ownerMap");
     }
 
     @Override

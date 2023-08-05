@@ -21,11 +21,11 @@ public class PetsOwnerServiceImpl implements PetsOwnerService {
     @Override
     public PetWithOwner addToPetWithOwner(PetWithOwner petWithOwner) throws PutToMapException {
         petWithOwnerMap.putIfAbsent(mapId++, petWithOwner);
-        if (!petWithOwnerMap.get(mapId-1).equals(petWithOwner)) {
+        if (!petWithOwnerMap.get(mapId - 1).equals(petWithOwner)) {
             throw new PutToMapException("ОШИБКА при попытке добавить животное "
-                    +petWithOwner.getPet().getBread()+" "+petWithOwner.getPet().getPetName()+
-                    "и нового хозяина "+petWithOwner.getOwner().getFirstName()+" "
-                    +petWithOwner.getOwner().getLastName()+" в МАПу petWithOwnerMap");
+                    + petWithOwner.getPet().getBread() + " " + petWithOwner.getPet().getPetName() +
+                    "и нового хозяина " + petWithOwner.getOwner().getFirstName() + " "
+                    + petWithOwner.getOwner().getLastName() + " в МАПу petWithOwnerMap");
         }
         return petWithOwner;
     }
@@ -44,13 +44,13 @@ public class PetsOwnerServiceImpl implements PetsOwnerService {
     public PetWithOwner editPetWithOwnerById(int recordId, PetWithOwner petWithOwner) throws EditMapException {
         if (petWithOwnerMap.containsKey(recordId))
             petWithOwnerMap.put(recordId, petWithOwner);
-            if (!petWithOwnerMap.get(recordId).equals(petWithOwner)) {
-                throw new EditMapException("ОШИБКА при попытке изменить запись о животном "
-                        +petWithOwner.getPet().getBread()+" "+petWithOwner.getPet().getPetName()+
-                        "и новом хозяине "+petWithOwner.getOwner().getFirstName()+" "
-                        +petWithOwner.getOwner().getLastName() +" в МАПе petWithOwnerMap под id="+recordId);
+        if (!petWithOwnerMap.get(recordId).equals(petWithOwner)) {
+            throw new EditMapException("ОШИБКА при попытке изменить запись о животном "
+                    + petWithOwner.getPet().getBread() + " " + petWithOwner.getPet().getPetName() +
+                    "и новом хозяине " + petWithOwner.getOwner().getFirstName() + " "
+                    + petWithOwner.getOwner().getLastName() + " в МАПе petWithOwnerMap под id=" + recordId);
         }
-            return petWithOwner;
+        return petWithOwner;
     }
 
     @Override
@@ -64,8 +64,9 @@ public class PetsOwnerServiceImpl implements PetsOwnerService {
             petWithOwnerMap.remove(recordId);
             return true;
         }
-        throw new DeleteFromMapException("ОШИБКА при попытке удалить запись из МАПы petWithOwnerMap под id="+recordId);
+        throw new DeleteFromMapException("ОШИБКА при попытке удалить запись из МАПы petWithOwnerMap под id=" + recordId);
     }
+
     @Override
     public boolean deletePetWithOwnerByValue(PetWithOwner petWithOwner) throws DeleteFromMapException {
         if (petWithOwnerMap.containsValue(petWithOwner)) {
@@ -73,12 +74,13 @@ public class PetsOwnerServiceImpl implements PetsOwnerService {
             return true;
         }
         throw new DeleteFromMapException("ОШИБКА при попытке удалить запись о животном "
-                +petWithOwner.getPet().getBread()+" "+petWithOwner.getPet().getPetName()+
-                "и новом хозяине "+petWithOwner.getOwner().getFirstName()+" "
-                +petWithOwner.getOwner().getLastName() +" из МАПы petWithOwnerMap");
+                + petWithOwner.getPet().getBread() + " " + petWithOwner.getPet().getPetName() +
+                "и новом хозяине " + petWithOwner.getOwner().getFirstName() + " "
+                + petWithOwner.getOwner().getLastName() + " из МАПы petWithOwnerMap");
     }
+
     @Override
-    public int idByValue (PetWithOwner petWithOwner) {
+    public int idByValue(PetWithOwner petWithOwner) {
         for (Map.Entry<Integer, PetWithOwner> entry : petWithOwnerMap.entrySet())
             if (entry.getValue().equals(petWithOwner)) return entry.getKey();
         return -1;
