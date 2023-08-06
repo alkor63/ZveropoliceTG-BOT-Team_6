@@ -1,17 +1,14 @@
 package com.ward_n6.entity.reports;
 
-import com.ward_n6.entity.pets.Pet;
 import com.ward_n6.enums.PetsType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
 
 import javax.persistence.*;
-import java.awt.image.BufferedImage;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -21,8 +18,7 @@ import java.util.Objects;
  * поведение
  */
 @AllArgsConstructor
-
-
+@NoArgsConstructor
 @Getter
 @Setter
 @Entity
@@ -59,40 +55,41 @@ public class OwnerReport {
 
     @Column(name = "pet_id", nullable = false)
     private long petId; // id питомца
-    @Lob
-    private List<BufferedImage> photos = new ArrayList<>(); // лист фоток
 
-    public OwnerReport() {
-    }
+//    @Lob
+//    private List<BufferedImage> photos = new ArrayList<>(); // лист фоток
 
-    public OwnerReport(long id, long chatId, LocalDateTime reportDateTime, PetsType petsType, boolean havePhoto, String nutrition,
-                       String petsHealth, String petsBehavior, long petId) {
-        this.id = id;
-        this.chatId = chatId;
-        this.reportDateTime = reportDateTime;
-        this.petsType = petsType;
+//    public OwnerReport() {
+//    }
 
-        if (photos.size() != 0) {
-            this.havePhoto = true;
-        }
-        this.nutrition = nutrition;
-        this.petsHealth = petsHealth;
-        this.petsBehavior = petsBehavior;
-        this.petId = petId;
-    }
+//    public OwnerReport(long id, long chatId, LocalDateTime reportDateTime, PetsType petsType, boolean havePhoto, String nutrition,
+//                       String petsHealth, String petsBehavior, long petId) {
+//        this.id = id;
+//        this.chatId = chatId;
+//        this.reportDateTime = reportDateTime;
+//        this.petsType = petsType;
+//
+////        if (photos.size() != 0) {
+//            this.havePhoto = havePhoto;
+////        }
+//        this.nutrition = nutrition;
+//        this.petsHealth = petsHealth;
+//        this.petsBehavior = petsBehavior;
+//        this.petId = petId;
+//    }
 
-    public OwnerReport(long id, long chatId, LocalDateTime reportDateTime, PetsType petsType, boolean havePhoto, String nutrition,
-                       String petsHealth, String petsBehavior, Pet ownersPet, long petId) {
-        this.id = id;
-        this.chatId = chatId;
-        this.reportDateTime = reportDateTime;
-        this.petsType = petsType;
-        this.havePhoto = havePhoto;
-        this.nutrition = nutrition;
-        this.petsHealth = petsHealth;
-        this.petsBehavior = petsBehavior;
-        this.petId = petId;
-    }
+//    public OwnerReport(long id, long chatId, LocalDateTime reportDateTime, PetsType petsType, boolean havePhoto, String nutrition,
+//                       String petsHealth, String petsBehavior, Pet ownersPet, long petId) {
+//        this.id = id;
+//        this.chatId = chatId;
+//        this.reportDateTime = reportDateTime;
+//        this.petsType = petsType;
+//        this.havePhoto = havePhoto;
+//        this.nutrition = nutrition;
+//        this.petsHealth = petsHealth;
+//        this.petsBehavior = petsBehavior;
+//        this.petId = petId;
+//    }
 
 
     @Override
