@@ -114,9 +114,9 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
 
                     case "/report":
                         sendMessage(chatId, "Загрузите отчёт.");
-
-                        saveOwnerReportToDB(chatId, messageText);
+                        reportStart = true;
                         break;
+                        if reportStart { saveOwnerReportToDB(chatId, messageText);}
 
                     case "/volunteer":
                         sendMessage(chatId,
