@@ -113,9 +113,10 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
 //                        break;
 
                     case "/report":
-                        sendMessage(chatId, "Загрузите отчёт.");
                         reportStart = true;
+                        sendMessage(chatId, "Загрузите отчёт.");
                         break;
+
                         if reportStart { saveOwnerReportToDB(chatId, messageText);}
 
                     case "/volunteer":
@@ -225,6 +226,8 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
         telegramBot.execute(sendMessage);
     }
 
+
+// СОХРАНЕНИЕ ОТЧЁТА
     public void saveOwnerReportToDB(long chatId, String messageText) {
 
         SendMessage sendMessage = new SendMessage(chatId, "Следуйте указаниям бота.");
