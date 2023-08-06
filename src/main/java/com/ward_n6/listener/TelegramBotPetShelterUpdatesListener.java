@@ -8,21 +8,25 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
 import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
 import com.pengrad.telegrambot.model.request.Keyboard;
+import com.pengrad.telegrambot.request.GetUpdates;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.response.SendResponse;
 import com.vdurmont.emoji.EmojiParser;
 import com.ward_n6.entity.BotMessaging;
+import com.ward_n6.entity.reports.OwnerReport;
+import com.ward_n6.entity.shelters.PetShelter;
+import com.ward_n6.enums.PetsType;
 import com.ward_n6.service.BotMessageService;
+import com.ward_n6.service.PhotoService;
+import com.ward_n6.service.ReportService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.regex.Pattern;
 
 @Component
 public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
@@ -30,6 +34,12 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
 
     private final BotMessageService botMessageService;
     private final TelegramBot telegramBot;
+    private PetShelter petShelter = new PetShelter() {
+    };
+    private PhotoService photoService;
+    private GiveReport giveReport;
+    private ReportService reportService;
+    private static final Pattern ID_PATTERN = Pattern.compile("(\\d{1,5})");
 
     public TelegramBotPetShelterUpdatesListener(TelegramBot telegramBot, BotMessageService botMessageService) {
         this.botMessageService = botMessageService;
@@ -43,8 +53,10 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
     }
 
     boolean startSelected = false; // переменная для подтверждения старта
+    boolean reportStart = false;
 
-    /** ОСНОВНОЙ МЕТОД
+    /**
+     * ОСНОВНОЙ МЕТОД
      * "прослушиваине бота, добавляет кнопки на экран и меню с первыми командами
      */
     @Override
@@ -92,10 +104,25 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                                     "Выберите интересующий Вас пункт меню.");
                         }
                         break;
+//                    case "/photo":
+//                        sendMessage(chatId, "Загрузите фото.");
+//                        // photoService.getPhotos(update);
+//                        if (message.photo().length > 0) {
+//                            sendMessage(chatId, "Фото загружено");
+//                        }
+//                        break;
+
+                    case "/report":
+                        sendMessage(chatId, "Загрузите отчёт.");
+
+                        saveOwnerReportToDB(chatId, messageText);
+                        break;
+
                     case "/volunteer":
                         sendMessage(chatId,
-                                "Вы позвали волонтёра приюта. Ожидайте, с Вами свяжутся " +
-                                        "в течение 30 мин.");
+                                petShelter.getCallVolonteer());
+                        break;
+
                     default:
                         if (messageText != null) { // проверяем, не пустой ли текст
                             saveMessages(chatId, messageText);
@@ -197,4 +224,70 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
         sendMessage.replyMarkup(keyboard);
         telegramBot.execute(sendMessage);
     }
+
+    public void saveOwnerReportToDB(long chatId, String messageText) {
+
+        SendMessage sendMessage = new SendMessage(chatId, "Следуйте указаниям бота.");
+        OwnerReport ownerReport = new OwnerReport();
+        switch (messageText) {
+            case "/petId" -> {
+                sendMessage(chatId, "Укажите ID питомца");
+                if (messageText.matches("/report \\d+")) {
+
+                    long petsId = Long.parseLong(messageText.split(" ")[1]);
+
+                    ownerReport.setPetId(petsId);
+                } else {
+                    return;
+                }
+            }
+            case "/action" -> {
+                sendMessage(chatId, "Опишите кратко поведение питомца");
+                if (!messageText.isEmpty() && messageText.length() > 10) {
+
+                    ownerReport.setPetsBehavior(messageText);
+                } else {
+                    sendMessage(chatId, "Вы не описали поведение питомца. Неполный отчёт не будет засчитан.");
+                    ownerReport.setPetsBehavior("autoReport: не указано");
+                    return;
+                }
+            }
+            case "/helth" -> {
+                sendMessage(chatId, "Опишите самочувствие питомца");
+                if (!messageText.isEmpty()) {
+
+                    ownerReport.setPetsHealth(messageText);
+                } else {
+                    sendMessage(chatId, "Вы не описали самочувствие питомца. Неполный отчёт не будет засчитан.");
+                    ownerReport.setPetsHealth("autoReport: не указано");
+                    return;
+                }
+            }
+            case "/feed" -> {
+                sendMessage(chatId, "Опишите рацион питомца");
+                if (!messageText.isEmpty()) {
+
+                    ownerReport.setNutrition(messageText);
+                    // Устанавливаем флаг, что рацион был описан
+                } else {
+                    sendMessage(chatId, "Вы не описали рацион питомца. Неполный отчёт не будет засчитан.");
+                    ownerReport.setNutrition("autoReport: не указано");
+                    return;
+                }
+            }
+        }
+        ownerReport.setChatId(chatId);
+        ownerReport.setReportDateTime(LocalDateTime.now());
+        ownerReport.setPetsType(PetsType.DOG);
+        reportService.save(ownerReport);
+        saveMessages(chatId, "Ваш отчёт загружен");
+
+    }
+
+    private Update getNextUpdate() {
+        while (true) {
+            return telegramBot.execute(new GetUpdates().limit(1).offset(1)).updates().get(1);
+        }
+    }
 }
+

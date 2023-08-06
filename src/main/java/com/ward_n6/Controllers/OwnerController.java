@@ -5,10 +5,9 @@ import com.ward_n6.entity.owners.Owner;
 import com.ward_n6.service.Impl.DeleteFromMapException;
 import com.ward_n6.service.Impl.EditMapException;
 import com.ward_n6.service.Impl.PutToMapException;
-import com.ward_n6.service.OwnerService;
+import com.ward_n6.service.interfaces.OwnerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import liquibase.pro.packaged.O;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

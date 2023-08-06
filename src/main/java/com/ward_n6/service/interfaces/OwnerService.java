@@ -1,4 +1,4 @@
-package com.ward_n6.service;
+package com.ward_n6.service.interfaces;
 
 import com.ward_n6.entity.owners.Owner;
 import com.ward_n6.service.Impl.DeleteFromMapException;

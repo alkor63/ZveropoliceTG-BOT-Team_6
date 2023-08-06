@@ -2,15 +2,14 @@ package com.ward_n6.entity.people;
 
 import com.ward_n6.entity.PetWithOwner;
 import com.ward_n6.entity.owners.Owner;
-import com.ward_n6.entity.owners.PetsOwnerArchive;
 import com.ward_n6.entity.pets.Pet;
 import com.ward_n6.entity.reports.OwnerReport;
 import com.ward_n6.service.Impl.DeleteFromMapException;
 import com.ward_n6.service.Impl.EditMapException;
 import com.ward_n6.service.Impl.PutToMapException;
-import com.ward_n6.service.PetService;
-import com.ward_n6.service.PetsOwnerArchiveService;
-import com.ward_n6.service.PetsOwnerService;
+import com.ward_n6.service.interfaces.PetService;
+import com.ward_n6.service.interfaces.PetsOwnerArchiveService;
+import com.ward_n6.service.interfaces.PetsOwnerService;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

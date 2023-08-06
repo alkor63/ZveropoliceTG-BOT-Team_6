@@ -1,13 +1,9 @@
 package com.ward_n6.service.Impl;
 
 import com.ward_n6.entity.owners.Owner;
-import com.ward_n6.service.OwnerService;
+import com.ward_n6.service.interfaces.OwnerService;
 import org.springframework.stereotype.Service;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

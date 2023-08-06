@@ -5,7 +5,7 @@ import com.ward_n6.entity.pets.Pet;
 import com.ward_n6.service.Impl.DeleteFromMapException;
 import com.ward_n6.service.Impl.EditMapException;
 import com.ward_n6.service.Impl.PutToMapException;
-import com.ward_n6.service.PetService;
+import com.ward_n6.service.interfaces.PetService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;

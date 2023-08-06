@@ -1,4 +1,4 @@
-CREATE TABLE pet_owners
+CREATE TABLE list_owners
 (
     owner_id           BIGSERIAL PRIMARY KEY,
     first_name     CHAR NOT NULL,

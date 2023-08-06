@@ -1,11 +1,9 @@
 package com.ward_n6.service.Impl;
 
 import com.ward_n6.entity.pets.Pet;
-import com.ward_n6.service.PetService;
+import com.ward_n6.service.interfaces.PetService;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

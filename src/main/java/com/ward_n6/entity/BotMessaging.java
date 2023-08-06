@@ -27,7 +27,7 @@ public class BotMessaging {
     private String botMessage;
 
     @Column(name = "message_date_time", nullable = false)
-    private LocalDateTime massageDateTime;
+    private LocalDateTime massageDateTime = LocalDateTime.now();
 
 
 

@@ -1,7 +1,7 @@
 package com.ward_n6.service.Impl;
 
 import com.ward_n6.entity.PetWithOwner;
-import com.ward_n6.service.PetsOwnerService;
+import com.ward_n6.service.interfaces.PetsOwnerService;
 
 import java.util.ArrayList;
 import java.util.HashMap;

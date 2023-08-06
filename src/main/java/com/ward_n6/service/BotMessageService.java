@@ -8,7 +8,7 @@ import java.util.List;
 
 @Service
 public class BotMessageService {// класс для обработки переписки
-    // вероятно обработка отчётов тоже будет здесь, а составление самого отчёа уже в классе отчёта
+    // вероятно обработка отчётов тоже будет здесь, а составление самого отчёnа уже в классе отчёта
 
     private final BotMessagingRepository botMessagingRepository;
 
@@ -23,6 +23,8 @@ public class BotMessageService {// класс для обработки пере
     public List<BotMessaging> allCorrespondenceWithOwner() {
         return botMessagingRepository.findAll();
     }
+
+
 
 
 }

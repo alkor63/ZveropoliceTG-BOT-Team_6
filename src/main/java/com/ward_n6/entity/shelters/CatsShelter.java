@@ -1,19 +1,33 @@
 package entity.shelters;
 
-import entity.pets.Cat;
-import entity.pets.Pet;
+import com.ward_n6.entity.pets.Cat;
+import com.ward_n6.entity.pets.Pet;
+import com.ward_n6.entity.shelters.PetShelter;
 
 import java.util.List;
 import java.util.Map;
 
-public class CatsShelter extends PetShelter{
+public class CatsShelter extends PetShelter {
     public CatsShelter() {
         super();
     }
-    public CatsShelter(String shelterName, String shelterAddress, Map<Integer, Pet> petsInSelter) {
-        super(shelterName, shelterAddress, petsInSelter);
+
+    public CatsShelter(Cat cat, String descriptionCat, String takeCat, List<Cat> cats) {
+        this.cat = cat;
+        this.descriptionCat = descriptionCat;
+        this.takeCat = takeCat;
+        this.cats = cats;
     }
 
+    public CatsShelter(String shelterName, String shelterAdress, Map<Integer, Pet> petsInSelter, Cat cat, String descriptionCat, String takeCat, List<Cat> cats) {
+        super(shelterName, shelterAdress, petsInSelter);
+        this.cat = cat;
+        this.descriptionCat = descriptionCat;
+        this.takeCat = takeCat;
+        this.cats = cats;
+    }
+
+    private Cat cat;
 
     private String descriptionCat = "В приюте для кошек единовременно содержится более 600 кошек самых разных пород и возрастов. Все они привиты, чипированы и стерилизованы. За годы работы мы нашли новый дом более чем для 7400 питомцев и хотим, чтобы на улицах не было бездомных животных."; //описание приюта для кошек
     private String takeCat = getTakePet() +
