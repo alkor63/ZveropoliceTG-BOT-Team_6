@@ -38,9 +38,8 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
     private final PetShelter petShelter = new PetShelter() {
     };
     private PhotoService photoService;
-    private GiveReport giveReport;
-    private final ReportService reportService;
 
+    private final ReportService reportService;
 
 
     private final OwnerService ownerService;
@@ -360,87 +359,100 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
      * проработать выбор / заполнение типа питомца
      * (в зависимости от выбора приюта)
      */
-    public void saveOwnerReportToDB(List<Update> updates) {
+    private int saveOwnerReportToDB(List<Update> updates) {
         try {
-            for (Update update : updates) {// итерируемся по ним
-                logger.info("Processing update: {}", update); // записываем лог апдейтов на уровне инфо
 
-                Message message = update.message(); // получаем сообщение из текущего обновления
-                Long chatId = message.chat().id(); // получаем идентификатор чата, к которому относится апдейт
-                String messageText = message.text(); // получаем текст сообщения
-                sendMessage(chatId, "Для загрузки отчёта следуйте указаниям бота. " +
-                        "Пожалуйста, заполните всё пункты отчёта." + "\n" +
-                        "Команды для отчёта: " + "\n" +
-                        "1. /ID - указать id питомца" + "\n" +
-                        "2. /action - отчёт о поведении питомца" + "\n" +
-                        "3. /health - отчёт о здоровье питомца" + "\n" +
-                        "4. /feed - отчёт о питании питомца" + "\n" +
-                        "5. /save - сохранить отчёт");
-                    OwnerReport ownerReport = new OwnerReport();
-                ownerReport.setChatId(chatId);
-                ownerReport.setReportDateTime(LocalDateTime.now());
-                ownerReport.setPetsType(PetsType.DOG);
-                switch (messageText) {
-                    case "/ID" -> {
-                        sendMessage(chatId, "Укажите ID Вашего питомца");
-                        String idMessage = message.text();
-                        if (idMessage.matches("\\d+")) {
-                            long petsId = Long.parseLong(messageText.split(" ")[1]);
-                            ownerReport.setPetId(petsId);
-                            sendMessage(chatId, "ID питомца записан.");
-                        } else {
-                            sendMessage(chatId, "Вы не указали ID питомца.");
-                        }
-                    }
-                    case "/action" -> {
-                        sendMessage(chatId, "Опишите кратко поведение питомца");
-                        String actionMessage = message.text();
-                        if (actionMessage.length() > 10) {
-                            ownerReport.setPetsBehavior(messageText);
-                            sendMessage(chatId, "Отчёт о поведении записан");
-                        } else {
-                            sendMessage(chatId, "Вы не описали поведение питомца. " +
-                                    "Неполный отчёт не будет засчитан.");
-                            ownerReport.setPetsBehavior("autoReport: не указано");
-                        }
-                    }
-                    case "/health" -> {
-                        sendMessage(chatId, "Опишите самочувствие питомца");
-                        String healthMessage = message.text();
-                        if (healthMessage != null) {
-                            ownerReport.setPetsHealth(messageText);
-                        } else {
-                            sendMessage(chatId, "Вы не описали самочувствие питомца. " +
-                                    "Неполный отчёт не будет засчитан.");
-                            ownerReport.setPetsHealth("autoReport: не указано");
-                        }
-                    }
-                    case "/feed" -> {
-                        sendMessage(chatId, "Опишите рацион питомца");
-                        String feedMessage = message.text();
-                        if (feedMessage != null) {
-                            ownerReport.setNutrition(messageText);
-                        } else {
+            updates.stream() // получаем поток апдейтов из листа
+                    .filter(update -> update.message() != null)// фильтруем по тем, что не нулл
+                    .forEach(update -> { // итерируемся по ним
+                        logger.info("Processing update: {}", update); // записываем лог апдейтов на уровне инфо
+                        Message message = update.message(); // получаем сообщение из текущего обновления
+                        Long chatId = message.chat().id(); // получаем идентификатор чата, к которому относится апдейт
+                        String messageText = message.text(); // получаем текст сообщения
+                        sendMessage(chatId, """
+                                Для загрузки отчёта следуйте указаниям бота. Пожалуйста, заполните все пункты отчёта.
+                                Команды для отчёта:\s
+                                1. /ID - указать id питомца
+                                2. /action - отчёт о поведении питомца
+                                3. /health - отчёт о здоровье питомца
+                                4. /feed - отчёт о питании питомца
+                                5. /save - сохранить отчёт""");
+                        OwnerReport ownerReport = new OwnerReport();
+                        ownerReport.setChatId(chatId);
+                        ownerReport.setReportDateTime(LocalDateTime.now());
+                        ownerReport.setPetsType(PetsType.DOG); //ИСПРАВИТЬ!
+                        switch (messageText) {
+                            case "/ID":
+                                sendMessage(chatId, "Укажите ID Вашего питомца");
+                                String idMessage = message.text();
+                                if (idMessage.matches("\\d+")) { // проверяем, что указано число
+                                    long petsId = Long.parseLong(messageText.split(" ")[0]); // парсим сообщение в формат ID, 0 - без пробелов
+                                    ownerReport.setPetId(petsId);
+                                    sendMessage(chatId, "ID питомца записан.");
+                                }
+                                break;
 
-                            sendMessage(chatId, "Вы не описали рацион питомца. " +
-                                    "Неполный отчёт не будет засчитан.");
-                            ownerReport.setNutrition("autoReport: не указано");
+                            case "/action":
+                                sendMessage(chatId, "Опишите кратко поведение питомца");
+                                String actionMessage = message.text(); // сохраняем текстовое сообщение в переменную.
+                            if (actionMessage.length() > 10) {
+                                ownerReport.setPetsBehavior(actionMessage);
+                                sendMessage(chatId, "Отчёт о поведении питомца записан");
+                            }
+                            else {
+                                sendMessage(chatId, "Вы не описали поведение питомца. " +
+                                        "Неполный отчёт не будет засчитан.");
+                                ownerReport.setPetsBehavior("autoReport: не указано");
+
+                            }
+                                break;
+
+                            case "/health":
+                                sendMessage(chatId, "Опишите кратко самочувствие питомца");
+                                String healthMessage = message.text();
+                            if (healthMessage != null) {
+                                ownerReport.setPetsHealth(healthMessage);
+                            }
+                            else {
+                                sendMessage(chatId, "Вы не описали самочувствие питомца. " +
+                                        "Неполный отчёт не будет засчитан.");
+                                ownerReport.setPetsHealth("autoReport: не указано");
+                            }
+                                break;
+
+                            case "/feed":
+                                sendMessage(chatId, "Опишите рацион питомца");
+                                String feedMessage = message.text();
+                            if (feedMessage != null) {
+                                ownerReport.setNutrition(feedMessage);
+                            }
+                            else {
+
+                                sendMessage(chatId, "Вы не описали рацион питомца. " +
+                                        "Неполный отчёт не будет засчитан.");
+                                ownerReport.setNutrition("autoReport: не указано");
+                            }
+                                break;
+
+                            case "/save":
+                                reportService.save(ownerReport);
+                                sendMessage(chatId, "Ваш отчёт загружен");
+
+                                break;
+                            default:
+                                if (messageText != null) {
+                                   saveMessages(chatId, messageText);
+                                }
                         }
-                    }
-                    case "/save" -> {
-                        reportService.save(ownerReport);
-                        sendMessage(chatId, "Ваш отчёт загружен");
-                    }
-                }
-                reportService.save(ownerReport);
-            }
+                    });
         } catch (Exception e) {
             logger.error(e.getMessage()); // ловим ошибку
         }
+        return UpdatesListener.CONFIRMED_UPDATES_ALL; // успешно завершаем метод, без падения
     }
 
-
-    private void addOwnerToDB(List<Update> updates) {
+    // СОХРАНЕНИЕ ПЕРСОНЫ в БД
+    private int addOwnerToDB(List<Update> updates) {
         try {
             for (Update update : updates) {// итерируемся по ним
                 logger.info("Processing update: {}", update);
@@ -482,11 +494,11 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                         }
                     }
                 }
-                ownerService.save(owner);
+
             }
         } catch (Exception e) {
             logger.error(e.getMessage()); // ловим ошибку
-        }
+        } return UpdatesListener.CONFIRMED_UPDATES_ALL; // успешно завершаем метод, без падения
     }
 }
 
