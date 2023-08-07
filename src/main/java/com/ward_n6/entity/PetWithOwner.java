@@ -24,6 +24,10 @@ public class PetWithOwner {
         this.endDate = endDate;
     }
 
+    public PetWithOwner() {
+
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

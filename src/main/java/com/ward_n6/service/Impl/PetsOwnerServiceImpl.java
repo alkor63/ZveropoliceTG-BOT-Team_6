@@ -1,88 +1,66 @@
 package com.ward_n6.service.Impl;
 
 import com.ward_n6.entity.PetWithOwner;
+import com.ward_n6.exception.DeleteFromMapException;
+import com.ward_n6.exception.EditMapException;
+import com.ward_n6.exception.PutToMapException;
+import com.ward_n6.repository.PetsOwnerRepository;
 import com.ward_n6.service.PetsOwnerService;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+@Service
 public class PetsOwnerServiceImpl implements PetsOwnerService {
-    private Map<Integer, PetWithOwner> petWithOwnerMap = new HashMap<>();
-    private int mapId = 0;
+    private final PetsOwnerRepository petsOwnerRepository;
 
+    public PetsOwnerServiceImpl(PetsOwnerRepository petsOwnerRepository) {
+        this.petsOwnerRepository = petsOwnerRepository;
+    }
 
     @Override
     public int getId() {
-        return mapId;
+        return petsOwnerRepository.getId();
     }
 
     @Override
     public PetWithOwner addToPetWithOwner(PetWithOwner petWithOwner) throws PutToMapException {
-        petWithOwnerMap.putIfAbsent(mapId++, petWithOwner);
-        if (!petWithOwnerMap.get(mapId - 1).equals(petWithOwner)) {
-            throw new PutToMapException("ОШИБКА при попытке добавить животное "
-                    + petWithOwner.getPet().getBread() + " " + petWithOwner.getPet().getPetName() +
-                    "и нового хозяина " + petWithOwner.getOwner().getFirstName() + " "
-                    + petWithOwner.getOwner().getLastName() + " в МАПу petWithOwnerMap");
-        }
-        return petWithOwner;
+        return petsOwnerRepository.addToPetWithOwner(petWithOwner);
     }
 
     @Override
     public PetWithOwner getFromPetWithOwnerById(int recordId) {
-        return petWithOwnerMap.get(recordId);
+        return petsOwnerRepository.getFromPetWithOwnerById(recordId);
     }
 
     @Override
     public List<PetWithOwner> getAllFromPetWithOwner() {
-        return new ArrayList<>(petWithOwnerMap.values());
+        return petsOwnerRepository.getAllFromPetWithOwner();
     }
 
     @Override
     public PetWithOwner editPetWithOwnerById(int recordId, PetWithOwner petWithOwner) throws EditMapException {
-        if (petWithOwnerMap.containsKey(recordId))
-            petWithOwnerMap.put(recordId, petWithOwner);
-        if (!petWithOwnerMap.get(recordId).equals(petWithOwner)) {
-            throw new EditMapException("ОШИБКА при попытке изменить запись о животном "
-                    + petWithOwner.getPet().getBread() + " " + petWithOwner.getPet().getPetName() +
-                    "и новом хозяине " + petWithOwner.getOwner().getFirstName() + " "
-                    + petWithOwner.getOwner().getLastName() + " в МАПе petWithOwnerMap под id=" + recordId);
-        }
-        return petWithOwner;
+        return petsOwnerRepository.editPetWithOwnerById(recordId, petWithOwner);
     }
 
     @Override
-    public void deleteAllFromPetWithOwner() {
-        petWithOwnerMap.clear();
+    public boolean deleteAllFromPetWithOwner() {
+        return petsOwnerRepository.deleteAllFromPetWithOwner();
     }
 
     @Override
     public boolean deletePetWithOwnerById(int recordId) throws DeleteFromMapException {
-        if (petWithOwnerMap.containsKey(recordId)) {
-            petWithOwnerMap.remove(recordId);
-            return true;
-        }
-        throw new DeleteFromMapException("ОШИБКА при попытке удалить запись из МАПы petWithOwnerMap под id=" + recordId);
+        return petsOwnerRepository.deletePetWithOwnerById(recordId);
     }
 
     @Override
     public boolean deletePetWithOwnerByValue(PetWithOwner petWithOwner) throws DeleteFromMapException {
-        if (petWithOwnerMap.containsValue(petWithOwner)) {
-            petWithOwnerMap.values().remove(petWithOwner);
-            return true;
-        }
-        throw new DeleteFromMapException("ОШИБКА при попытке удалить запись о животном "
-                + petWithOwner.getPet().getBread() + " " + petWithOwner.getPet().getPetName() +
-                "и новом хозяине " + petWithOwner.getOwner().getFirstName() + " "
-                + petWithOwner.getOwner().getLastName() + " из МАПы petWithOwnerMap");
+        return petsOwnerRepository.deletePetWithOwnerByValue(petWithOwner);
     }
 
     @Override
     public int idByValue(PetWithOwner petWithOwner) {
-        for (Map.Entry<Integer, PetWithOwner> entry : petWithOwnerMap.entrySet())
-            if (entry.getValue().equals(petWithOwner)) return entry.getKey();
-        return -1;
+        return petsOwnerRepository.idByValue(petWithOwner);
     }
 }

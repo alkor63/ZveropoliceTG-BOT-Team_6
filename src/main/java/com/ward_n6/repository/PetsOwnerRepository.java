@@ -1,4 +1,4 @@
-package com.ward_n6.service;
+package com.ward_n6.repository;
 
 import com.ward_n6.entity.PetWithOwner;
 import com.ward_n6.exception.DeleteFromMapException;
@@ -7,7 +7,7 @@ import com.ward_n6.exception.PutToMapException;
 
 import java.util.List;
 
-public interface PetsOwnerService {
+public interface PetsOwnerRepository {
     int getId();
 
     PetWithOwner addToPetWithOwner(PetWithOwner petWithOwner) throws PutToMapException;

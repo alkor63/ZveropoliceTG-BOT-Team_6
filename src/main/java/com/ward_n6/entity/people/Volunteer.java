@@ -2,12 +2,11 @@ package com.ward_n6.entity.people;
 
 import com.ward_n6.entity.PetWithOwner;
 import com.ward_n6.entity.owners.Owner;
-import com.ward_n6.entity.owners.PetsOwnerArchive;
 import com.ward_n6.entity.pets.Pet;
 import com.ward_n6.entity.reports.OwnerReport;
-import com.ward_n6.service.Impl.DeleteFromMapException;
-import com.ward_n6.service.Impl.EditMapException;
-import com.ward_n6.service.Impl.PutToMapException;
+import com.ward_n6.exception.DeleteFromMapException;
+import com.ward_n6.exception.EditMapException;
+import com.ward_n6.exception.PutToMapException;
 import com.ward_n6.service.PetService;
 import com.ward_n6.service.PetsOwnerArchiveService;
 import com.ward_n6.service.PetsOwnerService;
@@ -28,6 +27,8 @@ public class Volunteer {
     // Бот отслеживает испытательный срок и если срок подошел к концу - обращается к волонтёру за приговором
     // приговор в методе endOfProbationPeriod
     // вызов этого метода из Бота и его обработка - ниже, в ownersVerdict
+
+
     private final PetService petService;
     private final PetsOwnerService petsOwnerService;
     private final PetsOwnerArchiveService petsOwnerArchiveService;
@@ -37,6 +38,8 @@ public class Volunteer {
         this.petsOwnerService = petsOwnerService;
         this.petsOwnerArchiveService = petsOwnerArchiveService;
     }
+
+
 
     public String callVolunteer(String firstName) {
         // Волонтёр откликается на просьбу о связи от пользователя с именем firstName
@@ -48,7 +51,8 @@ public class Volunteer {
         // и время начала и окончания испытательного срока
         try {
             PetWithOwner petWithOwner = new PetWithOwner(owner, pet, LocalDate.now(), LocalDate.now().plusDays(30));
-            return petsOwnerService.addToPetWithOwner(petWithOwner);
+            petWithOwner = petsOwnerService.addToPetWithOwner(petWithOwner);
+            return petWithOwner;
         } catch (PutToMapException e) {
             System.out.println(e.getMessage());
             return null;
@@ -131,7 +135,7 @@ public class Volunteer {
                 // продлить испытательный срок на 30 дней
                 int idFromMap = petsOwnerService.idByValue(petWithOwner);
                 LocalDate newEndDate30 = LocalDate.now().plusDays(30);
-                petWithOwner.setEndDate(newEndDate30);   //увеличили дату окончания исп.срока на 30 дней
+                petWithOwner.setEndDate(newEndDate30);   //увеличили дату окончания исп. срока на 30 дней
                 try {
                     petsOwnerService.editPetWithOwnerById(idFromMap, petWithOwner);//перезаписали с новой датой окончания исп.срока
                 } catch (EditMapException e) {

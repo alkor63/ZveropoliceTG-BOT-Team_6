@@ -1,4 +1,4 @@
-package com.ward_n6.service;
+package com.ward_n6.repository;
 
 import com.ward_n6.entity.owners.Owner;
 import com.ward_n6.exception.DeleteFromMapException;
@@ -7,9 +7,7 @@ import com.ward_n6.exception.PutToMapException;
 
 import java.util.List;
 
-public interface OwnerService {
-    int getId();
-
+public interface OwnerRepository {
     Owner addOwner(Owner owner) throws PutToMapException;
 
     Owner getOwnerById(int recordId);
@@ -25,4 +23,6 @@ public interface OwnerService {
     boolean deleteOwnerByValue(Owner owner) throws DeleteFromMapException;
 
     int idOwnerByValue(Owner owner);
+
+    int getId();
 }

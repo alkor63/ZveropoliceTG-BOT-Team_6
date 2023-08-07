@@ -1,10 +1,9 @@
 package com.ward_n6.Controllers;
 
 import com.ward_n6.entity.owners.Owner;
-import com.ward_n6.entity.pets.Pet;
-import com.ward_n6.service.Impl.DeleteFromMapException;
-import com.ward_n6.service.Impl.EditMapException;
-import com.ward_n6.service.Impl.PutToMapException;
+import com.ward_n6.exception.DeleteFromMapException;
+import com.ward_n6.exception.EditMapException;
+import com.ward_n6.exception.PutToMapException;
 import com.ward_n6.service.OwnerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

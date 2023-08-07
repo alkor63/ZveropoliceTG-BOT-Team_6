@@ -9,6 +9,7 @@ import lombok.Setter;
 import org.springframework.data.annotation.Id;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -35,7 +36,7 @@ public abstract class Pet {
     private int petAge;
 
     @Column(name = "pet_birthday")
-    private LocalDateTime petBirthDay;
+    private LocalDate petBirthDay;
 
     @Column(name = "pet_name")
     private String petName;
@@ -53,28 +54,25 @@ public abstract class Pet {
 
 
 
-    public Pet(long id, PetsType petsType, PetsSex petsSex, String petName, LocalDateTime petBirthDay, int petAge, String bread, Owner Owner) {
+    public Pet(long id, PetsType petsType, PetsSex petsSex, String petName, LocalDate petBirthDay, String bread) {
         this.id = id;
         this.petsSex = petsSex;
         this.petsType = petsType;
         this.petName = petName;
         this.petBirthDay = petBirthDay;
-        //  this.petAge = LocalDate.now().getYear() - petBirthDay.getYear();
-        this.Owner = Owner;
         this.bread = bread;
 
     }
 
-    public Pet(PetsType petsType, PetsSex petsSex, String petName, LocalDateTime petBirthDay, int petAge, String bread, Owner Owner) {
+    public Pet(PetsType petsType, PetsSex petsSex, String petName, LocalDate petBirthDay, int petAge, String bread, Owner Owner) {
         this.petsType = petsType;
         this.petsSex = petsSex;
         this.petName = petName;
         this.petBirthDay = petBirthDay;
-        //    this.petAge = LocalDate.now().getYear() - petBirthDay.getYear();
         this.bread = bread;
     }
 
-    public Pet(PetsType petsType, PetsSex petsSex, String petName, LocalDateTime petBirthDay, String bread) {
+    public Pet(PetsType petsType, PetsSex petsSex, String petName, LocalDate petBirthDay, String bread) {
         this.petsType = petsType;
         this.petsSex = petsSex;
         this.petName = petName;
@@ -88,7 +86,7 @@ public abstract class Pet {
         this.petsType = petsType;
         this.petsSex = petsSex;
         this.petName = petName;
-        this.petAge = LocalDateTime.now().getYear() - petBirthDay.getYear();
+        this.petAge = LocalDate.now().getYear() - petBirthDay.getYear();
         this.bread = bread;
         this.Owner = Owner;
     }
@@ -101,10 +99,7 @@ public abstract class Pet {
                 ", животное " + petsType.getTitle() +
                 ", кличка " + petName + '\'' +
                 ", дата рождения: " + petBirthDay +
-                ", возраст, лет: " +
                 ", порода " + bread + '\'' +
-                ", владелец: " + Owner.getId() + " " + Owner.getLastName() + " " +
-                Owner.getFirstName() + " " + Owner.getPhoneNumber() + '\'' +
                 '}';
     }
     public String reportToString() {
@@ -112,7 +107,6 @@ public abstract class Pet {
                 "ID " + id +
                 ", животное " + petsType.getTitle() +
                 ", кличка " + petName + '\'' +
-                ", возраст, лет: " + petAge +
                 ", порода " + bread + '\'' +
                 '}';
 
@@ -123,11 +117,12 @@ public abstract class Pet {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Pet pet = (Pet) o;
-        return petAge == pet.petAge && Objects.equals(id, pet.id) && Objects.equals(bread, pet.bread) && Objects.equals(petBirthDay, pet.petBirthDay) && Objects.equals(petName, pet.petName) && petsSex == pet.petsSex && petsType == pet.petsType && Objects.equals(Owner, pet.Owner);
+        return Objects.equals(id, pet.id) && Objects.equals(bread, pet.bread) && Objects.equals(petBirthDay, pet.petBirthDay)
+                && Objects.equals(petName, pet.petName) && petsSex == pet.petsSex && petsType == pet.petsType;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, bread, petAge, petBirthDay, petName, petsSex, petsType, Owner);
+        return Objects.hash(id, bread, petBirthDay, petName, petsSex, petsType);
     }
 }
