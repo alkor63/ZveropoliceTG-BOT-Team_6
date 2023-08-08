@@ -59,17 +59,17 @@ public class OwnerReport {
         this.petId = petId;
     }
 
-    public OwnerReport(long id, LocalDateTime reportDateTime, boolean havePhoto, String nutrition, String petsHealth, String petsBehavior, Pet ownersPet, long petId) {
-        this.id = id;
-        this.reportDateTime = reportDateTime;
-        this.havePhoto = havePhoto;
-        this.nutrition = nutrition;
-        this.petsHealth = petsHealth;
-        this.petsBehavior = petsBehavior;
-        this.petId = petId;
-    }
+//    public OwnerReport(long id, LocalDateTime reportDateTime, boolean havePhoto, String nutrition, String petsHealth, String petsBehavior, Pet ownersPet, long petId) {
+//        this.id = id;
+//        this.reportDateTime = reportDateTime;
+//        this.havePhoto = havePhoto;
+//        this.nutrition = nutrition;
+//        this.petsHealth = petsHealth;
+//        this.petsBehavior = petsBehavior;
+//        this.petId = petId;
+//    }
 
-// фото
+//   фото
     //рацион
     //здоровье
     //изменение поведения - м.б. null?
@@ -93,5 +93,15 @@ public class OwnerReport {
 
     public Long getId() {
         return id;
+    }
+
+    @Override
+    public String toString() {
+        return "OwnerReport{" +
+                "id=" + id +
+                ", reportDateTime=" + reportDateTime +
+
+                ", petId=" + petId +
+                '}';
     }
 }

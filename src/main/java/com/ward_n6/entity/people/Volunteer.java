@@ -7,6 +7,7 @@ import com.ward_n6.entity.reports.OwnerReport;
 import com.ward_n6.exception.DeleteFromMapException;
 import com.ward_n6.exception.EditMapException;
 import com.ward_n6.exception.PutToMapException;
+import com.ward_n6.service.OwnerReportService;
 import com.ward_n6.service.PetService;
 import com.ward_n6.service.PetsOwnerArchiveService;
 import com.ward_n6.service.PetsOwnerService;
@@ -29,17 +30,17 @@ public class Volunteer {
     // вызов этого метода из Бота и его обработка - ниже, в ownersVerdict
 
 
-    private final PetService petService;
     private final PetsOwnerService petsOwnerService;
     private final PetsOwnerArchiveService petsOwnerArchiveService;
+    private final OwnerReportService ownerReportService;
+    private final PetService petService;
 
-    public Volunteer(PetService petService, PetsOwnerService petsOwnerService, PetsOwnerArchiveService petsOwnerArchiveService) {
-        this.petService = petService;
+    public Volunteer(PetsOwnerService petsOwnerService, PetsOwnerArchiveService petsOwnerArchiveService, OwnerReportService ownerReportService, PetService petService) {
         this.petsOwnerService = petsOwnerService;
         this.petsOwnerArchiveService = petsOwnerArchiveService;
+        this.ownerReportService = ownerReportService;
+        this.petService = petService;
     }
-
-
 
     public String callVolunteer(String firstName) {
         // Волонтёр откликается на просьбу о связи от пользователя с именем firstName
@@ -81,13 +82,16 @@ public class Volunteer {
         // чтоб не потерять отчеты, пришедшие с 21:00 по 21:01, время задаём здесь
         LocalDateTime startTime = LocalDateTime.of(date.minusDays(1), time);
         LocalDateTime stopTime = LocalDateTime.of(date, time).plusNanos(1); // т.к. методы isAfter и isBefore не включают equals
-        List<OwnerReport> ownerReportList = new ArrayList<>();
+        List<OwnerReport> ownerReportList = new ArrayList<>(ownerReportService.getAllOwnerReports());
+
+
+        System.out.println("ownerReportList = "+ownerReportList);
         for (OwnerReport ownerReport : ownerReportList) {
             LocalDateTime dateTime = ownerReport.getReportDateTime();
             if (dateTime.isAfter(startTime) && dateTime.isBefore(stopTime))
                 num++; // есть отчёт в искомом интервале времени
         }
-        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm");
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
         System.out.println("c " + startTime.format(fmt) + " по " + stopTime.format(fmt) + " поступило " + num + " отчетов усыновителей");
         if (num > 0) System.out.println("все отчеты обработаны");
         return num; // количество отчетов за 24 часа до 21:00 указанной даты

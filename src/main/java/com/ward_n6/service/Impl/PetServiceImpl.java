@@ -15,8 +15,6 @@ import java.util.Map;
 @Service
 public class PetServiceImpl implements PetService {
     private final PetRepository petRepository;
-
-
     public PetServiceImpl(PetRepository petRepository) {
         this.petRepository = petRepository;
     }

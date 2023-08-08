@@ -24,6 +24,13 @@ public class PetWithOwner {
         this.endDate = endDate;
     }
 
+    public PetWithOwner(Owner owner, Pet pet) {
+//      try {
+            this.owner = owner;
+            this.pet = pet;
+//      } catch
+//      (throw new IllegalArgumentException("кривой аргумент в конструкторе PetWithOwner");)
+    }
     public PetWithOwner() {
 
     }
