@@ -51,7 +51,8 @@ public class OwnerReport {
 
     public OwnerReport(long id, LocalDateTime reportDateTime, boolean havePhoto, String nutrition, String petsHealth, String petsBehavior, long petId) {
         this.id = id;
-        this.reportDateTime = reportDateTime;
+//        this.reportDateTime = reportDateTime;
+        this.reportDateTime = LocalDateTime.now();
         this.havePhoto = havePhoto;
         this.nutrition = nutrition;
         this.petsHealth = petsHealth;

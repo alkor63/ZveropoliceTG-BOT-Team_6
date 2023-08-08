@@ -82,10 +82,11 @@ public class Volunteer {
         // чтоб не потерять отчеты, пришедшие с 21:00 по 21:01, время задаём здесь
         LocalDateTime startTime = LocalDateTime.of(date.minusDays(1), time);
         LocalDateTime stopTime = LocalDateTime.of(date, time).plusNanos(1); // т.к. методы isAfter и isBefore не включают equals
-        List<OwnerReport> ownerReportList = new ArrayList<>(ownerReportService.getAllOwnerReports());
+        List<OwnerReport> ownerReportList = new ArrayList<>();
+        //(ownerReportService.getAllOwnerReports());
 
 
-        System.out.println("ownerReportList = "+ownerReportList);
+        System.out.println("ownerReportList = " + ownerReportList);
         for (OwnerReport ownerReport : ownerReportList) {
             LocalDateTime dateTime = ownerReport.getReportDateTime();
             if (dateTime.isAfter(startTime) && dateTime.isBefore(stopTime))
@@ -173,6 +174,80 @@ public class Volunteer {
             default:
                 return "Некорректное значение rating. Разработчик что-то накосячил";
         }
+    }
+
+    public int verifyReport(OwnerReport ownerReport) {
+// метод проверяет заполнено каждое из 4 полей в отчете или нет
+// возвращает целое число (до 4 знаков), собранное по бинарному принципу:
+// 1111 - все поля заполнены, 1010 - заполнены 1 и 3, а 2 и 4 - пустые; 0 - пустой отчет
+        int n = 0;
+        if (ownerReport.isHavePhoto()) n = n + 1000;
+        if (!nullString(ownerReport.getNutrition())) n = n + 100;
+        if (!nullString(ownerReport.getPetsHealth())) n = n + 10;
+        if (!nullString(ownerReport.getPetsBehavior())) n = n + 1;
+        return n;
+    }
+
+    public String reportExpertise(OwnerReport ownerReport){
+        int n = verifyReport(ownerReport);
+        switch (n){
+            case 0:
+                // все поля пустые
+                return "Вы прислали отчет. Потрудитесь заполнить все поля!";
+            case 1:
+                // заполнено только поле "поведение"
+                return "Вы рассказали только о поведении питомца. Заполните, пожалуйста, остальные поля";
+            case 10:
+                // заполнено только поле "самочувствие"
+                return "Вы рассказали только о самочувствии питомца. Заполните, пожалуйста, остальные поля";
+            case 100:
+                // заполнено только поле "питание"
+                return "Вы рассказали только о питании питомца. Заполните, пожалуйста, остальные поля";
+            case 1000:
+                // заполнено только поле "фото"
+                return "Вы прислали только фото питомца. Заполните, пожалуйста, остальные поля";
+
+            case 11:
+                // заполнены поля "поведение" и "самочувствие"
+                return "Вы рассказали только о поведении питомца. Заполните, пожалуйста, остальные поля";
+            case 101:
+                // заполнены поля "поведение" и "питание"
+                return "Вы рассказали только о самочувствии питомца. Заполните, пожалуйста, остальные поля";
+            case 1001:
+                // заполнены поля "поведение" и "фото"
+                return "Вы рассказали о поведении питомца и прислали фото. Заполните, пожалуйста, остальные поля";
+            case 110:
+                // заполнены поля "питание" и "самочувствие"
+                return "Вы рассказали о питании и самочувствие питомца. Заполните, пожалуйста, остальные поля";
+            case 1010:
+                // заполнены поля "самочувствие" и "фото"
+                return "Вы рассказали о самочувствии питомца и прислали фото. Заполните, пожалуйста, остальные поля";
+            case 1100:
+                // заполнены поля "питание" и "фото"
+                return "Вы рассказали о питании питомца и прислали фото. Заполните, пожалуйста, остальные поля";
+
+            case 111:
+                // заполнены все поля кроме "фото"
+                return "Вы забыли прислать фото питомца. Заполните, пожалуйста, это поле";
+            case 1011:
+                // заполнены все поля кроме "питание"
+                return "Вы забыли рассказать о питании питомца. Заполните, пожалуйста, это поле";
+            case 1101:
+                // заполнены все поля кроме "самочувствие"
+                return "Вы забыли рассказать о самочувствии питомца. Заполните, пожалуйста, это поле";
+            case 1110:
+                // заполнены все поля кроме "поведение"
+                return "Вы забыли рассказать о поведении питомца. Заполните, пожалуйста, это поле";
+
+            case 1111:
+                // заполнены все поля
+                return "Отличный отчёт!";
+            default:
+                return "Некорректное значение кода отчета. Разработчик что-то накосячил";
+        }
+    }
+    public static boolean nullString(String s) {
+        return (s == null || s.isEmpty() || s.isBlank());
     }
 }
 
