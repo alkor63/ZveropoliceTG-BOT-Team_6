@@ -1,11 +1,18 @@
 package com.ward_n6.entity.shelters;
 
 import com.ward_n6.entity.pets.Pet;
+import lombok.Generated;
+import lombok.Setter;
 
+import javax.persistence.Entity;
 import java.util.HashMap;
 import java.util.Map;
 // абстрактный класс для реализации конструктора и методов приюта
+@Setter
+@Generated
+
 public abstract class PetShelter {
+
     private String shelterName = "Приют «Мечта»"; //название приюта
     public String description = "Мы приветствуем вас в приюте «Мечта». Наш приют основан в 2015 году в г. Астана. За это время через наши руки прошло более 500 собак и 200 кошек. Мы являемся некоммерческой организацией, поэтому все средства к нашему существованию – это пожертвования неравнодушных жителей. Мы очень рады, что вы заглянули к нам! ";
             //"Скажите, ваш вопрос связан с приютом для кошек или для собак?"; //описание приюта
@@ -24,7 +31,6 @@ public abstract class PetShelter {
     private String callVolonteer = "Через некоторое время с Вами свяжется волонтёр и ответит на интересующие вопросы";
 
     public PetShelter() {
-
     }
     //геттеры и сеттеры
     public String getShelterName() {

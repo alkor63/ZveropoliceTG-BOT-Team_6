@@ -368,6 +368,8 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                         Message message = update.message(); // получаем сообщение из текущего обновления
                         Long chatId = message.chat().id(); // получаем идентификатор чата, к которому относится апдейт
                         String messageText = message.text(); // получаем текст сообщения
+
+                        // ФОРМА ОТЧЁТА:
                         sendMessage(chatId, """
                                 Для загрузки отчёта следуйте указаниям бота. Пожалуйста, заполните все пункты отчёта.
                                 Команды для отчёта:\s
@@ -376,10 +378,14 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                                 3. /health - отчёт о здоровье питомца
                                 4. /feed - отчёт о питании питомца
                                 5. /save - сохранить отчёт""");
+                        // начинаем сохранять отчёт:
                         OwnerReport ownerReport = new OwnerReport();
                         ownerReport.setChatId(chatId);
                         ownerReport.setReportDateTime(LocalDateTime.now());
-                        ownerReport.setPetsType(PetsType.DOG); //ИСПРАВИТЬ!
+                        //ИСПРАВИТЬ!
+                        ownerReport.setPetsType(PetsType.DOG);
+
+                        // КОМАНДЫ ОТЧЁТА:
                         switch (messageText) {
                             case "/ID":
                                 sendMessage(chatId, "Укажите ID Вашего питомца");
@@ -388,7 +394,7 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                                     long petsId = Long.parseLong(messageText.split(" ")[0]); // парсим сообщение в формат ID, 0 - без пробелов
                                     ownerReport.setPetId(petsId);
                                     sendMessage(chatId, "ID питомца записан.");
-                                }
+                                } break;
 
                             case "/action":
                                 sendMessage(chatId, "Опишите кратко поведение питомца");
@@ -396,21 +402,21 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                             if (actionMessage.length() > 10) {
                                 ownerReport.setPetsBehavior(actionMessage);
                                 sendMessage(chatId, "Отчёт о поведении питомца записан");
-                            }
+                            } break;
 
                             case "/health":
                                 sendMessage(chatId, "Опишите кратко самочувствие питомца");
                                 String healthMessage = message.text();
                             if (healthMessage != null) {
                                 ownerReport.setPetsHealth(healthMessage);
-                            }
+                            } break;
 
                             case "/feed":
                                 sendMessage(chatId, "Опишите рацион питомца");
                                 String feedMessage = message.text();
                             if (feedMessage != null) {
                                 ownerReport.setNutrition(feedMessage);
-                            }
+                            } break;
 
                             case "/save":
                                 reportService.save(ownerReport);
@@ -419,7 +425,7 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                             default:
                                 if (messageText != null) {
                                    saveMessages(chatId, messageText);
-                                }
+                                } break;
                         }
                     });
         } catch (Exception e) {
@@ -439,7 +445,7 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                 String messageText = message.text();
 
                 sendMessage(chatId, """
-                        Укажите Вашу фамилию с заглавной буквы. Команды для заполнения данных:
+                        Укажите Ваши контактные данные. Введите команду для заполнения данных:
                         1. /ln - указать фамилию
                         2. /fn -  указать имя
                         3. /phone -  указать номер телефона""");
