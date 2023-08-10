@@ -13,14 +13,14 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-// класс, содержащий общие свойства для кошек и собак и для создания БД
+/** класс, содержащий общие свойства для кошек и собак и для создания отдельных
+ *  для животных - на рассмотреии - сколько нужно таблицБД*/
 @Getter
 @Setter
 @NoArgsConstructor
-//@MappedSuperclass
 @Entity
 @Table(name = "pets")
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS) // каждому наследнику свою таблицу
 
 public abstract class Pet {
 
@@ -105,7 +105,7 @@ public abstract class Pet {
     public String reportToString() {
         return "Pet{" +
                 "ID " + id +
-                ", животное " + petsType.getTitle() +
+                " " + petsType.getTitle() +
                 ", кличка " + petName + '\'' +
                 ", порода " + bread + '\'' +
                 '}';
