@@ -24,14 +24,10 @@ public class PetsOwnerArchiveRepositoryImpl implements PetsOwnerArchiveRepositor
     }
 
     @Override
-    public PetWithOwner addToArchivePetWithOwner(PetWithOwner petWithOwner) throws PutToMapException {
+    public PetWithOwner addToArchivePetWithOwner(PetWithOwner petWithOwner) {
+        if (petWithOwner.equals(null)) throw new NullPointerException(
+                "ОШИБКА при попытке добавить petWithOwner=Null в архив ownerReportMap");
         petWithOwnerMap.putIfAbsent(mapId++, petWithOwner);
-        if (!petWithOwnerMap.get(mapId - 1).equals(petWithOwner)) {
-            throw new PutToMapException("ОШИБКА при попытке добавить животное "
-                    + petWithOwner.getPet().getBread() + " " + petWithOwner.getPet().getPetName() +
-                    "и нового хозяина " + petWithOwner.getOwner().getFirstName() + " "
-                    + petWithOwner.getOwner().getLastName() + " в АРХИВ petWithOwnerMap");
-        }
         return petWithOwner;
     }
 

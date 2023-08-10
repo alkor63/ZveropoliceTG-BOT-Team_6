@@ -18,12 +18,9 @@ public class OwnerRepositoryImpl implements OwnerRepository {
 
 
     @Override
-    public Owner addOwner(Owner owner) throws PutToMapException {
+    public Owner addOwner(Owner owner) {
+        if (owner.equals(null)) throw new NullPointerException("ОШИБКА при попытке добавить owner=Null в МАПу ownerMap");
         ownerMap.putIfAbsent(mapId++, owner);
-        if (!ownerMap.get(mapId - 1).equals(owner)) {
-            throw new PutToMapException("ОШИБКА при попытке добавить гостя по имени "
-                    + owner.getFirstName() + " " + owner.getLastName() + " в МАПу ownerMap");
-        }
         return owner;
     }
 

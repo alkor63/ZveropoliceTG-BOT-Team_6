@@ -17,12 +17,10 @@ public class OwnerReportRepositoryImpl implements OwnerReportRepository {
     private Map<Integer, OwnerReport> ownerReportMap = new HashMap<>();
     private int mapId = 0;
     @Override
-    public OwnerReport addOwnerReport(OwnerReport ownerReport) throws PutToMapException {
+    public OwnerReport addOwnerReport(OwnerReport ownerReport) {
+        if (ownerReport.equals(null)) throw new NullPointerException(
+                "ОШИБКА при попытке добавить ownerReport=Null в МАПу ownerReportMap");
         ownerReportMap.putIfAbsent(mapId++, ownerReport);
-        if (!ownerReportMap.get(mapId-1).equals(ownerReport)) {
-            throw new PutToMapException("ОШИБКА при попытке добавить отчет о животном с id = "
-                    +ownerReport.getPetId()+" в МАПу ownerReportMap");
-        }
         return ownerReport;
     }
 

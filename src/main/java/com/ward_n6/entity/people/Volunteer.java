@@ -30,7 +30,7 @@ public class Volunteer {
     // вызов этого метода из Бота и его обработка - ниже, в ownersVerdict
 
 
-    private final PetsOwnerService petsOwnerService;
+    final PetsOwnerService petsOwnerService;
     private final PetsOwnerArchiveService petsOwnerArchiveService;
     private final OwnerReportService ownerReportService;
     private final PetService petService;
@@ -82,12 +82,12 @@ public class Volunteer {
         // чтоб не потерять отчеты, пришедшие с 21:00 по 21:01, время задаём здесь
         LocalDateTime startTime = LocalDateTime.of(date.minusDays(1), time);
         LocalDateTime stopTime = LocalDateTime.of(date, time).plusNanos(1); // т.к. методы isAfter и isBefore не включают equals
-        List<OwnerReport> ownerReportList = new ArrayList<>();
+//        List<OwnerReport> ownerReportList = new ArrayList<>();
         //(ownerReportService.getAllOwnerReports());
 
 
-        System.out.println("ownerReportList = " + ownerReportList);
-        for (OwnerReport ownerReport : ownerReportList) {
+        System.out.println("ownerReportList = " + ownerReportService.getAllOwnerReports());
+        for (OwnerReport ownerReport : ownerReportService.getAllOwnerReports()) {
             LocalDateTime dateTime = ownerReport.getReportDateTime();
             if (dateTime.isAfter(startTime) && dateTime.isBefore(stopTime))
                 num++; // есть отчёт в искомом интервале времени
@@ -103,6 +103,7 @@ public class Volunteer {
 // Исходим из того, что запрос на "приговор" приходит в день окончания испытательного срока
 // т.е. дата = localDate.now()
 // просматриваем все отчеты этого усыновителя за испытательный период и присваиваем ему рейтинг
+
         long petId = petWithOwner.getPet().getId();
         int numReport = 0;
         int numOldReport = 0;
@@ -110,9 +111,8 @@ public class Volunteer {
         LocalDate before30 = today.minusDays(30);
         LocalDate before60 = today.minusDays(61);
         // list всех отчетов
-        List<OwnerReport> ownerReportList = new ArrayList<>();
         // foreach для всех отчетов
-        for (OwnerReport ownerReport : ownerReportList) {
+        for (OwnerReport ownerReport : ownerReportService.getAllOwnerReports()) {
             LocalDate date = ownerReport.getReportDateTime().toLocalDate();
             if (ownerReport.getPetId() == petId) {
                 if (date.isBefore(before30) && date.isAfter(before60)) {

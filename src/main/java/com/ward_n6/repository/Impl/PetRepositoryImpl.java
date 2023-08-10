@@ -17,12 +17,10 @@ public class PetRepositoryImpl implements PetRepository {
     private Map<Integer, Pet> petMap = new HashMap<>();
     private int mapId = 0;
     @Override
-    public Pet addPet(Pet pet) throws PutToMapException {
+    public Pet addPet(Pet pet) {
+        if (pet.equals(null)) throw new NullPointerException(
+                "ОШИБКА при попытке добавить pet=Null в МАПу petMap");
         petMap.putIfAbsent(mapId++, pet);
-        if (!petMap.get(mapId-1).equals(pet)) {
-            throw new PutToMapException("ОШИБКА при попытке добавить животное "
-                    +pet.getBread()+" "+pet.getPetName()+" в МАПу petMap");
-        }
         return pet;
     }
 

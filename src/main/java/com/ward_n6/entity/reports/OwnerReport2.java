@@ -1,22 +1,23 @@
 package com.ward_n6.entity.reports;
 
-import com.ward_n6.entity.pets.Pet;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Getter
 @Setter
 //@Entity
-@Table(name="owner_report")
-// нужно делать класс абстрактным???
-public class OwnerReport {
+@Table(name="owner_report2")
+public class OwnerReport2 {
     @javax.persistence.Id
-    @Column(name = "id", nullable = false)
+    @Column(nullable = false)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -27,7 +28,7 @@ public class OwnerReport {
     @Column(name = "have_a_photo", nullable = false)
     private boolean havePhoto; // проверка наличия фото
 
-    @Column(name = "nutrition", nullable = false)
+    @Column(nullable = false)
     private String nutrition; // питание
 
     @Column(name = "pets_health", nullable = false)
@@ -46,45 +47,38 @@ public class OwnerReport {
     @Column(name = "pet_id", nullable = false)
     private long petId; // id питомца
 
-    public OwnerReport() {
+    @Column(name = "owner_id", nullable = false)
+    private long ownerId; // id питомца
+
+    public OwnerReport2() {
     }
 
-    public OwnerReport(long id, LocalDateTime reportDateTime, boolean havePhoto, String nutrition, String petsHealth, String petsBehavior, long petId) {
-        this.id = id;
-        this.reportDateTime = reportDateTime;
+    public OwnerReport2(boolean havePhoto, String nutrition, String petsHealth, String petsBehavior, long petId, long ownerId) {
         this.havePhoto = havePhoto;
         this.nutrition = nutrition;
         this.petsHealth = petsHealth;
         this.petsBehavior = petsBehavior;
         this.petId = petId;
+        this.ownerId = ownerId;
+        this.reportDateTime = LocalDateTime.now();
     }
-
-//    public OwnerReport(long id, LocalDateTime reportDateTime, boolean havePhoto, String nutrition, String petsHealth, String petsBehavior, Pet ownersPet, long petId) {
-//        this.id = id;
-//        this.reportDateTime = reportDateTime;
-//        this.havePhoto = havePhoto;
-//        this.nutrition = nutrition;
-//        this.petsHealth = petsHealth;
-//        this.petsBehavior = petsBehavior;
-//        this.petId = petId;
-//    }
 
 //   фото
     //рацион
     //здоровье
-    //изменение поведения - м.б. null?
+    //изменение поведения
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        OwnerReport that = (OwnerReport) o;
-        return id == that.id && havePhoto == that.havePhoto && petId == that.petId && Objects.equals(reportDateTime, that.reportDateTime) && Objects.equals(nutrition, that.nutrition) && Objects.equals(petsHealth, that.petsHealth) && Objects.equals(petsBehavior, that.petsBehavior);
+        OwnerReport2 that = (OwnerReport2) o;
+        return id == that.id && petId == that.petId && ownerId == that.ownerId && reportDateTime.equals(that.reportDateTime) && Objects.equals(nutrition, that.nutrition) && Objects.equals(petsHealth, that.petsHealth) && Objects.equals(petsBehavior, that.petsBehavior);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, reportDateTime, havePhoto, nutrition, petsHealth, petsBehavior, petId);
+        return Objects.hash(id, reportDateTime, nutrition, petsHealth, petsBehavior, petId, ownerId);
     }
 
     public Long getId() {
@@ -97,7 +91,7 @@ public class OwnerReport {
                 "id=" + id +
                 ", reportDateTime=" + reportDateTime +
 
-                ", petId=" + petId +
+                ", petId=" + petId + " ownerId = " + ownerId +
                 '}';
     }
 }
