@@ -3,10 +3,13 @@ package com.ward_n6.repository.Impl;
 import com.ward_n6.entity.owners.Owner;
 import com.ward_n6.exception.DeleteFromMapException;
 import com.ward_n6.exception.EditMapException;
-import com.ward_n6.exception.PutToMapException;
 import com.ward_n6.repository.OwnerRepository;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,7 +26,31 @@ public class OwnerRepositoryImpl implements OwnerRepository {
         ownerMap.putIfAbsent(mapId++, owner);
         return owner;
     }
+    @Override
+    public Owner addOwnerToDB(Owner owner) {
+        try {
+            // Создаем подключение к базе данных
+            Connection connection = DriverManager.getConnection(
+                    "jdbc:mysql://localhost:5432/postgres",
+                    "postgres", "Sql2374");
 
+            // Создаем запрос на добавление записи в таблицу:
+            String query = "INSERT INTO owner (firstName, lastName, ownerPhone) VALUES (?, ?, ?)";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(1, owner.getFirstName());
+            statement.setString(2, owner.getLastName());
+            statement.setString(3, owner.getPhoneNumber());
+
+            // Выполняем запрос и закрываем соединение:
+            statement.executeUpdate();
+            statement.close();
+            connection.close();
+        } catch (
+                SQLException e) {
+            System.out.println("Ошибка при добавлении записи в базу данных: " + e.getMessage());
+        }
+        return owner;
+    }
     @Override
     public Owner getOwnerById(int recordId) {
         return ownerMap.get(recordId);

@@ -1,9 +1,17 @@
 package com.ward_n6.service.Impl;
 
 import com.ward_n6.entity.owners.Owner;
+import com.ward_n6.exception.DeleteFromMapException;
+import com.ward_n6.exception.EditMapException;
+import com.ward_n6.exception.PutToMapException;
+import com.ward_n6.repository.OwnerRepository;
 import com.ward_n6.service.OwnerService;
 import org.springframework.stereotype.Service;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,92 +19,63 @@ import java.util.Map;
 
 @Service
 public class OwnerServiceImpl implements OwnerService {
+    private final OwnerRepository ownerRepository;
     private Map<Integer, Owner> ownerMap = new HashMap<>();
     private int mapId = 0;
+
+    public OwnerServiceImpl(OwnerRepository ownerRepository) {
+        this.ownerRepository = ownerRepository;
+    }
 
 
     @Override
     public int getId() {
-        return mapId;
+        return ownerRepository.getId();
     }
 
     @Override
     public Owner addOwner(Owner owner) throws PutToMapException {
-        ownerMap.putIfAbsent(mapId++, owner);
-        return ownerMap.get(mapId - 1);
+        return ownerRepository.addOwner(owner);
     }
 
 // добавление в БД
-//    @Override
-//    public Owner addOwnerToDB(Owner owner) {
-//        try {
-//            // Создаем подключение к базе данных
-//            Connection connection = DriverManager.getConnection(
-//                    "jdbc:mysql://localhost:5432/postgres",
-//                    "postgres", "1234");
-//
-//            // Создаем запрос на добавление записи в таблицу:
-//            String query = "INSERT INTO owner (fitstName, lastName, ownerPhne) VALUES (?, ?, ?)";
-//            PreparedStatement statement = connection.prepareStatement(query);
-//            statement.setString(1, owner.getFirstName());
-//            statement.setString(2, owner.getLastName());
-//            statement.setString(3, owner.getPhoneNumber());
-//
-//            // Выполняем запрос и закрываем соединение:
-//            statement.executeUpdate();
-//            statement.close();
-//            connection.close();
-//        } catch (SQLException e) {
-//            System.out.println("Ошибка при добавлении записи в базу данных: " + e.getMessage());
-//        } return owner;
-//    }
+    @Override
+    public Owner addOwnerToDB(Owner owner) {
+ return ownerRepository.addOwnerToDB(owner);
+    }
 
     @Override
     public Owner getOwnerById(int recordId) {
-        return ownerMap.get(recordId);
+        return ownerRepository.getOwnerById(recordId);
     }
 
     @Override
     public List<Owner> getAllOwners() {
-        return new ArrayList<>(ownerMap.values());
+        return ownerRepository.getAllOwners();
     }
 
     @Override
     public Owner editOwnerById(int recordId, Owner owner) throws EditMapException {
-        if (ownerMap.containsKey(recordId)) {
-            ownerMap.put(recordId, owner);
-            return ownerMap.get(recordId);
-        }
-        return null;
+return ownerRepository.editOwnerById(recordId,owner);
     }
 
     @Override
     public void deleteAllFromOwner() {
-        ownerMap.clear();
+        ownerRepository.deleteAllFromOwner();
     }
 
     @Override
     public boolean deleteOwnerById(int recordId) throws DeleteFromMapException {
-        if (ownerMap.containsKey(recordId)) {
-            ownerMap.remove(recordId);
-            return true;
-        }
-        return false;
+        return ownerRepository.deleteOwnerById(recordId);
     }
 
     @Override
     public boolean deleteOwnerByValue(Owner owner) throws DeleteFromMapException {
-        if (ownerMap.containsValue(owner)) {
-            ownerMap.values().remove(owner);
-            return true;
-        }
-        return false;
+        return ownerRepository.deleteOwnerByValue(owner);
     }
 
     @Override
     public int idOwnerByValue(Owner owner) {
-        for (Map.Entry<Integer, Owner> entry : ownerMap.entrySet())
-            if (entry.getValue().equals(owner)) return entry.getKey();
-        return -1;
+        return ownerRepository.idOwnerByValue(owner);
     }
 }

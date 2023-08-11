@@ -8,7 +8,6 @@ import com.ward_n6.repository.PetsOwnerArchiveRepository;
 import com.ward_n6.service.PetsOwnerArchiveService;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service

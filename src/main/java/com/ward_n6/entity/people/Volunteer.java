@@ -2,15 +2,15 @@ package com.ward_n6.entity.people;
 
 import com.ward_n6.entity.PetWithOwner;
 import com.ward_n6.entity.owners.Owner;
+import com.ward_n6.entity.owners.OwnerReport;
 import com.ward_n6.entity.pets.Pet;
-import com.ward_n6.entity.reports.OwnerReport;
 import com.ward_n6.exception.DeleteFromMapException;
 import com.ward_n6.exception.EditMapException;
 import com.ward_n6.exception.PutToMapException;
-import com.ward_n6.service.OwnerReportService;
-import com.ward_n6.service.PetService;
-import com.ward_n6.service.PetsOwnerArchiveService;
-import com.ward_n6.service.PetsOwnerService;
+import com.ward_n6.repository.OwnerReportRepository;
+import com.ward_n6.repository.PetRepository;
+import com.ward_n6.repository.PetsOwnerArchiveRepository;
+import com.ward_n6.repository.PetsOwnerRepository;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -30,16 +30,16 @@ public class Volunteer {
     // вызов этого метода из Бота и его обработка - ниже, в ownersVerdict
 
 
-    final PetsOwnerService petsOwnerService;
-    private final PetsOwnerArchiveService petsOwnerArchiveService;
-    private final OwnerReportService ownerReportService;
-    private final PetService petService;
+    final PetsOwnerRepository petsOwnerRepository;
+    private final PetsOwnerArchiveRepository petsOwnerArchiveRepository;
+    private final OwnerReportRepository ownerReportRepository;
+    private final PetRepository petRepository;
 
-    public Volunteer(PetsOwnerService petsOwnerService, PetsOwnerArchiveService petsOwnerArchiveService, OwnerReportService ownerReportService, PetService petService) {
-        this.petsOwnerService = petsOwnerService;
-        this.petsOwnerArchiveService = petsOwnerArchiveService;
-        this.ownerReportService = ownerReportService;
-        this.petService = petService;
+    public Volunteer(PetsOwnerRepository petsOwnerRepository, PetsOwnerArchiveRepository petsOwnerArchiveRepository, OwnerReportRepository ownerReportRepository, PetRepository petRepository) {
+        this.petsOwnerRepository = petsOwnerRepository;
+        this.petsOwnerArchiveRepository = petsOwnerArchiveRepository;
+        this.ownerReportRepository = ownerReportRepository;
+        this.petRepository = petRepository;
     }
 
     public String callVolunteer(String firstName) {
@@ -52,7 +52,7 @@ public class Volunteer {
         // и время начала и окончания испытательного срока
         try {
             PetWithOwner petWithOwner = new PetWithOwner(owner, pet, LocalDate.now(), LocalDate.now().plusDays(30));
-            petWithOwner = petsOwnerService.addToPetWithOwner(petWithOwner);
+            petWithOwner = petsOwnerRepository.addToPetWithOwner(petWithOwner);
             return petWithOwner;
         } catch (PutToMapException e) {
             System.out.println(e.getMessage());
@@ -64,8 +64,8 @@ public class Volunteer {
         // убираем парочку из таблицы PetWithOwner и заносим в одноименный архив
         // после успешного прохождения (окончания) испытательного срока
         try {
-            petsOwnerArchiveService.addToArchivePetWithOwner(petWithOwner);
-            petsOwnerService.deletePetWithOwnerByValue(petWithOwner);
+            petsOwnerArchiveRepository.addToArchivePetWithOwner(petWithOwner);
+            petsOwnerRepository.deletePetWithOwnerByValue(petWithOwner);
             return true;
         } catch (PutToMapException | DeleteFromMapException e) {
             System.out.println(e.getMessage());
@@ -83,11 +83,11 @@ public class Volunteer {
         LocalDateTime startTime = LocalDateTime.of(date.minusDays(1), time);
         LocalDateTime stopTime = LocalDateTime.of(date, time).plusNanos(1); // т.к. методы isAfter и isBefore не включают equals
 //        List<OwnerReport> ownerReportList = new ArrayList<>();
-        //(ownerReportService.getAllOwnerReports());
+        //(ownerReportRepository.getAllOwnerReports());
 
 
-        System.out.println("ownerReportList = " + ownerReportService.getAllOwnerReports());
-        for (OwnerReport ownerReport : ownerReportService.getAllOwnerReports()) {
+        System.out.println("ownerReportList = " + ownerReportRepository.getAllOwnerReports());
+        for (OwnerReport ownerReport : ownerReportRepository.getAllOwnerReports()) {
             LocalDateTime dateTime = ownerReport.getReportDateTime();
             if (dateTime.isAfter(startTime) && dateTime.isBefore(stopTime))
                 num++; // есть отчёт в искомом интервале времени
@@ -112,7 +112,7 @@ public class Volunteer {
         LocalDate before60 = today.minusDays(61);
         // list всех отчетов
         // foreach для всех отчетов
-        for (OwnerReport ownerReport : ownerReportService.getAllOwnerReports()) {
+        for (OwnerReport ownerReport : ownerReportRepository.getAllOwnerReports()) {
             LocalDate date = ownerReport.getReportDateTime().toLocalDate();
             if (ownerReport.getPetId() == petId) {
                 if (date.isBefore(before30) && date.isAfter(before60)) {
@@ -134,15 +134,15 @@ public class Volunteer {
         switch (rating) {
             case 0:
                 // вернуть животное в приют
-                //         petsOwnerService.deletePetWithOwnerByValue(petWithOwner); ==> удалить запись из таблицы
+                //         petsOwnerRepository.deletePetWithOwnerByValue(petWithOwner); ==> удалить запись из таблицы
                 return "За 30 дней Вы ни разу не прислали отчет. Вы должны вернуть животное в приют!";
             case 1:
                 // продлить испытательный срок на 30 дней
-                int idFromMap = petsOwnerService.idByValue(petWithOwner);
+                int idFromMap = petsOwnerRepository.idByValue(petWithOwner);
                 LocalDate newEndDate30 = LocalDate.now().plusDays(30);
                 petWithOwner.setEndDate(newEndDate30);   //увеличили дату окончания исп. срока на 30 дней
                 try {
-                    petsOwnerService.editPetWithOwnerById(idFromMap, petWithOwner);//перезаписали с новой датой окончания исп.срока
+                    petsOwnerRepository.editPetWithOwnerById(idFromMap, petWithOwner);//перезаписали с новой датой окончания исп.срока
                 } catch (EditMapException e) {
                     System.out.println(e.getMessage());
                 }
@@ -150,10 +150,10 @@ public class Volunteer {
             case 2:
                 // продлить испытательный срок на 14 дней
                 LocalDate newEndDate14 = LocalDate.now().plusDays(14);
-                idFromMap = petsOwnerService.idByValue(petWithOwner);
+                idFromMap = petsOwnerRepository.idByValue(petWithOwner);
                 petWithOwner.setEndDate(newEndDate14);   //увеличили дату окончания исп.срока на 14 дней
                 try {
-                    petsOwnerService.editPetWithOwnerById(idFromMap, petWithOwner);//перезаписали с новой датой окончания исп.срока
+                    petsOwnerRepository.editPetWithOwnerById(idFromMap, petWithOwner);//перезаписали с новой датой окончания исп.срока
                 } catch (EditMapException e) {
                     System.out.println(e.getMessage());
                 }
@@ -166,7 +166,7 @@ public class Volunteer {
 //              перемещаем запись о животном и хозяине в архив
 //              удаляем запись о животном и хозяине из таблицы с испытательным сроком
 //              удаляем запись о животном из таблицы Pet - этого животного больше нет в приюте
-                    petService.deletePetByValue(petWithOwner.getPet());
+                    petRepository.deletePetByValue(petWithOwner.getPet());
                 } catch (DeleteFromMapException e) {
                     System.out.println(e.getMessage());
                 }

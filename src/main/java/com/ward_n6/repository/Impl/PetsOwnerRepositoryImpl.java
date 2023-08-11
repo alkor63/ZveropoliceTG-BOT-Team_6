@@ -3,7 +3,6 @@ package com.ward_n6.repository.Impl;
 import com.ward_n6.entity.PetWithOwner;
 import com.ward_n6.exception.DeleteFromMapException;
 import com.ward_n6.exception.EditMapException;
-import com.ward_n6.exception.PutToMapException;
 import com.ward_n6.repository.PetsOwnerRepository;
 import org.springframework.stereotype.Repository;
 

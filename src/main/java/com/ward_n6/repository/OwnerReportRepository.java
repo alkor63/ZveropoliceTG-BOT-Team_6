@@ -1,6 +1,6 @@
 package com.ward_n6.repository;
 
-import com.ward_n6.entity.reports.OwnerReport;
+import com.ward_n6.entity.owners.OwnerReport;
 import com.ward_n6.exception.DeleteFromMapException;
 import com.ward_n6.exception.EditMapException;
 import com.ward_n6.exception.PutToMapException;
