@@ -1,4 +1,4 @@
-package com.ward_n6.Controllers;
+package com.ward_n6.exception.Controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ward_n6.entity.pets.Cat_2;

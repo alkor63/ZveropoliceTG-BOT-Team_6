@@ -13,7 +13,7 @@ import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.response.SendResponse;
 import com.vdurmont.emoji.EmojiParser;
 import com.ward_n6.entity.BotMessaging;
-import com.ward_n6.entity.owners.OwnerReport;
+import com.ward_n6.entity.reports.OwnerReport;
 import com.ward_n6.entity.shelters.PetShelter;
 import com.ward_n6.service.BotMessageService;
 import com.ward_n6.service.PhotoService;

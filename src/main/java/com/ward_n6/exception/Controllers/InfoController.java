@@ -1,4 +1,4 @@
-package com.ward_n6.Controllers;
+package com.ward_n6.exception.Controllers;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

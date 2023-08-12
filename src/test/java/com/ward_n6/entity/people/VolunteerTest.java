@@ -5,7 +5,7 @@ import com.ward_n6.entity.owners.CatOwner;
 import com.ward_n6.entity.owners.Owner;
 import com.ward_n6.entity.pets.Cat;
 import com.ward_n6.entity.pets.Pet;
-import com.ward_n6.entity.owners.OwnerReport;
+import com.ward_n6.entity.reports.OwnerReport;
 import com.ward_n6.exception.PutToMapException;
 import com.ward_n6.repository.OwnerReportRepository;
 import com.ward_n6.repository.PetRepository;
@@ -77,11 +77,11 @@ class VolunteerTest {
     void removePetWithOwnerToArchive() {
     }
 
-//    @Test
-//    void viewAllReports() {
-//        assertEquals(1,
-//                volunteer.viewAllReports(LocalDate.of(2023, 8, 7)));
-//    }
+    @Test
+    void viewAllReports() {
+        assertEquals(1,
+                volunteer.viewAllReports(LocalDate.of(2023, 8, 7)));
+    }
 
 //    @Test
 //    void endOfProbationPeriod() {
