@@ -1,17 +1,12 @@
-package com.ward_n6.entity.reports;
+package com.ward_n6.entity.owners;
 
-import com.ward_n6.entity.pets.Pet;
-import com.ward_n6.enums.PetsType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
 
 import javax.persistence.*;
-import java.awt.image.BufferedImage;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -21,8 +16,6 @@ import java.util.Objects;
  * поведение
  */
 @AllArgsConstructor
-
-
 @Getter
 @Setter
 @Entity
@@ -35,14 +28,8 @@ public class OwnerReport {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "chat_id", nullable = false)
-    private long chatId;
-
     @Column(name = "report_date_time", nullable = false)
     private LocalDateTime reportDateTime; // дата, время
-
-    @Column(name = "pet_type", nullable = false)
-    private PetsType petsType;
 
     @Column(name = "have_a_photo")
     private boolean havePhoto; // проверка наличия фото
@@ -59,34 +46,15 @@ public class OwnerReport {
 
     @Column(name = "pet_id", nullable = false)
     private long petId; // id питомца
-    @Lob
-    private List<BufferedImage> photos = new ArrayList<>(); // лист фоток
-
+    @Column(name = "owner_id", nullable = false)
+    private long ownerId; // id [усыновителя]
     public OwnerReport() {
     }
 
-    public OwnerReport(long id, long chatId, LocalDateTime reportDateTime, PetsType petsType, boolean havePhoto, String nutrition,
+    public OwnerReport(long id, LocalDateTime reportDateTime, boolean havePhoto, String nutrition,
                        String petsHealth, String petsBehavior, long petId) {
         this.id = id;
-        this.chatId = chatId;
         this.reportDateTime = reportDateTime;
-        this.petsType = petsType;
-
-        if (photos.size() != 0) {
-            this.havePhoto = true;
-        }
-        this.nutrition = nutrition;
-        this.petsHealth = petsHealth;
-        this.petsBehavior = petsBehavior;
-        this.petId = petId;
-    }
-
-    public OwnerReport(long id, long chatId, LocalDateTime reportDateTime, PetsType petsType, boolean havePhoto, String nutrition,
-                       String petsHealth, String petsBehavior, Pet ownersPet, long petId) {
-        this.id = id;
-        this.chatId = chatId;
-        this.reportDateTime = reportDateTime;
-        this.petsType = petsType;
         this.havePhoto = havePhoto;
         this.nutrition = nutrition;
         this.petsHealth = petsHealth;
@@ -94,17 +62,17 @@ public class OwnerReport {
         this.petId = petId;
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof OwnerReport that)) return false;
-        return getId() == that.getId() && getChatId() == that.getChatId() && Objects.equals(getReportDateTime(), that.getReportDateTime());
+        if (o == null || getClass() != o.getClass()) return false;
+        OwnerReport that = (OwnerReport) o;
+        return id == that.id && havePhoto == that.havePhoto && petId == that.petId && ownerId == that.ownerId && Objects.equals(reportDateTime, that.reportDateTime) && Objects.equals(nutrition, that.nutrition) && Objects.equals(petsHealth, that.petsHealth) && Objects.equals(petsBehavior, that.petsBehavior);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getChatId(), getReportDateTime());
+        return Objects.hash(id, reportDateTime, havePhoto, nutrition, petsHealth, petsBehavior, petId, ownerId);
     }
 
     public void setId(Long id) {
@@ -113,5 +81,15 @@ public class OwnerReport {
 
     public Long getId() {
         return id;
+    }
+
+    @Override
+    public String toString() {
+        return "OwnerReport{" +
+                "id=" + id +
+                ", reportDateTime=" + reportDateTime +
+
+                ", petId=" + petId +
+                '}';
     }
 }

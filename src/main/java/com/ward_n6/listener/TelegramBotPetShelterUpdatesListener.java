@@ -13,9 +13,8 @@ import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.response.SendResponse;
 import com.vdurmont.emoji.EmojiParser;
 import com.ward_n6.entity.BotMessaging;
-import com.ward_n6.entity.reports.OwnerReport;
+import com.ward_n6.entity.owners.OwnerReport;
 import com.ward_n6.entity.shelters.PetShelter;
-import com.ward_n6.enums.PetsType;
 import com.ward_n6.service.BotMessageService;
 import com.ward_n6.service.PhotoService;
 import com.ward_n6.service.ReportService;
@@ -117,7 +116,7 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                         sendMessage(chatId, "Загрузите отчёт.");
                         break;
 
-                        if reportStart { saveOwnerReportToDB(chatId, messageText);}
+  //                      if reportStart { saveOwnerReportToDB(chatId, messageText);}
 
                     case "/volunteer":
                         sendMessage(chatId,
@@ -279,9 +278,9 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                 }
             }
         }
-        ownerReport.setChatId(chatId);
+//        ownerReport.setChatId(chatId);
         ownerReport.setReportDateTime(LocalDateTime.now());
-        ownerReport.setPetsType(PetsType.DOG);
+//        ownerReport.setPetsType(PetsType.DOG);
         reportService.save(ownerReport);
         saveMessages(chatId, "Ваш отчёт загружен");
 

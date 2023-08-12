@@ -3,7 +3,7 @@ package com.ward_n6.listener;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.ward_n6.entity.BotMessaging;
-import com.ward_n6.entity.reports.OwnerReport;
+import com.ward_n6.entity.owners.OwnerReport;
 import com.ward_n6.service.BotMessageService;
 import org.springframework.stereotype.Service;
 @Service
