@@ -1,6 +1,6 @@
 package com.ward_n6.service;
 
-import com.ward_n6.entity.reports.OwnerReport;
+import com.ward_n6.entity.owners.OwnerReport;
 import com.ward_n6.repository.ReportRepository;
 import org.springframework.stereotype.Service;
 

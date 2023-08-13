@@ -1,61 +1,56 @@
 package com.ward_n6.service.Impl;
 
 import com.ward_n6.entity.PetWithOwner;
-import com.ward_n6.service.interfaces.PetsOwnerArchiveService;
+import com.ward_n6.exception.DeleteFromMapException;
+import com.ward_n6.exception.EditMapException;
+import com.ward_n6.exception.PutToMapException;
+import com.ward_n6.repository.PetsOwnerArchiveRepository;
+import com.ward_n6.service.PetsOwnerArchiveService;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
 @Service
 public class PetsOwnerArchiveServiceImpl implements PetsOwnerArchiveService {
-    private Map<Integer, PetWithOwner> petWithOwnerMap = new HashMap<>();
-    private int mapId = 0;
+private final PetsOwnerArchiveRepository petsOwnerArchiveRepository;
 
+    public PetsOwnerArchiveServiceImpl(PetsOwnerArchiveRepository petsOwnerArchiveRepository) {
+        this.petsOwnerArchiveRepository = petsOwnerArchiveRepository;
+    }
 
     @Override
     public int getId() {
-        return mapId;
+        return petsOwnerArchiveRepository.getId();
     }
 
     @Override
     public PetWithOwner addToArchivePetWithOwner(PetWithOwner petWithOwner) throws PutToMapException {
-        petWithOwnerMap.putIfAbsent(mapId++, petWithOwner);
-        return petWithOwnerMap.get(mapId-1);
+return petsOwnerArchiveRepository.addToArchivePetWithOwner(petWithOwner);
     }
 
     @Override
     public PetWithOwner getFromArchivePetWithOwnerById(int recordId) {
-        return petWithOwnerMap.get(recordId);
+        return petsOwnerArchiveRepository.getFromArchivePetWithOwnerById(recordId);
     }
 
     @Override
     public List<PetWithOwner> getAllFromArchivePetWithOwner() {
-        return new ArrayList<>(petWithOwnerMap.values());
+        return petsOwnerArchiveRepository.getAllFromArchivePetWithOwner();
     }
 
     @Override
     public PetWithOwner editArchivePetWithOwnerById(int recordId, PetWithOwner petWithOwner) throws EditMapException {
-        if (petWithOwnerMap.containsKey(recordId)) {
-            petWithOwnerMap.put(recordId, petWithOwner);
-            return petWithOwnerMap.get(recordId);
-        }
-        return null;
+return petsOwnerArchiveRepository.editArchivePetWithOwnerById(recordId, petWithOwner);
     }
 
     @Override
-    public void deleteAllFromArchive() {
-        petWithOwnerMap.clear();
+    public boolean deleteAllFromArchive() {
+        return petsOwnerArchiveRepository.deleteAllFromArchive();
     }
 
     @Override
     public boolean deleteFromArchivePetWithOwnerById(int recordId) throws DeleteFromMapException {
-        if (petWithOwnerMap.containsKey(recordId)) {
-            petWithOwnerMap.remove(recordId);
-            return true;
-        }
-        return false;
+return petsOwnerArchiveRepository.deleteFromArchivePetWithOwnerById(recordId);
     }
 
 }

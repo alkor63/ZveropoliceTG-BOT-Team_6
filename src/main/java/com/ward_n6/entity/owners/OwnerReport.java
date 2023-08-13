@@ -1,4 +1,4 @@
-package com.ward_n6.entity.reports;
+package com.ward_n6.entity.owners;
 
 import com.ward_n6.enums.PetsType;
 import lombok.AllArgsConstructor;
@@ -91,17 +91,17 @@ public class OwnerReport {
 //        this.petId = petId;
 //    }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof OwnerReport that)) return false;
-        return getId() == that.getId() && getChatId() == that.getChatId() && Objects.equals(getReportDateTime(), that.getReportDateTime());
+        if (o == null || getClass() != o.getClass()) return false;
+        OwnerReport that = (OwnerReport) o;
+        return id == that.id && havePhoto == that.havePhoto && petId == that.petId && ownerId == that.ownerId && Objects.equals(reportDateTime, that.reportDateTime) && Objects.equals(nutrition, that.nutrition) && Objects.equals(petsHealth, that.petsHealth) && Objects.equals(petsBehavior, that.petsBehavior);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getChatId(), getReportDateTime());
+        return Objects.hash(id, reportDateTime, havePhoto, nutrition, petsHealth, petsBehavior, petId, ownerId);
     }
 
     public void setId(Long id) {
@@ -110,5 +110,15 @@ public class OwnerReport {
 
     public Long getId() {
         return id;
+    }
+
+    @Override
+    public String toString() {
+        return "OwnerReport{" +
+                "id=" + id +
+                ", reportDateTime=" + reportDateTime +
+
+                ", petId=" + petId +
+                '}';
     }
 }

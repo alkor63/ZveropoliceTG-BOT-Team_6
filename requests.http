@@ -1,0 +1,36 @@
+GET http://localhost:8080
+
+###
+GET http://localhost:8080/info
+
+###
+GET http://localhost:8080/pet/5
+
+###
+GET http://localhost:8080/
+
+###
+DELETE http://localhost:8080/pet/3
+
+###
+GET http://localhost:8080/pet/1
+
+###
+POST http://localhost:8080/pet
+Content-Type: application/json
+
+{
+  "name": "Творог",
+  "quantity": 250,
+  "measureUnit": "г"
+}
+
+###
+POST http://localhost:8080/ingredient
+Content-Type: application/json
+
+{
+  "name": "Куриное яйцо",
+  "quantity": 3,
+  "measureUnit": "штуки"
+}
