@@ -1,8 +1,7 @@
 package com.ward_n6.entity.reports;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import com.ward_n6.enums.PetsType;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 
 import javax.persistence.*;
@@ -15,8 +14,9 @@ import java.util.Objects;
  * рацион
  * поведение
  */
+
 @AllArgsConstructor
-@NoArgsConstructor
+//@NoArgsConstructor
 @Getter
 @Setter
 @Builder
@@ -37,7 +37,7 @@ public class OwnerReport {
     @Column(name = "report_date_time", nullable = false)
     private LocalDateTime reportDateTime; // дата, время
 
-    @Column(name = "pet_type", nullable = false)
+    @Column(name = "pet_type", columnDefinition = "VARCHAR(255)")
     private PetsType petsType;
 
     @Column(name = "have_a_photo")
@@ -55,6 +55,7 @@ public class OwnerReport {
 
     @Column(name = "pet_id", nullable = false)
     private long petId; // id питомца
+
     @Column(name = "owner_id", nullable = false)
     private long ownerId; // id [усыновителя]
     public OwnerReport() {

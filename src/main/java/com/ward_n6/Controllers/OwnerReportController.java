@@ -1,24 +1,14 @@
 package com.ward_n6.Controllers;
 
-import com.ward_n6.entity.pets.Cat_2;
-import com.ward_n6.entity.pets.CatsCrud;
+
 import com.ward_n6.entity.reports.OwnerReport;
-import com.ward_n6.exception.EditMapException;
 import com.ward_n6.exception.InvalidRequestException;
-import com.ward_n6.exception.PutToMapException;
 import com.ward_n6.repository.OwnerReportRepository;
 import io.swagger.v3.oas.annotations.Operation;
-import javassist.NotFoundException;
-import liquibase.pro.packaged.O;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 

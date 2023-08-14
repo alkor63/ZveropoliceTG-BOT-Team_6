@@ -5,7 +5,7 @@ import com.ward_n6.exception.DeleteFromMapException;
 import com.ward_n6.exception.EditMapException;
 import com.ward_n6.exception.PutToMapException;
 import com.ward_n6.repository.PetsOwnerRepository;
-import com.ward_n6.service.PetsOwnerService;
+import com.ward_n6.service.interfaces.PetsOwnerService;
 
 import java.util.HashMap;
 import java.util.List;

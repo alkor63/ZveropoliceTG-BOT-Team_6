@@ -12,10 +12,11 @@ import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.response.SendResponse;
 import com.vdurmont.emoji.EmojiParser;
 import com.ward_n6.entity.BotMessaging;
-import com.ward_n6.entity.owners.OwnerReport;
 import com.ward_n6.entity.owners.Owner;
 import com.ward_n6.entity.reports.OwnerReport;
 import com.ward_n6.entity.shelters.PetShelter;
+import com.ward_n6.enums.PetsType;
+import com.ward_n6.repository.OwnerRepository;
 import com.ward_n6.service.BotMessageService;
 import com.ward_n6.service.OwnerService;
 import com.ward_n6.service.PhotoService;
@@ -27,6 +28,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Component
@@ -40,7 +42,7 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
     private PhotoService photoService;
 
     private final ReportService reportService;
-
+    private OwnerRepository ownerRepository;
 
     private final OwnerService ownerService;
 
@@ -53,9 +55,7 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
         this.telegramBot = telegramBot;
         this.reportService = reportService;
         this.ownerService = ownerService;
-
     }
-
 
     @PostConstruct
     public void init() {
@@ -63,7 +63,11 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
     }
 
     boolean startSelected = false; // переменная для подтверждения старта
-    boolean reportStart = false;
+
+    boolean reportSelect = false;
+    boolean catSelect = false;
+    boolean dogSelect = false;
+    boolean getOwnerDataSelect = false;
 
     /**
      * ОСНОВНОЙ МЕТОД
@@ -95,6 +99,7 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                         }
                         case "ИНФО_КОШКИ": {
                             catInfoButton(chatId);
+
                             break;
                         }
                         case "КАК_ЗАБРАТЬ_СОБАКУ": {
@@ -124,12 +129,14 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                         afterStartMenu(chatId, "/start");
                         break;
                     case "/dogs":
+                        dogSelect = true;
                         if (startSelected) {
                             sendMessage(chatId, "Вас приветствует приют для собак. " +
                                     "Выберите интересующий Вас пункт меню.");
                         }
                         break;
                     case "/cats":
+                        catSelect = true;
                         if (startSelected) {
                             sendMessage(chatId, "Вас приветствует приют для кошек. " +
                                     "Выберите интересующий Вас пункт меню.");
@@ -144,31 +151,88 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
 //                        break;
 
                     case "/report":
-
-
-                        saveOwnerReportToDB(updates);
-
+                        reportSelect = true;
+                        sendMessage(chatId, """
+                                Для загрузки отчёта следуйте указаниям бота. Пожалуйста, заполните все пункты отчёта.
+                                Команды для отчёта:\s
+                                1. /ID - указать id питомца
+                                2. /action - отчёт о поведении питомца
+                                3. /health - отчёт о здоровье питомца
+                                4. /feed - отчёт о питании питомца
+                                5. /save - сохранить отчёт""");
                         break;
 
                     case "/myData":
-                        addOwnerToDB(updates);
+                        if (startSelected) {
+                            sendMessage(chatId, "Пожалуйста, укажите Ваши данные в формате: " +
+                                    "Иванов Иван 8-ХХХ-ХХХ-ХХ-ХХ");
+                            String ownerData = update.message().text();
+//                            saveOwner(chatId, ownerData);
+                            getOwnerDataSelect = true;
+                        }
                         break;
-
-  //                      if reportStart { saveOwnerReportToDB(chatId, messageText);}
 
                     case "/volunteer":
                         sendMessage(chatId,
                                 petShelter.getCallVolonteer());
                         break;
-
-                    default:
-                        if (messageText != null) { // проверяем, не пустой ли текст
-                            saveMessages(chatId, messageText);
-                        }
-                        break;
+                } if (getOwnerDataSelect) {
+                    saveOwner(chatId, messageText);
                 }
+//                    case "/ID":
+//                        if(isReportSelect){
+//                        sendMessage(chatId, "Укажите ID Вашего питомца");
+//
+//                        ownerReport.wait();
+//                        String idMessage = message.text();
+//                        if (idMessage.matches("\\d+")) {
+//                            long id = Long.parseLong(idMessage.split(" ")[0]);
+//                            ownerReport.setPetId(id);
+//                            sendMessage(chatId, "ID питомца записан.");
+//                            ownerReport.notifyAll();
+//
+//                        } else {
+//                            sendMessage(chatId, "ID питомца указан неверно.");
+//                        }}
+//
+//                        break;
+//                    case "/action":
+//                        if(isReportSelect) {
+//                            sendMessage(chatId, "Опишите кратко поведение питомца");
+//                            saver.savePetBehavior(update, ownerReport);
+////                            String actionMessage = message.text();
+////                            ownerReport.setPetsBehavior(actionMessage);
+//                            sendMessage(chatId, "Отчёт о поведении питомца записан");
+//                        }
+//                        break;
+//                    case "/health":
+//                        if(isReportSelect) {
+//                            sendMessage(chatId, "Опишите кратко самочувствие питомца");
+//
+//                            String healthMessage = message.text();
+//                            ownerReport.setPetsHealth(healthMessage);
+//                        }
+//                        break;
+//                    case "/feed":
+//                        if(isReportSelect) {
+//                            sendMessage(chatId, "Опишите рацион питомца");
+//                            String feedMessage = message.text();
+//                            ownerReport.setNutrition(feedMessage);
+//                        }
+//                        break;
+//                    case "/save":
+//                        if(isReportSelect) {
+//                            reportService.save(ownerReport);
+//                            sendMessage(chatId, "Ваш отчёт загружен");
+//                        }
+//                        break;
+//                    default: if(isReportSelect){reportService.save(ownerReport);}
             }
-        } catch (Exception e) {
+            if (reportSelect && (dogSelect || catSelect)) {
+                saveOwnerReportToDB(updates);
+            }
+        } catch (
+                Exception e) {
             logger.error(e.getMessage()); // ловим ошибку
         }
         return UpdatesListener.CONFIRMED_UPDATES_ALL; // успешно завершаем метод, без падения
@@ -363,6 +427,7 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
      * (в зависимости от выбора приюта)
      */
     private int saveOwnerReportToDB(List<Update> updates) {
+        OwnerReport ownerReport = new OwnerReport();
         try {
             updates.stream() // получаем поток апдейтов из листа
                     .filter(update -> update.message() != null)// фильтруем по тем, что не нулл
@@ -371,64 +436,59 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                         Message message = update.message(); // получаем сообщение из текущего обновления
                         Long chatId = message.chat().id(); // получаем идентификатор чата, к которому относится апдейт
                         String messageText = message.text(); // получаем текст сообщения
-
-                        // ФОРМА ОТЧЁТА:
-                        sendMessage(chatId, """
-                                Для загрузки отчёта следуйте указаниям бота. Пожалуйста, заполните все пункты отчёта.
-                                Команды для отчёта:\s
-                                1. /ID - указать id питомца
-                                2. /action - отчёт о поведении питомца
-                                3. /health - отчёт о здоровье питомца
-                                4. /feed - отчёт о питании питомца
-                                5. /save - сохранить отчёт""");
-                        // начинаем сохранять отчёт:
-                        OwnerReport ownerReport = new OwnerReport();
                         ownerReport.setChatId(chatId);
                         ownerReport.setReportDateTime(LocalDateTime.now());
-                        //ИСПРАВИТЬ!
-                        ownerReport.setPetsType(PetsType.DOG);
-
+                        if (dogSelect) {
+                            ownerReport.setPetsType(PetsType.DOG);
+                        } else if (catSelect) {
+                            ownerReport.setPetsType(PetsType.CAT);
+                        }
                         // КОМАНДЫ ОТЧЁТА:
                         switch (messageText) {
                             case "/ID":
                                 sendMessage(chatId, "Укажите ID Вашего питомца");
                                 String idMessage = message.text();
                                 if (idMessage.matches("\\d+")) { // проверяем, что указано число
-                                    long petsId = Long.parseLong(messageText.split(" ")[0]); // парсим сообщение в формат ID, 0 - без пробелов
+                                    long petsId = Long.parseLong(idMessage.split(" ")[0]); // парсим сообщение в формат ID, 0 - без пробелов
                                     ownerReport.setPetId(petsId);
                                     sendMessage(chatId, "ID питомца записан.");
-                                } break;
+                                }
+                                break;
 
                             case "/action":
                                 sendMessage(chatId, "Опишите кратко поведение питомца");
                                 String actionMessage = message.text(); // сохраняем текстовое сообщение в переменную.
-                            if (actionMessage.length() > 10) {
-                                ownerReport.setPetsBehavior(actionMessage);
-                                sendMessage(chatId, "Отчёт о поведении питомца записан");
-                            } break;
+                                if (actionMessage != null) {
+                                    ownerReport.setPetsBehavior(actionMessage);
+                                    sendMessage(chatId, "Отчёт о поведении питомца записан");
+                                }
+                                break;
 
                             case "/health":
                                 sendMessage(chatId, "Опишите кратко самочувствие питомца");
                                 String healthMessage = message.text();
-                            if (healthMessage != null) {
-                                ownerReport.setPetsHealth(healthMessage);
-                            } break;
+                                if (healthMessage != null) {
+                                    ownerReport.setPetsHealth(healthMessage);
+                                }
+                                break;
 
                             case "/feed":
                                 sendMessage(chatId, "Опишите рацион питомца");
                                 String feedMessage = message.text();
-                            if (feedMessage != null) {
-                                ownerReport.setNutrition(feedMessage);
-                            } break;
+                                if (feedMessage != null) {
+                                    ownerReport.setNutrition(feedMessage);
+                                }
+                                break;
 
                             case "/save":
                                 reportService.save(ownerReport);
                                 sendMessage(chatId, "Ваш отчёт загружен");
 
                             default:
-                                if (messageText != null) {
-                                   saveMessages(chatId, messageText);
-                                } break;
+                                if (messageText != null) { // почему всегда true?
+                                    saveMessages(chatId, messageText);
+                                }
+                                break;
                         }
                     });
         } catch (Exception e) {
@@ -437,8 +497,36 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
         return UpdatesListener.CONFIRMED_UPDATES_ALL; // успешно завершаем метод, без падения
     }
 
+    // ****************************** СОХРАНЯЕМ ОВНЕРА ***********************
+    boolean isLastName = false;
+    boolean isFirstName = false;
+    boolean isPhone = false;
+
+    //    private static final Pattern OWNER_PHONE_NUMBER_PATTERN = Pattern.compile("\\d-\\d{3}-\\d{3}-\\d{2}-\\d{2}");
+    private static final Pattern OWNER_DATA_PATTERN = Pattern.compile("([А-я])\\s|\\n + ([А-я]) \\s|\\n +" +
+            "(\\d-\\d{3}-\\d{3}-\\d{2}-\\d{2})"); //символы и \\s - пробел, в (...) - группы паттерна
+
     // СОХРАНЕНИЕ ПЕРСОНЫ в БД
+    private void saveOwner(long chatId, String messageText) {
+        Matcher matcher = OWNER_DATA_PATTERN.matcher(messageText); // поиск соответствия сообщения заданным параметрам
+        if (matcher.find()) {
+            Owner owner = new Owner();
+            String ownerLastName = matcher.group(1);
+            String ownerFirstName = matcher.group(2);
+            String ownerPhone = matcher.group(3);
+            owner.setLastName(ownerLastName);
+            owner.setFirstName(ownerFirstName);
+            owner.setPhoneNumber(ownerPhone);
+            ownerRepository.save(owner);
+            sendMessage(chatId, "Ваши данные добавлена в нашу базу: " + owner.toString() +
+                    "Для удаления Ваших данных из нашей базы обратитесь к волонтёру");
+        } else {
+            sendMessage(chatId, "Данные указаны неверно. Пожалуйста, введите Ваши данные в указанном формате.");
+        }
+    }
+
     private int addOwnerToDB(List<Update> updates) {
+        Owner owner = new Owner();
         try {
             for (Update update : updates) {// итерируемся по ним
                 logger.info("Processing update: {}", update);
@@ -446,13 +534,6 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                 Message message = update.message();
                 Long chatId = message.chat().id();
                 String messageText = message.text();
-
-                sendMessage(chatId, """
-                        Укажите Ваши контактные данные. Введите команду для заполнения данных:
-                        1. /ln - указать фамилию
-                        2. /fn -  указать имя
-                        3. /phone -  указать номер телефона""");
-                Owner owner = new Owner();
                 switch (messageText) {
                     case "ln" -> {
                         sendMessage(chatId, "Укажите Вашу фамилию с заглавной буквы");
@@ -481,11 +562,11 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                         }
                     }
                 }
-
             }
         } catch (Exception e) {
             logger.error(e.getMessage()); // ловим ошибку
-        } return UpdatesListener.CONFIRMED_UPDATES_ALL; // успешно завершаем метод, без падения
+        }
+        return UpdatesListener.CONFIRMED_UPDATES_ALL; // успешно завершаем метод, без падения
     }
 }
 

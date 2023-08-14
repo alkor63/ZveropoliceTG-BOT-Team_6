@@ -5,7 +5,7 @@ import com.ward_n6.exception.DeleteFromMapException;
 import com.ward_n6.exception.EditMapException;
 import com.ward_n6.exception.PutToMapException;
 import com.ward_n6.repository.PetsOwnerArchiveRepository;
-import com.ward_n6.service.PetsOwnerArchiveService;
+import com.ward_n6.service.interfaces.PetsOwnerArchiveService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

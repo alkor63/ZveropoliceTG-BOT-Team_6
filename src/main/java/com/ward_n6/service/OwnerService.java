@@ -28,4 +28,5 @@ public interface OwnerService {
     boolean deleteOwnerByValue(Owner owner) throws DeleteFromMapException;
 
     int idOwnerByValue(Owner owner);
+
 }

@@ -1,9 +1,6 @@
-package com.ward_n6.service;
+package com.ward_n6.service.interfaces;
 
 import com.ward_n6.entity.reports.OwnerReport;
-import com.ward_n6.exception.EditMapException;
-
-import java.util.List;
 
 public interface OwnerReportService {
     //

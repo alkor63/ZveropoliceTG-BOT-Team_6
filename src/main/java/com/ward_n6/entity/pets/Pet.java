@@ -3,6 +3,7 @@ package com.ward_n6.entity.pets;
 import com.ward_n6.entity.owners.Owner;
 import com.ward_n6.enums.PetsSex;
 import com.ward_n6.enums.PetsType;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,7 +11,6 @@ import org.springframework.data.annotation.Id;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Objects;
 
 /** класс, содержащий общие свойства для кошек и собак и для создания отдельных
@@ -18,6 +18,7 @@ import java.util.Objects;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "pets")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS) // каждому наследнику свою таблицу
@@ -35,7 +36,7 @@ public abstract class Pet {
 
     private int petAge;
 
-    @Column(name = "pet_birthday")
+    @Column(name = "pet_birthday", columnDefinition = "DATE")
     private LocalDate petBirthDay;
 
     @Column(name = "pet_name")
@@ -51,45 +52,6 @@ public abstract class Pet {
     @ManyToOne
     @JoinColumn(name = "owner_id", insertable = false, updatable = false)
     private Owner Owner;
-
-
-
-    public Pet(long id, PetsType petsType, PetsSex petsSex, String petName, LocalDate petBirthDay, String bread) {
-        this.id = id;
-        this.petsSex = petsSex;
-        this.petsType = petsType;
-        this.petName = petName;
-        this.petBirthDay = petBirthDay;
-        this.bread = bread;
-
-    }
-
-    public Pet(PetsType petsType, PetsSex petsSex, String petName, LocalDate petBirthDay, int petAge, String bread, Owner Owner) {
-        this.petsType = petsType;
-        this.petsSex = petsSex;
-        this.petName = petName;
-        this.petBirthDay = petBirthDay;
-        this.bread = bread;
-    }
-
-    public Pet(PetsType petsType, PetsSex petsSex, String petName, LocalDate petBirthDay, String bread) {
-        this.petsType = petsType;
-        this.petsSex = petsSex;
-        this.petName = petName;
-        this.petBirthDay = petBirthDay;
-        this.bread = bread;
-        this.Owner = Owner;
-    }
-
-    public Pet(long id, PetsType petsType, PetsSex petsSex, String petName, int petAge, String bread, Owner Owner) {
-        this.id = id;
-        this.petsType = petsType;
-        this.petsSex = petsSex;
-        this.petName = petName;
-        this.petAge = LocalDate.now().getYear() - petBirthDay.getYear();
-        this.bread = bread;
-        this.Owner = Owner;
-    }
 
 
     @Override

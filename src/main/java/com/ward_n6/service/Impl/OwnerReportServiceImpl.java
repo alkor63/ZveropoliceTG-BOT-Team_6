@@ -3,7 +3,7 @@ package com.ward_n6.service.Impl;
 import com.ward_n6.entity.reports.OwnerReport;
 import com.ward_n6.exception.InvalidRequestException;
 import com.ward_n6.repository.OwnerReportRepository;
-import com.ward_n6.service.OwnerReportService;
+import com.ward_n6.service.interfaces.OwnerReportService;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
