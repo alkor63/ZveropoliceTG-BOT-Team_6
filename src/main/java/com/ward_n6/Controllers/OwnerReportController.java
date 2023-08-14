@@ -1,12 +1,14 @@
-package com.ward_n6.exception.Controllers;
+package com.ward_n6.Controllers;
 
 import com.ward_n6.entity.pets.Cat_2;
 import com.ward_n6.entity.pets.CatsCrud;
 import com.ward_n6.entity.reports.OwnerReport;
 import com.ward_n6.exception.EditMapException;
+import com.ward_n6.exception.InvalidRequestException;
 import com.ward_n6.exception.PutToMapException;
 import com.ward_n6.repository.OwnerReportRepository;
 import io.swagger.v3.oas.annotations.Operation;
+import javassist.NotFoundException;
 import liquibase.pro.packaged.O;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Modifying;
@@ -51,23 +53,6 @@ public class OwnerReportController {
           return ResponseEntity.notFound().build();
     }
 
-//    @PutMapping("/{ownerReportId}")
-//    @Operation(summary = "Отредактировать отчёт",
-//            description = "нужно указать id и заполнить все поля отчёта в Body")
-//    public ResponseEntity<OwnerReport> editOwnerReportById(@PathVariable long ownerReportId, @RequestBody OwnerReport ownerReport) {
-//
-//        OwnerReport newOwnerReport = ownerReportRepository.updateReport(ownerReportId,
-//                ownerReport.isHavePhoto(),
-//                ownerReport.getNutrition(),
-//                ownerReport.getPetsBehavior(),
-//                ownerReport.getPetsHealth(),
-//                ownerReport.getReportDateTime()
-//                );
-//        if (newOwnerReport == null) {
-//            return ResponseEntity.notFound().build();
-//        }
-//        return ResponseEntity.ok(newOwnerReport);
-//    }
 //+++++++++++++++++++++++++++++++++++++++++
     @DeleteMapping("/{ownerReportId}")
     @Operation(summary = "Удалить один отчёт из списка",
@@ -90,21 +75,27 @@ public class OwnerReportController {
         }
         return ResponseEntity.notFound().build();
     }
-//        UPDATE goods SET title = "утюг", price = 300 WHERE num = 2
-//    OwnerReport owr;
-// //   @Modifying
-//    @Query("UPDATE owner_report  "WHERE owr.id = id");
 
-//        @Query("update owr set owr.nutrition = :nutrition WHERE owr.id = :id");
-//        @Query("update owr set owr.petsBehavior = :petsBehavior WHERE owr.id = :id");
-//        @Query("update owr set owr.petsHealth = :petsHealth WHERE owr.id = :id");
-//        @Query("update owr set owr.reportDateTime = : reportDateTime WHERE owr.id = :id");
-//
-//        OwnerReport updateReport(@Param("id") Long id,
-//        @Param("havePhoto") boolean havePhoto,
-//        @Param("nutrition") String nutrition,
-//        @Param("petsBehavior") String petsBehavior,
-//        @Param("petsHealth") String petsHealth,
-//        @Param("reportDateTime") LocalDateTime reportDateTime
-//    );
+    @PutMapping("/{ownerReportId}")
+    @Operation(summary = "Отредактировать отчёт",
+            description = "нужно указать id и заполнить все поля отчёта в Body")
+    public ResponseEntity<OwnerReport> editOwnerReportById(@PathVariable int ownerReportId, @RequestBody OwnerReport ownerReport) {
+        if (ownerReport == null || ownerReport.getId() == null) {
+            throw new InvalidRequestException("PatientRecord or ID must not be null!");
+        }
+        Optional optionalOwnerReport = ownerReportRepository.findById(ownerReport.getId());
+        if (optionalOwnerReport.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        OwnerReport existingOwnerReport = (OwnerReport) optionalOwnerReport.get();
+
+        existingOwnerReport.setHavePhoto(ownerReport.isHavePhoto());
+        existingOwnerReport.setNutrition(ownerReport.getNutrition());
+        existingOwnerReport.setPetsBehavior(ownerReport.getPetsBehavior());
+        existingOwnerReport.setPetsHealth(ownerReport.getPetsHealth());
+        existingOwnerReport.setReportDateTime(ownerReport.getReportDateTime());
+
+        ownerReportRepository.save(ownerReport);
+        return ResponseEntity.ok(ownerReport);
+    }
 }
