@@ -1,9 +1,7 @@
-package com.ward_n6.entity.owners;
+package com.ward_n6.entity.reports;
 
-import com.ward_n6.enums.PetsType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
 
@@ -21,6 +19,8 @@ import java.util.Objects;
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
+//@Data
 @Entity
 @Table(name = "owner_report")
 // нужно делать класс абстрактным???
@@ -55,41 +55,21 @@ public class OwnerReport {
 
     @Column(name = "pet_id", nullable = false)
     private long petId; // id питомца
+    @Column(name = "owner_id", nullable = false)
+    private long ownerId; // id [усыновителя]
+    public OwnerReport() {
+    }
 
-//    @Lob
-//    private List<BufferedImage> photos = new ArrayList<>(); // лист фоток
-
-//    public OwnerReport() {
-//    }
-
-//    public OwnerReport(long id, long chatId, LocalDateTime reportDateTime, PetsType petsType, boolean havePhoto, String nutrition,
-//                       String petsHealth, String petsBehavior, long petId) {
-//        this.id = id;
-//        this.chatId = chatId;
-//        this.reportDateTime = reportDateTime;
-//        this.petsType = petsType;
-//
-////        if (photos.size() != 0) {
-//            this.havePhoto = havePhoto;
-////        }
-//        this.nutrition = nutrition;
-//        this.petsHealth = petsHealth;
-//        this.petsBehavior = petsBehavior;
-//        this.petId = petId;
-//    }
-
-//    public OwnerReport(long id, long chatId, LocalDateTime reportDateTime, PetsType petsType, boolean havePhoto, String nutrition,
-//                       String petsHealth, String petsBehavior, Pet ownersPet, long petId) {
-//        this.id = id;
-//        this.chatId = chatId;
-//        this.reportDateTime = reportDateTime;
-//        this.petsType = petsType;
-//        this.havePhoto = havePhoto;
-//        this.nutrition = nutrition;
-//        this.petsHealth = petsHealth;
-//        this.petsBehavior = petsBehavior;
-//        this.petId = petId;
-//    }
+    public OwnerReport(long id, LocalDateTime reportDateTime, boolean havePhoto, String nutrition,
+                       String petsHealth, String petsBehavior, long petId) {
+        this.id = id;
+        this.reportDateTime = reportDateTime;
+        this.havePhoto = havePhoto;
+        this.nutrition = nutrition;
+        this.petsHealth = petsHealth;
+        this.petsBehavior = petsBehavior;
+        this.petId = petId;
+    }
 
     @Override
     public boolean equals(Object o) {

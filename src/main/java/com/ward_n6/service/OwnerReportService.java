@@ -1,26 +1,37 @@
 package com.ward_n6.service;
 
-import com.ward_n6.entity.owners.OwnerReport;
-import com.ward_n6.exception.DeleteFromMapException;
+import com.ward_n6.entity.reports.OwnerReport;
 import com.ward_n6.exception.EditMapException;
-import com.ward_n6.exception.PutToMapException;
 
 import java.util.List;
 
 public interface OwnerReportService {
-    int getId();
-
-    OwnerReport addOwnerReport(OwnerReport ownerReport) throws PutToMapException;
-
+    //
+    //    @Override
+    //    public OwnerReport addOwnerReport(OwnerReport ownerReport) {
+    //        return this.ownerReportRepository.save(ownerReport);
+    //    }
+    //
     OwnerReport getOwnerReportById(int recordId);
 
-    List<OwnerReport> getAllOwnerReports();
+    //
+    //    @Override
+    //    public OwnerReport addOwnerReport(OwnerReport ownerReport) {
+    //        return this.ownerReportRepository.save(ownerReport);
+    //    }
+    //
+    OwnerReport getOwnerReportById(Long recordId);
 
-    OwnerReport editOwnerReportById(int recordId, OwnerReport ownerReport) throws EditMapException;
-
-    void deleteAllFromOwnerReport();
-
-    boolean deleteOwnerReportById(int recordId) throws DeleteFromMapException;
-
-    int idOwnerReportByValue(OwnerReport ownerReport);
+//
+//    OwnerReport addOwnerReport(OwnerReport ownerReport);
+//
+////    OwnerReport getOwnerReportById(int recordId);
+//
+//    List<OwnerReport> getAllOwnerReports();
+//
+//    OwnerReport editOwnerReportById(Integer recordId, OwnerReport ownerReport) throws EditMapException;
+//
+//    OwnerReport editOwnerReportById(long recordId, OwnerReport ownerReport);
+//
+//    void deleteOwnerReportById(Integer recordId);
 }

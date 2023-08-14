@@ -1,14 +1,12 @@
 package com.ward_n6.service.Impl;
 
-import com.ward_n6.entity.owners.OwnerReport;
-import com.ward_n6.exception.DeleteFromMapException;
-import com.ward_n6.exception.EditMapException;
-import com.ward_n6.exception.PutToMapException;
+import com.ward_n6.entity.reports.OwnerReport;
+import com.ward_n6.exception.InvalidRequestException;
 import com.ward_n6.repository.OwnerReportRepository;
 import com.ward_n6.service.OwnerReportService;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Optional;
 
 @Service
 public class OwnerReportServiceImpl implements OwnerReportService {
@@ -19,43 +17,53 @@ public class OwnerReportServiceImpl implements OwnerReportService {
     }
 
     @Override
-    public int getId() {
-        return ownerReportRepository.getId();
-    }
-
-    @Override
-    public OwnerReport addOwnerReport(OwnerReport ownerReport) throws PutToMapException {
-        return ownerReportRepository.addOwnerReport(ownerReport);
-    }
-
-    @Override
     public OwnerReport getOwnerReportById(int recordId) {
-        return ownerReportRepository.getOwnerReportById(recordId);
+        return null;
     }
 
+    //
+//    @Override
+//    public OwnerReport addOwnerReport(OwnerReport ownerReport) {
+//        return this.ownerReportRepository.save(ownerReport);
+//    }
+//
     @Override
-    public List<OwnerReport> getAllOwnerReports() {
-        return ownerReportRepository.getAllOwnerReports();
+    public OwnerReport getOwnerReportById(Long recordId) {
+            Optional<OwnerReport> optionalOwnerReport = ownerReportRepository.findById(recordId);
+            if(optionalOwnerReport.isPresent()) {
+                final OwnerReport ownerReport = optionalOwnerReport.get();
+                return ownerReport;
+        }
+        throw new InvalidRequestException("ОШИБКА: не удалось найти отчёт с id = "+recordId);
     }
 
-    @Override
-    public OwnerReport editOwnerReportById(int recordId, OwnerReport ownerReport) throws EditMapException {
-        return ownerReportRepository.editOwnerReportById(recordId, ownerReport);
-    }
+//    @Override
+//    public List<OwnerReport> getAllOwnerReports() {
+//        return this.ownerReportRepository.findAll();
+//    }
+//
+//
+//    @Override
+//    public OwnerReport editOwnerReportById(Integer recordId, OwnerReport ownerReport) {
+//        long longId = recordId;
+//        return this.ownerReportRepository.updateReport(longId,
+//                ownerReport.isHavePhoto(),
+//                ownerReport.getNutrition(),
+//                ownerReport.getPetsBehavior(),
+//                ownerReport.getPetsHealth(),
+//                ownerReport.getReportDateTime());
+//    }
+//
+//    @Override
+//    public OwnerReport editOwnerReportById(long recordId, OwnerReport ownerReport) {
+//        return null;
+//    }
+//
+//    @Override
+//    public void deleteOwnerReportById(Integer recordId) {
+//        if (ownerReportRepository.findById(recordId).isPresent())
+//            ownerReportRepository.deleteById(recordId);
+//    }
 
-    @Override
-    public void deleteAllFromOwnerReport() {
-        ownerReportRepository.deleteAllFromOwnerReport();
-    }
-
-    @Override
-    public boolean deleteOwnerReportById(int recordId) throws DeleteFromMapException {
-        return ownerReportRepository.deleteOwnerReportById(recordId);
-    }
-
-    @Override
-    public int idOwnerReportByValue(OwnerReport ownerReport) {
-        return ownerReportRepository.idOwnerReportByValue(ownerReport);
-    }
 }
 
