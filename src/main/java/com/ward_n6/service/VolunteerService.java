@@ -1,4 +1,4 @@
-package com.ward_n6.entity.people;
+package com.ward_n6.service;
 
 import com.ward_n6.entity.PetWithOwner;
 import com.ward_n6.entity.owners.Owner;
@@ -11,6 +11,7 @@ import com.ward_n6.repository.OwnerReportRepository;
 import com.ward_n6.repository.PetRepository;
 import com.ward_n6.repository.PetsOwnerArchiveRepository;
 import com.ward_n6.repository.PetsOwnerRepository;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.time.LocalDate;
@@ -18,8 +19,8 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-
-public class Volunteer {
+@Service
+public class VolunteerService {
     // класс с функционалом волонтёра
     // метод добавление усыновителя+животного в БД == createCatsOwner и createDogsOwner
     // метод беседы с усыновителем == callVolunteer
@@ -38,7 +39,7 @@ public class Volunteer {
 
 
 
-    public Volunteer(PetsOwnerRepository petsOwnerRepository, PetsOwnerArchiveRepository petsOwnerArchiveRepository, OwnerReportRepository ownerReportRepository, PetRepository petRepository) {
+    public VolunteerService(PetsOwnerRepository petsOwnerRepository, PetsOwnerArchiveRepository petsOwnerArchiveRepository, OwnerReportRepository ownerReportRepository, PetRepository petRepository) {
         this.petsOwnerRepository = petsOwnerRepository;
         this.petsOwnerArchiveRepository = petsOwnerArchiveRepository;
         this.ownerReportRepository = ownerReportRepository;

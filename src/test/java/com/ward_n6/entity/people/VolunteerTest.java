@@ -11,6 +11,7 @@ import com.ward_n6.repository.OwnerReportRepository;
 import com.ward_n6.repository.PetRepository;
 import com.ward_n6.repository.PetsOwnerArchiveRepository;
 import com.ward_n6.repository.PetsOwnerRepository;
+import com.ward_n6.service.VolunteerService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -46,10 +47,10 @@ class VolunteerTest {
     @Mock
     private PetsOwnerArchiveRepository petsOwnerArchiveRepository;
     @Spy
-    final Volunteer volunteerMock = spy(new Volunteer(petsOwnerRepository, petsOwnerArchiveRepository, ownerReportRepository, petRepository));
+    final VolunteerService volunteerMock = spy(new VolunteerService(petsOwnerRepository, petsOwnerArchiveRepository, ownerReportRepository, petRepository));
 
     @InjectMocks
-    private Volunteer volunteer;
+    private VolunteerService volunteer;
 
     PetWithOwner petWithOwner = new PetWithOwner(owner1, pet, LocalDate.now().minusDays(30), LocalDate.now());
 
