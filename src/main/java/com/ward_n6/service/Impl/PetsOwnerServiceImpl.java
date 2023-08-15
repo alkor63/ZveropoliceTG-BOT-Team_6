@@ -1,73 +1,67 @@
 package com.ward_n6.service.Impl;
 
 import com.ward_n6.entity.PetWithOwner;
-import com.ward_n6.service.PetsOwnerService;
+import com.ward_n6.exception.DeleteFromMapException;
+import com.ward_n6.exception.EditMapException;
+import com.ward_n6.exception.PutToMapException;
+import com.ward_n6.repository.PetsOwnerRepository;
+import com.ward_n6.service.interfaces.PetsOwnerService;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class PetsOwnerServiceImpl implements PetsOwnerService {
+    private final PetsOwnerRepository petsOwnerRepository;
     private Map<Integer, PetWithOwner> petWithOwnerMap = new HashMap<>();
     private int mapId = 0;
+
+    public PetsOwnerServiceImpl(PetsOwnerRepository petsOwnerRepository) {
+        this.petsOwnerRepository = petsOwnerRepository;
+    }
 
 
     @Override
     public int getId() {
-        return mapId;
+        return petsOwnerRepository.getId();
     }
 
     @Override
     public PetWithOwner addToPetWithOwner(PetWithOwner petWithOwner) throws PutToMapException {
-        petWithOwnerMap.putIfAbsent(mapId++, petWithOwner);
-        return petWithOwnerMap.get(mapId-1);
+        return petsOwnerRepository.addToPetWithOwner(petWithOwner);
     }
 
     @Override
     public PetWithOwner getFromPetWithOwnerById(int recordId) {
-        return petWithOwnerMap.get(recordId);
+        return petsOwnerRepository.getFromPetWithOwnerById(recordId);
     }
 
     @Override
     public List<PetWithOwner> getAllFromPetWithOwner() {
-        return new ArrayList<>(petWithOwnerMap.values());
+        return petsOwnerRepository.getAllFromPetWithOwner();
     }
 
     @Override
     public PetWithOwner editPetWithOwnerById(int recordId, PetWithOwner petWithOwner) throws EditMapException {
-        if (petWithOwnerMap.containsKey(recordId)) {
-            petWithOwnerMap.put(recordId, petWithOwner);
-            return petWithOwnerMap.get(recordId);
-        }
-        return null;
+        return petsOwnerRepository.editPetWithOwnerById(recordId,petWithOwner);
     }
 
     @Override
-    public void deleteAllFromPetWithOwner() {
-        petWithOwnerMap.clear();
+    public boolean deleteAllFromPetWithOwner() {
+        petsOwnerRepository.deleteAllFromPetWithOwner();
+        return false;
     }
 
     @Override
     public boolean deletePetWithOwnerById(int recordId) throws DeleteFromMapException {
-        if (petWithOwnerMap.containsKey(recordId)) {
-            petWithOwnerMap.remove(recordId);
-            return true;
-        }
-        return false;
+        return petsOwnerRepository.deletePetWithOwnerById(recordId);
     }
     @Override
     public boolean deletePetWithOwnerByValue(PetWithOwner petWithOwner) throws DeleteFromMapException {
-        if (petWithOwnerMap.containsValue(petWithOwner)) {
-            petWithOwnerMap.values().remove(petWithOwner);
-            return true;
-        }
-        return false;
+        return petsOwnerRepository.deletePetWithOwnerByValue(petWithOwner);
     }
     @Override
     public int idByValue (PetWithOwner petWithOwner) {
-        for (Map.Entry<Integer, PetWithOwner> entry : petWithOwnerMap.entrySet())
-            if (entry.getValue().equals(petWithOwner)) return entry.getKey();
-        return -1;
+        return petsOwnerRepository.idByValue(petWithOwner);
     }
 }

@@ -1,9 +1,9 @@
-package com.ward_n6.service;
+package com.ward_n6.service.interfaces;
 
 import com.ward_n6.entity.PetWithOwner;
-import com.ward_n6.service.Impl.DeleteFromMapException;
-import com.ward_n6.service.Impl.EditMapException;
-import com.ward_n6.service.Impl.PutToMapException;
+import com.ward_n6.exception.DeleteFromMapException;
+import com.ward_n6.exception.EditMapException;
+import com.ward_n6.exception.PutToMapException;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ public interface PetsOwnerService {
 
     PetWithOwner editPetWithOwnerById(int recordId, PetWithOwner petWithOwner) throws EditMapException;
 
-    void deleteAllFromPetWithOwner();
+    boolean deleteAllFromPetWithOwner();
 
     boolean deletePetWithOwnerById(int recordId) throws DeleteFromMapException;
 
