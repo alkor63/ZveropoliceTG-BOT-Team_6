@@ -47,6 +47,7 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
     private final OwnerService ownerService;
 
     private static final Pattern ID_PATTERN = Pattern.compile("(\\d{1,5})");
+    private EventHandler currentHandler = null;
 
 
     public TelegramBotPetShelterUpdatesListener(BotMessageService botMessageService, TelegramBot telegramBot,
@@ -63,8 +64,9 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
     }
 
     boolean startSelected = false; // переменная для подтверждения старта
-
     boolean reportSelect = false;
+    boolean reportTextSelect = false;
+    boolean reportPhotoSelect = false;
     boolean catSelect = false;
     boolean dogSelect = false;
     boolean getOwnerDataSelect = false;
@@ -85,39 +87,42 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                     CallbackQuery callbackQuery = update.callbackQuery();
                     String data = callbackQuery.data();
                     switch (data) {
-                        case "КНОПКА_ПРИЮТ_ДЛЯ_СОБАК": {
+                        case "КНОПКА_ПРИЮТ_ДЛЯ_СОБАК":
+                            dogSelect = true;
                             dogButton(chatId);
                             break;
-                        }
-                        case "КНОПКА_ПРИЮТ_ДЛЯ_КОШЕК": {
+
+                        case "КНОПКА_ПРИЮТ_ДЛЯ_КОШЕК":
+                            catSelect = true;
                             catButton(chatId);
                             break;
-                        }
-                        case "ИНФО_СОБАКИ": {
+
+                        case "ИНФО_СОБАКИ":
                             dogInfoButton(chatId);
                             break;
-                        }
-                        case "ИНФО_КОШКИ": {
-                            catInfoButton(chatId);
 
+                        case "ИНФО_КОШКИ":
+                            catInfoButton(chatId);
                             break;
-                        }
-                        case "КАК_ЗАБРАТЬ_СОБАКУ": {
+
+                        case "КАК_ЗАБРАТЬ_СОБАКУ":
                             wantToTakeDogButton(chatId);
                             break;
-                        }
-                        case "КАК_ЗАБРАТЬ_КОШКУ": {
+
+                        case "КАК_ЗАБРАТЬ_КОШКУ":
                             wantToTakeCatButton(chatId);
-                        }
-                        case "ВОЛОНТЁР": {
+
+                        case "ВОЛОНТЁР":
                             callVoluntier(chatId);
-                        }
-                        case "ОТЧЁТ": {
+
+                        case "ОТЧЁТ":
                             sendOwnerHowReport(chatId);
-                        }
+                        break;
+
                     }
-                    continue;
-                }
+//                    continue;
+                }if (reportTextSelect){saveOwnerReportToDB(updates);}
+
                 // меню команд:
                 Message message = update.message(); // получаем сообщение из текущего обновления
                 Long chatId = message.chat().id(); // получаем идентификатор чата, к которому относится апдейт
@@ -151,7 +156,7 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
 //                        break;
 
                     case "/report":
-                        reportSelect = true;
+                        reportTextSelect = true;
                         sendMessage(chatId, """
                                 Для загрузки отчёта следуйте указаниям бота. Пожалуйста, заполните все пункты отчёта.
                                 Команды для отчёта:\s
@@ -176,7 +181,8 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                         sendMessage(chatId,
                                 petShelter.getCallVolonteer());
                         break;
-                } if (getOwnerDataSelect) {
+                }
+                if (getOwnerDataSelect) {
                     saveOwner(chatId, messageText);
                 }
 //                    case "/ID":
@@ -228,7 +234,7 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
 //                        break;
 //                    default: if(isReportSelect){reportService.save(ownerReport);}
             }
-            if (reportSelect && (dogSelect || catSelect)) {
+            if (reportTextSelect && (dogSelect || catSelect)) {
                 saveOwnerReportToDB(updates);
             }
         } catch (
@@ -409,17 +415,41 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
         telegramBot.execute(sendMessage);
     }
 
+
     private void sendOwnerHowReport(long chatId) {
         SendMessage sendMessage = new SendMessage(chatId, EmojiParser.parseToUnicode("Для отчёта нужно отправить текст :memo: описывающий: самочувствие питомца, рацион питания питомца, в каких условиях живёт питомец; и фото питомца :camera:"));
         InlineKeyboardButton textButton = new InlineKeyboardButton(EmojiParser.parseToUnicode("Отправить текст :memo:"));
         InlineKeyboardButton photoButton = new InlineKeyboardButton(EmojiParser.parseToUnicode("Отправить фото :camera:"));
+
         textButton.callbackData("ОТЧЁТ_ТЕКСТ");
+
+
         photoButton.callbackData("ОТЧЁТ_ФОТО");
         Keyboard keyboard = new InlineKeyboardMarkup().addRow(textButton).addRow(photoButton);
         sendMessage.replyMarkup(keyboard);
+//        if (update.callbackQuery() != null && update.callbackQuery().message() != null) {
+//        if(update.callbackQuery().equals("ОТЧЁТ_ТЕКСТ")){reportTextSelect = true;
+//            ss = reportSelect;
+//        }else if (update.callbackQuery().equals("ОТЧЁТ_ФОТО")){reportPhotoSelect = true;}
         telegramBot.execute(sendMessage);
-    }
 
+    }
+    boolean choice = false;
+    private boolean handleButtonPress(Update update) {
+        String callbackData = update.callbackQuery().data();
+
+        // Проверяем, какая кнопка была нажата
+        if (callbackData.equals("ОТЧЁТ_ТЕКСТ")) {
+            // Устанавливаем значение choice в true
+            reportTextSelect = true;
+            choice = reportTextSelect;
+        } else if (callbackData.equals("ОТЧЁТ_ФОТО")) {
+            reportPhotoSelect = true;
+            choice = reportPhotoSelect;
+            // Обработка нажатия кнопки "Отправить фото"
+        }
+        return choice;
+    }
 
     /**
      * СОХРАНЕНИЕ ОТЧЁТА
@@ -525,6 +555,7 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
         }
     }
 
+    // не рабоатет
     private int addOwnerToDB(List<Update> updates) {
         Owner owner = new Owner();
         try {
@@ -568,5 +599,9 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
         }
         return UpdatesListener.CONFIRMED_UPDATES_ALL; // успешно завершаем метод, без падения
     }
-}
 
+
+    //****************************************
+
+
+}
