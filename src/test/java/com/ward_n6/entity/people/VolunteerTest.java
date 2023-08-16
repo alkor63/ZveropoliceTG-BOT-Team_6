@@ -3,14 +3,15 @@ package com.ward_n6.entity.people;
 import com.ward_n6.entity.PetWithOwner;
 import com.ward_n6.entity.owners.CatOwner;
 import com.ward_n6.entity.owners.Owner;
+import com.ward_n6.entity.owners.PetsOwner;
 import com.ward_n6.entity.pets.Cat;
 import com.ward_n6.entity.pets.Pet;
 import com.ward_n6.entity.reports.OwnerReport;
-import com.ward_n6.exception.PutToMapException;
 import com.ward_n6.repository.OwnerReportRepository;
 import com.ward_n6.repository.PetRepository;
 import com.ward_n6.repository.PetsOwnerArchiveRepository;
 import com.ward_n6.repository.PetsOwnerRepository;
+import com.ward_n6.service.PetsOwnerService;
 import com.ward_n6.service.VolunteerService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -43,16 +44,17 @@ class VolunteerTest {
     @Mock
     private PetsOwnerRepository petsOwnerRepositoryMock;
     @Mock
-    private PetWithOwner petWithOwnerMock;
+    private PetsOwner petWithOwnerMock;
     @Mock
     private PetsOwnerArchiveRepository petsOwnerArchiveRepository;
+    private PetsOwnerService petsOwnerArchiveService;
     @Spy
-    final VolunteerService volunteerMock = spy(new VolunteerService(petsOwnerRepository, petsOwnerArchiveRepository, ownerReportRepository, petRepository));
+    final VolunteerService volunteerMock = spy(new VolunteerService(petsOwnerRepository, petsOwnerArchiveRepository, petsOwnerArchiveService, ownerReportRepository, petRepository));
 
     @InjectMocks
     private VolunteerService volunteer;
 
-    PetWithOwner petWithOwner = new PetWithOwner(owner1, pet, LocalDate.now().minusDays(30), LocalDate.now());
+    PetsOwner petWithOwner = new PetsOwner(owner1, pet, LocalDate.now().minusDays(30), LocalDate.now());
 
 
     @Test
@@ -65,7 +67,7 @@ class VolunteerTest {
 //        assertThrows(PutToMapException.class, () -> petRepository.addPet(null));
 //}
     @Test
-    public void shouldAddPetAndOwnerToPetsOwnerDB() throws PutToMapException {
+    public void shouldAddPetAndOwnerToPetsOwnerDB()  {
 //        when(petWithOwnerMock. = new PetWithOwner()).thenReturn(petWithOwner);
 //        when(volunteerMock.petsOwnerRepository.addToPetWithOwner(petWithOwner)).thenReturn(petWithOwner);
 //        assertDoesNotThrow((Executable) new PetWithOwner(owner,pet));

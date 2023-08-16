@@ -5,6 +5,7 @@ import com.ward_n6.entity.reports.OwnerReport;
 import com.ward_n6.exception.InvalidRequestException;
 import com.ward_n6.repository.OwnerReportRepository;
 import javassist.NotFoundException;
+import liquibase.pro.packaged.O;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -18,6 +19,7 @@ import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -67,6 +69,19 @@ public class OwnerReportControllerTest {
                 .andExpect(jsonPath("$", hasSize(3)))
                 .andExpect(jsonPath("$[1].nutrition", Matchers.is("meat")));
     }
+
+    @Test
+    public void givenOwnerReport_whenAdd_thenStatus201andOwnerReportReturned() throws Exception {
+        //тест для метода addOwnerReport()
+        Mockito.when(ownerReportRepository.save(Mockito.any())).thenReturn(ownerReport1);
+            mockMvc.perform(MockMvcRequestBuilders
+                                    .post("/report")
+                                    .contentType(MediaType.APPLICATION_JSON)
+                            .content(mapper.writeValueAsString(ownerReport1))
+                    )
+                    .andExpect(status().isCreated())
+                    .andExpect(content().json(mapper.writeValueAsString(ownerReport1)));
+        }
 
     @Test
     public void addOwnerReportTest() throws Exception {
@@ -122,64 +137,6 @@ public class OwnerReportControllerTest {
                 .andExpect(jsonPath("$.nutrition", Matchers.is("Whiskas")));
     }
 
-//    @Test
-//    public void shouldReturnExceptionWhenReportOrIdIsNull() throws Exception {
-//// проверяем бросание исключений при ownerReport or id = null
-//        OwnerReport nullOwnerReport = new OwnerReport();
-//        OwnerReport editedOwnerReport = OwnerReport.builder()
-                //пропустили id
-//                .reportDateTime(LocalDateTime.now())
-//                .havePhoto(true)
-//                .nutrition("Whiskas")
-//                .petsHealth("good")
-//                .petsBehavior("Ok")
-//                .petId(1L)
-//                .ownerId(3L)
-//                .build();
-
-//        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/report")
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .accept(MediaType.APPLICATION_JSON)
-//                .content(this.mapper.writeValueAsString(nullOwnerReport));
-//
-//        mockMvc.perform(mockRequest)
-//                .andExpect(status().isBadRequest())
-//                .andExpect(result ->
-//                        assertTrue(result.getResolvedException() instanceof NullPointerException))
-//                .andExpect(result ->
-//                        assertEquals(("OwnerRecord или Id не должны быть null"), result.getResolvedException().getMessage()));
-//    }
-
-//    @Test
-//    public void shouldReturnExceptionWhenReportNotFound() throws Exception {
-// проверяем бросание исключений если запись ownerReport не обнаружена
-        OwnerReport nullOwnerReport = new OwnerReport();
-//        OwnerReport editedOwnerReport = OwnerReport.builder()
-//                .id(321L)
-//                .reportDateTime(LocalDateTime.now())
-//                .havePhoto(true)
-//                .nutrition("Whiskas")
-//                .petsHealth("good")
-//                .petsBehavior("Ok")
-//                .petId(1L)
-//                .ownerId(3L)
-//                .build();
-
-//        Mockito.when(ownerReportRepository.findById(nullOwnerReport.getId())).thenReturn(null);
-//
-//        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/report")
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .accept(MediaType.APPLICATION_JSON)
-//                .content(this.mapper.writeValueAsString(nullOwnerReport));
-//
-//        mockMvc.perform(mockRequest)
-//                .andExpect(status().isBadRequest())
-//                .andExpect(result ->
-//                        assertTrue(result.getResolvedException() instanceof NotFoundException))
-//                .andExpect(result ->
-//                        assertEquals(("Записи OwnerRecord с Id = 321 не существует"), result.getResolvedException().getMessage()));
-//    }
-
     @Test
     public void deleteOwnerReportByIdTest() throws Exception{
         Mockito.when(ownerReportRepository.findById(ownerReport2.getId())).thenReturn(Optional.of(ownerReport2));
@@ -190,17 +147,54 @@ public class OwnerReportControllerTest {
                 .andExpect(status().isOk());
     }
 
-//    @Test
-//    public void deleteOwnerReportByIdTestWhenNotFoundException()throws Exception{
-//        Mockito.when((ownerReportRepository.findById(5L))).thenReturn(null);
-//
-//        mockMvc.perform(MockMvcRequestBuilders
-//                        .delete(("/report/2"))
-//                        .contentType(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isBadRequest())
-//                .andExpect(result ->
-//                        assertTrue(result.getResolvedException() instanceof NotFoundException))
-//                .andExpect(result -> assertEquals("В базе нет отчёта с id = 5 ",
-//                        result.getResolvedException().getMessage()));
-//    }
+    @Test
+    public void givenId_whenGetExistingOwnerReport_thenStatus200andOwnerReportReturned() throws Exception {
+        Mockito.when(ownerReportRepository.findById(Mockito.any())).thenReturn(Optional.of(ownerReport3));
+        mockMvc.perform(MockMvcRequestBuilders
+                .get("/report/3"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value("3"))
+                .andExpect(jsonPath("$.nutrition").value("fish"));
+    }
+    @Test
+    public void givenId_whenGetNotExistingOwnerReport_thenStatus404anExceptionThrown() throws Exception {
+        Mockito.when(ownerReportRepository.findById(Mockito.any())).
+                thenReturn(Optional.empty());
+        mockMvc.perform(MockMvcRequestBuilders
+                .get("/report/3"))
+                .andExpect(status().isNotFound())
+                .andExpect(mvcResult -> mvcResult.getResolvedException().getClass().equals(EntityNotFoundException.class));
+    }
+    @Test
+    public void giveOwnerReport_whenUpdate_thenStatus200andUpdatedReturns() throws Exception {
+        Mockito.when(ownerReportRepository.save(Mockito.any())).thenReturn(ownerReport1);
+        Mockito.when(ownerReportRepository.findById(Mockito.any())).thenReturn(Optional.of(ownerReport1));
+        mockMvc.perform(MockMvcRequestBuilders
+                .post("/report/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                                .content(mapper.writeValueAsString(ownerReport1)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value("1"))
+                .andExpect(jsonPath("$.name").value("Michail"));
+    }
+    @Test
+    public void givenOwnerReport_whenDeleteOwnerReport_thenStatus200() throws Exception {
+        Mockito.when(ownerReportRepository.findById(Mockito.any())).thenReturn(Optional.of(ownerReport2));
+        mockMvc.perform(MockMvcRequestBuilders
+                .delete("/report/2"))
+                .andExpect(status().isOk());
+    }
+    @Test
+    public void givenOwnerReport_whenGetOwnerReport_thenStatus200() throws Exception {
+        List ownerReports = new ArrayList<>(Arrays.asList(ownerReport1, ownerReport2, ownerReport3));
+
+        Mockito.when(ownerReportRepository.findAll()).thenReturn(ownerReports);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/report")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(3)))
+//                .andExpect(jsonPath("$[1].nutrition", Matchers.is("meat")))
+                .andExpect(content().json(mapper.writeValueAsString(ownerReports)));
+    }
 }

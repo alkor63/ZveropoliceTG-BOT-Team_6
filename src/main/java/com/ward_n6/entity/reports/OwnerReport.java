@@ -62,6 +62,15 @@ public class OwnerReport {
         this.petId = petId;
     }
 
+    public OwnerReport(LocalDateTime reportDateTime, boolean havePhoto, String nutrition, String petsHealth, String petsBehavior, long petId) {
+        this.reportDateTime = reportDateTime;
+        this.havePhoto = havePhoto;
+        this.nutrition = nutrition;
+        this.petsHealth = petsHealth;
+        this.petsBehavior = petsBehavior;
+        this.petId = petId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -1,54 +1,39 @@
 package com.ward_n6.entity.owners;
+
 import com.ward_n6.entity.pets.Pet;
-import com.ward_n6.enums.PetsSex;
-import com.ward_n6.enums.PetsType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
-
-    @Entity
+//@Entity
     @NoArgsConstructor
-    @Table(name = "pets_owner")
     @Getter
     @Setter
-    public abstract class PetsOwner {
+    @Table(name = "pets_owner")
 
-        @javax.persistence.Id
-        @Column(name = "id",nullable = false)
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private Long id;
+    public class PetsOwner {
 
-        @ManyToOne
-        @JoinColumn(name = "owner", insertable = false, updatable = false)
-        private Owner owner;
+//    @javax.persistence.Id
+    @Column(name = "id", nullable = false)
+    @org.springframework.data.annotation.Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
-        @ManyToOne
-        @JoinColumn(name = "pet", insertable = false, updatable = false)
-        private Pet pet;
+    @Column(name = "end_date", nullable = false)
+    private LocalDate dateEnd; // дата, время
 
-        @Column(name = "start_date")
-        private LocalDate startDate;
+    @Column(name = "start_date", nullable = false)
+    private LocalDate dateBegin; // дата, время
 
-        @Column(name = "end_date")
-        private LocalDate endDate;
+    @Column(name = "owner")
+    private Owner owner; // питание
 
-        public PetsOwner(Owner owner, Pet pet) {
-            this.owner = owner;
-            this.pet = pet;
-        }
+    @Column(name = "pet")
+    private Pet pet; // о здоровье
 
-        public PetsOwner(Owner owner, Pet pet, LocalDate startDate, LocalDate endDate) {
-            this.owner = owner;
-            this.pet = pet;
-            this.startDate = startDate;
-            this.endDate = endDate;
-        }
+    public PetsOwner(Owner owner, Pet pet, LocalDate dateBegin, LocalDate dateEnd) {
     }
+}
 

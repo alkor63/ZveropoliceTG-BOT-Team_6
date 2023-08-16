@@ -1,24 +1,13 @@
 package com.ward_n6.Controllers;
 
-import com.ward_n6.entity.pets.Cat_2;
-import com.ward_n6.entity.pets.CatsCrud;
 import com.ward_n6.entity.reports.OwnerReport;
-import com.ward_n6.exception.EditMapException;
-import com.ward_n6.exception.InvalidRequestException;
-import com.ward_n6.exception.PutToMapException;
 import com.ward_n6.repository.OwnerReportRepository;
 import io.swagger.v3.oas.annotations.Operation;
-import javassist.NotFoundException;
-import liquibase.pro.packaged.O;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
-import java.time.LocalDateTime;
+import javax.persistence.EntityNotFoundException;
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,56 +25,58 @@ public class OwnerReportController {
     @PostMapping
     @Operation(summary = "Добавление отчёта в список",
             description = "нужно заполнить все поля отчёта в Body")
-    public ResponseEntity<OwnerReport> addOwnerReport(@RequestBody OwnerReport ownerReport) {
-        ownerReportRepository.save(ownerReport);
-        return ResponseEntity.ok(ownerReport);
+    public ResponseEntity<OwnerReport> addOwnerReport(@RequestBody @Valid OwnerReport ownerReport) {
+        OwnerReport orp = ownerReportRepository.save(ownerReport);
+        return ResponseEntity.status(200).body(orp);
     }
 // ++++++++++++++++++++++++++++++++++++
-    @GetMapping("/{ownerReportId}")
-    @Operation(summary = "Показать один отчёт по id",
-            description = "нужно указать id отчёта")
-    public ResponseEntity<OwnerReport> getOwnerReportById(@PathVariable Integer ownerReportId) {
-        long longId = ownerReportId;
-        Optional<OwnerReport> optionalOwnerReport = ownerReportRepository.findById(longId);
-        if(optionalOwnerReport.isPresent()) {
-            final OwnerReport ownerReport = optionalOwnerReport.get();
-        return ResponseEntity.ok(ownerReport);}
-          return ResponseEntity.notFound().build();
-    }
-
-//+++++++++++++++++++++++++++++++++++++++++
-    @DeleteMapping("/{ownerReportId}")
-    @Operation(summary = "Удалить один отчёт из списка",
-            description = "нужно указать id отчёта")
-    public ResponseEntity<Void> deleteOwnerReportById(@PathVariable Integer ownerReportId) {
-        long longId = ownerReportId;
-        if (ownerReportRepository.findById(longId).isPresent()) {
-            ownerReportRepository.deleteById(longId);
-            return ResponseEntity.ok().build();
-        }
-        return ResponseEntity.notFound().build();
-    }
 
     @GetMapping
     @Operation(summary = "Показать все отчёты")
     public ResponseEntity<List<OwnerReport>> getAllOwnerReports() {
         List<OwnerReport> allOwnerReports = ownerReportRepository.findAll();
         if (allOwnerReports.size() > 0) {
-            return ResponseEntity.ok(allOwnerReports);
+            return ResponseEntity.ok().body(allOwnerReports);
         }
         return ResponseEntity.notFound().build();
     }
+// ++++++++++++++++++++++++++++++++++++
+    @GetMapping("/{ownerReportId}")
+    @Operation(summary = "Показать один отчёт по id",
+            description = "нужно указать id отчёта")
+    public ResponseEntity<OwnerReport> getOwnerReportById(@PathVariable Integer ownerReportId)
+    throws EntityNotFoundException {
+        long longId = ownerReportId;
+        Optional<OwnerReport> optionalOwnerReport = ownerReportRepository.findById(longId);
+        if(optionalOwnerReport.isPresent())
+                    return ResponseEntity.ok().body(optionalOwnerReport.get());
+        throw new EntityNotFoundException("В базе нет отчёта с id="+ownerReportId);
+    }
+
+//+++++++++++++++++++++++++++++++++++++++++
+    @DeleteMapping("/{ownerReportId}")
+    @Operation(summary = "Удалить один отчёт из списка",
+            description = "нужно указать id отчёта")
+    public ResponseEntity<OwnerReport> deleteOwnerReportById(@PathVariable Integer ownerReportId)
+    throws EntityNotFoundException {
+        long longId = ownerReportId;
+        Optional<OwnerReport> optionalOwnerReport = ownerReportRepository.findById(longId);
+        if (optionalOwnerReport.isPresent()) {
+            ownerReportRepository.deleteById(longId);
+            return ResponseEntity.ok().body(optionalOwnerReport.get());
+        }
+throw new EntityNotFoundException("Невозможно удалить отчёт, т.к. в базе нет отчёта с id = "+ownerReportId);    }
 
     @PutMapping("/{ownerReportId}")
     @Operation(summary = "Отредактировать отчёт",
             description = "нужно указать id и заполнить все поля отчёта в Body")
-    public ResponseEntity<OwnerReport> editOwnerReportById(@PathVariable int ownerReportId, @RequestBody OwnerReport ownerReport) {
-        if (ownerReport == null || ownerReport.getId() == null) {
-            throw new InvalidRequestException("PatientRecord or ID must not be null!");
-        }
-        Optional optionalOwnerReport = ownerReportRepository.findById(ownerReport.getId());
-        if (optionalOwnerReport.isEmpty()) {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<OwnerReport> editOwnerReportById(@PathVariable int ownerReportId,
+                                                           @RequestBody @Valid OwnerReport ownerReport)
+            throws EntityNotFoundException    {
+        long longId = ownerReportId;
+        Optional optionalOwnerReport = ownerReportRepository.findById(longId);
+        if (!optionalOwnerReport.isPresent()) {
+            throw new EntityNotFoundException("Невозможно изменить отчёт, т.к. в базе нет отчёта с id = "+ownerReportId);
         }
         OwnerReport existingOwnerReport = (OwnerReport) optionalOwnerReport.get();
 
@@ -95,7 +86,6 @@ public class OwnerReportController {
         existingOwnerReport.setPetsHealth(ownerReport.getPetsHealth());
         existingOwnerReport.setReportDateTime(ownerReport.getReportDateTime());
 
-        ownerReportRepository.save(ownerReport);
-        return ResponseEntity.ok(ownerReport);
+        return ResponseEntity.ok().body(ownerReportRepository.save(ownerReport));
     }
 }

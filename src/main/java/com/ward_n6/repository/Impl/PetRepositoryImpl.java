@@ -1,10 +1,8 @@
 package com.ward_n6.repository.Impl;
 
 import com.ward_n6.entity.pets.Pet;
-import com.ward_n6.exception.DeleteFromMapException;
-import com.ward_n6.exception.EditMapException;
-import com.ward_n6.exception.PutToMapException;
 import com.ward_n6.repository.PetRepository;
+import javassist.NotFoundException;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -35,12 +33,12 @@ public class PetRepositoryImpl implements PetRepository {
     }
 
     @Override
-    public Pet editPetById(int recordId, Pet pet) throws EditMapException {
+    public Pet editPetById(int recordId, Pet pet) throws NotFoundException {
         if (petMap.containsKey(recordId)) {
             petMap.put(recordId, pet);
             if (!petMap.get(recordId).equals(pet)) {
-                throw new EditMapException("ОШИБКА при попытке изменить запись о животном "
-                        +pet.getBread()+" "+pet.getPetName()+" в МАПе petMap под id="+recordId);
+                throw new NotFoundException("ОШИБКА при попытке изменить запись о животном "
+                        +pet.getBread()+" "+pet.getPetName()+" в МАПе petMap под id = "+recordId);
             }
             return null;
         }
@@ -53,20 +51,20 @@ public class PetRepositoryImpl implements PetRepository {
     }
 
     @Override
-    public boolean deletePetById(int recordId) throws DeleteFromMapException {
+    public boolean deletePetById(int recordId) throws NotFoundException {
         if (petMap.containsKey(recordId)) {
             petMap.remove(recordId);
             return true;
         }
-        throw new DeleteFromMapException("ОШИБКА при попытке удалить запись о животном в МАПе petMap под id="+recordId);
+        throw new NotFoundException("ОШИБКА при попытке удалить запись о животном в МАПе petMap под id = "+recordId);
     }
     @Override
-    public boolean deletePetByValue(Pet pet) throws DeleteFromMapException {
+    public boolean deletePetByValue(Pet pet) throws NotFoundException {
         if (petMap.containsValue(pet)) {
             petMap.values().remove(pet);
             return true;
         }
-        throw new DeleteFromMapException("ОШИБКА при попытке удалить запись о животном "
+        throw new NotFoundException("ОШИБКА при попытке удалить запись о животном "
                 +pet.getBread()+" "+pet.getPetName()+" в МАПе petMap");
     }
     @Override
