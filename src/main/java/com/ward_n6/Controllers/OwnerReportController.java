@@ -70,10 +70,11 @@ public class OwnerReportController {
     @Operation(summary = "Отредактировать отчёт",
             description = "нужно указать id и заполнить все поля отчёта в Body")
     public ResponseEntity<OwnerReport> editOwnerReportById(@PathVariable int ownerReportId, @RequestBody OwnerReport ownerReport) {
-        if (ownerReport == null || ownerReport.getId() == null) {
+        if (ownerReport == null ) {
+            //удалено: || ownerReport.getOwnerId() == null
             throw new InvalidRequestException("PatientRecord or ID must not be null!");
         }
-        Optional optionalOwnerReport = ownerReportRepository.findById(ownerReport.getId());
+        Optional optionalOwnerReport = ownerReportRepository.findById(ownerReport.getOwnerId());
         if (optionalOwnerReport.isEmpty()) {
             return ResponseEntity.notFound().build();
         }

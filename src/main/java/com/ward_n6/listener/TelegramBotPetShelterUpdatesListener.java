@@ -49,14 +49,20 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
     private static final Pattern ID_PATTERN = Pattern.compile("(\\d{1,5})");
     private EventHandler currentHandler = null;
 
-
     public TelegramBotPetShelterUpdatesListener(BotMessageService botMessageService, TelegramBot telegramBot,
-                                                ReportService reportService, OwnerService ownerService) {
+                                                ReportService reportService, OwnerService ownerService,
+                                                OwnerReport ownerReport) {
         this.botMessageService = botMessageService;
         this.telegramBot = telegramBot;
         this.reportService = reportService;
         this.ownerService = ownerService;
+
     }
+
+    private OwnerReport ownerReport;
+
+
+
 
     @PostConstruct
     public void init() {
@@ -71,6 +77,7 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
     boolean dogSelect = false;
     boolean getOwnerDataSelect = false;
 
+
     /**
      * ОСНОВНОЙ МЕТОД
      * "прослушиваине бота, добавляет кнопки на экран и меню с первыми командами
@@ -81,7 +88,12 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
         try {
             for (Update update : updates) {// итерируемся по ним
                 logger.info("Processing update: {}", update); // записываем лог апдейтов на уровне инфо
-
+                // новый блок - подсказка
+                if (currentHandler != null) { // добавляем в метож хэндлер
+                    if (currentHandler.handle(update)) {
+                        currentHandler = null;
+                    }
+                }
                 if (update.callbackQuery() != null) {
                     Long chatId = update.callbackQuery().message().chat().id();
                     CallbackQuery callbackQuery = update.callbackQuery();
@@ -117,11 +129,14 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
 
                         case "ОТЧЁТ":
                             sendOwnerHowReport(chatId);
-                        break;
+                            break;
 
                     }
 //                    continue;
-                }if (reportTextSelect){saveOwnerReportToDB(updates);}
+                }
+//                if (reportTextSelect) {
+//                    saveOwnerReportToDB(updates);
+//                }
 
                 // меню команд:
                 Message message = update.message(); // получаем сообщение из текущего обновления
@@ -157,14 +172,26 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
 
                     case "/report":
                         reportTextSelect = true;
+                        currentHandler = new ReportHandler(reportService, telegramBot);
+                       // OwnerReport ownerReport = new OwnerReport();
                         sendMessage(chatId, """
                                 Для загрузки отчёта следуйте указаниям бота. Пожалуйста, заполните все пункты отчёта.
                                 Команды для отчёта:\s
                                 1. /ID - указать id питомца
-                                2. /action - отчёт о поведении питомца
-                                3. /health - отчёт о здоровье питомца
-                                4. /feed - отчёт о питании питомца
-                                5. /save - сохранить отчёт""");
+                                2. /type - указать вид питомца
+                                3. /action - отчёт о поведении питомца
+                                4. /health - отчёт о здоровье питомца
+                                5. /feed - отчёт о питании питомца
+                                6. /save - сохранить отчёт""");
+//                        if (dogSelect || catSelect) {
+////                            ownerReport.setOwnerId(chatId);
+////                            ownerReport.setReportDateTime(LocalDateTime.now());
+//                            if (dogSelect) {
+//                               currentHandler.fillReport(chatId, dogSelect);
+//                            } else if (catSelect) {
+//                                currentHandler.fillReport(chatId, dogSelect);
+//                            }
+//                    }
                         break;
 
                     case "/myData":
@@ -234,9 +261,8 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
 //                        break;
 //                    default: if(isReportSelect){reportService.save(ownerReport);}
             }
-            if (reportTextSelect && (dogSelect || catSelect)) {
-                saveOwnerReportToDB(updates);
-            }
+//            if (reportTextSelect && (dogSelect || catSelect)) {
+//            }
         } catch (
                 Exception e) {
             logger.error(e.getMessage()); // ловим ошибку
@@ -434,7 +460,9 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
         telegramBot.execute(sendMessage);
 
     }
+
     boolean choice = false;
+
     private boolean handleButtonPress(Update update) {
         String callbackData = update.callbackQuery().data();
 
@@ -466,7 +494,7 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                         Message message = update.message(); // получаем сообщение из текущего обновления
                         Long chatId = message.chat().id(); // получаем идентификатор чата, к которому относится апдейт
                         String messageText = message.text(); // получаем текст сообщения
-                        ownerReport.setChatId(chatId);
+                        ownerReport.setOwnerId(chatId);
                         ownerReport.setReportDateTime(LocalDateTime.now());
                         if (dogSelect) {
                             ownerReport.setPetsType(PetsType.DOG);

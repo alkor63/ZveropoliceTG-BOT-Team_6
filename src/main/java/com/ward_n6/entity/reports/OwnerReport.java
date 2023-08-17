@@ -3,8 +3,11 @@ package com.ward_n6.entity.reports;
 import com.ward_n6.enums.PetsType;
 import lombok.*;
 import org.springframework.data.annotation.Id;
+import org.springframework.stereotype.Component;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -14,9 +17,9 @@ import java.util.Objects;
  * рацион
  * поведение
  */
-
+@Component
 @AllArgsConstructor
-//@NoArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 @Builder
@@ -26,13 +29,13 @@ import java.util.Objects;
 // нужно делать класс абстрактным???
 public class OwnerReport {
     @javax.persistence.Id
-    @Column(name = "id", nullable = false)
+//    @Column(name = "id", nullable = false)
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+  //  @GeneratedValue(strategy = GenerationType.class)
+ //   private long id;
 
-    @Column(name = "chat_id", nullable = false)
-    private long chatId;
+    @Column(name = "owner_id", nullable = false)
+    private long ownerId;
 
     @Column(name = "report_date_time", nullable = false)
     private LocalDateTime reportDateTime; // дата, время
@@ -56,49 +59,55 @@ public class OwnerReport {
     @Column(name = "pet_id", nullable = false)
     private long petId; // id питомца
 
-    @Column(name = "owner_id", nullable = false)
-    private long ownerId; // id [усыновителя]
-    public OwnerReport() {
-    }
+//    @Column(name = "owner_id", nullable = false)
+//    private long ownerId; // id [усыновителя]
+//    public OwnerReport() {
+//    }
 
-    public OwnerReport(long id, LocalDateTime reportDateTime, boolean havePhoto, String nutrition,
-                       String petsHealth, String petsBehavior, long petId) {
-        this.id = id;
-        this.reportDateTime = reportDateTime;
-        this.havePhoto = havePhoto;
-        this.nutrition = nutrition;
-        this.petsHealth = petsHealth;
-        this.petsBehavior = petsBehavior;
-        this.petId = petId;
-    }
+//    public OwnerReport(long ownerId, LocalDateTime reportDateTime, PetsType petsType, boolean havePhoto, String nutrition,
+//                       String petsHealth, String petsBehavior, long petId) {
+//        this.ownerId = ownerId;
+//        this.reportDateTime = reportDateTime;
+//        this.havePhoto = havePhoto;
+//        this.nutrition = nutrition;
+//        this.petsHealth = petsHealth;
+//        this.petsBehavior = petsBehavior;
+//        this.petId = petId;
+//        this.petsType = petsType;
+//    }
+
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        OwnerReport that = (OwnerReport) o;
-        return id == that.id && havePhoto == that.havePhoto && petId == that.petId && ownerId == that.ownerId && Objects.equals(reportDateTime, that.reportDateTime) && Objects.equals(nutrition, that.nutrition) && Objects.equals(petsHealth, that.petsHealth) && Objects.equals(petsBehavior, that.petsBehavior);
+        if (!(o instanceof OwnerReport that)) return false;
+        return getOwnerId() == that.getOwnerId() && isHavePhoto() == that.isHavePhoto() && getPetId() == that.getPetId() && Objects.equals(getReportDateTime(), that.getReportDateTime()) && getPetsType() == that.getPetsType() && Objects.equals(getNutrition(), that.getNutrition()) && Objects.equals(getPetsHealth(), that.getPetsHealth()) && Objects.equals(getPetsBehavior(), that.getPetsBehavior());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, reportDateTime, havePhoto, nutrition, petsHealth, petsBehavior, petId, ownerId);
+        return Objects.hash(getOwnerId(), getReportDateTime(), getPetsType(), isHavePhoto(), getNutrition(), getPetsHealth(), getPetsBehavior(), getPetId());
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public long getOwnerId() {
+        return ownerId;
     }
 
-    public Long getId() {
-        return id;
+    public OwnerReport setOwnerId(long ownerId) {
+        this.ownerId = ownerId;
+        return this;
     }
 
     @Override
     public String toString() {
         return "OwnerReport{" +
-                "id=" + id +
+                "ownerId=" + ownerId +
                 ", reportDateTime=" + reportDateTime +
-
+                ", petsType=" + petsType +
+                ", havePhoto=" + havePhoto +
+                ", nutrition='" + nutrition + '\'' +
+                ", petsHealth='" + petsHealth + '\'' +
+                ", petsBehavior='" + petsBehavior + '\'' +
                 ", petId=" + petId +
                 '}';
     }
