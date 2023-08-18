@@ -1,4 +1,4 @@
-package com.ward_n6.service.interfaces;
+package com.ward_n6.service;
 
 import com.ward_n6.entity.pets.Cat_2;
 import com.ward_n6.entity.pets.Dog_2;

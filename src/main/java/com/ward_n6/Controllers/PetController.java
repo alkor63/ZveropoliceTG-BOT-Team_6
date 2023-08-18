@@ -4,7 +4,7 @@ import com.ward_n6.entity.pets.Cat_2;
 import com.ward_n6.entity.pets.Dog_2;
 import com.ward_n6.enums.PetsSex;
 import com.ward_n6.service.CatService;
-import com.ward_n6.service.interfaces.DogService;
+import com.ward_n6.service.DogService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
