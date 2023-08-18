@@ -13,8 +13,10 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Objects;
 
-/** класс, содержащий общие свойства для кошек и собак и для создания отдельных
- *  для животных - на рассмотреии - сколько нужно таблицБД*/
+/**
+ * класс, содержащий общие свойства для кошек и собак и для создания отдельных
+ * для животных - на рассмотреии - сколько нужно таблицБД
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -28,7 +30,8 @@ public abstract class Pet {
     @javax.persistence.Id
     @Column(name = "pet_id", nullable = false)
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO) // стратегия будет выбрана автоматически, так как IDENTITY по умолчанию здесь не компилируется \о/
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    // стратегия будет выбрана автоматически, так как IDENTITY по умолчанию здесь не компилируется \о/
     private Long id;
 
     @Column(name = "bread")
@@ -45,8 +48,9 @@ public abstract class Pet {
     @Column(name = "sex")
     private PetsSex petsSex;
 
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "pets_type", insertable = false, updatable = false)
+    //    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Enumerated(EnumType.STRING) // для сохранения названия, а не цифры
+    @Column(name = "pets_type", insertable = false, updatable = false, columnDefinition = "VARCHAR(255)")
     protected PetsType petsType;
 
     @ManyToOne
@@ -64,6 +68,7 @@ public abstract class Pet {
                 ", порода " + bread + '\'' +
                 '}';
     }
+
     public String reportToString() {
         return "Pet{" +
                 "ID " + id +

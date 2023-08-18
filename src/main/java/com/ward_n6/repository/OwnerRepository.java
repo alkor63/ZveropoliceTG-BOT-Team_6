@@ -29,7 +29,7 @@ public interface OwnerRepository extends JpaRepository<Owner, Long> {
     int getId();
 
     Owner addOwnerToDB(Owner owner);
-
     @Override
-    <S extends Owner> S save(S entity);
+    List<Owner> findAll();
+
 }

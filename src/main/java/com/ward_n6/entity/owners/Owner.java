@@ -1,27 +1,33 @@
 package com.ward_n6.entity.owners;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import java.util.Objects;
 
-@Entity
-@NoArgsConstructor
+@Component
 @AllArgsConstructor
-@Table(name = "owner")
+@NoArgsConstructor
 @Getter
 @Setter
+@Builder
+@Entity
+@Table(name = "owner")
+
 //@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS) // позволяет классам наследникам сопоставляться со своей собственной таблицей
 // общий класс для владельцев (нужно ли его делать АБСТРАКТНЫМ?)
-public class Owner { // хозяин животного, его свойства
 
-    @Id
-    @Column(name = "owner_id",nullable = false)
+public class Owner { // хозяин животного, его свойства
+    @javax.persistence.Id
+    @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
+
+//    @javax.persistence.Id
+    @Column(name = "owner_id", nullable = false)
+//    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long ownerId;
 
     @Column(name = "first_name")
     private String firstName;
@@ -37,22 +43,20 @@ public class Owner { // хозяин животного, его свойства
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Owner owner)) return false;
-        return Objects.equals(getId(), owner.getId()) && Objects.equals(getFirstName(), owner.getFirstName()) && Objects.equals(getLastName(), owner.getLastName()) && Objects.equals(getPhoneNumber(), owner.getPhoneNumber());
+        return getId() == owner.getId() && Objects.equals(getOwnerId(), owner.getOwnerId()) && Objects.equals(getFirstName(), owner.getFirstName()) && Objects.equals(getLastName(), owner.getLastName()) && Objects.equals(getPhoneNumber(), owner.getPhoneNumber());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getFirstName(), getLastName(), getPhoneNumber());
+        return Objects.hash(getId(), getOwnerId(), getFirstName(), getLastName(), getPhoneNumber());
     }
 
     @Override
     public String toString() {
-        return "PetOwner{" +
-                "ownerId=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                '}';
+        return "ID: " + ownerId + ", \n" +
+                "имя " + firstName + ", \n" +
+                "фамилия " + lastName + ", \n" +
+                "номер телефона: " + phoneNumber + ". \n";
     }
 
 

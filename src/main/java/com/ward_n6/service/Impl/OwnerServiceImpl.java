@@ -5,14 +5,9 @@ import com.ward_n6.exception.DeleteFromMapException;
 import com.ward_n6.exception.EditMapException;
 import com.ward_n6.exception.PutToMapException;
 import com.ward_n6.repository.OwnerRepository;
-import com.ward_n6.service.OwnerService;
+import com.ward_n6.service.interfaces.OwnerService;
 import org.springframework.stereotype.Service;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,9 +21,13 @@ public class OwnerServiceImpl implements OwnerService {
     public OwnerServiceImpl(OwnerRepository ownerRepository) {
         this.ownerRepository = ownerRepository;
     }
+    //******************************
+     // СОХРАНЕНИЕ В БД ИЗ БОТА!
+    public void save(Owner owner) {
+        ownerRepository.save(owner);
+    }
+    //*******************************************
 
-
-    @Override
     public int getId() {
         return ownerRepository.getId();
     }
@@ -78,4 +77,5 @@ return ownerRepository.editOwnerById(recordId,owner);
     public int idOwnerByValue(Owner owner) {
         return ownerRepository.idOwnerByValue(owner);
     }
+
 }

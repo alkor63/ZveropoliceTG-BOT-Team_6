@@ -22,11 +22,6 @@ public class ReportHandler implements EventHandler {
     private final ReportService reportService;
     private final TelegramBot bot;
 
-//    public ReportHandler(ReportService reportService, TelegramBot bot) {
-//        this.reportService = reportService;
-//        this.bot = bot;
-//    }
-
     private Consumer<Update> actionOnNextMessage; // переменная для определения действий над поступаемым сообщением
     boolean isId = false;
     boolean isHealth = false;
@@ -41,7 +36,6 @@ public class ReportHandler implements EventHandler {
             actionOnNextMessage.accept(update);
             actionOnNextMessage = null;
             return false;
-
         }
         var text = update.message().text();
         switch (text) {
@@ -59,20 +53,6 @@ public class ReportHandler implements EventHandler {
                     }
                 };
                 break;
-            case "/type":
-                bot.execute(new SendMessage(update.message().chat().id(), "Укажите вид Вашего питомца: собака(/dog) " +
-                        "или кошка (/cat"));
-                actionOnNextMessage = upd -> {
-                    if (upd.message().text().equals("/dog")){
-                        ownerReport.setPetsType(PetsType.DOG);
-                } else if (upd.message().text().equals("//cat")){
-                        ownerReport.setPetsType(PetsType.CAT);
-                    }
-                    bot.execute(new SendMessage(update.message().chat().id(), "Вид питомца записан в отчёт!"));
-                    isHealth = true;
-                };
-                break;
-
             case "/health":
                 bot.execute(new SendMessage(update.message().chat().id(), "Опишите кратко самочувствие питомца"));
                 actionOnNextMessage = upd -> {
@@ -102,17 +82,15 @@ public class ReportHandler implements EventHandler {
             case "/save":
                 ownerReport.setReportDateTime(LocalDateTime.now());
                 ownerReport.setOwnerId(update.message().chat().id());
+                if (TelegramBotPetShelterUpdatesListener.dogSelect){
+                    ownerReport.setPetsType(PetsType.DOG);
+                } else if (TelegramBotPetShelterUpdatesListener.catSelect) {
+                    ownerReport.setPetsType(PetsType.CAT);
+                }
                 reportService.save(ownerReport);
                 bot.execute(new SendMessage(update.message().chat().id(), "Ваш отчёт загружен"));
                 return true; // возвращаем true - это значит, что контекст завершен.
 
-            default:
-                ownerReport.setReportDateTime(LocalDateTime.now());
-                ownerReport.setOwnerId(update.message().chat().id());
-                if (isId && isFeed && isHealth && isAction) {
-                    reportService.save(ownerReport);
-                    return true;
-                }
         }
         return false;
     }

@@ -2,12 +2,9 @@ package com.ward_n6.entity.reports;
 
 import com.ward_n6.enums.PetsType;
 import lombok.*;
-import org.springframework.data.annotation.Id;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -23,16 +20,16 @@ import java.util.Objects;
 @Getter
 @Setter
 @Builder
-//@Data
 @Entity
 @Table(name = "owner_report")
 // нужно делать класс абстрактным???
 public class OwnerReport {
+
     @javax.persistence.Id
-//    @Column(name = "id", nullable = false)
-    @Id
-  //  @GeneratedValue(strategy = GenerationType.class)
- //   private long id;
+    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
+
 
     @Column(name = "owner_id", nullable = false)
     private long ownerId;
@@ -40,6 +37,7 @@ public class OwnerReport {
     @Column(name = "report_date_time", nullable = false)
     private LocalDateTime reportDateTime; // дата, время
 
+    @Enumerated(EnumType.STRING) // для сохранения названия, а не цифры
     @Column(name = "pet_type", columnDefinition = "VARCHAR(255)")
     private PetsType petsType;
 
@@ -59,34 +57,17 @@ public class OwnerReport {
     @Column(name = "pet_id", nullable = false)
     private long petId; // id питомца
 
-//    @Column(name = "owner_id", nullable = false)
-//    private long ownerId; // id [усыновителя]
-//    public OwnerReport() {
-//    }
-
-//    public OwnerReport(long ownerId, LocalDateTime reportDateTime, PetsType petsType, boolean havePhoto, String nutrition,
-//                       String petsHealth, String petsBehavior, long petId) {
-//        this.ownerId = ownerId;
-//        this.reportDateTime = reportDateTime;
-//        this.havePhoto = havePhoto;
-//        this.nutrition = nutrition;
-//        this.petsHealth = petsHealth;
-//        this.petsBehavior = petsBehavior;
-//        this.petId = petId;
-//        this.petsType = petsType;
-//    }
-
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof OwnerReport that)) return false;
-        return getOwnerId() == that.getOwnerId() && isHavePhoto() == that.isHavePhoto() && getPetId() == that.getPetId() && Objects.equals(getReportDateTime(), that.getReportDateTime()) && getPetsType() == that.getPetsType() && Objects.equals(getNutrition(), that.getNutrition()) && Objects.equals(getPetsHealth(), that.getPetsHealth()) && Objects.equals(getPetsBehavior(), that.getPetsBehavior());
+        if (!(o instanceof OwnerReport report)) return false;
+        return getId() == report.getId() && getOwnerId() == report.getOwnerId() && isHavePhoto() == report.isHavePhoto() && getPetId() == report.getPetId() && Objects.equals(getReportDateTime(), report.getReportDateTime()) && getPetsType() == report.getPetsType() && Objects.equals(getNutrition(), report.getNutrition()) && Objects.equals(getPetsHealth(), report.getPetsHealth()) && Objects.equals(getPetsBehavior(), report.getPetsBehavior());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getOwnerId(), getReportDateTime(), getPetsType(), isHavePhoto(), getNutrition(), getPetsHealth(), getPetsBehavior(), getPetId());
+        return Objects.hash(getId(), getOwnerId(), getReportDateTime(), getPetsType(), isHavePhoto(), getNutrition(), getPetsHealth(), getPetsBehavior(), getPetId());
     }
 
     public long getOwnerId() {
