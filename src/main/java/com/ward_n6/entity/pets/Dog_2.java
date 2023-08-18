@@ -1,23 +1,21 @@
 package com.ward_n6.entity.pets;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.ward_n6.entity.owners.Owner;
 import com.ward_n6.enums.PetsSex;
-import com.ward_n6.enums.PetsType;
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.Period;
 
-
 @Entity
 @NoArgsConstructor
 @Data
 
-@Table(name = "cats_2")
-public class Cat_2 {
+@Table(name = "dogs_2")
+public class Dog_2 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "pet_id")
@@ -39,7 +37,7 @@ public class Cat_2 {
     @Column(name = "owner_id")
     private int ownerId;
 
-    public Cat_2(Long id, String bread, LocalDate petBirthDay, String petName, PetsSex petsSex, int ownerId) {
+    public Dog_2(Long id, String bread, LocalDate petBirthDay, String petName, PetsSex petsSex, int ownerId) {
         this.id = id;
         this.bread = bread;
         this.petBirthDay = petBirthDay;
@@ -58,10 +56,10 @@ public class Cat_2 {
 
     @Override
     public String toString() {
-        return "Кошка" +
+        return "Собака" +
                 "ID " + id +
                 ", кличка " + petName + '\'' +
-               ", возраст: " + getAge() +
+                ", возраст: " + getAge() +
                 ", порода " + bread + '\'' +
                 ", пол " + petsSex.getTitle() + '\'' +
                 ", id владелец: " + ownerId + "\n";
