@@ -1,16 +1,12 @@
 package com.ward_n6.entity.owners;
+
 import com.ward_n6.entity.pets.Pet;
-import com.ward_n6.enums.PetsSex;
-import com.ward_n6.enums.PetsType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 
     @Entity
@@ -26,8 +22,8 @@ import java.util.List;
         private Long id;
 
         @ManyToOne
-        @JoinColumn(name = "owner", insertable = false, updatable = false)
-        private Owner owner;
+        @JoinColumn(name = "owner_id", referencedColumnName = "owner_id")
+        protected Owner owner;
 
         @ManyToOne
         @JoinColumn(name = "pet", insertable = false, updatable = false)

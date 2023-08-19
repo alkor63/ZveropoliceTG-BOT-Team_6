@@ -4,31 +4,35 @@ import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.CallbackQuery;
 import com.pengrad.telegrambot.model.Message;
+import com.pengrad.telegrambot.model.PhotoSize;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
 import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
 import com.pengrad.telegrambot.model.request.Keyboard;
+import com.pengrad.telegrambot.request.GetFile;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.response.SendResponse;
 import com.vdurmont.emoji.EmojiParser;
 import com.ward_n6.entity.BotMessaging;
 import com.ward_n6.entity.owners.Owner;
-import com.ward_n6.entity.reports.OwnerReport;
 import com.ward_n6.entity.shelters.PetShelter;
-import com.ward_n6.enums.PetsType;
+import com.ward_n6.repository.Impl.OwnerServiceImpl;
 import com.ward_n6.repository.OwnerRepository;
 import com.ward_n6.entity.reports.OwnerReport;
 import com.ward_n6.entity.shelters.PetShelter;
 import com.ward_n6.service.BotMessageService;
-import com.ward_n6.service.OwnerService;
 import com.ward_n6.service.PhotoService;
 import com.ward_n6.service.ReportService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.time.LocalDateTime;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.URL;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -46,29 +50,34 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
     private final ReportService reportService;
     private OwnerRepository ownerRepository;
 
-    private PetShelter petShelter = new PetShelter() {
-    };
+    private final OwnerServiceImpl ownerServiceImpl;
 
-    private final OwnerService ownerService;
+    private EventHandler currentHandler = null;
 
-    private static final Pattern ID_PATTERN = Pattern.compile("(\\d{1,5})");
-
+    private Owner owner = new Owner();
 
     public TelegramBotPetShelterUpdatesListener(BotMessageService botMessageService, TelegramBot telegramBot,
-                                                ReportService reportService, OwnerService ownerService) {
+                                                ReportService reportService,
+                                                OwnerRepository ownerRepository, OwnerServiceImpl ownerServiceImpl) {
         this.botMessageService = botMessageService;
         this.telegramBot = telegramBot;
         this.reportService = reportService;
-        this.ownerService = ownerService;
+        this.ownerRepository = ownerRepository;
+        this.ownerServiceImpl = ownerServiceImpl;
     }
-
 
     @PostConstruct
     public void init() {
         telegramBot.setUpdatesListener(this);
     }
 
-    boolean startSelected = false; // переменная для подтверждения старта
+    private boolean startSelected = false; // переменная для подтверждения старта
+    private boolean reportSelect = false;
+    private boolean reportTextSelect = false;
+    private boolean reportPhotoSelect = false;
+    protected static boolean catSelect = false;
+    protected static boolean dogSelect = false;
+    protected static boolean getOwnerDataSelect = false;
 
     boolean reportSelect = false;
     boolean catSelect = false;
@@ -85,44 +94,51 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
         try {
             for (Update update : updates) {// итерируемся по ним
                 logger.info("Processing update: {}", update); // записываем лог апдейтов на уровне инфо
-
+                // новый блок - подсказка
+                if (currentHandler != null) { // добавляем в метож хэндлер
+                    if (currentHandler.handle(update)) {
+                        currentHandler = null;
+                    }
+                }
                 if (update.callbackQuery() != null) {
                     Long chatId = update.callbackQuery().message().chat().id();
                     CallbackQuery callbackQuery = update.callbackQuery();
                     String data = callbackQuery.data();
                     switch (data) {
-                        case "КНОПКА_ПРИЮТ_ДЛЯ_СОБАК": {
+                        case "КНОПКА_ПРИЮТ_ДЛЯ_СОБАК":
+                            dogSelect = true;
                             dogButton(chatId);
                             break;
-                        }
-                        case "КНОПКА_ПРИЮТ_ДЛЯ_КОШЕК": {
+
+                        case "КНОПКА_ПРИЮТ_ДЛЯ_КОШЕК":
+                            catSelect = true;
                             catButton(chatId);
                             break;
-                        }
-                        case "ИНФО_СОБАКИ":{
+
+                        case "ИНФО_СОБАКИ":
                             dogInfoButton(chatId);
                             break;
-                        }
-                        case "ИНФО_КОШКИ":{
+
+                        case "ИНФО_КОШКИ":
                             catInfoButton(chatId);
                             break;
-                        }
-                        case "КАК_ЗАБРАТЬ_СОБАКУ":{
+
+                        case "КАК_ЗАБРАТЬ_СОБАКУ":
                             wantToTakeDogButton(chatId);
                             break;
-                        }
-                        case "КАК_ЗАБРАТЬ_КОШКУ":{
+
+                        case "КАК_ЗАБРАТЬ_КОШКУ":
                             wantToTakeCatButton(chatId);
-                        }
-                        case "ВОЛОНТЁР":{
+
+                        case "ВОЛОНТЁР":
                             callVoluntier(chatId);
-                        }
-                        case "ОТЧЁТ":{
+
+                        case "ОТЧЁТ":
                             sendOwnerHowReport(chatId);
-                        }
+                            break;
                     }
-                    continue;
                 }
+
                 // меню команд:
                 Message message = update.message(); // получаем сообщение из текущего обновления
                 Long chatId = message.chat().id(); // получаем идентификатор чата, к которому относится апдейт
@@ -131,7 +147,7 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                 switch (messageText) {
                     case "/start":
                         startSelected = true;
-                        afterStartMenu(chatId);
+                        afterStartMenu(chatId, "/start");
                         break;
                     case "/dogs":
                         dogSelect = true;
@@ -147,16 +163,17 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                                     "Выберите интересующий Вас пункт меню.");
                         }
                         break;
-//                    case "/photo":
-//                        sendMessage(chatId, "Загрузите фото.");
-//                        // photoService.getPhotos(update);
-//                        if (message.photo().length > 0) {
-//                            sendMessage(chatId, "Фото загружено");
-//                        }
-//                        break;
+
+                    case "/photo":
+                        sendMessage(chatId, "Отправьте фото Вашего питомца для отчёта.");
+//                        currentHandler = new PhotoHandler(telegramBot);
+                        getPhoto(update);
+////
+                        break;
 
                     case "/report":
-                        reportSelect = true;
+                        reportTextSelect = true;
+                        currentHandler = new ReportHandler(reportService, telegramBot);
                         sendMessage(chatId, """
                                 Для загрузки отчёта следуйте указаниям бота. Пожалуйста, заполните все пункты отчёта.
                                 Команды для отчёта:\s
@@ -168,25 +185,27 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                         break;
 
                     case "/myData":
-                        if (startSelected) {
-                            sendMessage(chatId, "Пожалуйста, укажите Ваши данные в формате: " +
-                                    "Иванов Иван 8-ХХХ-ХХХ-ХХ-ХХ");
-                            String ownerData = update.message().text();
-//                            saveOwner(chatId, ownerData);
-                            getOwnerDataSelect = true;
-                        }
+                        getOwnerDataSelect = true;
+                        currentHandler = new OwnerHandler(ownerServiceImpl, telegramBot);
+                        sendMessage(chatId, """
+                                Пожалуйста, укажите Ваши данные:
+                                1. /ln - указать фамилию
+                                2. /fn - указать имя
+                                3. /phone - указать номер телефона
+                                4. /save - сохранить мои контактные данные в базе приюта
+                                5. /delete - удалить мои данные
+                                """);
                         break;
 
                     case "/volunteer":
                         sendMessage(chatId,
                                 petShelter.getCallVolonteer());
                         break;
-                } if (getOwnerDataSelect) {
-                    saveOwner(chatId, messageText);
                 }
-            }
-            if (reportSelect && (dogSelect || catSelect)) {
-                saveOwnerReportToDB(updates);
+//                if (reportPhotoSelect) {
+//                    getPhoto(update);
+//                }
+
             }
         } catch (
                 Exception e) {
@@ -367,84 +386,27 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
         Keyboard keyboard = new InlineKeyboardMarkup().addRow(textButton).addRow(photoButton); //СОЗДАЁМ КЛАВИАТУРУ
         sendMessage.replyMarkup(keyboard); //ИНИЦИАЛИЗИРУЕМ КЛАВИАТУРУ В СООБЩЕНИЕ
         telegramBot.execute(sendMessage);
+
     }
 
+    boolean choice = false;
 
-    /**
-     * СОХРАНЕНИЕ ОТЧЁТА
-     * проработать выбор / заполнение типа питомца
-     * (в зависимости от выбора приюта)
-     */
-    private int saveOwnerReportToDB(List<Update> updates) {
-        OwnerReport ownerReport = new OwnerReport();
-        try {
-            updates.stream() // получаем поток апдейтов из листа
-                    .filter(update -> update.message() != null)// фильтруем по тем, что не нулл
-                    .forEach(update -> { // итерируемся по ним
-                        logger.info("Processing update: {}", update); // записываем лог апдейтов на уровне инфо
-                        Message message = update.message(); // получаем сообщение из текущего обновления
-                        Long chatId = message.chat().id(); // получаем идентификатор чата, к которому относится апдейт
-                        String messageText = message.text(); // получаем текст сообщения
-                        ownerReport.setChatId(chatId);
-                        ownerReport.setReportDateTime(LocalDateTime.now());
-                        if (dogSelect) {
-                            ownerReport.setPetsType(PetsType.DOG);
-                        } else if (catSelect) {
-                            ownerReport.setPetsType(PetsType.CAT);
-                        }
-                        // КОМАНДЫ ОТЧЁТА:
-                        switch (messageText) {
-                            case "/ID":
-                                sendMessage(chatId, "Укажите ID Вашего питомца");
-                                String idMessage = message.text();
-                                if (idMessage.matches("\\d+")) { // проверяем, что указано число
-                                    long petsId = Long.parseLong(idMessage.split(" ")[0]); // парсим сообщение в формат ID, 0 - без пробелов
-                                    ownerReport.setPetId(petsId);
-                                    sendMessage(chatId, "ID питомца записан.");
-                                }
-                                break;
+    private boolean handleButtonPress(Update update) {
+        String callbackData = update.callbackQuery().data();
 
-                            case "/action":
-                                sendMessage(chatId, "Опишите кратко поведение питомца");
-                                String actionMessage = message.text(); // сохраняем текстовое сообщение в переменную.
-                                if (actionMessage != null) {
-                                    ownerReport.setPetsBehavior(actionMessage);
-                                    sendMessage(chatId, "Отчёт о поведении питомца записан");
-                                }
-                                break;
-
-                            case "/health":
-                                sendMessage(chatId, "Опишите кратко самочувствие питомца");
-                                String healthMessage = message.text();
-                                if (healthMessage != null) {
-                                    ownerReport.setPetsHealth(healthMessage);
-                                }
-                                break;
-
-                            case "/feed":
-                                sendMessage(chatId, "Опишите рацион питомца");
-                                String feedMessage = message.text();
-                                if (feedMessage != null) {
-                                    ownerReport.setNutrition(feedMessage);
-                                }
-                                break;
-
-                            case "/save":
-                                reportService.save(ownerReport);
-                                sendMessage(chatId, "Ваш отчёт загружен");
-
-                            default:
-                                if (messageText != null) { // почему всегда true?
-                                    saveMessages(chatId, messageText);
-                                }
-                                break;
-                        }
-                    });
-        } catch (Exception e) {
-            logger.error(e.getMessage()); // ловим ошибку
+        // Проверяем, какая кнопка была нажата
+        if (callbackData.equals("ОТЧЁТ_ТЕКСТ")) {
+            // Устанавливаем значение choice в true
+            reportTextSelect = true;
+            choice = reportTextSelect;
+        } else if (callbackData.equals("ОТЧЁТ_ФОТО")) {
+            reportPhotoSelect = true;
+            choice = reportPhotoSelect;
+            // Обработка нажатия кнопки "Отправить фото"
         }
-        return UpdatesListener.CONFIRMED_UPDATES_ALL; // успешно завершаем метод, без падения
+        return choice;
     }
+
 
     // ****************************** СОХРАНЯЕМ ОВНЕРА ***********************
     boolean isLastName = false;
@@ -474,48 +436,26 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
         }
     }
 
-    private int addOwnerToDB(List<Update> updates) {
-        Owner owner = new Owner();
-        try {
-            for (Update update : updates) {// итерируемся по ним
-                logger.info("Processing update: {}", update);
 
-                Message message = update.message();
-                Long chatId = message.chat().id();
-                String messageText = message.text();
-                switch (messageText) {
-                    case "ln" -> {
-                        sendMessage(chatId, "Укажите Вашу фамилию с заглавной буквы");
-                        if (messageText != null) {
-                            owner.setLastName(messageText);
+    //**************************************** фОТО ******************************
+    @Value("${path.to.file}")
+    String folderPath ; // путь к файлам
 
-                        } else {
-                            owner.setLastName("auto: не указано");
-                        }
-                    }
-                    case "/fn" -> {
-                        sendMessage(chatId, "Укажите Ваше имя с заглавной буквы");
-                        if (messageText != null) {
-                            owner.setFirstName(messageText);
-                        } else {
-                            owner.setLastName("auto: не указано");
-                        }
-                    }
-                    case "/phone" -> {
-                        sendMessage(chatId, "Укажите Ваш телефон для связи в формате: " + "\n" +
-                                "8-XXX-XXX-XX-XX");
-                        if (messageText != null) {
-                            owner.setPhoneNumber(messageText);
-                        } else {
-                            owner.setLastName("auto: не указано");
-                        }
-                    }
-                }
+    private void getPhoto(Update update) {
+        PhotoSize[] messagePhoto = update.message().photo(); // получаем сообщение из текущего обновления
+        Long chatId =update.message().chat().id(); // получаем идентификатор чата, к которому относится апдейт
+//       PhotoSize[] messagePhoto = message.photo();
+        if (messagePhoto != null) {
+            var photo = update.message().photo()[3]; // 3 - самое лучшее качество
+            var getFile = telegramBot.execute(new GetFile(photo.fileId()));
+            var outFile = new File(folderPath, (photo.fileId() + "-owner-" + chatId + ".jpeg")); // добавлено
+            try (var in = new URL(telegramBot.getFullFilePath(getFile.file())).openStream();
+                 var out = new FileOutputStream(outFile)) {
+                     // для примера просто сделал случайное название файла, лучше прописать путь и расширение
+                in.transferTo(out);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
-        } catch (Exception e) {
-            logger.error(e.getMessage()); // ловим ошибку
         }
-        return UpdatesListener.CONFIRMED_UPDATES_ALL; // успешно завершаем метод, без падения
     }
 }
-

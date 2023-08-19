@@ -8,8 +8,9 @@ package com.ward_n6.entity.owners;
 //@AllArgsConstructor
 
 public class CatOwner extends  Owner{
-    public CatOwner(Long id, String firstName, String lastName, String phoneNumber) {
-        super(id, firstName, lastName, phoneNumber);
+
+    public CatOwner(Long ownerId, String firstName, String lastName, String phoneNumber) {
+        super(ownerId, firstName, lastName, phoneNumber);
     }
 
     public CatOwner() {
