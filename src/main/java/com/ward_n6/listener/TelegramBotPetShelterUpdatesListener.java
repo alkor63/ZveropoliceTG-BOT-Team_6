@@ -16,7 +16,7 @@ import com.vdurmont.emoji.EmojiParser;
 import com.ward_n6.entity.BotMessaging;
 import com.ward_n6.entity.owners.Owner;
 import com.ward_n6.entity.shelters.PetShelter;
-import com.ward_n6.repository.Impl.OwnerService;
+import com.ward_n6.repository.Impl.OwnerServiceImpl;
 import com.ward_n6.repository.OwnerRepository;
 import com.ward_n6.service.BotMessageService;
 import com.ward_n6.service.PhotoService;
@@ -48,7 +48,7 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
     private final ReportService reportService;
     private OwnerRepository ownerRepository;
 
-    private final OwnerService ownerService;
+    private final OwnerServiceImpl ownerServiceImpl;
 
     private EventHandler currentHandler = null;
 
@@ -56,12 +56,12 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
 
     public TelegramBotPetShelterUpdatesListener(BotMessageService botMessageService, TelegramBot telegramBot,
                                                 ReportService reportService,
-                                                OwnerRepository ownerRepository, OwnerService ownerService) {
+                                                OwnerRepository ownerRepository, OwnerServiceImpl ownerServiceImpl) {
         this.botMessageService = botMessageService;
         this.telegramBot = telegramBot;
         this.reportService = reportService;
         this.ownerRepository = ownerRepository;
-        this.ownerService = ownerService;
+        this.ownerServiceImpl = ownerServiceImpl;
     }
 
 
@@ -181,7 +181,7 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
 
                     case "/myData":
                         getOwnerDataSelect = true;
-                        currentHandler = new OwnerHandler(ownerService, telegramBot);
+                        currentHandler = new OwnerHandler(ownerServiceImpl, telegramBot);
                         sendMessage(chatId, """
                                 Пожалуйста, укажите Ваши данные:
                                 1. /ln - указать фамилию

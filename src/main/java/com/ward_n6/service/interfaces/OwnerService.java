@@ -29,7 +29,7 @@ public interface OwnerService {
 
     int idOwnerByValue(Owner owner);
 
-//    interface OwnerService {
+//    interface OwnerServiceImpl {
 //        void save(Owner owner);
 //
 //        int getId();

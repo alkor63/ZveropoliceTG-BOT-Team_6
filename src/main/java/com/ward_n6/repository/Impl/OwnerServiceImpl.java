@@ -19,22 +19,22 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
-public class OwnerService  {
+public class OwnerServiceImpl implements com.ward_n6.service.interfaces.OwnerService {
     private final OwnerRepository ownerRepository;
     private Map<Integer, Owner> ownerMap = new HashMap<>();
     private int mapId = 0;
 
-    public OwnerService(OwnerRepository ownerRepository) {
+    public OwnerServiceImpl(OwnerRepository ownerRepository) {
         this.ownerRepository = ownerRepository;
     }
 
 
-
+@Override
     public Owner addOwner(Owner owner) {
         if (owner.equals(null)) throw new NullPointerException("ОШИБКА при попытке добавить owner=Null в МАПу ownerMap");
         ownerMap.putIfAbsent(mapId++, owner);
         return owner;
-    }
+    }@Override
 
     public Owner addOwnerToDB(Owner owner) {
         try {
@@ -60,12 +60,12 @@ public class OwnerService  {
         }
         return owner;
     }
-
+    @Override
     public Owner getOwnerById(int recordId) {
         return ownerMap.get(recordId);
     }
 
-
+    @Override
     public List<Owner> getAllOwners() {
         return new ArrayList<>(ownerMap.values());
     }
@@ -83,12 +83,12 @@ public class OwnerService  {
         return ownerMap.get(recordId);
     }
 
-
+    @Override
     public void deleteAllFromOwner() {
         ownerMap.clear();
     }
 
-
+    @Override
     public boolean deleteOwnerById(int recordId) throws DeleteFromMapException {
         if (ownerMap.containsKey(recordId)) {
             ownerMap.remove(recordId);
@@ -97,7 +97,7 @@ public class OwnerService  {
         throw new DeleteFromMapException("ОШИБКА при попытке удалить запись о госте в МАПе ownerMap под id=" + recordId);
     }
 
-
+    @Override
     public boolean deleteOwnerByValue(Owner owner) throws DeleteFromMapException {
         if (ownerMap.containsValue(owner)) {
             ownerMap.values().remove(owner);
@@ -107,13 +107,13 @@ public class OwnerService  {
                 + owner.getFirstName() + " " + owner.getLastName() + " из МАПы ownerMap");
     }
 
-
+    @Override
     public int idOwnerByValue(Owner owner) {
         for (Map.Entry<Integer, Owner> entry : ownerMap.entrySet())
             if (entry.getValue().equals(owner)) return entry.getKey();
         return -1;
     }
-
+    @Override
     public int getId() {
         return mapId;
     }
@@ -167,10 +167,6 @@ public class OwnerService  {
     public void deleteAll() {
 
     }
-
-
-
-
 
 public void save(Owner owner) {
     ownerRepository.save(owner);

@@ -4,8 +4,8 @@ import com.ward_n6.entity.owners.Owner;
 import com.ward_n6.exception.DeleteFromMapException;
 import com.ward_n6.exception.EditMapException;
 import com.ward_n6.exception.PutToMapException;
-import com.ward_n6.repository.Impl.OwnerService;
 import com.ward_n6.repository.OwnerRepository;
+import com.ward_n6.service.interfaces.OwnerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +18,7 @@ import java.util.List;
 @Tag(name = "Список посетителей приюта",
         description = "CRUD-операции с усыновителями")
 public class OwnerController {
+    private  final OwnerService ownerService;
     private final OwnerRepository ownerRepository;
 
     public OwnerController(OwnerRepository ownerRepository, OwnerService ownerService) {
@@ -44,7 +45,10 @@ public class OwnerController {
         }
         return ResponseEntity.ok(owner);
     }
-private  final  OwnerService ownerService;
+
+
+
+
     @PutMapping("/{ownerId}")
     @Operation(summary = "Отредактировать карточку усыновителя",
             description = "нужно указать id и заполнить все поля карточки усыновителя в Body")

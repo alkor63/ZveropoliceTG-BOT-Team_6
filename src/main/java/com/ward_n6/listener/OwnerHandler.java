@@ -4,19 +4,19 @@ import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.ward_n6.entity.owners.Owner;
-import com.ward_n6.repository.Impl.OwnerService;
+import com.ward_n6.repository.Impl.OwnerServiceImpl;
 
 import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class OwnerHandler implements EventHandler {
-    private final OwnerService ownerService;
+    private final OwnerServiceImpl ownerServiceImpl;
     private final TelegramBot telegramBot;
     private Owner owner = new Owner();
 
-    public OwnerHandler(OwnerService ownerService, TelegramBot telegramBot) {
-        this.ownerService = ownerService;
+    public OwnerHandler(OwnerServiceImpl ownerServiceImpl, TelegramBot telegramBot) {
+        this.ownerServiceImpl = ownerServiceImpl;
         this.telegramBot = telegramBot;
     }
 
@@ -36,7 +36,16 @@ public class OwnerHandler implements EventHandler {
                 telegramBot.execute(new SendMessage(update.message().chat().id(), "Укажите Вашу фамилию с заглавной буквы"));
                 actionOnNextMessage = upd -> {
                     owner.setLastName(upd.message().text());
-                    telegramBot.execute(new SendMessage(update.message().chat().id(), "Фамилия записана!"));
+                    telegramBot.execute(new SendMessage(update.message().chat().id(), "Фамилия записана!"+
+                            """
+                                Команды для отчёта:
+                                1. /ID - указать id питомца
+                                2. /action - отчёт о поведении питомца
+                                3. /health - отчёт о здоровье питомца
+                                4. /feed - отчёт о питании питомца
+                                5. /save - сохранить отчёт
+                                    """
+                    ));
                 };
                 break;
 
@@ -44,7 +53,17 @@ public class OwnerHandler implements EventHandler {
                 telegramBot.execute(new SendMessage(update.message().chat().id(), "Укажите Ваше имя с заглавной буквы"));
                 actionOnNextMessage = upd -> {
                     owner.setFirstName(upd.message().text());
-                    telegramBot.execute(new SendMessage(update.message().chat().id(), "Имя записано!"));
+                    telegramBot.execute(new SendMessage(update.message().chat().id(), "Имя записано!"+
+                            """
+                                Команды для отчёта:
+                                1. /ID - указать id питомца
+                                2. /action - отчёт о поведении питомца
+                                3. /health - отчёт о здоровье питомца
+                                4. /feed - отчёт о питании питомца
+                                5. /save - сохранить отчёт
+                                    """
+
+));
                 };
                 break;
 
@@ -66,21 +85,21 @@ public class OwnerHandler implements EventHandler {
             case "/save":
 
                 owner.setOwnerId(update.message().chat().id().longValue());
-                ownerService.save(owner);
+                ownerServiceImpl.save(owner);
                 telegramBot.execute(new SendMessage(update.message().chat().id(), "Ваши данные " + "\n" + owner.toString()
                         + "добавлены в нашу базу. Для удаления данных из нашей базы обратитесь в волонтёру"));
 
-                return true;
+               return true;
 
 
             case "/delete":
                 telegramBot.execute(new SendMessage(update.message().chat().id(), "К сожалению, эта функция пока не работает. " +
                         "Для удаления данных из нашей базы обратитесь в волонтёру."));
-//              int id = Integer.parseInt(update.message().chat().id());
-//                ownerService.deleteOwnerById(update.message().chat().id());
-//                telegramBot.execute(new SendMessage(update.message().chat().id(), "Ваши данные " + owner.toString() + "добавлены в нашу базу." +
-//                        "Для удаления данных из нашей базы обратитесь в волонтёру"));
+                ownerServiceImpl.deleteById(update.message().chat().id());
+                telegramBot.execute(new SendMessage(update.message().chat().id(), "Ваши данные " + owner.toString() + "добавлены в нашу базу." +
+                        "Для удаления данных из нашей базы обратитесь в волонтёру"));
                 return true;
+
         }
 
         return false;

@@ -5,7 +5,7 @@
 //import com.ward_n6.exception.EditMapException;
 //import com.ward_n6.exception.PutToMapException;
 //import com.ward_n6.repository.OwnerRepository;
-//import com.ward_n6.service.interfaces.OwnerService;
+//import com.ward_n6.service.interfaces.OwnerServiceImpl;
 //import org.springframework.stereotype.Service;
 //
 //import java.util.HashMap;
@@ -13,7 +13,7 @@
 //import java.util.Map;
 //
 //@Service
-//public class OwnerServiceImpl implements OwnerService {
+//public class OwnerServiceImpl implements OwnerServiceImpl {
 //    private final OwnerRepository ownerRepository;
 //    private Map<Integer, Owner> ownerMap = new HashMap<>();
 //    private int mapId = 0;
