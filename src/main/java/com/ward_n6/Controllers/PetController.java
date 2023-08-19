@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/pet")
 @Tag(name = "Список животных приюта", description = "CRUD-операции с животными")
@@ -41,17 +43,23 @@ public class PetController {
 
     @GetMapping("allCat")
     @Operation(summary = "Показать всех кошек приюта")
-    public ResponseEntity<String> allCats() {
-        String cat = catService.allCats();
-        if (cat.isBlank()) return ResponseEntity.ok().body("Кошек нет в приюте");
+    public ResponseEntity<List<Cat_2>> allCats() {
+        List<Cat_2> cat = catService.allCats();
+        if (cat.isEmpty()) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(cat);
     }
+
+
     @Operation(summary = "Удалить кошку")
     @DeleteMapping("delCat")
-    public ResponseEntity<String> deleteCat(@RequestParam long id) {
-        String s = catService.deleteCat(id);
-        return ResponseEntity.ok(s);
+    public ResponseEntity<Cat_2> deleteCat(@RequestParam long id) {
+        Cat_2 result = catService.findCat(id);
+        if (result == null) return ResponseEntity.notFound().build();
+        Cat_2 cat2 = catService.deleteCat(id);
+        return ResponseEntity.ok(cat2);
     }
+
+
     @Operation(summary = "Поменять кошку")
     @PutMapping("changeCat")
     public ResponseEntity<Cat_2> changeCat(@RequestParam long id, @RequestParam PetsSex petsSex, Cat_2 cat_2) {
@@ -79,19 +87,22 @@ public class PetController {
     }
 
 
-    @GetMapping("allDogs")
+    @GetMapping("allDog")
     @Operation(summary = "Показать всех собак приюта")
-    public ResponseEntity<String> allDogs() {
-        String dog = dogService.allDogs();
-        if (dog.isBlank()) return ResponseEntity.ok().body("Собак нет в приюте");
+    public ResponseEntity<List<Dog_2>> allDogs() {
+        List<Dog_2> dog = dogService.allDogs();
+        if (dog.isEmpty()) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(dog);
     }
 
+
     @Operation(summary = "Удалить собаку")
     @DeleteMapping("delDog")
-    public ResponseEntity<String> deleteDog(@RequestParam long id) {
-        String s = dogService.deleteDog(id);
-        return ResponseEntity.ok(s);
+    public ResponseEntity<Dog_2> deleteDog(@RequestParam long id) {
+        Dog_2 result = dogService.findDog(id);
+        if (result == null) return ResponseEntity.notFound().build();
+        Dog_2 dog = dogService.deleteDog(id);
+        return ResponseEntity.ok(dog);
     }
     @Operation(summary = "Поменять собаку")
     @PutMapping("changeDog")
