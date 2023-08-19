@@ -68,6 +68,19 @@ class OwnerControllerTest {
     }
 
 
+//   НЕ РАБОТАЕТ, ЧТО МОЖНО ИЗМЕНИТЬ?
+//    @Test
+//        //выведение ошибки на метод createOwner
+//    void createOwner_ShouldReturn400() throws Exception {
+//        when(ownerRepository.save(INCORRECT_OWNER)).thenReturn(false);
+//        this.mockMvc.perform(
+//                        post("/cat")
+//                                .contentType(MediaType.APPLICATION_JSON)
+//                                .content(objectMapper.writeValueAsString(INCORRECT_OWNER)))
+//                .andExpect(status().isBadRequest());
+//    }
+
+
 
     @Test
     //тест метода по поиска владельца при наличии его id
@@ -82,6 +95,18 @@ class OwnerControllerTest {
                 .andExpect(jsonPath("$.phone_number", Matchers.is(OWNER_1.getPhoneNumber())));
     }
 
+
+//   РАБОТАЕТ НЕПРАВИЛЬНО, ЧТО МОЖНО СДЕЛАТЬ?
+//    @Test
+//    //выведение ошибки на метод findById
+//    void findById_ShouldReturn404() throws Exception {
+//        when(ownerRepository.findById(5L)).thenReturn(Optional.empty());
+//        this.mockMvc.perform(
+//                        get("getOwner", 5))
+//                .andExpect(status().isNotFound());
+//    }
+
+
     @Test
     //тест выбрасывания исключения для findById
     void ShouldReturnExceptionToGetOwner() throws Exception {
@@ -90,6 +115,15 @@ class OwnerControllerTest {
                         get("getOwner", 5))
                 .andExpect(status().isNotFound());
     }
+
+//    КАЖЕТСЯ, РАБОТАЕТ НЕПРАВИЛЬНО, ЧТО МОЖНО СДЕЛАТЬ?
+//    @Test
+//    void findById_ShouldReturn404() throws Exception {
+//        when(ownerRepository.findById(5L)).thenReturn(Optional.empty());
+//        this.mockMvc.perform(
+//                        get("getOwner}", 5))
+//                .andExpect(status().isNotFound());
+//    }
 
     @Test
     //тест метода по редактированию данных владельца
@@ -115,6 +149,8 @@ class OwnerControllerTest {
                 .andExpect(jsonPath("$.phone_number", Matchers.is("+79000000000")));
     }
 
+    //ПОДСКАЖИТЕ, ПОЖАЛУЙСТА, КАК МОЖНО РЕАЛИЗОВАТЬ ИЛИ КАКИМ ПУТЁМ СТОИТ ПОЙТИ, ЧТОБЫ НАПИСАТЬ ТЕСТ НА ВЫВЕДЕНИЕ ОШИБКИ К МЕТОДУ НА ОБНОВЛЕНИЕ КАРТОЧКИ?
+
 
     @Test
     //тест метода по удалению владельца
@@ -125,6 +161,17 @@ class OwnerControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
+
+//   НЕ РАБОТАЕТ ТЕСТ
+//    @Test
+//    void deleteById_ShouldReturn404() throws Exception {
+//        when(ownerRepository.deleteById(INCORRECT_OWNER.getId())).thenReturn(false);
+//        mockMvc.perform(
+//                        delete("deleteOwner", INCORRECT_OWNER.getId()))
+//                .andExpect(status().isNotFound());
+//    }
+
+
 
     @Test
     //тест метода по получению всех владельцев
@@ -138,6 +185,15 @@ class OwnerControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)));
     }
+
+//   МОЖНО ЛИ ТАК РЕАЛИЗОВАТЬ ТЕСТ НА ВЫВЕДЕНИЕ ОШИБКИ?
+//    @Test
+//    void findAll_ShouldReturn404() throws Exception {
+//        when(ownerRepository.findAll()).thenReturn(new ArrayList<>());
+//        this.mockMvc.perform(
+//                        get("getAllOwners"))
+//                .andExpect(status().isNotFound());
+//    }
 
 
 }
