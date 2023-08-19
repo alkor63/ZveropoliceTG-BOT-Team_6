@@ -1,10 +1,9 @@
 package com.ward_n6.entity.pets;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.ward_n6.entity.owners.Owner;
 import com.ward_n6.enums.PetsSex;
-import com.ward_n6.enums.PetsType;
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -21,7 +20,6 @@ public class Cat_2 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "pet_id")
-    @JsonIgnore
     private Long id;
 
     private String bread;
