@@ -17,6 +17,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "owner")
 
+
 //@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS) // позволяет классам наследникам сопоставляться со своей собственной таблицей
 // общий класс для владельцев (нужно ли его делать АБСТРАКТНЫМ?)
 

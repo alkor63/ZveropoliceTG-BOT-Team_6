@@ -43,7 +43,6 @@ public class ReportHandler implements EventHandler {
                 bot.execute(new SendMessage(update.message().chat().id(), "Укажите ID Вашего питомца"));
                 actionOnNextMessage = upd -> {
                     var idMessage = upd.message().text();
-
                     if (idMessage.matches("\\d+")) { // проверяем, что указано число
                         ownerReport.setPetId(Long.parseLong(idMessage));
                         bot.execute(new SendMessage(upd.message().chat().id(), "ID питомца записан."));
@@ -53,6 +52,7 @@ public class ReportHandler implements EventHandler {
                     }
                 };
                 break;
+
             case "/health":
                 bot.execute(new SendMessage(update.message().chat().id(), "Опишите кратко самочувствие питомца"));
                 actionOnNextMessage = upd -> {
@@ -90,7 +90,6 @@ public class ReportHandler implements EventHandler {
                 reportService.save(ownerReport);
                 bot.execute(new SendMessage(update.message().chat().id(), "Ваш отчёт загружен"));
                 return true; // возвращаем true - это значит, что контекст завершен.
-
         }
         return false;
     }

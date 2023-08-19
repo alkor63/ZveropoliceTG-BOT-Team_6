@@ -22,12 +22,13 @@ import java.time.LocalDate;
         private Long id;
 
         @ManyToOne
-        @JoinColumn(name = "owner_id", referencedColumnName = "owner_id")
-        protected Owner owner;
+
+        @JoinColumn(name = "owner_id", referencedColumnName = "owner_id", columnDefinition = "TEXT")
+        private Owner owner;
 
         @ManyToOne
-        @JoinColumn(name = "pet", insertable = false, updatable = false)
-        private Pet pet;
+        @JoinColumn(name = "pet", insertable = false, updatable = false, columnDefinition = "TEXT")
+         private Pet pet;
 
         @Column(name = "start_date")
         private LocalDate startDate;

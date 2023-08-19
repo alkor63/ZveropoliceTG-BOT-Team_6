@@ -23,4 +23,9 @@ public class Dog extends Pet {
 
     public Dog() {
     }
+
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 }

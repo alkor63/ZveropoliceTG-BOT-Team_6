@@ -124,9 +124,11 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
 
                         case "КАК_ЗАБРАТЬ_КОШКУ":
                             wantToTakeCatButton(chatId);
+                            break;
 
                         case "ВОЛОНТЁР":
                             callVoluntier(chatId);
+                            break;
 
                         case "ОТЧЁТ":
                             sendOwnerHowReport(chatId);
@@ -167,16 +169,18 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                         break;
 
                     case "/report":
-                        reportTextSelect = true;
-                        currentHandler = new ReportHandler(reportService, telegramBot);
-                        sendMessage(chatId, """
-                                Для загрузки отчёта следуйте указаниям бота. Пожалуйста, заполните все пункты отчёта.
-                                Команды для отчёта:
-                                1. /ID - указать id питомца
-                                2. /action - отчёт о поведении питомца
-                                3. /health - отчёт о здоровье питомца
-                                4. /feed - отчёт о питании питомца
-                                5. /save - сохранить отчёт""");
+                        if (dogSelect || catSelect) {
+                            reportTextSelect = true;
+                            currentHandler = new ReportHandler(reportService, telegramBot);
+                            sendMessage(chatId, """
+                                    Для загрузки отчёта следуйте указаниям бота. Пожалуйста, заполните все пункты отчёта.
+                                    Команды для отчёта:
+                                    1. /ID - указать id питомца
+                                    2. /action - отчёт о поведении питомца
+                                    3. /health - отчёт о здоровье питомца
+                                    4. /feed - отчёт о питании питомца
+                                    5. /save - сохранить отчёт""");
+                        }
                         break;
 
                     case "/myData":
@@ -376,7 +380,8 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
     }
 
     private void callVoluntier(long chatId) {
-        SendMessage sendMessage = new SendMessage(chatId, EmojiParser.parseToUnicode(":white_check_mark:Через некоторое время с Вами свяжется волонтёр и ответит на интересующие вопросы!:wink:"));
+        SendMessage sendMessage = new SendMessage(chatId, EmojiParser.parseToUnicode(":white_check_mark:Через " +
+                "некоторое время с Вами свяжется волонтёр и ответит на интересующие вопросы!:wink:"));
         telegramBot.execute(sendMessage);
     }
 
@@ -385,17 +390,15 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
         SendMessage sendMessage = new SendMessage(chatId, EmojiParser.parseToUnicode("Для отчёта нужно отправить текст :memo: описывающий: самочувствие питомца, рацион питания питомца, в каких условиях живёт питомец; и фото питомца :camera:"));
         InlineKeyboardButton textButton = new InlineKeyboardButton(EmojiParser.parseToUnicode("Отправить текст :memo:"));
         InlineKeyboardButton photoButton = new InlineKeyboardButton(EmojiParser.parseToUnicode("Отправить фото :camera:"));
-
-        textButton.callbackData("ОТЧЁТ_ТЕКСТ");
-
-
         photoButton.callbackData("ОТЧЁТ_ФОТО");
         Keyboard keyboard = new InlineKeyboardMarkup().addRow(textButton).addRow(photoButton);
         sendMessage.replyMarkup(keyboard);
-//        if (update.callbackQuery() != null && update.callbackQuery().message() != null) {
-//        if(update.callbackQuery().equals("ОТЧЁТ_ТЕКСТ")){reportTextSelect = true;
-//            ss = reportSelect;
-//        }else if (update.callbackQuery().equals("ОТЧЁТ_ФОТО")){reportPhotoSelect = true;}
+        sendMessage(chatId,"""
+                Для отправки текстового отчёта нажмите или введите команду:
+                /report
+                Для отправки фото нажмите или введите команду:
+                /photo
+                """);
         telegramBot.execute(sendMessage);
 
     }
@@ -428,7 +431,7 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
     private static final Pattern OWNER_DATA_PATTERN = Pattern.compile("([А-я])\\s|\\n + ([А-я]) \\s|\\n +" +
             "(\\d-\\d{3}-\\d{3}-\\d{2}-\\d{2})"); //символы и \\s - пробел, в (...) - группы паттерна
 
-    // СОХРАНЕНИЕ ПЕРСОНЫ в БД
+    // СОХРАНЕНИЕ ПЕРСОНЫ в БД (этот метод пока не используем)
     private void saveOwner(long chatId, String messageText) {
         Matcher matcher = OWNER_DATA_PATTERN.matcher(messageText); // поиск соответствия сообщения заданным параметрам
         if (matcher.find()) {
@@ -450,11 +453,11 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
 
     //**************************************** фОТО ******************************
     @Value("${path.to.file}")
-    String folderPath ; // путь к файлам
+    String folderPath; // путь к файлам
 
     private void getPhoto(Update update) {
         PhotoSize[] messagePhoto = update.message().photo(); // получаем сообщение из текущего обновления
-        Long chatId =update.message().chat().id(); // получаем идентификатор чата, к которому относится апдейт
+        Long chatId = update.message().chat().id(); // получаем идентификатор чата, к которому относится апдейт
 //       PhotoSize[] messagePhoto = message.photo();
         if (messagePhoto != null) {
             var photo = update.message().photo()[3]; // 3 - самое лучшее качество
@@ -462,7 +465,7 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
             var outFile = new File(folderPath, (photo.fileId() + "-owner-" + chatId + ".jpeg")); // добавлено
             try (var in = new URL(telegramBot.getFullFilePath(getFile.file())).openStream();
                  var out = new FileOutputStream(outFile)) {
-                     // для примера просто сделал случайное название файла, лучше прописать путь и расширение
+                // для примера просто сделал случайное название файла, лучше прописать путь и расширение
                 in.transferTo(out);
             } catch (IOException e) {
                 throw new RuntimeException(e);
