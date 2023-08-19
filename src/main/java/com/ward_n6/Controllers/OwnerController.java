@@ -1,7 +1,9 @@
 package com.ward_n6.Controllers;
 
 import com.ward_n6.entity.owners.Owner;
+import com.ward_n6.entity.pets.Cat_2;
 import com.ward_n6.entity.reports.OwnerReport;
+import com.ward_n6.enums.PetsSex;
 import com.ward_n6.repository.OwnerRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -23,31 +25,31 @@ public class OwnerController {
         this.ownerRepository = ownerRepository;
     }
 
-    @PostMapping
+
     @Operation(summary = "Добавление посетителя в список",
             description = "нужно заполнить все поля карточки посетителя в Body")
+    @PostMapping("createOwner")
     public ResponseEntity<Owner> createOwner(@RequestBody Owner owner)  {
       Owner newOwner = ownerRepository.save(owner);
-        //  Owner newOwner = ownerRepository.addOwnerToDB(owner);
         return ResponseEntity.ok(newOwner);
     }
 
-    @GetMapping("/{ownerId}")
+
     @Operation(summary = "Показать одного усыновителя по id",
             description = "нужно указать id усыновителя")
-    public ResponseEntity<Owner> getOwner(@PathVariable int ownerId) {
-        long longId = ownerId;
-        Owner owner = ownerRepository.getById(longId);
-        if (owner == null) {
-            return ResponseEntity.notFound().build();
-        }
+    @GetMapping("getOwner")
+    public ResponseEntity<Owner> getOwner(long ownerId) {
+        Owner owner = ownerRepository.getById(ownerId);
+        if (owner == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(owner);
     }
 
-    @PutMapping("/{ownerId}")
+
+
     @Operation(summary = "Отредактировать карточку усыновителя",
             description = "нужно указать id и заполнить все поля карточки усыновителя в Body")
-    public ResponseEntity<Owner> editOwner(@PathVariable int ownerId, @RequestBody Owner owner) {
+    @PutMapping("editOwner")
+    public ResponseEntity<Owner> editOwner(@RequestParam long ownerId, @RequestBody Owner owner) {
         Owner newOwner = ownerRepository.save(owner);
         if (newOwner == null) {
             return ResponseEntity.notFound().build();
@@ -55,21 +57,20 @@ public class OwnerController {
         return ResponseEntity.ok(newOwner);
     }
 
-    @DeleteMapping("/{ownerId}")
     @Operation(summary = "Удалить одного усыновителя из списка",
             description = "нужно указать id усыновителя")
-    public ResponseEntity<Void> deleteOwner(@PathVariable int ownerId)  {
-        long longId = ownerId;
-        Optional<Owner> optionalOwner = ownerRepository.findById(longId);
+    @DeleteMapping("deleteOwner")
+    public ResponseEntity<Void> deleteOwner(@RequestParam long ownerId)  {
+        Optional<Owner> optionalOwner = ownerRepository.findById(ownerId);
         if (optionalOwner.isPresent()) {
-            ownerRepository.deleteById(longId);
+            ownerRepository.deleteById(ownerId);
              ResponseEntity.ok().body(optionalOwner.get());
         }
         throw new EntityNotFoundException("Невозможно удалить Owner, т.к. в базе нет owner с id = "+ownerId);
     }
 
-    @GetMapping
     @Operation(summary = "Показать всех усыновителей приюта")
+    @GetMapping("getAllOwners")
     public ResponseEntity<List<Owner>> getAllOwners() {
         List<Owner> allOwners = ownerRepository.findAll();
         if (allOwners.size() > 0) {
@@ -78,4 +79,16 @@ public class OwnerController {
         return ResponseEntity.notFound().build();
     }
 
+
 }
+
+
+
+
+
+
+
+
+
+
+

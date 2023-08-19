@@ -1,18 +1,51 @@
 package com.ward_n6.entity.owners;
 
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.PrimaryKeyJoinColumn;
-import javax.persistence.Table;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import com.ward_n6.entity.pets.Dog_2;
+import javax.persistence.*;
+
 @Entity
-@Table(name = "dog_owner")
-@PrimaryKeyJoinColumn(name = "pet_id")
-@DiscriminatorValue("pet_id")
-public class DogOwner extends Owner {
-    public DogOwner() {
+@NoArgsConstructor
+@Data
+
+@Table(name = "dog_owner") // отдельная таблица
+@PrimaryKeyJoinColumn(name = "pets_type")
+@DiscriminatorValue("pets_type")
+
+public class DogOwner  extends Owner {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ownerId")
+    private Long ownerId;
+
+    @Column(name = "owner_firstName")
+    private String name;
+
+    @Column(name = "owner_lastname")
+    private String lastName;
+
+    @Column(name = "owner_phone")
+    private String phoneNumber;
+
+    @Column(name = "pet_id")
+    private int id;
+
+    public DogOwner (Long ownerId, String name, String lastName, String phoneNumber) {
+        this.ownerId = ownerId;
+        this.name = name;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
     }
 
-    public DogOwner(Long id, String firstName, String lastName, String phoneNumber) {
-        super(id, firstName, lastName, phoneNumber);
+    @Override
+    public String toString() {
+        return "Владелец собаки" +
+                "ID " + id +
+                ", имя " + name + '\'' +
+                ", фамилия: " + lastName +
+                ", номер телефона " + phoneNumber + "\n";
     }
+
+
 }
