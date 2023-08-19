@@ -6,8 +6,9 @@ package com.ward_n6.entity.owners;
 //@DiscriminatorValue("pet_id")
 
 public class DogOwner extends Owner{
-    public DogOwner(long id, Long ownerId, String firstName, String lastName, String phoneNumber) {
-        super(id, ownerId, firstName, lastName, phoneNumber);
+
+    public DogOwner(Long ownerId, String firstName, String lastName, String phoneNumber) {
+        super(ownerId, firstName, lastName, phoneNumber);
     }
 
     public DogOwner() {

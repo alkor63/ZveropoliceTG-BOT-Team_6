@@ -4,26 +4,33 @@ import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.CallbackQuery;
 import com.pengrad.telegrambot.model.Message;
+import com.pengrad.telegrambot.model.PhotoSize;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
 import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
 import com.pengrad.telegrambot.model.request.Keyboard;
+import com.pengrad.telegrambot.request.GetFile;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.response.SendResponse;
 import com.vdurmont.emoji.EmojiParser;
 import com.ward_n6.entity.BotMessaging;
 import com.ward_n6.entity.owners.Owner;
 import com.ward_n6.entity.shelters.PetShelter;
+import com.ward_n6.repository.Impl.OwnerService;
 import com.ward_n6.repository.OwnerRepository;
 import com.ward_n6.service.BotMessageService;
-import com.ward_n6.service.OwnerService;
 import com.ward_n6.service.PhotoService;
 import com.ward_n6.service.ReportService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.URL;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -45,7 +52,8 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
 
     private EventHandler currentHandler = null;
 
-private Owner owner = new Owner();
+    private Owner owner = new Owner();
+
     public TelegramBotPetShelterUpdatesListener(BotMessageService botMessageService, TelegramBot telegramBot,
                                                 ReportService reportService,
                                                 OwnerRepository ownerRepository, OwnerService ownerService) {
@@ -150,13 +158,13 @@ private Owner owner = new Owner();
                                     "Выберите интересующий Вас пункт меню.");
                         }
                         break;
-//                    case "/photo":
-//                        sendMessage(chatId, "Загрузите фото.");
-//                        // photoService.getPhotos(update);
-//                        if (message.photo().length > 0) {
-//                            sendMessage(chatId, "Фото загружено");
-//                        }
-//                        break;
+
+                    case "/photo":
+                        sendMessage(chatId, "Отправьте фото Вашего питомца для отчёта.");
+//                        currentHandler = new PhotoHandler(telegramBot);
+                        getPhoto(update);
+////
+                        break;
 
                     case "/report":
                         reportTextSelect = true;
@@ -189,10 +197,10 @@ private Owner owner = new Owner();
                                 petShelter.getCallVolonteer());
                         break;
                 }
-//                if (getOwnerDataSelect) {
-//                    owner.setOwnerId(message.chat().id());
-//                    ownerService.save(owner);
+//                if (reportPhotoSelect) {
+//                    getPhoto(update);
 //                }
+
             }
         } catch (
                 Exception e) {
@@ -440,7 +448,25 @@ private Owner owner = new Owner();
     }
 
 
-    //****************************************
+    //**************************************** фОТО ******************************
+    @Value("${path.to.file}")
+    String folderPath ; // путь к файлам
 
-
+    private void getPhoto(Update update) {
+        PhotoSize[] messagePhoto = update.message().photo(); // получаем сообщение из текущего обновления
+        Long chatId =update.message().chat().id(); // получаем идентификатор чата, к которому относится апдейт
+//       PhotoSize[] messagePhoto = message.photo();
+        if (messagePhoto != null) {
+            var photo = update.message().photo()[3]; // 3 - самое лучшее качество
+            var getFile = telegramBot.execute(new GetFile(photo.fileId()));
+            var outFile = new File(folderPath, (photo.fileId() + "-owner-" + chatId + ".jpeg")); // добавлено
+            try (var in = new URL(telegramBot.getFullFilePath(getFile.file())).openStream();
+                 var out = new FileOutputStream(outFile)) {
+                     // для примера просто сделал случайное название файла, лучше прописать путь и расширение
+                in.transferTo(out);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
 }
