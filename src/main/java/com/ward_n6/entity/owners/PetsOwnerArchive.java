@@ -11,42 +11,32 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@Entity
+//@Entity
 @NoArgsConstructor
-@Table(name = "pets_owner")
+@Table(name = "pets_owner_archive")
 @Getter
 @Setter
-public abstract class PetsOwnerArchive {
+public class PetsOwnerArchive {
 
-    @javax.persistence.Id
-    @Column(name = "id",nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+        //    @javax.persistence.Id
+        @Column(name = "id", nullable = false)
+        @org.springframework.data.annotation.Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        private long id;
 
-    @ManyToOne
-    @JoinColumn(name = "owner", insertable = false, updatable = false)
-    private Owner owner;
+        @Column(name = "end_date", nullable = false)
+        private LocalDate dateEnd; // дата, время
 
-    @ManyToOne
-    @JoinColumn(name = "pet", insertable = false, updatable = false)
-    private com.ward_n6.entity.pets.Pet pet;
+        @Column(name = "start_date", nullable = false)
+        private LocalDate dateBegin; // дата, время
 
-    @Column(name = "start_date")
-    private LocalDate startDate;
+        @Column(name = "owner")
+        private Owner owner; // питание
 
-    @Column(name = "end_date")
-    private LocalDate endDate;
+        @Column(name = "pet")
+        private Pet pet; // о здоровье
 
-    public PetsOwnerArchive(Owner owner, Pet pet) {
-        this.owner = owner;
-        this.pet = pet;
-    }
-
-    public PetsOwnerArchive(Owner owner, Pet pet, LocalDate startDate, LocalDate endDate) {
-        this.owner = owner;
-        this.pet = pet;
-        this.startDate = startDate;
-        this.endDate = endDate;
-    }
+        public PetsOwnerArchive(Owner owner, Pet pet, LocalDate dateBegin, LocalDate dateEnd) {
+        }
 }
 

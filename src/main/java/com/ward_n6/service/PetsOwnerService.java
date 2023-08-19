@@ -1,28 +1,27 @@
 package com.ward_n6.service;
 
 import com.ward_n6.entity.PetWithOwner;
-import com.ward_n6.exception.DeleteFromMapException;
-import com.ward_n6.exception.EditMapException;
-import com.ward_n6.exception.PutToMapException;
+import com.ward_n6.entity.owners.PetsOwner;
+import javassist.NotFoundException;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
-
+@Service
 public interface PetsOwnerService {
-    int getId();
 
-    PetWithOwner addToPetWithOwner(PetWithOwner petWithOwner) throws PutToMapException;
+    //++++++++++++++++++++++++++++++++++++++++++++++++++++
+    PetsOwner addPetsOwner(PetsOwner petsOwner);
 
-    PetWithOwner getFromPetWithOwnerById(int recordId);
+    // ++++++++++++++++++++++++++++++++++++
+    List<PetsOwner> getAllPetsOwners() throws NotFoundException;
 
-    List<PetWithOwner> getAllFromPetWithOwner();
+    // ++++++++++++++++++++++++++++++++++++
+    PetsOwner getPetsOwnerById(Integer petsOwnerId) throws NotFoundException;
 
-    PetWithOwner editPetWithOwnerById(int recordId, PetWithOwner petWithOwner) throws EditMapException;
+    //+++++++++++++++++++++++++++++++++++++++++
+    PetsOwner deletePetsOwnerById(Integer petsOwnerId)
+            throws NotFoundException;
 
-    boolean deleteAllFromPetWithOwner();
-
-    boolean deletePetWithOwnerById(int recordId) throws DeleteFromMapException;
-
-    boolean deletePetWithOwnerByValue(PetWithOwner petWithOwner) throws DeleteFromMapException;
-
-    int idByValue(PetWithOwner petWithOwner);
+    PetsOwner editPetsOwnerById(int petsOwnerId, PetsOwner petsOwner)
+            throws NotFoundException;
 }

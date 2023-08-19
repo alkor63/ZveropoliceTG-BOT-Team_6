@@ -1,8 +1,6 @@
-package com.ward_n6.entity.owners;
+package com.ward_n6.entity.reports;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 
 import javax.persistence.*;
@@ -18,6 +16,8 @@ import java.util.Objects;
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
+//@Data
 @Entity
 @Table(name = "owner_report")
 // нужно делать класс абстрактным???
@@ -54,6 +54,15 @@ public class OwnerReport {
     public OwnerReport(long id, LocalDateTime reportDateTime, boolean havePhoto, String nutrition,
                        String petsHealth, String petsBehavior, long petId) {
         this.id = id;
+        this.reportDateTime = reportDateTime;
+        this.havePhoto = havePhoto;
+        this.nutrition = nutrition;
+        this.petsHealth = petsHealth;
+        this.petsBehavior = petsBehavior;
+        this.petId = petId;
+    }
+
+    public OwnerReport(LocalDateTime reportDateTime, boolean havePhoto, String nutrition, String petsHealth, String petsBehavior, long petId) {
         this.reportDateTime = reportDateTime;
         this.havePhoto = havePhoto;
         this.nutrition = nutrition;
