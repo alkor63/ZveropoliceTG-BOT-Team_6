@@ -67,18 +67,22 @@ public class OwnerHandler implements EventHandler {
 
             case "/phone":
                 telegramBot.execute(new SendMessage(update.message().chat().id(), "Укажите Ваш телефон для связи в формате: " +
-                        "" + "\n" + "8-XXX-XXX-XX-XX" +
+                        "" + "\n" + "8-XXX-XXX-XX-XX " +
                         """
                                 Команды для записи контактных данных:
                                 1. /ln - указать фамилию
+                                
                                 2. /fn - указать имя
+                                
                                 3. /phone - указать номер телефона
+                                
                                 4. /save - сохранить мои контактные данные в базе приюта
+                                
                                 5. /delete - удалить мои данные
                                 """));
                 actionOnNextMessage = upd -> {
-                    var phoneMessage = upd.message().text();
-                    if (phoneMessage.matches("8-d{3}-d{3}-d{2}-d{2}")) {
+                    String phoneMessage = upd.message().text();
+                    if (phoneMessage.matches("8-\\d{3}-\\d{3}-\\d{2}-\\d{2}")) {
                         owner.setPhoneNumber(upd.message().text());
                         telegramBot.execute(new SendMessage(update.message().chat().id(), "Номер записан!"));
                     } else {
@@ -89,7 +93,7 @@ public class OwnerHandler implements EventHandler {
 
             case "/save":
 
-                owner.setOwnerId(update.message().chat().id().longValue());
+                owner.setId(update.message().chat().id().longValue());
                 ownerServiceImpl.save(owner);
                 telegramBot.execute(new SendMessage(update.message().chat().id(), "Ваши данные " + "\n" + owner.toString()
                         + "добавлены в нашу базу. Для удаления данных из нашей базы обратитесь в волонтёру"));

@@ -179,8 +179,8 @@ public class OwnerServiceImpl implements com.ward_n6.service.interfaces.OwnerSer
     public void save(Owner owner) {
         ownerRepository.save(owner);
     }
-
+Owner owner;
     public Owner getOwnerById (long ownerId){
-        return ownerRepository.getById(ownerId);
+        return owner = ownerRepository.getById(ownerId);
     }
 }

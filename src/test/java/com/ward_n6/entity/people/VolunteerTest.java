@@ -10,6 +10,7 @@ import com.ward_n6.repository.PetsOwnerArchiveRepository;
 import com.ward_n6.repository.PetsOwnerRepository;
 import com.ward_n6.service.PetsOwnerServiceImpl;
 import com.ward_n6.service.VolunteerService;
+import com.ward_n6.service.interfaces.PetService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -49,7 +50,7 @@ class VolunteerTest {
     private PetsOwnerArchiveRepository petsOwnerArchiveRepository;
     @Spy
     final VolunteerService volunteerMock = spy(new VolunteerService(petsOwnerRepository, petsOwnerArchiveRepository,
-            ownerReportRepository, petRepository,petsOwnerService ));
+            ownerReportRepository, (PetService) petRepository,petsOwnerService ));
 
     @InjectMocks
     private VolunteerService volunteer;

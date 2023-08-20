@@ -82,7 +82,7 @@ public class OwnerReport {
     @Override
     public String toString() {
         return "OwnerReport{" +
-                "ownerId=" + ownerId +
+                "id=" + ownerId +
                 ", reportDateTime=" + reportDateTime +
                 ", petsType=" + petsType +
                 ", havePhoto=" + havePhoto +

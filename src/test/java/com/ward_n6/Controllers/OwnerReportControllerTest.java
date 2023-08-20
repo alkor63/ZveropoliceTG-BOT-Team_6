@@ -137,7 +137,7 @@ public class OwnerReportControllerTest {
 //                .petsHealth("good")
 //                .petsBehavior("Ok")
 //                .petId(1L)
-//                .ownerId(3L)
+//                .id(3L)
 //                .build();
 
 //        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/report")
@@ -165,7 +165,7 @@ public class OwnerReportControllerTest {
 //                .petsHealth("good")
 //                .petsBehavior("Ok")
 //                .petId(1L)
-//                .ownerId(3L)
+//                .id(3L)
 //                .build();
 
 //        Mockito.when(ownerReportRepository.findById(nullOwnerReport.getId())).thenReturn(null);

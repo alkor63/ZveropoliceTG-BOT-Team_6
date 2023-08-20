@@ -29,8 +29,7 @@ public class Owner { // хозяин животного, его свойства
 
     @javax.persistence.Id
     @Column(name = "owner_id", nullable = false)
-
-    private Long ownerId;
+    private Long id;
 
     @Column(name = "first_name")
     private String firstName;
@@ -46,17 +45,17 @@ public class Owner { // хозяин животного, его свойства
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Owner owner)) return false;
-        return Objects.equals(getOwnerId(), owner.getOwnerId()) && Objects.equals(getFirstName(), owner.getFirstName()) && Objects.equals(getLastName(), owner.getLastName()) && Objects.equals(getPhoneNumber(), owner.getPhoneNumber());
+        return Objects.equals(getId(), owner.getId()) && Objects.equals(getFirstName(), owner.getFirstName()) && Objects.equals(getLastName(), owner.getLastName()) && Objects.equals(getPhoneNumber(), owner.getPhoneNumber());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getOwnerId(), getFirstName(), getLastName(), getPhoneNumber());
+        return Objects.hash(getId(), getFirstName(), getLastName(), getPhoneNumber());
     }
 
     @Override
     public String toString() {
-        return "ID: " + ownerId + ", \n" +
+        return "ID: " + id + ", \n" +
                 "имя " + firstName + ", \n" +
                 "фамилия " + lastName + ", \n" +
                 "номер телефона: " + phoneNumber + ". \n";

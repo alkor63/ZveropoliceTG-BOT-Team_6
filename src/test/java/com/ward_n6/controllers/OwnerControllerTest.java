@@ -55,7 +55,7 @@ class OwnerControllerTest {
         this.mockMvc.perform(
                         get("/{ownerId}", 1))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", Matchers.is(OWNER_1.getOwnerId())))
+                .andExpect(jsonPath("$.id", Matchers.is(OWNER_1.getId())))
                 .andExpect(jsonPath("$.first_name", Matchers.is(OWNER_1.getFirstName())))
                 .andExpect(jsonPath("$.last_name", Matchers.is(OWNER_1.getLastName())))
                 .andExpect(jsonPath("$.phone_number", Matchers.is(OWNER_1.getPhoneNumber())));
@@ -65,7 +65,7 @@ class OwnerControllerTest {
 //    void ShouldReturnExceptionToGetOwner() throws Exception {
 //        when(ownerRepository.getOwnerById(5)).thenReturn(Optional.empty());
 //        this.mockMvc.perform(
-//                        get("/{ownerId}", 5))
+//                        get("/{id}", 5))
 //                .andExpect(status().isNotFound());
 //    }
 
@@ -94,9 +94,9 @@ class OwnerControllerTest {
 
     @Test
     void ShouldReturnExceptionToDeleteOwner() throws Exception {
-        when(ownerService.deleteOwnerById(Math.toIntExact(OWNER_1.getOwnerId()))).thenReturn(false);
+        when(ownerService.deleteOwnerById(Math.toIntExact(OWNER_1.getId()))).thenReturn(false);
         mockMvc.perform(
-                        delete("/{ownerId}", OWNER_1.getOwnerId()))
+                        delete("/{ownerId}", OWNER_1.getId()))
                 .andExpect(status().isNotFound());
     }
 

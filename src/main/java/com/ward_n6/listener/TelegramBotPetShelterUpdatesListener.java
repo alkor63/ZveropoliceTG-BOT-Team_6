@@ -204,22 +204,24 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
 
                     case "/takePet":
                         if (dogSelect || catSelect) {
-                            Owner ownerCheck = ownerServiceImpl.getOwnerById(chatId);
-                            if (ownerCheck != null) { // проверяем данные
-                                currentHandler = new PetsOwnerHandler(petsOwnerServiceImpl, telegramBot);
-                                sendMessage(chatId, "Если после посещения приюта Вы выбрали питомца " +
-                                        "и хотите стать еve другом, укажите ID питомца " +
-                                        "для бронирования и подготовки документов.");
-                            } else {
-                                saveMessages(chatId,
-                                        """
-                                                В нашей базе отсутствуют Ваши данные. Чтобы продолжить,
-                                                пожалуйста, сначала зарегистрируйтесь в нашем приюте:
-                                                 /myData - регистрация в приюте,
-                                                 или  обратитесь к волонтёру:
-                                                 /volunteer
-                                                 """);
-                            }
+                            currentHandler = new PetsOwnerHandler(petsOwnerServiceImpl, telegramBot);
+//                            Owner ownerCheck = ownerServiceImpl.getOwnerById(chatId);
+//                            if (ownerCheck != null) { // проверяем, что пользователь есть в базе
+
+                                sendMessage(chatId, """
+                                        Если после посещения приюта Вы выбрали питомца и хотите стать его другом, укажите ID питомца для бронирования и подготовки документов.
+                                        Нажмите или введите команду:
+                                        /ID""");
+//                            } else {
+//                                sendMessages(chatId,
+//                                        """
+//                                                В нашей базе отсутствуют Ваши данные. Чтобы продолжить,
+//                                                пожалуйста, сначала зарегистрируйтесь в нашем приюте:
+//                                                 /myData - регистрация в приюте,
+//                                                 или  обратитесь к волонтёру:
+//                                                 /volunteer
+//                                                 """);
+//                            }
                         }
                         break;
 
