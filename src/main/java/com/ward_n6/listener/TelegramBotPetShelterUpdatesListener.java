@@ -1,5 +1,6 @@
 package com.ward_n6.listener;
 
+
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.CallbackQuery;
@@ -51,7 +52,6 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
 
     private Owner owner = new Owner();
 
-
     public TelegramBotPetShelterUpdatesListener(BotMessageService botMessageService, TelegramBot telegramBot,
                                                 PetsOwnerServiceImpl petsOwnerServiceImpl, ReportService reportService,
                                                 OwnerRepository ownerRepository, OwnerServiceImpl ownerServiceImpl) {
@@ -62,7 +62,6 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
         this.ownerRepository = ownerRepository;
         this.ownerServiceImpl = ownerServiceImpl;
     }
-
 
     @PostConstruct
     public void init() {
@@ -160,10 +159,11 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                         break;
 
                     case "/photo":
-                        sendMessage(chatId, "Отправьте фото Вашего питомца для отчёта.");
-//                        currentHandler = new PhotoHandler(telegramBot);
-                        getPhoto(update);
-////
+                        if (dogSelect || catSelect) {
+                            sendMessage(chatId, "Отправьте фото Вашего питомца для отчёта.");
+                        currentHandler = new PhotoHandler(telegramBot);
+
+                        }
                         break;
 
                     case "/report":

@@ -52,6 +52,8 @@ public class PetsOwner {
     @Column(name = "end_date")
     private LocalDate endDate;
 
+
+
     @Column(name = "owner") // заносим сущность в строковом виде в таблицу
     public String getOwnerAsString() {
         return owner != null ? owner.toString() : null;
