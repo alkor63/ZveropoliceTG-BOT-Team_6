@@ -1,10 +1,10 @@
-package com.ward_n6.Controllers;
+package com.ward_n6.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ward_n6.Controllers.OwnerReportController;
 import com.ward_n6.entity.reports.OwnerReport;
-import com.ward_n6.exception.InvalidRequestException;
+import com.ward_n6.enums.PetsType;
 import com.ward_n6.repository.OwnerReportRepository;
-import javassist.NotFoundException;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -13,19 +13,19 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
-import static net.bytebuddy.matcher.ElementMatchers.*;
-import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(OwnerReportController.class)
 public class OwnerReportControllerTest {
@@ -37,9 +37,12 @@ public class OwnerReportControllerTest {
     @MockBean
     OwnerReportRepository ownerReportRepository;
     // создаем несколько объектов тестируемого класса
-    OwnerReport ownerReport1 = new OwnerReport(1L, LocalDateTime.now(), true, "Pedigree", "good", "Ok", 1L);
-    OwnerReport ownerReport2 = new OwnerReport(2L, LocalDateTime.now(), true, "meat", "very good", "Ok", 2L);
-    OwnerReport ownerReport3 = new OwnerReport(3L, LocalDateTime.now(), false, "fish", "normal", "Ok", 3L);
+    OwnerReport ownerReport1 = new OwnerReport(1l, 9932688l, LocalDateTime.now(), PetsType.CAT, false,
+            "fff","dddd", "dse", 23L);
+    OwnerReport ownerReport2 = new OwnerReport(2l, 1236688l, LocalDateTime.now(), PetsType.CAT, false,
+            "f[pf","diudd", ";ose", 21L);
+    OwnerReport ownerReport3 = new OwnerReport(3l, 1236458l, LocalDateTime.now(), PetsType.DOG, false,
+            "efWQ","dduiyu", "Fg", 27L);
 
     @Test
     public void getOwnerReportByIdTest() throws Exception {

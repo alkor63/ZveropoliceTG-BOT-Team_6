@@ -1,18 +1,29 @@
-package com.ward_n6.repository.Impl;
+package com.ward_n6.service;
 
+import com.ward_n6.entity.pets.Cat;
+import com.ward_n6.entity.pets.Dog;
 import com.ward_n6.entity.pets.Pet;
 import com.ward_n6.exception.DeleteFromMapException;
 import com.ward_n6.exception.EditMapException;
-import com.ward_n6.exception.PutToMapException;
-import com.ward_n6.repository.PetRepository;
+import com.ward_n6.repository.pets.CatRepository;
+import com.ward_n6.repository.pets.DogRepository;
+import com.ward_n6.repository.pets.PetBaseRepository;
+import com.ward_n6.service.interfaces.PetService;
 import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+@Service
 @Repository
-public class PetRepositoryImpl implements PetRepository {
+public class PetServiceImpl implements PetService {
+    private PetBaseRepository petBaseRepository;
+    private Pet cat = new Cat();
+    private Pet dog = new Dog();
+    private CatRepository catRepository;
+    private DogRepository dogRepository;
 
     private Map<Integer, Pet> petMap = new HashMap<>();
     private int mapId = 0;
@@ -24,15 +35,7 @@ public class PetRepositoryImpl implements PetRepository {
         return pet;
     }
 
-    @Override
-    public Pet getPetById(int recordId) {
-        return petMap.get(recordId);
-    }
 
-    @Override
-    public List<Pet> getAllPets() {
-        return new ArrayList<>(petMap.values());
-    }
 
     @Override
     public Pet editPetById(int recordId, Pet pet) throws EditMapException {
@@ -47,10 +50,8 @@ public class PetRepositoryImpl implements PetRepository {
         return petMap.get(recordId);
     }
 
-    @Override
-    public void deleteAllFromPet() {
-        petMap.clear();
-    }
+
+
 
     @Override
     public boolean deletePetById(int recordId) throws DeleteFromMapException {
@@ -75,9 +76,65 @@ public class PetRepositoryImpl implements PetRepository {
             if (entry.getValue().equals(pet)) return entry.getKey();
         return -1;
     }
-    @Override
-    public int getId() {
-        return mapId;
+
+
+    public PetServiceImpl(PetBaseRepository petBaseRepository) {
+        this.petBaseRepository = petBaseRepository;
+        this.cat = cat;
+        this.dog = dog;
     }
 
+    @Override
+    public int getId() {
+        return 0;
+    }
+
+
+
+    @Override
+    public Pet getPetById(int recordId) {
+        return null;
+    }
+
+    @Override
+    public Pet getPetByIdInt(int recordId) {
+        return null;
+    }
+
+    @Override
+    public List<Pet> getAllPets() {
+        return null;
+    }
+
+
+    @Override
+    public void deleteAllFromPet() {
+    }
+
+
+
+    ///**************************** методы репозитория **************
+
+   public Pet getPetById (long petId){
+      return catRepository.getById(petId);
+   }
+
+    //************* КОШКИ: ************
+    public void saveCat(Cat cat) {
+        catRepository.save(cat);
+    }
+
+    public Cat getCatById (long petId){
+        return catRepository.getById(petId);
+    }
+
+
+    // ******************* СОБАКИ ****************
+    public void saveDog(Dog dog) {
+        dogRepository.save(dog);
+    }
+
+    public Dog getDogById (long petId){
+        return dogRepository.getById(petId);
+    }
 }

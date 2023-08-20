@@ -1,51 +1,95 @@
 package com.ward_n6.entity.owners;
 
 import com.ward_n6.entity.pets.Pet;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.ward_n6.enums.PetsType;
+import lombok.*;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Objects;
 
 
-    @Entity
-    @NoArgsConstructor
-    @Table(name = "pets_owner")
-    @Getter
-    @Setter
-    public abstract class PetsOwner {
+@Component
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@Builder
+@Entity
+@Table(name = "pets_owner")
 
-        @javax.persistence.Id
-        @Column(name = "id",nullable = false)
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private Long id;
+public class PetsOwner {
 
-        @ManyToOne
+    @javax.persistence.Id
+    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-        @JoinColumn(name = "owner_id", referencedColumnName = "owner_id", columnDefinition = "TEXT")
-        private Owner owner;
+    @Column(name = "owner_id", nullable = false)
+    private long ownerId;
 
-        @ManyToOne
-        @JoinColumn(name = "pet", insertable = false, updatable = false, columnDefinition = "TEXT")
-         private Pet pet;
+    @Column(name = "pet_id", nullable = false)
+    private long petId;
 
-        @Column(name = "start_date")
-        private LocalDate startDate;
+    @ManyToOne
+    @Transient
+    @JoinColumn(name = "owner_id", referencedColumnName = "owner_id")
+    private Owner owner;
 
-        @Column(name = "end_date")
-        private LocalDate endDate;
+    @Column(name = "pet_type", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private PetsType petsType;
 
-        public PetsOwner(Owner owner, Pet pet) {
-            this.owner = owner;
-            this.pet = pet;
-        }
+    @ManyToOne
+    @Transient
+    @JoinColumn(name = "pet", insertable = false, updatable = false)
+    private Pet pet;
 
-        public PetsOwner(Owner owner, Pet pet, LocalDate startDate, LocalDate endDate) {
-            this.owner = owner;
-            this.pet = pet;
-            this.startDate = startDate;
-            this.endDate = endDate;
-        }
+    @Column(name = "start_date")
+    private LocalDate startDate;
+
+    @Column(name = "end_date")
+    private LocalDate endDate;
+
+    @Column(name = "owner")
+    public String getOwnerAsString() {
+        return owner != null ? owner.toString() : null;
     }
+
+    @Column(name = "pet")
+    public String getPetAsString() {
+        return pet != null ? pet.toString() : null;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof PetsOwner petsOwner)) return false;
+        return getOwnerId() == petsOwner.getOwnerId() && getPetId() ==
+                petsOwner.getPetId() && Objects.equals(getId(), petsOwner.getId())
+                && Objects.equals(getOwner(), petsOwner.getOwner())
+                && getPetsType() == petsOwner.getPetsType()
+                && Objects.equals(getPet(), petsOwner.getPet())
+                && Objects.equals(getStartDate(), petsOwner.getStartDate())
+                && Objects.equals(getEndDate(), petsOwner.getEndDate());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getOwnerId(), getPetId(), getOwner(), getPetsType(),
+                getPet(), getStartDate(), getEndDate());
+    }
+
+    @Override
+    public String toString() {
+        return "PetsOwner{" +
+                "id=" + id +
+                ", owner=" + owner +
+                ", pet=" + pet +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                '}';
+    }
+}
 

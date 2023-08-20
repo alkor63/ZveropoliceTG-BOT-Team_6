@@ -2,11 +2,13 @@ package com.ward_n6.entity.people;
 
 import com.ward_n6.entity.PetWithOwner;
 import com.ward_n6.entity.reports.OwnerReport;
+import com.ward_n6.enums.PetsType;
 import com.ward_n6.exception.PutToMapException;
 import com.ward_n6.repository.OwnerReportRepository;
-import com.ward_n6.repository.PetRepository;
+import com.ward_n6.repository.pets.PetRepository;
 import com.ward_n6.repository.PetsOwnerArchiveRepository;
 import com.ward_n6.repository.PetsOwnerRepository;
+import com.ward_n6.service.PetsOwnerServiceImpl;
 import com.ward_n6.service.VolunteerService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,9 +31,13 @@ class VolunteerTest {
 
 //    private static Owner owner = new CatOwner(110L, "testName", "testLastName", "testPhoneNumber");
 //    private static Owner owner1 = new CatOwner(111L, "testName1", "testLastName1", "testPhoneNumber1");
-    private OwnerReport ownerReport1= new OwnerReport(11L, LocalDateTime.now(), false, "nutrition1", "health1", "bahavior1", 1L);
+    private OwnerReport ownerReport1= new OwnerReport(1l,23655l,LocalDateTime.now(), PetsType.DOG,
+        false, "ххх","хххх","ххх", 23L);
 //    private static Pet pet = new Cat(99L, CAT, MALE, "Атос", LocalDate.of(2020, 5, 11), "mixBread");
     private PetsOwnerRepository petsOwnerRepository;
+
+
+    private PetsOwnerServiceImpl petsOwnerService;
     private OwnerReportRepository ownerReportRepository;
     @Mock
     private PetRepository petRepository;
@@ -42,7 +48,8 @@ class VolunteerTest {
     @Mock
     private PetsOwnerArchiveRepository petsOwnerArchiveRepository;
     @Spy
-    final VolunteerService volunteerMock = spy(new VolunteerService(petsOwnerRepository, petsOwnerArchiveRepository, ownerReportRepository, petRepository));
+    final VolunteerService volunteerMock = spy(new VolunteerService(petsOwnerRepository, petsOwnerArchiveRepository,
+            ownerReportRepository, petRepository,petsOwnerService ));
 
     @InjectMocks
     private VolunteerService volunteer;

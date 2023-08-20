@@ -14,6 +14,8 @@ public interface PetService {
 
     Pet getPetById(int recordId);
 
+    Pet getPetByIdInt(int recordId);
+
     List<Pet> getAllPets();
 
     Pet editPetById(int recordId, Pet pet) throws EditMapException;
