@@ -56,21 +56,21 @@ class OwnerControllerTest {
 
 
     @Test
-    //тест метода по добавлению владельца
+        //С‚РµСЃС‚ РјРµС‚РѕРґР° РїРѕ РґРѕР±Р°РІР»РµРЅРёСЋ РІР»Р°РґРµР»СЊС†Р°
     void ShouldCreateOwner() throws Exception {
         Mockito.when(ownerRepository.save(Mockito.any())).thenReturn(OWNER_1);
         mockMvc.perform(MockMvcRequestBuilders
                         .post("createOwner")
-                                .content(objectMapper.writeValueAsString(OWNER_1))
-                                .contentType(MediaType.APPLICATION_JSON))
+                        .content(objectMapper.writeValueAsString(OWNER_1))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
                 .andExpect(content().json(objectMapper.writeValueAsString(OWNER_1)));
     }
 
 
-//   НЕ РАБОТАЕТ, ЧТО МОЖНО ИЗМЕНИТЬ?
+//   РќР• Р РђР‘РћРўРђР•Рў, Р§РўРћ РњРћР–РќРћ РР—РњР•РќРРўР¬?
 //    @Test
-//        //выведение ошибки на метод createOwner
+//        //РІС‹РІРµРґРµРЅРёРµ РѕС€РёР±РєРё РЅР° РјРµС‚РѕРґ createOwner
 //    void createOwner_ShouldReturn400() throws Exception {
 //        when(ownerRepository.save(INCORRECT_OWNER)).thenReturn(false);
 //        this.mockMvc.perform(
@@ -81,13 +81,8 @@ class OwnerControllerTest {
 //    }
 
 
-
-
-
-
-
     @Test
-    //тест метода по поиска владельца при наличии его id
+        //С‚РµСЃС‚ РјРµС‚РѕРґР° РїРѕ РїРѕРёСЃРєР° РІР»Р°РґРµР»СЊС†Р° РїСЂРё РЅР°Р»РёС‡РёРё РµРіРѕ id
     void ShouldGetOwner() throws Exception {
         Mockito.when(ownerRepository.findById(OWNER_1.getId())).thenReturn(java.util.Optional.of(OWNER_1));
         this.mockMvc.perform(MockMvcRequestBuilders
@@ -100,9 +95,9 @@ class OwnerControllerTest {
     }
 
 
-//   РАБОТАЕТ НЕПРАВИЛЬНО, ЧТО МОЖНО СДЕЛАТЬ?
+//   Р РђР‘РћРўРђР•Рў РќР•РџР РђР’РР›Р¬РќРћ, Р§РўРћ РњРћР–РќРћ РЎР”Р•Р›РђРўР¬?
 //    @Test
-//    //выведение ошибки на метод findById
+//    //РІС‹РІРµРґРµРЅРёРµ РѕС€РёР±РєРё РЅР° РјРµС‚РѕРґ findById
 //    void findById_ShouldReturn404() throws Exception {
 //        when(ownerRepository.findById(5L)).thenReturn(Optional.empty());
 //        this.mockMvc.perform(
@@ -112,7 +107,7 @@ class OwnerControllerTest {
 
 
     @Test
-    //тест выбрасывания исключения для findById
+        //С‚РµСЃС‚ РІС‹Р±СЂР°СЃС‹РІР°РЅРёСЏ РёСЃРєР»СЋС‡РµРЅРёСЏ РґР»СЏ findById
     void ShouldReturnExceptionToGetOwner() throws Exception {
         when(ownerRepository.findById(any())).thenReturn(Optional.empty());
         this.mockMvc.perform(
@@ -120,7 +115,7 @@ class OwnerControllerTest {
                 .andExpect(status().isNotFound());
     }
 
-//    КАЖЕТСЯ, РАБОТАЕТ НЕПРАВИЛЬНО, ЧТО МОЖНО СДЕЛАТЬ?
+//    РљРђР–Р•РўРЎРЇ, Р РђР‘РћРўРђР•Рў РќР•РџР РђР’РР›Р¬РќРћ, Р§РўРћ РњРћР–РќРћ РЎР”Р•Р›РђРўР¬?
 //    @Test
 //    void findById_ShouldReturn404() throws Exception {
 //        when(ownerRepository.findById(5L)).thenReturn(Optional.empty());
@@ -129,8 +124,9 @@ class OwnerControllerTest {
 //                .andExpect(status().isNotFound());
 //    }
 
+
     @Test
-    //тест метода по редактированию данных владельца
+        //С‚РµСЃС‚ РјРµС‚РѕРґР° РїРѕ СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёСЋ РґР°РЅРЅС‹С… РІР»Р°РґРµР»СЊС†Р°
     void ShouldEditOwner() throws Exception {
         Owner editedOwner = Owner.builder()
                 .ownerId(1L)
@@ -153,11 +149,10 @@ class OwnerControllerTest {
                 .andExpect(jsonPath("$.phone_number", Matchers.is("+79000000000")));
     }
 
-    //ПОДСКАЖИТЕ, ПОЖАЛУЙСТА, КАК МОЖНО РЕАЛИЗОВАТЬ ИЛИ КАКИМ ПУТЁМ СТОИТ ПОЙТИ, ЧТОБЫ НАПИСАТЬ ТЕСТ НА ВЫВЕДЕНИЕ ОШИБКИ К МЕТОДУ НА ОБНОВЛЕНИЕ КАРТОЧКИ?
-
+    //РџРћР”РЎРљРђР–РРўР•, РџРћР–РђР›РЈР™РЎРўРђ, РљРђРљ РњРћР–РќРћ Р Р•РђР›РР—РћР’РђРўР¬ РР›Р РљРђРљРРњ РџРЈРўРЃРњ РЎРўРћРРў РџРћР™РўР, Р§РўРћР‘Р« РќРђРџРРЎРђРўР¬ РўР•РЎРў РќРђ Р’Р«Р’Р•Р”Р•РќРР• РћРЁРР‘РљР Рљ РњР•РўРћР”РЈ РќРђ РћР‘РќРћР’Р›Р•РќРР• РљРђР РўРћР§РљР?
 
     @Test
-    //тест метода по удалению владельца
+        //С‚РµСЃС‚ РјРµС‚РѕРґР° РїРѕ СѓРґР°Р»РµРЅРёСЋ РІР»Р°РґРµР»СЊС†Р°
     void ShouldDeleteOwner() throws Exception {
         Mockito.when(ownerRepository.findById(OWNER_2.getId())).thenReturn(Optional.of(OWNER_2));
         mockMvc.perform(MockMvcRequestBuilders
@@ -166,7 +161,7 @@ class OwnerControllerTest {
                 .andExpect(status().isOk());
     }
 
-//   НЕ РАБОТАЕТ ТЕСТ
+//   РќР• Р РђР‘РћРўРђР•Рў РўР•РЎРў
 //    @Test
 //    void deleteById_ShouldReturn404() throws Exception {
 //        when(ownerRepository.deleteById(INCORRECT_OWNER.getId())).thenReturn(false);
@@ -176,9 +171,8 @@ class OwnerControllerTest {
 //    }
 
 
-
     @Test
-    //тест метода по получению всех владельцев
+        //С‚РµСЃС‚ РјРµС‚РѕРґР° РїРѕ РїРѕР»СѓС‡РµРЅРёСЋ РІСЃРµС… РІР»Р°РґРµР»СЊС†РµРІ
     void ShouldGetAllOwners() throws Exception {
         List allOwners = new ArrayList<>(Arrays.asList(OWNER_1, OWNER_2));
 
@@ -190,7 +184,7 @@ class OwnerControllerTest {
                 .andExpect(jsonPath("$", hasSize(2)));
     }
 
-//   МОЖНО ЛИ ТАК РЕАЛИЗОВАТЬ ТЕСТ НА ВЫВЕДЕНИЕ ОШИБКИ?
+//   РњРћР–РќРћ Р›Р РўРђРљ Р Р•РђР›РР—РћР’РђРўР¬ РўР•РЎРў РќРђ Р’Р«Р’Р•Р”Р•РќРР• РћРЁРР‘РљР?
 //    @Test
 //    void findAll_ShouldReturn404() throws Exception {
 //        when(ownerRepository.findAll()).thenReturn(new ArrayList<>());
