@@ -74,7 +74,7 @@ throw new EntityNotFoundException("Невозможно удалить отчё�
                                                            @RequestBody @Valid OwnerReport ownerReport)
             throws EntityNotFoundException    {
         long longId = ownerReportId;
-        Optional optionalOwnerReport = ownerReportRepository.findById(longId);
+        Optional<OwnerReport> optionalOwnerReport = ownerReportRepository.findById(longId);
         if (!optionalOwnerReport.isPresent()) {
             throw new EntityNotFoundException("Невозможно изменить отчёт, т.к. в базе нет отчёта с id = "+ownerReportId);
         }

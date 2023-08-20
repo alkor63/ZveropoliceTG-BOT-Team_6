@@ -14,12 +14,8 @@ import java.util.List;
 @Table(name = "owner")
 @Getter
 @Setter
-//@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS) // позволяет классам наследникам сопоставляться со своей собственной таблицей
-// общий класс для владельцев (нужно ли его делать АБСТРАКТНЫМ?)
-public abstract class Owner { // хозяин животного, его свойства
-    // закончился испытательный срок, что делать?
-    // через сколько времени удалять из базы
-    // нужен ли чёрный список усыновителей
+
+public class Owner { // хозяин животного, его свойства
 
     @javax.persistence.Id
     @Column(name = "owner_id",nullable = false)

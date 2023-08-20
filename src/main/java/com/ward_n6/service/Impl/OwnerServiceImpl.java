@@ -5,10 +5,6 @@ import com.ward_n6.repository.OwnerRepository;
 import com.ward_n6.service.OwnerService;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 @Service
 public class OwnerServiceImpl implements OwnerService {
     private final OwnerRepository ownerRepository;
