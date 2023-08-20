@@ -18,8 +18,6 @@ import com.ward_n6.entity.owners.Owner;
 import com.ward_n6.entity.shelters.PetShelter;
 import com.ward_n6.repository.Impl.OwnerServiceImpl;
 import com.ward_n6.repository.OwnerRepository;
-import com.ward_n6.entity.reports.OwnerReport;
-import com.ward_n6.entity.shelters.PetShelter;
 import com.ward_n6.service.BotMessageService;
 import com.ward_n6.service.PhotoService;
 import com.ward_n6.service.ReportService;
@@ -79,10 +77,10 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
     protected static boolean dogSelect = false;
     protected static boolean getOwnerDataSelect = false;
 
-    boolean reportSelect = false;
-    boolean catSelect = false;
-    boolean dogSelect = false;
-    boolean getOwnerDataSelect = false;
+//    boolean reportSelect = false;
+//    boolean catSelect = false;
+//    boolean dogSelect = false;
+//    boolean getOwnerDataSelect = false;
 
     /**
      * ОСНОВНОЙ МЕТОД
@@ -147,7 +145,7 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                 switch (messageText) {
                     case "/start":
                         startSelected = true;
-                        afterStartMenu(chatId, "/start");
+                        afterStartMenu(chatId);
                         break;
                     case "/dogs":
                         dogSelect = true;
