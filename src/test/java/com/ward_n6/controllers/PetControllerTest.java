@@ -1,7 +1,7 @@
 package com.ward_n6.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ward_n6.repository.PetRepository;
+import com.ward_n6.repository.pets.PetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;

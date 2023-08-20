@@ -1,34 +1,32 @@
 package com.ward_n6.Controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ward_n6.entity.pets.Cat_2;
 import com.ward_n6.entity.pets.CatsCrud;
 import com.ward_n6.entity.pets.Pet;
 import com.ward_n6.exception.DeleteFromMapException;
 import com.ward_n6.exception.EditMapException;
-import com.ward_n6.repository.PetRepository;
+import com.ward_n6.service.interfaces.PetService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 
 @RestController
     @RequestMapping("/pet")
     @Tag(name = "Список животных приюта", description = "CRUD-операции с животными")
     public class PetController {
-        private final PetRepository petRepository;
+        private final PetService petService;
 
         @Resource
         private CatsCrud catsCrud;
 
-        public PetController(PetRepository petRepository) {
-            this.petRepository = petRepository;
-        }
+    public PetController(PetService petService) {
+        this.petService = petService;
+    }
+
 
 //        @PostMapping
 //        @Operation(summary = "Добавление животного в список", description = "нужно заполнить все поля карточки животного в Body")
@@ -68,7 +66,7 @@ import java.util.Optional;
         @Operation(summary = "Отредактировать карточку животного",
                 description = "нужно указать id и заполнить все поля карточки животного в Body")
         public ResponseEntity<Pet> editPet(@PathVariable int petId, @RequestBody Pet pet) throws EditMapException {
-            Pet newPet = petRepository.editPetById(petId, pet);
+            Pet newPet = petService.editPetById(petId, pet);
             if (newPet == null) {
                 return ResponseEntity.notFound().build();
             }
@@ -78,7 +76,7 @@ import java.util.Optional;
         @DeleteMapping("/{petId}")
         @Operation(summary = "Удалить одно животное из списка", description = "нужно указать id животного")
         public ResponseEntity<Void> deletePet(@PathVariable int petId) throws DeleteFromMapException {
-            if (petRepository.deletePetById(petId)) {
+            if (petService.deletePetById(petId)) {
                 return ResponseEntity.ok().build();
             }
             return ResponseEntity.notFound().build();
@@ -87,7 +85,7 @@ import java.util.Optional;
         @DeleteMapping
         @Operation(summary = "Удалить из списка всех животных - приют закрывается")
         public ResponseEntity<Void> deleteAllPets() {
-            petRepository.deleteAllFromPet();
+            petService.deleteAllFromPet();
             return ResponseEntity.ok().build();
         }
 

@@ -1,4 +1,4 @@
-package com.ward_n6.repository.Impl;
+package com.ward_n6.service;
 
 import com.ward_n6.entity.owners.Owner;
 import com.ward_n6.exception.DeleteFromMapException;
@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -18,6 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Service
 @Repository
 public class OwnerServiceImpl implements com.ward_n6.service.interfaces.OwnerService {
     private final OwnerRepository ownerRepository;
@@ -29,12 +31,15 @@ public class OwnerServiceImpl implements com.ward_n6.service.interfaces.OwnerSer
     }
 
 
-@Override
+    @Override
     public Owner addOwner(Owner owner) {
-        if (owner.equals(null)) throw new NullPointerException("ОШИБКА при попытке добавить owner=Null в МАПу ownerMap");
+        if (owner.equals(null))
+            throw new NullPointerException("ОШИБКА при попытке добавить owner=Null в МАПу ownerMap");
         ownerMap.putIfAbsent(mapId++, owner);
         return owner;
-    }@Override
+    }
+
+    @Override
 
     public Owner addOwnerToDB(Owner owner) {
         try {
@@ -60,6 +65,7 @@ public class OwnerServiceImpl implements com.ward_n6.service.interfaces.OwnerSer
         }
         return owner;
     }
+
     @Override
     public Owner getOwnerById(int recordId) {
         return ownerMap.get(recordId);
@@ -113,6 +119,7 @@ public class OwnerServiceImpl implements com.ward_n6.service.interfaces.OwnerSer
             if (entry.getValue().equals(owner)) return entry.getKey();
         return -1;
     }
+
     @Override
     public int getId() {
         return mapId;
@@ -145,6 +152,7 @@ public class OwnerServiceImpl implements com.ward_n6.service.interfaces.OwnerSer
 
 
     public void deleteById(Long aLong) {
+        ownerRepository.deleteById(aLong);
 
     }
 
@@ -168,7 +176,11 @@ public class OwnerServiceImpl implements com.ward_n6.service.interfaces.OwnerSer
 
     }
 
-public void save(Owner owner) {
-    ownerRepository.save(owner);
-}
+    public void save(Owner owner) {
+        ownerRepository.save(owner);
+    }
+Owner owner;
+    public Owner getOwnerById (long ownerId){
+        return owner = ownerRepository.getById(ownerId);
+    }
 }

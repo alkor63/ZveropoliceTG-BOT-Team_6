@@ -91,7 +91,7 @@ public class OwnerReport2 {
                 "id=" + id +
                 ", reportDateTime=" + reportDateTime +
 
-                ", petId=" + petId + " ownerId = " + ownerId +
+                ", petId=" + petId + " id = " + ownerId +
                 '}';
     }
 }

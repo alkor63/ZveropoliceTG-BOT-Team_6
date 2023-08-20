@@ -17,11 +17,15 @@ import java.time.LocalDate;
 
 
 public class Cat extends Pet {
-
-
-    public Cat(Long id, String bread, int petAge, LocalDate petBirthDay, String petName, PetsSex petsSex, PetsType petsType, com.ward_n6.entity.owners.Owner Owner) {
-        super(id, bread, petAge, petBirthDay, petName, petsSex, petsType, Owner);
+    public Cat(Long id, String bread, int petAge, LocalDate petBirthDay, String petName, PetsSex petsSex, PetsType petsType, long ownerId) {
+        super(id, bread, petAge, petBirthDay, petName, petsSex, petsType, ownerId);
     }
+
     public Cat() {
+    }
+
+    @Override
+    public String toString() {
+        return super.toString();
     }
 }

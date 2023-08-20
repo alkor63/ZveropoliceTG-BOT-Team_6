@@ -3,6 +3,7 @@ package com.ward_n6.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ward_n6.Controllers.OwnerController;
 import com.ward_n6.repository.OwnerRepository;
+import com.ward_n6.service.interfaces.OwnerService;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,11 +34,12 @@ class OwnerControllerTest {
 
     @MockBean
     private OwnerRepository ownerRepository;
+    private OwnerService ownerService;
 
 
     @Test
     void ShouldCreateOwner() throws Exception {
-        Mockito.when(ownerRepository.addOwner(Mockito.any())).thenReturn(LIST_OF_OWNERS.get(0));
+        Mockito.when(ownerService.addOwner(Mockito.any())).thenReturn(LIST_OF_OWNERS.get(0));
         mockMvc.perform(
                         post("/{ownerId}")
                                 .content(objectMapper.writeValueAsString(LIST_OF_OWNERS.get(0)))
@@ -48,7 +50,7 @@ class OwnerControllerTest {
 
     @Test
     void ShouldGetOwner() throws Exception {
-        Mockito.when(ownerRepository.getOwnerById(ArgumentMatchers.anyInt()))
+        Mockito.when(ownerService.getOwnerById(ArgumentMatchers.anyInt()))
                 .thenReturn(LIST_OF_OWNERS.get(0));
         this.mockMvc.perform(
                         get("/{ownerId}", 1))
@@ -63,14 +65,14 @@ class OwnerControllerTest {
 //    void ShouldReturnExceptionToGetOwner() throws Exception {
 //        when(ownerRepository.getOwnerById(5)).thenReturn(Optional.empty());
 //        this.mockMvc.perform(
-//                        get("/{ownerId}", 5))
+//                        get("/{id}", 5))
 //                .andExpect(status().isNotFound());
 //    }
 
     @Test
     void ShouldEditOwner() throws Exception {
-        Mockito.when(ownerRepository.addOwnerToDB(Mockito.any())).thenReturn(LIST_OF_OWNERS.get(1));
-        Mockito.when(ownerRepository.getOwnerById(ArgumentMatchers.anyInt()))
+        Mockito.when(ownerService.addOwnerToDB(Mockito.any())).thenReturn(LIST_OF_OWNERS.get(1));
+        Mockito.when(ownerService.getOwnerById(ArgumentMatchers.anyInt()))
                 .thenReturn(LIST_OF_OWNERS.get(0));
         mockMvc.perform(
                         put("/{ownerId}/1")
@@ -84,7 +86,7 @@ class OwnerControllerTest {
 
     @Test
     void ShouldDeleteOwner() throws Exception {
-        Mockito.when(ownerRepository.addOwnerToDB(Mockito.any())).thenReturn(LIST_OF_OWNERS.get(1));
+        Mockito.when(ownerService.addOwnerToDB(Mockito.any())).thenReturn(LIST_OF_OWNERS.get(1));
         mockMvc.perform(
                         delete("/{ownerId}"))
                 .andExpect(status().isOk());
@@ -92,7 +94,7 @@ class OwnerControllerTest {
 
     @Test
     void ShouldReturnExceptionToDeleteOwner() throws Exception {
-        when(ownerRepository.deleteOwnerById(Math.toIntExact(OWNER_1.getId()))).thenReturn(false);
+        when(ownerService.deleteOwnerById(Math.toIntExact(OWNER_1.getId()))).thenReturn(false);
         mockMvc.perform(
                         delete("/{ownerId}", OWNER_1.getId()))
                 .andExpect(status().isNotFound());
@@ -100,14 +102,14 @@ class OwnerControllerTest {
 
     @Test
     void ShouldDeleteAllOwners() {
-        ownerRepository.deleteAllFromOwner();
+        ownerService.deleteAllFromOwner();
         assertEquals(0, LIST_OF_OWNERS.size());
     }
 
 
     @Test
     void ShouldGetAllOwners() {
-        when(ownerRepository.getAllOwners())
+        when(ownerService.getAllOwners())
                 .thenReturn(LIST_OF_OWNERS);
         assertEquals(status().isOk(), LIST_OF_OWNERS.size());
     }

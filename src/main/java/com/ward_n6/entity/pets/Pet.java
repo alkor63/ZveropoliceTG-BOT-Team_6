@@ -1,6 +1,5 @@
 package com.ward_n6.entity.pets;
 
-import com.ward_n6.entity.owners.Owner;
 import com.ward_n6.enums.PetsSex;
 import com.ward_n6.enums.PetsType;
 import lombok.AllArgsConstructor;
@@ -45,6 +44,7 @@ public abstract class Pet {
     @Column(name = "pet_name")
     private String petName;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "sex")
     private PetsSex petsSex;
 
@@ -52,11 +52,13 @@ public abstract class Pet {
     @Enumerated(EnumType.STRING) // для сохранения названия, а не цифры
     @Column(name = "pets_type", insertable = false, updatable = false, columnDefinition = "VARCHAR(255)")
     protected PetsType petsType;
+//
+//    @ManyToOne
+//    @JoinColumn(name = "owner_id", insertable = false, updatable = false)
+//    private Owner owner;
 
-    @ManyToOne
-    @JoinColumn(name = "owner_id", insertable = false, updatable = false)
-    private Owner Owner;
-
+    @Column(name = "owner_id")
+    private long ownerId;
 
     @Override
     public String toString() {

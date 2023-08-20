@@ -17,10 +17,16 @@ import java.time.LocalDate;
 //@AllArgsConstructor
 
 public class Dog extends Pet {
-    public Dog(Long id, String bread, int petAge, LocalDate petBirthDay, String petName, PetsSex petsSex, PetsType petsType, com.ward_n6.entity.owners.Owner Owner) {
-        super(id, bread, petAge, petBirthDay, petName, petsSex, petsType, Owner);
+
+    public Dog(Long id, String bread, int petAge, LocalDate petBirthDay, String petName, PetsSex petsSex, PetsType petsType, long ownerId) {
+        super(id, bread, petAge, petBirthDay, petName, petsSex, petsType, ownerId);
     }
 
     public Dog() {
+    }
+
+    @Override
+    public String toString() {
+        return super.toString();
     }
 }
