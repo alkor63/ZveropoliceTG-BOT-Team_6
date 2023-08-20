@@ -2,10 +2,7 @@ package com.ward_n6.Controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ward_n6.entity.reports.OwnerReport;
-import com.ward_n6.exception.InvalidRequestException;
 import com.ward_n6.repository.OwnerReportRepository;
-import javassist.NotFoundException;
-import liquibase.pro.packaged.O;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 @RestController
@@ -69,20 +70,16 @@ public class PetsOwnerController {
         @PutMapping("/{petsOwnerId}")
         @Operation(summary = "Отредактировать отчёт",
                 description = "нужно указать id и заполнить все поля  Body")
-        public ResponseEntity<PetsOwner> editPetsOwnerById(@PathVariable int petsOwnerId,
-                                                               @RequestBody @Valid PetsOwner petsOwner)
+        public ResponseEntity<PetsOwner> editDateEndPetsOwnerById(@PathVariable int petsOwnerId,
+                                                               @RequestBody @Valid LocalDate newDateEnd)
                 throws EntityNotFoundException    {
             long longId = petsOwnerId;
             Optional optionalPetsOwner = petsOwnerRepository.findById(longId);
             if (!optionalPetsOwner.isPresent()) {
                 throw new EntityNotFoundException("Невозможно изменить запись, т.к. в базе нет id = "+petsOwnerId);
             }
-            PetsOwner existingPetsOwner = (PetsOwner) optionalPetsOwner.get();
-
-            existingPetsOwner.setDateEnd(petsOwner.getDateEnd());
-            existingPetsOwner.setDateBegin(petsOwner.getDateBegin());
-            existingPetsOwner.setOwner(petsOwner.getOwner());
-            existingPetsOwner.setPet(petsOwner.getPet());
+            PetsOwner petsOwner = (PetsOwner) optionalPetsOwner.get();
+            petsOwner.setDateEnd(newDateEnd);
 
             return ResponseEntity.ok().body(petsOwnerRepository.save(petsOwner));
         }

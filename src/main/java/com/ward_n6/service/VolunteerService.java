@@ -5,6 +5,7 @@ import com.ward_n6.entity.owners.PetsOwner;
 import com.ward_n6.entity.owners.PetsOwnerArchive;
 import com.ward_n6.entity.reports.OwnerReport;
 import com.ward_n6.entity.pets.Pet;
+import com.ward_n6.enums.PetsSex;
 import com.ward_n6.repository.OwnerReportRepository;
 import com.ward_n6.repository.PetRepository;
 import com.ward_n6.repository.PetsOwnerArchiveRepository;
@@ -31,8 +32,6 @@ public class VolunteerService {
 
 
    private final PetsOwnerRepository petsOwnerRepository;
-//    private final PetsOwnerController petsOwnerController;
-//    private final PetsOwnerArchiveRepository petsOwnerArchiveRepository;
     private final PetsOwnerArchiveRepository petsOwnerArchiveRepository;
     private final PetsOwnerService petsOwnerService;
     @Resource
@@ -46,12 +45,6 @@ public class VolunteerService {
         this.ownerReportRepository = ownerReportRepository;
         this.petRepository = petRepository;
     }
-//    public VolunteerService(PetsOwnerRepository petsOwnerRepository, PetsOwnerArchiveRepository petsOwnerArchiveRepository, OwnerReportRepository ownerReportRepository, PetRepository petRepository) {
-//        this.petsOwnerRepository = petsOwnerRepository;
-//        this.petsOwnerArchiveRepository = petsOwnerArchiveRepository;
-//        this.ownerReportRepository = ownerReportRepository;
-//        this.petRepository = petRepository;
-//    }
 
 
     public String callVolunteer(String firstName) {
@@ -63,7 +56,10 @@ public class VolunteerService {
         // собираем в одну таблицу PetWithOwner усыновителя owner, животное pat
         // и время начала и окончания испытательного срока
         try {
-            PetsOwner petsOwner = new PetsOwner(owner, pet, LocalDate.now(), LocalDate.now().plusDays(30));
+            PetsOwner petsOwner = new PetsOwner(LocalDate.now(), LocalDate.now().plusDays(30),
+                    owner.getId(), owner.getFirstName(), owner.getLastName(), owner.getPhoneNumber(),
+                    pet.getId(), pet.getBread(), pet.getPetBirthDay(),pet.getPetName()
+            );
             return petsOwnerRepository.save(petsOwner);
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
@@ -71,15 +67,22 @@ public class VolunteerService {
         }
     }
 
-    public Boolean removePetWithOwnerToArchive(PetsOwner petsOwner) {
-        // убираем парочку из таблицы PetWithOwner и заносим в одноименный архив
+    public Boolean removePetsOwnerToArchive(PetsOwner petsOwner) {
+        // убираем парочку из таблицы PetsOwner и заносим в одноименный архив
         // после успешного прохождения (окончания) испытательного срока
         try {
             PetsOwnerArchive newPetsOwnerArchive = new PetsOwnerArchive(
-                    petsOwner.getOwner(),
-                    petsOwner.getPet(),
                     petsOwner.getDateBegin(),
-                    petsOwner.getDateEnd());
+                    petsOwner.getDateEnd(),
+                    petsOwner.getOwnerId(),
+                    petsOwner.getFirstName(),
+                    petsOwner.getLastName(),
+                    petsOwner.getPhoneNumber(),
+                    petsOwner.getPetId(),
+                    petsOwner.getBread(),
+                    petsOwner.getPetBirthDay(),
+                    petsOwner.getPetName()
+                    );
             petsOwnerArchiveRepository.save(newPetsOwnerArchive);
             petsOwnerRepository.deleteById(petsOwner.getId());
             return true;
@@ -90,7 +93,7 @@ public class VolunteerService {
     }
 
 
-    public int viewAllReports(LocalDate date) {
+    public String viewAllReports(LocalDate date) {
         // просмотр всех отчетов за прошедшие сутки (с 21:00 предыдущего дня по 21:00 дня = date
         int num = 0;
         LocalTime time = LocalTime.of(21, 00);
@@ -102,16 +105,18 @@ public class VolunteerService {
         //(ownerReportRepository.getAllOwnerReports());
 
         List<OwnerReport> allOwnerReports = ownerReportRepository.findAll();
-        System.out.println("ownerReportList = " + allOwnerReports);
+//        System.out.println("ownerReportList = " + allOwnerReports);
         for (OwnerReport ownerReport : allOwnerReports) {
             LocalDateTime dateTime = ownerReport.getReportDateTime();
             if (dateTime.isAfter(startTime) && dateTime.isBefore(stopTime))
                 num++; // есть отчёт в искомом интервале времени
         }
         DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
-        System.out.println("c " + startTime.format(fmt) + " по " + stopTime.format(fmt) + " поступило " + num + " отчетов усыновителей");
-        if (num > 0) System.out.println("все отчеты обработаны");
-        return num; // количество отчетов за 24 часа до 21:00 указанной даты
+        String ss = "";
+        if (num > 0) ss = ", все отчеты обработаны";
+        String s = "С " + startTime.format(fmt) + " по " + stopTime.format(fmt) + " поступило " + num + " отчетов усыновителей"+ss;
+        return s;
+        // num - количество отчетов за 24 часа до 21:00 указанной даты
     }
 
     public int endOfProbationPeriod(PetsOwner petWithOwner) {
@@ -120,7 +125,7 @@ public class VolunteerService {
 // т.е. дата = localDate.now()
 // просматриваем все отчеты этого усыновителя за испытательный период и присваиваем ему рейтинг
 
-        long petId = petWithOwner.getPet().getId();
+        long petId = petWithOwner.getPetId();
         int numReport = 0;
         int numOldReport = 0;
         LocalDate today = LocalDate.now();
@@ -156,9 +161,9 @@ public class VolunteerService {
             case 1:
                 // продлить испытательный срок на 30 дней
                 LocalDate newEndDate30 = LocalDate.now().plusDays(30);
-                petWithOwner.setDateEnd(newEndDate30);   //увеличили дату окончания исп. срока на 30 дней
+   //увеличили дату окончания испытательного срока на 30 дней
                 try {
-                    petsOwnerService.editPetsOwnerById(Math.toIntExact(petWithOwner.getId()), petWithOwner);//перезаписали с новой датой окончания исп.срока
+                    petsOwnerService.editDateEndPetsOwnerById(Math.toIntExact(petWithOwner.getId()), newEndDate30);//перезаписали с новой датой окончания исп.срока
                 } catch (NotFoundException e) {
                     throw new RuntimeException(e);
                 }
@@ -167,9 +172,9 @@ public class VolunteerService {
             case 2:
                 // продлить испытательный срок на 14 дней
                 LocalDate newEndDate14 = LocalDate.now().plusDays(14);
-                petWithOwner.setDateEnd(newEndDate14);   //увеличили дату окончания исп.срока на 14 дней
+   //увеличили дату окончания испытательного срока на 14 дней
                 try {
-                    petsOwnerService.editPetsOwnerById(Math.toIntExact(petWithOwner.getId()), petWithOwner);//перезаписали с новой датой окончания исп.срока
+                    petsOwnerService.editDateEndPetsOwnerById(Math.toIntExact(petWithOwner.getId()), newEndDate14);//перезаписали с новой датой окончания исп.срока
                 } catch (NotFoundException e) {
                     throw new RuntimeException(e);
                 }
@@ -177,15 +182,15 @@ public class VolunteerService {
             case 3:
                 // поздравить с успешным прохождением испытательного срока
                 try {
-                    removePetWithOwnerToArchive(petWithOwner);
+                    removePetsOwnerToArchive(petWithOwner);
                     // method is Boolean
 //              перемещаем запись о животном и хозяине в архив
 //              удаляем запись о животном и хозяине из таблицы с испытательным сроком
 //              удаляем запись о животном из таблицы Pet - этого животного больше нет в приюте
-                    petRepository.deletePetById((int) petWithOwner.getId());
+                    petRepository.deleteById(petWithOwner.getId());
 
                     return "Поздравляем с завершением испытательного срока! Ваш питомец остаётся с Вами навсегда";
-                } catch (NotFoundException e) {
+                } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
 
@@ -207,6 +212,7 @@ public class VolunteerService {
     }
 
     public String reportExpertise(OwnerReport ownerReport){
+        // проверяем как заполнены поля отчёта и возвращаем соответствующий ответ
         int n = verifyReport(ownerReport);
         switch (n){
             case 0:

@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
 
 @RestController
@@ -43,26 +44,38 @@ import java.util.Optional;
         @Operation(summary = "Отредактировать карточку животного",
                 description = "нужно указать id и заполнить все поля карточки животного в Body")
         public ResponseEntity<Pet> editPet(@PathVariable int petId, @RequestBody Pet pet) throws NotFoundException {
-            Pet newPet = petRepository.editPetById(petId, pet);
-            if (newPet == null) {
-                return ResponseEntity.notFound().build();
+            long longId = petId;
+            Optional optionalPet = petRepository.findById(longId);
+            if (!optionalPet.isPresent()) {
+                throw new EntityNotFoundException("Невозможно изменить отчёт, т.к. в базе нет отчёта с id = "+petId);
             }
-            return ResponseEntity.ok(newPet);
+            Pet existingPet = (Pet) optionalPet.get();
+
+            existingPet.setPetName(pet.getPetName());
+            existingPet.setBread(pet.getBread());
+            existingPet.setPetsType(pet.getPetsType());
+            existingPet.setPetBirthDay(pet.getPetBirthDay());
+
+            return ResponseEntity.ok().body(petRepository.save(pet));
+
         }
 
         @DeleteMapping("/{petId}")
         @Operation(summary = "Удалить одно животное из списка", description = "нужно указать id животного")
-        public ResponseEntity<Void> deletePet(@PathVariable int petId) throws NotFoundException {
-            if (petRepository.deletePetById(petId)) {
-                return ResponseEntity.ok().build();
+        public ResponseEntity<Pet> deletePet(@PathVariable int petId) throws NotFoundException {
+            long longId = petId;
+            Optional<Pet> optionalPet = petRepository.findById(longId);
+            if (optionalPet.isPresent()) {
+                petRepository.deleteById(longId);
+                return ResponseEntity.ok().body(optionalPet.get());
             }
-            return ResponseEntity.notFound().build();
+            throw new EntityNotFoundException("Невозможно удалить отчёт, т.к. в базе нет отчёта с id = "+petId);    
         }
 
         @DeleteMapping
         @Operation(summary = "Удалить из списка всех животных - приют закрывается")
         public ResponseEntity<Void> deleteAllPets() {
-            petRepository.deleteAllFromPet();
+            petRepository.deleteAll();
             return ResponseEntity.ok().build();
         }
 

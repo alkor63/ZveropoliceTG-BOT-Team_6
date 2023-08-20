@@ -1,6 +1,5 @@
 package com.ward_n6.entity.people;
 
-import com.ward_n6.entity.PetWithOwner;
 import com.ward_n6.entity.owners.CatOwner;
 import com.ward_n6.entity.owners.Owner;
 import com.ward_n6.entity.owners.PetsOwner;
@@ -54,7 +53,7 @@ class VolunteerTest {
     @InjectMocks
     private VolunteerService volunteer;
 
-    PetsOwner petWithOwner = new PetsOwner(owner1, pet, LocalDate.now().minusDays(30), LocalDate.now());
+    PetsOwner petWithOwner = new PetsOwner(1L, LocalDate.now().minusDays(30), LocalDate.now(), 1L, 1L);
 
 
     @Test

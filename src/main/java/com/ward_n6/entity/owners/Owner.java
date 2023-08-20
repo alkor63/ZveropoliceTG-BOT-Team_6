@@ -1,22 +1,22 @@
 package com.ward_n6.entity.owners;
 
-import com.ward_n6.entity.pets.Pet;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
-@Entity
 @NoArgsConstructor
-@Table(name = "owner")
 @Getter
 @Setter
+@Builder
+@Entity
+@Table(name = "owner")
 //@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS) // позволяет классам наследникам сопоставляться со своей собственной таблицей
 // общий класс для владельцев (нужно ли его делать АБСТРАКТНЫМ?)
-public abstract class Owner { // хозяин животного, его свойства
+public class Owner {
+    // хозяин животного, его свойства
     // закончился испытательный срок, что делать?
     // через сколько времени удалять из базы
     // нужен ли чёрный список усыновителей
