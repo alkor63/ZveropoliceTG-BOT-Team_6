@@ -160,8 +160,9 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
 
                     case "/photo":
                         if (dogSelect || catSelect) {
+                            currentHandler = new PhotoHandler(telegramBot);
                             sendMessage(chatId, "Отправьте фото Вашего питомца для отчёта.");
-                        currentHandler = new PhotoHandler(telegramBot);
+
 
                         }
                         break;

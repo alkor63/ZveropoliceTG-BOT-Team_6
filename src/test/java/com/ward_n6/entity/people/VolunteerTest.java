@@ -7,7 +7,7 @@ import com.ward_n6.exception.PutToMapException;
 import com.ward_n6.repository.OwnerReportRepository;
 import com.ward_n6.repository.PetsOwnerArchiveRepository;
 import com.ward_n6.repository.PetsOwnerRepository;
-import com.ward_n6.repository.pets.PetRepository;
+import com.ward_n6.repository.pets.PetBaseRepository;
 import com.ward_n6.service.PetsOwnerServiceImpl;
 import com.ward_n6.service.VolunteerService;
 import org.junit.jupiter.api.Test;
@@ -40,7 +40,7 @@ class VolunteerTest {
     private PetsOwnerServiceImpl petsOwnerService;
     private OwnerReportRepository ownerReportRepository;
     @Mock
-    private PetRepository petRepository;
+    private PetBaseRepository petBaseRepository;
     @Mock
     private PetsOwnerRepository petsOwnerRepositoryMock;
     @Mock
@@ -49,7 +49,7 @@ class VolunteerTest {
     private PetsOwnerArchiveRepository petsOwnerArchiveRepository;
     @Spy
     final VolunteerService volunteerMock = spy(new VolunteerService(petsOwnerRepository, petsOwnerArchiveRepository,
-            petsOwnerService, ownerReportRepository,  petRepository ));
+            petsOwnerService, ownerReportRepository,  petBaseRepository ));
 
     @InjectMocks
     private VolunteerService volunteer;

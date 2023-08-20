@@ -43,7 +43,7 @@ public class PhotoHandler implements EventHandler {
                 var outFile = new File(folderPath, (photo.fileId() + "-owner-" + update.message().chat().id() + ".jpeg")); // добавлено
                 try (var in = new URL(telegramBot.getFullFilePath(getFile.file())).openStream();
                      var out = new FileOutputStream(outFile)) {
-                    // для примера просто сделал случайное название файла, лучше прописать путь и расширение
+
                     in.transferTo(out);
                 } catch (MalformedURLException e) {
                     throw new RuntimeException(e);
@@ -54,6 +54,6 @@ public class PhotoHandler implements EventHandler {
                 }
             }  else  telegramBot.execute(new SendMessage(update.message().chat().id(),
                     "Вы не отправили фото. Отчёт не полный."));
-        }; return true;
+        }; return false;
     }
 }
