@@ -42,8 +42,8 @@ public class OwnerTrialPriodTimer {
     //завершение испытательного срока
 
 
-//    @Scheduled(cron = "* 0 21 * * *") //вызов каждый день в 21:00
-    @Scheduled(cron = "* 45 20 * * *") //вызов каждый день в 21:00
+//    @Scheduled(cron = "* 00 21 * * *") //вызов каждый день в 21:00
+    @Scheduled(cron = "* 45 20 * * *") //вызов каждый день в мм чч на время отладки
 
     public void task() {
         //проверяем метод Позвать волонтёра
@@ -68,6 +68,7 @@ public class OwnerTrialPriodTimer {
             }
         }
         return;
+//      выполнение зациклено, нужно как-то прервать
     }
 
 }
