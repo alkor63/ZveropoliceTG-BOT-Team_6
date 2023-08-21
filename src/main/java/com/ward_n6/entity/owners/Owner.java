@@ -1,6 +1,7 @@
 package com.ward_n6.entity.owners;
 
 import lombok.*;
+import org.springframework.data.annotation.Id;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.Column;
@@ -24,6 +25,7 @@ import java.util.Objects;
 public class Owner { // хозяин животного, его свойства
 
     @javax.persistence.Id
+    @Id
     @Column(name = "owner_id", nullable = false)
     private Long id;
 

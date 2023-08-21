@@ -4,9 +4,9 @@ import com.ward_n6.entity.PetWithOwner;
 import com.ward_n6.entity.reports.OwnerReport;
 import com.ward_n6.enums.PetsType;
 import com.ward_n6.exception.PutToMapException;
-import com.ward_n6.repository.OwnerReportRepository;
 import com.ward_n6.repository.PetsOwnerArchiveRepository;
 import com.ward_n6.repository.PetsOwnerRepository;
+import com.ward_n6.repository.ReportRepository;
 import com.ward_n6.repository.pets.PetBaseRepository;
 import com.ward_n6.service.PetsOwnerServiceImpl;
 import com.ward_n6.service.VolunteerService;
@@ -38,7 +38,7 @@ class VolunteerTest {
 
 
     private PetsOwnerServiceImpl petsOwnerService;
-    private OwnerReportRepository ownerReportRepository;
+    private ReportRepository ownerReportRepository;
     @Mock
     private PetBaseRepository petBaseRepository;
     @Mock
