@@ -2,10 +2,11 @@ package com.ward_n6.service;
 
 import com.ward_n6.entity.reports.OwnerReport;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
-
+@Service
 public interface OwnerReportService {
     //++++++++++++++++++++++++++++++++++++++++++++++++++++
     OwnerReport addOwnerReport(OwnerReport ownerReport);
@@ -14,15 +15,15 @@ public interface OwnerReportService {
     List<OwnerReport> getAllOwnerReports();
 
     // ++++++++++++++++++++++++++++++++++++
-    OwnerReport getOwnerReportById(Integer ownerReportId)
-            throws EntityNotFoundException;
+
+    OwnerReport getOwnerReportById(Integer ownerReportId);
 
     //+++++++++++++++++++++++++++++++++++++++++
-    ResponseEntity<OwnerReport> deleteOwnerReportById(Integer ownerReportId)
-            throws EntityNotFoundException;
+    boolean deleteOwnerReportById(Integer ownerReportId);
 
     OwnerReport editOwnerReportById(int ownerReportId, OwnerReport ownerReport)
-        throws EntityNotFoundException;
+            throws EntityNotFoundException;
     //++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 
 }
