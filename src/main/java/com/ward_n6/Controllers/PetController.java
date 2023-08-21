@@ -1,8 +1,9 @@
 package com.ward_n6.Controllers;
 
-import com.ward_n6.entity.pets.Cat_2;
-import com.ward_n6.entity.pets.Dog_2;
+import com.ward_n6.entity.pets.Cat;
+import com.ward_n6.entity.pets.Dog;
 import com.ward_n6.enums.PetsSex;
+import com.ward_n6.enums.PetsType;
 import com.ward_n6.service.CatService;
 import com.ward_n6.service.DogService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -27,15 +28,16 @@ public class PetController {
 
     @PostMapping("add_cat/{petsSex}")
     @Operation(summary = "Добавить кошку")
-    public ResponseEntity<Cat_2> addCat(@PathVariable PetsSex petsSex, Cat_2 cat_2) {
-        catService.addCat(petsSex, cat_2);
-        return ResponseEntity.ok(cat_2);
+    public ResponseEntity<Cat> addCat(@PathVariable PetsSex petsSex, Cat cat) {
+        PetsType petsType = PetsType.CAT;
+        catService.addCat(petsSex, petsType, cat);
+        return ResponseEntity.ok(cat);
     }
 
     @Operation(summary = "Поиск кошки по id")
     @GetMapping("searchCat")
     public ResponseEntity<String> searchCat(long id) {
-        Cat_2 cat = catService.findCat(id);
+        Cat cat = catService.findCat(id);
         if (cat == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok().body(cat.toString());
     }
@@ -43,8 +45,8 @@ public class PetController {
 
     @GetMapping("allCat")
     @Operation(summary = "Показать всех кошек приюта")
-    public ResponseEntity<List<Cat_2>> allCats() {
-        List<Cat_2> cat = catService.allCats();
+    public ResponseEntity<List<Cat>> allCats() {
+        List<Cat> cat = catService.allCats();
         if (cat.isEmpty()) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(cat);
     }
@@ -52,18 +54,19 @@ public class PetController {
 
     @Operation(summary = "Удалить кошку")
     @DeleteMapping("delCat")
-    public ResponseEntity<Cat_2> deleteCat(@RequestParam long id) {
-        Cat_2 result = catService.findCat(id);
+    public ResponseEntity<Cat> deleteCat(@RequestParam long id) {
+        Cat result = catService.findCat(id);
         if (result == null) return ResponseEntity.notFound().build();
-        Cat_2 cat2 = catService.deleteCat(id);
-        return ResponseEntity.ok(cat2);
+        Cat cat = catService.deleteCat(id);
+        return ResponseEntity.ok(cat);
     }
 
 
     @Operation(summary = "Поменять кошку")
-    @PutMapping("changeCat")
-    public ResponseEntity<Cat_2> changeCat(@RequestParam long id, @RequestParam PetsSex petsSex, Cat_2 cat_2) {
-        Cat_2 change = catService.change(id, cat_2, petsSex);
+    @PutMapping("changeCat/{id}/{petsSex}")
+    public ResponseEntity<Cat> changeCat(@PathVariable long id, @PathVariable PetsSex petsSex, Cat cat) {
+        PetsType petsType = PetsType.CAT;
+        Cat change = catService.change(id,petsSex, petsType, cat);
         return ResponseEntity.ok(change);
     }
 
@@ -73,15 +76,16 @@ public class PetController {
 
     @PostMapping("add_dog/{petsSex}")
     @Operation(summary = "Добавить собаку")
-    public ResponseEntity<Dog_2> addDog(@PathVariable PetsSex petsSex, Dog_2 dog_2) {
-        dogService.addDog(petsSex, dog_2);
-        return ResponseEntity.ok(dog_2);
+    public ResponseEntity<Dog> addDog(@PathVariable PetsSex petsSex, Dog dog) {
+        PetsType petsType = PetsType.DOG;
+        dogService.addDog(petsSex, petsType, dog);
+        return ResponseEntity.ok(dog);
     }
 
     @Operation(summary = "Поиск собаки по id")
-    @GetMapping("searchDog")
+    @GetMapping("searchDOg")
     public ResponseEntity<String> searchDog(long id) {
-        Dog_2 dog = dogService.findDog(id);
+        Dog dog = dogService.findDog(id);
         if (dog == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok().body(dog.toString());
     }
@@ -89,8 +93,8 @@ public class PetController {
 
     @GetMapping("allDog")
     @Operation(summary = "Показать всех собак приюта")
-    public ResponseEntity<List<Dog_2>> allDogs() {
-        List<Dog_2> dog = dogService.allDogs();
+    public ResponseEntity<List<Dog>> allDogs() {
+        List<Dog> dog = dogService.allDogs();
         if (dog.isEmpty()) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(dog);
     }
@@ -98,16 +102,19 @@ public class PetController {
 
     @Operation(summary = "Удалить собаку")
     @DeleteMapping("delDog")
-    public ResponseEntity<Dog_2> deleteDog(@RequestParam long id) {
-        Dog_2 result = dogService.findDog(id);
+    public ResponseEntity<Dog> deleteDogt(@RequestParam long id) {
+        Dog result = dogService.findDog(id);
         if (result == null) return ResponseEntity.notFound().build();
-        Dog_2 dog = dogService.deleteDog(id);
+        Dog dog = dogService.deleteDog(id);
         return ResponseEntity.ok(dog);
     }
+
+
     @Operation(summary = "Поменять собаку")
-    @PutMapping("changeDog")
-    public ResponseEntity<Dog_2> changeDog(@RequestParam long id, @RequestParam PetsSex petsSex, Dog_2 dog_2) {
-        Dog_2 change = dogService.change(id, dog_2, petsSex);
+    @PutMapping("changeDog/{id}/{petsSex}")
+    public ResponseEntity<Dog> changeCat(@PathVariable long id, @PathVariable PetsSex petsSex, Dog dog) {
+        PetsType petsType = PetsType.CAT;
+        Dog change = dogService.change(id,petsSex, petsType, dog);
         return ResponseEntity.ok(change);
     }
 
