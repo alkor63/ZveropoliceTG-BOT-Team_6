@@ -15,9 +15,13 @@ import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.response.SendResponse;
 import com.vdurmont.emoji.EmojiParser;
 import com.ward_n6.entity.BotMessaging;
+import com.ward_n6.entity.Photo;
 import com.ward_n6.entity.owners.Owner;
 import com.ward_n6.entity.shelters.PetShelter;
-import com.ward_n6.repository.OwnerRepository;
+import com.ward_n6.repository.PhotoRepository;
+import com.ward_n6.repository.pets.CatRepository;
+import com.ward_n6.repository.pets.DogRepository;
+import com.ward_n6.repository.pets.PetBaseRepository;
 import com.ward_n6.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,26 +45,36 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
     private final PetsOwnerServiceImpl petsOwnerServiceImpl;
     private final PetShelter petShelter = new PetShelter() {
     };
-    private PhotoService photoService;
 
     private final ReportService reportService;
-    private OwnerRepository ownerRepository;
-
     private final OwnerServiceImpl ownerServiceImpl;
 
     private EventHandler currentHandler = null;
 
     private Owner owner = new Owner();
+    private final PetServiceImpl petService;
+    private final CatRepository catRepository;
+    private final DogRepository dogRepository;
+    private final PetBaseRepository petBaseRepository;
+    private final PhotoRepository photoRepository;
+    Photo photos = new Photo();
+
+
+
 
     public TelegramBotPetShelterUpdatesListener(BotMessageService botMessageService, TelegramBot telegramBot,
                                                 PetsOwnerServiceImpl petsOwnerServiceImpl, ReportService reportService,
-                                                OwnerRepository ownerRepository, OwnerServiceImpl ownerServiceImpl) {
+                                                OwnerServiceImpl ownerServiceImpl, PetServiceImpl petService, CatRepository catRepository, DogRepository dogRepository, PetBaseRepository petBaseRepository, PhotoRepository photoRepository) {
         this.botMessageService = botMessageService;
         this.telegramBot = telegramBot;
         this.petsOwnerServiceImpl = petsOwnerServiceImpl;
         this.reportService = reportService;
-        this.ownerRepository = ownerRepository;
         this.ownerServiceImpl = ownerServiceImpl;
+        this.petService = petService;
+        this.catRepository = catRepository;
+        this.dogRepository = dogRepository;
+        this.petBaseRepository = petBaseRepository;
+        this.photoRepository = photoRepository;
     }
 
     @PostConstruct
@@ -160,28 +174,29 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
 
                     case "/photo":
                         if (dogSelect || catSelect) {
-                            currentHandler = new PhotoHandler(telegramBot);
+                            currentHandler = new PhotoHandler(telegramBot, photoRepository);
                             sendMessage(chatId, "Отправьте фото Вашего питомца для отчёта.");
-
-
                         }
                         break;
 
                     case "/report":
                         if (dogSelect || catSelect) {
                             reportTextSelect = true;
-                            currentHandler = new ReportHandler(reportService, telegramBot);
+
+                            currentHandler = new ReportHandler(reportService, telegramBot, petService, catRepository, dogRepository, petBaseRepository);
                             sendMessage(chatId, """
                                     Для загрузки отчёта следуйте указаниям бота. Пожалуйста, заполните все пункты отчёта.
                                     Команды для отчёта (нажмите или введите):
                                     1. /ID - указать id питомца
-                                    
+                                                                        
                                     2. /action - отчёт о поведении питомца
-                                    
+                                                                        
                                     3. /health - отчёт о здоровье питомца
-                                    
+                                                            
                                     4. /feed - отчёт о питании питомца
                                     
+                                    * /photo - отправить фото
+                                                                        
                                     5. /save - сохранить отчёт""");
                         } else sendMessage(chatId, "Пожалуйста, сначала выберите приют");
                         break;
@@ -192,27 +207,27 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                         sendMessage(chatId, """
                                 Пожалуйста, укажите Ваши данные (нажмите или введите команду):
                                 1. /ln - указать фамилию
-                                
+                                                                
                                 2. /fn - указать имя
-                                
+                                                                
                                 3. /phone - указать номер телефона
-                                
+                                                                
                                 4. /save - сохранить мои контактные данные в базе приюта
-                                
+                                                                
                                 5. /delete - удалить мои данные
                                 """);
                         break;
 
                     case "/takePet":
                         if (dogSelect || catSelect) {
-                            currentHandler = new PetsOwnerHandler(petsOwnerServiceImpl, telegramBot);
+                            currentHandler = new PetsOwnerHandler(petsOwnerServiceImpl, telegramBot, catRepository, dogRepository);
 //                            Owner ownerCheck = ownerServiceImpl.getOwnerById(chatId);
 //                            if (ownerCheck != null) { // проверяем, что пользователь есть в базе
 
-                                sendMessage(chatId, """
-                                        Если после посещения приюта Вы выбрали питомца и хотите стать его другом, укажите ID питомца для бронирования и подготовки документов.
-                                        Нажмите или введите команду:
-                                        /ID""");
+                            sendMessage(chatId, """
+                                    Если после посещения приюта Вы выбрали питомца и хотите стать его другом, укажите ID питомца для бронирования и подготовки документов.
+                                    Нажмите или введите команду:
+                                    /ID""");
 //                            } else {
 //                                sendMessages(chatId,
 //                                        """

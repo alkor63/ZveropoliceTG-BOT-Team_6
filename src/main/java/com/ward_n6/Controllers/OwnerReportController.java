@@ -4,11 +4,13 @@ package com.ward_n6.Controllers;
 import com.ward_n6.entity.reports.OwnerReport;
 import com.ward_n6.exception.InvalidRequestException;
 import com.ward_n6.repository.OwnerReportRepository;
+import com.ward_n6.service.ReportService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,9 +19,11 @@ import java.util.Optional;
 public class OwnerReportController {
     //    @Resource
     private final OwnerReportRepository ownerReportRepository;
+    public final ReportService reportService;
 
-    public OwnerReportController(OwnerReportRepository ownerReportRepository) {
+    public OwnerReportController(OwnerReportRepository ownerReportRepository, ReportService reportService) {
         this.ownerReportRepository = ownerReportRepository;
+        this.reportService = reportService;
     }
 
     //++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -30,20 +34,22 @@ public class OwnerReportController {
         ownerReportRepository.save(ownerReport);
         return ResponseEntity.ok(ownerReport);
     }
-// ++++++++++++++++++++++++++++++++++++
+
+    // ++++++++++++++++++++++++++++++++++++
     @GetMapping("/{ownerReportId}")
     @Operation(summary = "Показать один отчёт по id",
             description = "нужно указать id отчёта")
     public ResponseEntity<OwnerReport> getOwnerReportById(@PathVariable Integer ownerReportId) {
         long longId = ownerReportId;
         Optional<OwnerReport> optionalOwnerReport = ownerReportRepository.findById(longId);
-        if(optionalOwnerReport.isPresent()) {
+        if (optionalOwnerReport.isPresent()) {
             final OwnerReport ownerReport = optionalOwnerReport.get();
-        return ResponseEntity.ok(ownerReport);}
-          return ResponseEntity.notFound().build();
+            return ResponseEntity.ok(ownerReport);
+        }
+        return ResponseEntity.notFound().build();
     }
 
-//+++++++++++++++++++++++++++++++++++++++++
+    //+++++++++++++++++++++++++++++++++++++++++
     @DeleteMapping("/{ownerReportId}")
     @Operation(summary = "Удалить один отчёт из списка",
             description = "нужно указать id отчёта")
@@ -70,22 +76,15 @@ public class OwnerReportController {
     @Operation(summary = "Отредактировать отчёт",
             description = "нужно указать id и заполнить все поля отчёта в Body")
     public ResponseEntity<OwnerReport> editOwnerReportById(@PathVariable int ownerReportId, @RequestBody OwnerReport ownerReport) {
-        if (ownerReport == null ) {
+        if (ownerReport == null) {
             //удалено: || ownerReport.getId() == null
             throw new InvalidRequestException("PatientRecord or ID must not be null!");
         }
-        Optional <OwnerReport> optionalOwnerReport = ownerReportRepository.findById(ownerReport.getOwnerId());
-        if (optionalOwnerReport.isEmpty()) {
-            return ResponseEntity.notFound().build();
+        Optional<OwnerReport> optionalOwnerReport = ownerReportRepository.findById(ownerReport.getOwnerId());
+        if (!optionalOwnerReport.isPresent()) {
+            throw new EntityNotFoundException("Невозможно изменить отчёт, т.к. в базе нет отчёта с id = " + ownerReportId);
         }
-        OwnerReport existingOwnerReport = (OwnerReport) optionalOwnerReport.get();
-
-        existingOwnerReport.setHavePhoto(ownerReport.isHavePhoto());
-        existingOwnerReport.setNutrition(ownerReport.getNutrition());
-        existingOwnerReport.setPetsBehavior(ownerReport.getPetsBehavior());
-        existingOwnerReport.setPetsHealth(ownerReport.getPetsHealth());
-        existingOwnerReport.setReportDateTime(ownerReport.getReportDateTime());
-
+        reportService.optiOwnerReport(ownerReport);
         ownerReportRepository.save(ownerReport);
         return ResponseEntity.ok(ownerReport);
     }

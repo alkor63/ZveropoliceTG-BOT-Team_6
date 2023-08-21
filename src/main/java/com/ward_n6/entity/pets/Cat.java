@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @Table(name = "cats")
 @PrimaryKeyJoinColumn(name = "CAT")
 @DiscriminatorValue("CAT")
-//@NoArgsConstructor
+
 
 
 public class Cat extends Pet {

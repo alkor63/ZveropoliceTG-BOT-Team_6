@@ -7,12 +7,17 @@ import com.ward_n6.entity.owners.Owner;
 import com.ward_n6.entity.owners.PetsOwner;
 import com.ward_n6.entity.pets.Pet;
 import com.ward_n6.enums.PetsType;
+import com.ward_n6.repository.pets.CatRepository;
+import com.ward_n6.repository.pets.DogRepository;
 import com.ward_n6.service.OwnerServiceImpl;
 import com.ward_n6.service.PetServiceImpl;
 import com.ward_n6.service.PetsOwnerServiceImpl;
 
 import java.util.function.Consumer;
-
+/**
+ * класс для обработки и сохранения связки овнер-питомец и отслеживания испытательгых сроков
+ * НЕ РАБОТАЕТ!!!!!
+ */
 public class PetsOwnerHandler implements EventHandler {
     private final PetsOwnerServiceImpl petsOwnerServiceImpl;
     private final TelegramBot telegramBot;
@@ -20,11 +25,15 @@ public class PetsOwnerHandler implements EventHandler {
     private final PetsOwner petsOwner = new PetsOwner();
     private PetServiceImpl petService;
     private OwnerServiceImpl ownerService;
+    private final CatRepository catRepository;
+    private final DogRepository dogRepository;
 
-    public PetsOwnerHandler(PetsOwnerServiceImpl petsOwnerServiceImpl, TelegramBot telegramBot) {
+    public PetsOwnerHandler(PetsOwnerServiceImpl petsOwnerServiceImpl, TelegramBot telegramBot, CatRepository catRepository, DogRepository dogRepository) {
         this.petsOwnerServiceImpl = petsOwnerServiceImpl;
         this.telegramBot = telegramBot;
 
+        this.catRepository = catRepository;
+        this.dogRepository = dogRepository;
     }
 
     private Consumer<Update> actionOnNextMessage;
@@ -59,15 +68,15 @@ public class PetsOwnerHandler implements EventHandler {
                             // КОШКИ
                             if (TelegramBotPetShelterUpdatesListener.catSelect) { // если кошачий приют, ищем в кошках
                                 petsOwner.setPetsType(PetsType.CAT); // присваиваем тип животного
-                                Pet cat = petService.getCatById(petId);
+                                Pet cat = catRepository.getById(petId);
 
                                 if (cat != null) { // проверяем на кошках, что такой ID есть
                                     petsOwner.setPet(cat);
                                     cat.setOwnerId(ownerId); // заносим ID пользователя в таблицу питомца
                                     telegramBot.execute(new SendMessage(update.message().chat().id(),
-                                            "Питомец" + petService.getCatById(petId).getPetsType().getTitle() + " "
-                                                    + petService.getCatById(petId).getId() + " "
-                                                    + petService.getCatById(petId).getPetName() + "забронирован за Вами"));
+                                            "Питомец" + catRepository.getById(petId).getPetsType().getTitle() + " "
+                                                    + catRepository.getById(petId).getId() + " "
+                                                    + catRepository.getById(petId).getPetName() + "забронирован за Вами"));
                                 } else {
                                     telegramBot.execute(new SendMessage(update.message().chat().id(),
                                             "Питомец с указанным ID отсутствует в нашем приюте. " +
@@ -82,9 +91,9 @@ public class PetsOwnerHandler implements EventHandler {
                                     petsOwner.setPet(dog);
                                     dog.setOwnerId(ownerId);
                                     telegramBot.execute(new SendMessage(update.message().chat().id(),
-                                            "Питомец" + petService.getDogById(petId).getPetsType().getTitle() + " "
-                                                    + petService.getDogById(petId).getId() + " "
-                                                    + petService.getDogById(petId).getPetName() + "забронирован за Вами."));
+                                            "Питомец" + dogRepository.getById(petId).getPetsType().getTitle() + " "
+                                                    + dogRepository.getById(petId).getId() + " "
+                                                    + dogRepository.getById(petId).getPetName() + "забронирован за Вами."));
 
                                 } else {
                                     telegramBot.execute(new SendMessage(update.message().chat().id(),

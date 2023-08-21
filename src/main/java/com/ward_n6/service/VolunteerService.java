@@ -5,9 +5,9 @@ import com.ward_n6.entity.owners.PetsOwner;
 import com.ward_n6.entity.pets.Pet;
 import com.ward_n6.entity.reports.OwnerReport;
 import com.ward_n6.enums.PetsType;
-import com.ward_n6.repository.OwnerReportRepository;
 import com.ward_n6.repository.PetsOwnerArchiveRepository;
 import com.ward_n6.repository.PetsOwnerRepository;
+import com.ward_n6.repository.ReportRepository;
 import com.ward_n6.repository.pets.PetBaseRepository;
 import com.ward_n6.service.interfaces.PetsOwnerService;
 import org.springframework.stereotype.Service;
@@ -34,11 +34,11 @@ public class VolunteerService {
     private final PetsOwnerArchiveRepository petsOwnerArchiveRepository;
     private final PetsOwnerService petsOwnerService;
     @Resource
-    private final OwnerReportRepository ownerReportRepository;
+    private final ReportRepository ownerReportRepository;
     private final PetBaseRepository petBaseRepository;
 
     public VolunteerService(PetsOwnerRepository petsOwnerRepository, PetsOwnerArchiveRepository petsOwnerArchiveRepository,
-                            PetsOwnerService petsOwnerService, OwnerReportRepository ownerReportRepository,
+                            PetsOwnerService petsOwnerService,ReportRepository ownerReportRepository,
                             PetBaseRepository petBaseRepository) {
         this.petsOwnerRepository = petsOwnerRepository;
         this.petsOwnerArchiveRepository = petsOwnerArchiveRepository;

@@ -34,8 +34,7 @@ public class PetServiceImpl implements PetService {
         return 0;
     }
 
-
-
+    public Pet addPet(Pet pet){return null;};
     @Override
     public Pet getPetById(int recordId) {
         return null;
@@ -80,9 +79,10 @@ public class PetServiceImpl implements PetService {
     ///**************************** методы репозитория **************
     private Pet cat = new Cat();
     private Pet dog = new Dog();
-   public Pet getPetById (long petId){
-      return cat = catRepository.getById(petId);
-   }
+
+    public Pet getPetById(long petId) {
+        return cat = catRepository.getById(petId);
+    }
 
     //************* КОШКИ: ************
 
@@ -91,10 +91,9 @@ public class PetServiceImpl implements PetService {
     }
 
 
-        public Pet getCatById (long petId){
-            return cat = catRepository.getById(petId);
-        }
-
+    public Pet getCatById(long petId) {
+        return cat = catRepository.getById(petId);
+    }
 
 
     // ******************* СОБАКИ ****************
@@ -102,7 +101,7 @@ public class PetServiceImpl implements PetService {
         dogRepository.save(dog);
     }
 
-    public Pet getDogById (long petId){
+    public Pet getDogById(long petId) {
         return dog = dogRepository.getById(petId);
     }
 }
