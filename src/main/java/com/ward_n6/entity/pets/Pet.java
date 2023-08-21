@@ -18,7 +18,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Builder
+
 @Table(name = "pets")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS) // каждому наследнику свою таблицу
 
