@@ -1,15 +1,17 @@
 package com.ward_n6.entity.pets;
 
-import com.ward_n6.entity.owners.Owner;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ward_n6.enums.PetsSex;
 import com.ward_n6.enums.PetsType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.Objects;
 
 /** класс, содержащий общие свойства для кошек и собак и для создания отдельных
@@ -21,21 +23,22 @@ import java.util.Objects;
 @Table(name = "pets")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS) // каждому наследнику свою таблицу
 
+
+
 public abstract class Pet {
 
     @javax.persistence.Id
     @Column(name = "pet_id", nullable = false)
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO) // стратегия будет выбрана автоматически, так как IDENTITY по умолчанию здесь не компилируется \о/
+ //   @GeneratedValue(strategy = GenerationType.IDENTITY)
+   @GeneratedValue(strategy = GenerationType.AUTO) // стратегия будет выбрана автоматически, так как IDENTITY по умолчанию здесь не компилируется \о/
     private Long id;
 
     @Column(name = "bread")
     private String bread;
-
-    private int petAge;
-
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "pet_birthday")
-    private LocalDateTime petBirthDay;
+    private LocalDate petBirthDay;
 
     @Column(name = "pet_name")
     private String petName;
@@ -43,76 +46,59 @@ public abstract class Pet {
     @Column(name = "sex")
     private PetsSex petsSex;
 
+    @JsonIgnore
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "pets_type", insertable = false, updatable = false)
-    protected PetsType petsType;
-
-    @ManyToOne
-    @JoinColumn(name = "owner_id", insertable = false, updatable = false)
-    private Owner Owner;
+    @Column(name = "pets_type")
+    private PetsType petsType;
 
 
+    @JoinColumn(name = "owner_id")
+    private long ownerId;
 
-    public Pet(long id, PetsType petsType, PetsSex petsSex, String petName, LocalDateTime petBirthDay, int petAge, String bread, Owner Owner) {
+
+
+    public Pet(long id, PetsType petsType, PetsSex petsSex, String petName, LocalDate petBirthDay, String bread, Long ownerId) {
         this.id = id;
         this.petsSex = petsSex;
         this.petsType = petsType;
         this.petName = petName;
         this.petBirthDay = petBirthDay;
-        //  this.petAge = LocalDate.now().getYear() - petBirthDay.getYear();
-        this.Owner = Owner;
+        this.ownerId = ownerId;
         this.bread = bread;
 
     }
 
-    public Pet(PetsType petsType, PetsSex petsSex, String petName, LocalDateTime petBirthDay, int petAge, String bread, Owner Owner) {
-        this.petsType = petsType;
-        this.petsSex = petsSex;
-        this.petName = petName;
-        this.petBirthDay = petBirthDay;
-        //    this.petAge = LocalDate.now().getYear() - petBirthDay.getYear();
-        this.bread = bread;
-    }
-
-    public Pet(PetsType petsType, PetsSex petsSex, String petName, LocalDateTime petBirthDay, String bread) {
+    public Pet(PetsType petsType, PetsSex petsSex, String petName, LocalDate petBirthDay, String bread) {
         this.petsType = petsType;
         this.petsSex = petsSex;
         this.petName = petName;
         this.petBirthDay = petBirthDay;
         this.bread = bread;
-        this.Owner = Owner;
     }
 
-    public Pet(long id, PetsType petsType, PetsSex petsSex, String petName, int petAge, String bread, Owner Owner) {
-        this.id = id;
-        this.petsType = petsType;
-        this.petsSex = petsSex;
-        this.petName = petName;
-        this.petAge = LocalDateTime.now().getYear() - petBirthDay.getYear();
-        this.bread = bread;
-        this.Owner = Owner;
-    }
 
+    private int getAge() {
+        return Period.between(petBirthDay, LocalDate.now()).getYears();
+    }
 
     @Override
     public String toString() {
         return "Pet{" +
                 "ID " + id +
-                ", животное " + petsType.getTitle() +
-                ", кличка " + petName + '\'' +
-                ", дата рождения: " + petBirthDay +
-                ", возраст, лет: " +
-                ", порода " + bread + '\'' +
-                ", владелец: " + Owner.getId() + " " + Owner.getLastName() + " " +
-                Owner.getFirstName() + " " + Owner.getPhoneNumber() + '\'' +
-                '}';
+                ", животное " + petsType.getTitle() + '\n' +
+                ", кличка " + petName + '\n' +
+                ", дата рождения: " + petBirthDay + '\n' +
+                ", пол: " + petsSex.getTitle() + '\n' +
+                ", возраст: " + getAge() + '\n' +
+                ", порода " + bread + '\n' +
+                ", id владельца: " + ownerId + '}' + '\n';
     }
     public String reportToString() {
         return "Pet{" +
                 "ID " + id +
                 " " + petsType.getTitle() +
                 ", кличка " + petName + '\'' +
-                ", возраст, лет: " + petAge +
+                ", возраст, лет: " + getAge() +
                 ", порода " + bread + '\'' +
                 '}';
 
@@ -123,11 +109,11 @@ public abstract class Pet {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Pet pet = (Pet) o;
-        return petAge == pet.petAge && Objects.equals(id, pet.id) && Objects.equals(bread, pet.bread) && Objects.equals(petBirthDay, pet.petBirthDay) && Objects.equals(petName, pet.petName) && petsSex == pet.petsSex && petsType == pet.petsType && Objects.equals(Owner, pet.Owner);
+        return Objects.equals(id, pet.id) && Objects.equals(bread, pet.bread) && Objects.equals(petBirthDay, pet.petBirthDay) && Objects.equals(petName, pet.petName) && petsSex == pet.petsSex && petsType == pet.petsType && Objects.equals(ownerId, pet.ownerId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, bread, petAge, petBirthDay, petName, petsSex, petsType, Owner);
+        return Objects.hash(id, bread, petBirthDay, petName, petsSex, petsType, ownerId);
     }
 }
