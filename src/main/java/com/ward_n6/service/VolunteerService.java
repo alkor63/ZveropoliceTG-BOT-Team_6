@@ -5,15 +5,12 @@ import com.ward_n6.entity.owners.PetsOwner;
 import com.ward_n6.entity.owners.PetsOwnerArchive;
 import com.ward_n6.entity.reports.OwnerReport;
 import com.ward_n6.entity.pets.Pet;
-import com.ward_n6.enums.PetsSex;
-import com.ward_n6.repository.OwnerReportRepository;
 import com.ward_n6.repository.PetRepository;
 import com.ward_n6.repository.PetsOwnerArchiveRepository;
 import com.ward_n6.repository.PetsOwnerRepository;
 import javassist.NotFoundException;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -34,19 +31,23 @@ public class VolunteerService {
    private final PetsOwnerRepository petsOwnerRepository;
     private final PetsOwnerArchiveRepository petsOwnerArchiveRepository;
     private final PetsOwnerService petsOwnerService;
-    @Resource
-    private final OwnerReportRepository ownerReportRepository;
+//    @Resource
+    private final OwnerReportService ownerReportService;
     private final PetRepository petRepository;
 
-    public VolunteerService(PetsOwnerRepository petsOwnerRepository, PetsOwnerArchiveRepository petsOwnerArchiveRepository, PetsOwnerService petsOwnerService, OwnerReportRepository ownerReportRepository, PetRepository petRepository) {
+    public VolunteerService(PetsOwnerRepository petsOwnerRepository,
+                            PetsOwnerArchiveRepository petsOwnerArchiveRepository,
+                            PetsOwnerService petsOwnerService,
+                            OwnerReportService ownerReportService,
+                            PetRepository petRepository) {
         this.petsOwnerRepository = petsOwnerRepository;
         this.petsOwnerArchiveRepository = petsOwnerArchiveRepository;
         this.petsOwnerService = petsOwnerService;
-        this.ownerReportRepository = ownerReportRepository;
+        this.ownerReportService = ownerReportService;
         this.petRepository = petRepository;
     }
 
-
+    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     public String callVolunteer(String firstName) {
         // Волонтёр откликается на просьбу о связи от пользователя с именем firstName
         return "Привет, " + firstName + "! Я Игорь - волонтёр приюта для животных. Готов ответить на все вопросы";
@@ -92,7 +93,7 @@ public class VolunteerService {
         }
     }
 
-
+// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     public String viewAllReports(LocalDate date) {
         // просмотр всех отчетов за прошедшие сутки (с 21:00 предыдущего дня по 21:00 дня = date
         int num = 0;
@@ -104,7 +105,7 @@ public class VolunteerService {
 //        List<OwnerReport> ownerReportList = new ArrayList<>();
         //(ownerReportRepository.getAllOwnerReports());
 
-        List<OwnerReport> allOwnerReports = ownerReportRepository.findAll();
+        List<OwnerReport> allOwnerReports = ownerReportService.getAllOwnerReports();
 //        System.out.println("ownerReportList = " + allOwnerReports);
         for (OwnerReport ownerReport : allOwnerReports) {
             LocalDateTime dateTime = ownerReport.getReportDateTime();
@@ -119,7 +120,7 @@ public class VolunteerService {
         // num - количество отчетов за 24 часа до 21:00 указанной даты
     }
 
-    public int endOfProbationPeriod(PetsOwner petWithOwner) {
+    int endOfProbationPeriod(PetsOwner petWithOwner) {
 
 // Исходим из того, что запрос на "приговор" приходит в день окончания испытательного срока
 // т.е. дата = localDate.now()
@@ -133,9 +134,9 @@ public class VolunteerService {
         LocalDate before60 = today.minusDays(61);
         // list всех отчетов
         // foreach для всех отчетов
-        for (OwnerReport ownerReport : ownerReportRepository.findAll()) {
+        for (OwnerReport ownerReport : ownerReportService.getAllOwnerReports()) {
             LocalDate date = ownerReport.getReportDateTime().toLocalDate();
-            if (ownerReport.getPetId() == petId) {
+            if (petId == ownerReport.getPetId()) {
                 if (date.isBefore(before30) && date.isAfter(before60)) {
                     numOldReport++;
                     break;
@@ -149,10 +150,11 @@ public class VolunteerService {
         else return 3;
     }
 
-    // метод обработки "приговора", вызывающий endOfProbationPeriod() - перенести в listener Боту
+    // метод обработки "приговора", вызывающий endOfProbationPeriod() - перенести в Timer
     public String ownersVerdict(PetsOwner petWithOwner) {
         int rating = endOfProbationPeriod(petWithOwner);
-        Integer id = Math.toIntExact(petWithOwner.getId());
+//       Integer id = Math.toIntExact(petWithOwner.getId());
+//        long id = petWithOwner.getId();
         switch (rating) {
             case 0:
                 // вернуть животное в приют
@@ -182,12 +184,12 @@ public class VolunteerService {
             case 3:
                 // поздравить с успешным прохождением испытательного срока
                 try {
-                    removePetsOwnerToArchive(petWithOwner);
+//                    removePetsOwnerToArchive(petWithOwner);
                     // method is Boolean
 //              перемещаем запись о животном и хозяине в архив
 //              удаляем запись о животном и хозяине из таблицы с испытательным сроком
 //              удаляем запись о животном из таблицы Pet - этого животного больше нет в приюте
-                    petRepository.deleteById(petWithOwner.getId());
+//                    petRepository.deleteById(petWithOwner.getPetId());
 
                     return "Поздравляем с завершением испытательного срока! Ваш питомец остаётся с Вами навсегда";
                 } catch (Exception e) {

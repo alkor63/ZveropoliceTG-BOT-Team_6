@@ -52,14 +52,7 @@ public class OwnerReportServiceTest {
 //        OwnerReport ownerReport3 = new OwnerReport(3L, LocalDateTime.now(), false, "fish", "normal", "Ok", 3L);
 @Autowired
         OwnerReportServiceImpl ownerReportService;
-//        @Autowired
-//        OwnerReportServiceImpl ownerReportService;
 
-//        @Mock
-//        private OwnerReportRepository ownerReportRepository;
-
-//        @InjectMocks
-//        private OwnerReportServiceImpl ownerReportService;
         @BeforeEach
         public void setup() {
 

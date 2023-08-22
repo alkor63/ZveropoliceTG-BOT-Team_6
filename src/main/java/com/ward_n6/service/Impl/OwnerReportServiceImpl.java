@@ -5,7 +5,6 @@ import com.ward_n6.entity.reports.OwnerReport;
 import com.ward_n6.exception.RecordNotFoundException;
 import com.ward_n6.repository.OwnerReportRepository;
 import com.ward_n6.service.OwnerReportService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -14,21 +13,12 @@ import java.util.Optional;
 
 @Service
 public class OwnerReportServiceImpl implements OwnerReportService {
-//    private final OwnerReportRepository ownerReportRepository;
-//
-//    public OwnerReportServiceImpl(OwnerReportRepository ownerReportRepository) {
-//        this.ownerReportRepository = ownerReportRepository;
-//    }
-@Autowired
+    private final OwnerReportRepository ownerReportRepository;
 
-    private OwnerReportRepository ownerReportRepository;
+    public OwnerReportServiceImpl(OwnerReportRepository ownerReportRepository) {
+        this.ownerReportRepository = ownerReportRepository;
+    }
 
-/*
-@Service
-public class OwnerReportService {
-
-}
- */
 
     //++++++++++++++++++++++++++++++++++++++++++++++++++++
     @Override
@@ -42,17 +32,7 @@ public class OwnerReportService {
         return ownerReportRepository.findAll();
     }
 
-    // ++++++++++++++++++++++++++++++++++++
-//    @Override
-//    public OwnerReport getOwnerReportById(Integer ownerReportId)
-//            throws EntityNotFoundException {
-//        long longId = ownerReportId;
-//        Optional<OwnerReport> optionalOwnerReport = ownerReportRepository.findById(longId);
-//        if (optionalOwnerReport.isPresent())
-//            return optionalOwnerReport.get();
-//
-//        throw new EntityNotFoundException("В базе нет отчёта с id=" + ownerReportId);
-//    }
+
     @Override
     public OwnerReport getOwnerReportById(Integer ownerReportId) {
         long longId = ownerReportId;
