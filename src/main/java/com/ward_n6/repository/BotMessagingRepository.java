@@ -10,4 +10,6 @@ public interface BotMessagingRepository extends JpaRepository<BotMessaging, Long
     List<BotMessaging> textingWithOwner = new ArrayList<>();
     @Override
     List<BotMessaging> findAll();
+
+
 }

@@ -1,10 +1,13 @@
 package com.ward_n6.service.interfaces;
 
 import com.ward_n6.entity.PetWithOwner;
-import com.ward_n6.service.Impl.DeleteFromMapException;
-import com.ward_n6.service.Impl.EditMapException;
-import com.ward_n6.service.Impl.PutToMapException;
+import com.ward_n6.entity.owners.PetsOwner;
+import com.ward_n6.exception.DeleteFromMapException;
+import com.ward_n6.exception.EditMapException;
+import com.ward_n6.exception.PutToMapException;
+import javassist.NotFoundException;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface PetsOwnerArchiveService {
@@ -18,7 +21,10 @@ public interface PetsOwnerArchiveService {
 
     PetWithOwner editArchivePetWithOwnerById(int recordId, PetWithOwner petWithOwner) throws EditMapException;
 
-    void deleteAllFromArchive();
+    boolean deleteAllFromArchive();
 
     boolean deleteFromArchivePetWithOwnerById(int recordId) throws DeleteFromMapException;
+
+    PetsOwner editDateEndPetsOwnerById(int petsOwnerId, LocalDate newDateEnd)
+            throws NotFoundException;
 }

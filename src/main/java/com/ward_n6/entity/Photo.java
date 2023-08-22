@@ -1,31 +1,46 @@
 package com.ward_n6.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.pengrad.telegrambot.model.PhotoSize;
+import lombok.*;
+import org.springframework.stereotype.Component;
 
+import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Objects;
-
-@AllArgsConstructor
+/**
+ * класс - попытка сохранить хоть как-то фото
+ */
+@Component
 @NoArgsConstructor
-@Setter
 @Getter
+@Setter
+@Builder
+@Entity
+@AllArgsConstructor
+@Table(name = "Photos")
 
 public class Photo {
-    private Long id;
-    private String fileId;
-    private String caption;
+    @javax.persistence.Id
+    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    @Lob
+    @Column(name = "photo", nullable = false)
+    PhotoSize photo;
+
+    @Column(name = "date_time", nullable = false)
+    LocalDateTime dateTime;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Photo photo)) return false;
-        return Objects.equals(getId(), photo.getId()) && Objects.equals(getFileId(), photo.getFileId()) && Objects.equals(getCaption(), photo.getCaption());
+        if (!(o instanceof Photo photo1)) return false;
+        return getId() == photo1.getId() && Objects.equals(getPhoto(), photo1.getPhoto()) && Objects.equals(getDateTime(), photo1.getDateTime());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getFileId(), getCaption());
+        return Objects.hash(getId(), getPhoto(), getDateTime());
     }
 }

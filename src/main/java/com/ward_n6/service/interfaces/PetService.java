@@ -1,18 +1,19 @@
 package com.ward_n6.service.interfaces;
 
 import com.ward_n6.entity.pets.Pet;
-import com.ward_n6.service.Impl.DeleteFromMapException;
-import com.ward_n6.service.Impl.EditMapException;
-import com.ward_n6.service.Impl.PutToMapException;
+import com.ward_n6.exception.DeleteFromMapException;
+import com.ward_n6.exception.EditMapException;
 
 import java.util.List;
 
 public interface PetService {
     int getId();
 
-    Pet addPet(Pet pet) throws PutToMapException;
+
 
     Pet getPetById(int recordId);
+
+    Pet getPetByIdInt(int recordId);
 
     List<Pet> getAllPets();
 

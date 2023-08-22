@@ -15,8 +15,5 @@ public class OwnerTrialPriodTimer {
         this.telegramBot = telegramBot;
     }
 
-    // продление испытательного срока
-    // @Scheduled
-    // удаление из БД / перенос в чёрный список после ИС
-    //завершение испытательного срока
 }
+

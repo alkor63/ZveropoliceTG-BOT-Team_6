@@ -1,9 +1,9 @@
 package com.ward_n6.service.interfaces;
 
 import com.ward_n6.entity.owners.Owner;
-import com.ward_n6.service.Impl.DeleteFromMapException;
-import com.ward_n6.service.Impl.EditMapException;
-import com.ward_n6.service.Impl.PutToMapException;
+import com.ward_n6.exception.DeleteFromMapException;
+import com.ward_n6.exception.EditMapException;
+import com.ward_n6.exception.PutToMapException;
 
 import java.util.List;
 
@@ -12,8 +12,8 @@ public interface OwnerService {
 
     Owner addOwner(Owner owner) throws PutToMapException;
 
-    // добавление в БД
-//    Owner addOwnerToDB(Owner owner);
+//     добавление в БД
+    Owner addOwnerToDB(Owner owner);
 
     Owner getOwnerById(int recordId);
 
@@ -28,4 +28,5 @@ public interface OwnerService {
     boolean deleteOwnerByValue(Owner owner) throws DeleteFromMapException;
 
     int idOwnerByValue(Owner owner);
+
 }
