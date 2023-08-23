@@ -16,12 +16,8 @@ import com.vdurmont.emoji.EmojiParser;
 import com.ward_n6.entity.BotMessaging;
 import com.ward_n6.entity.owners.Owner;
 import com.ward_n6.entity.shelters.PetShelter;
-import com.ward_n6.repository.Impl.OwnerServiceImpl;
 import com.ward_n6.repository.OwnerRepository;
-import com.ward_n6.service.BotMessageService;
-import com.ward_n6.service.Impl.PetsOwnerServiceImpl;
-import com.ward_n6.service.PhotoService;
-import com.ward_n6.service.ReportService;
+import com.ward_n6.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,6 +29,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Component
@@ -174,7 +171,7 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                         if (dogSelect || catSelect) {
                             reportTextSelect = true;
                             currentHandler = new ReportHandler(reportService, telegramBot);
-                            sendMessage(chatId, """
+                            sendMessage(chatId, EmojiParser.parseToUnicode("""
                                     Для загрузки отчёта следуйте указаниям бота. Пожалуйста, заполните все пункты отчёта.
                                     Команды для отчёта (нажмите или введите):
                                     1. /ID - указать id питомца
@@ -185,7 +182,7 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                                     
                                     4. /feed - отчёт о питании питомца
                                     
-                                    5. /save - сохранить отчёт""");
+                                    5. /save - сохранить отчёт"""));
                         } else sendMessage(chatId, "Пожалуйста, сначала выберите приют");
                         break;
 

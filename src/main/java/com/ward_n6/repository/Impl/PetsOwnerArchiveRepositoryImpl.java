@@ -3,8 +3,6 @@ package com.ward_n6.repository.Impl;
 import com.ward_n6.entity.PetWithOwner;
 import com.ward_n6.exception.DeleteFromMapException;
 import com.ward_n6.exception.EditMapException;
-import com.ward_n6.exception.PutToMapException;
-import com.ward_n6.repository.PetsOwnerArchiveRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -13,17 +11,17 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
-public class PetsOwnerArchiveRepositoryImpl implements PetsOwnerArchiveRepository {
+public class PetsOwnerArchiveRepositoryImpl {
     private Map<Integer, PetWithOwner> petWithOwnerMap = new HashMap<>();
     private int mapId = 0;
 
 
-    @Override
+
     public int getId() {
         return mapId;
     }
 
-    @Override
+
     public PetWithOwner addToArchivePetWithOwner(PetWithOwner petWithOwner) {
         if (petWithOwner.equals(null)) throw new NullPointerException(
                 "ОШИБКА при попытке добавить petWithOwner=Null в архив ownerReportMap");
@@ -31,17 +29,17 @@ public class PetsOwnerArchiveRepositoryImpl implements PetsOwnerArchiveRepositor
         return petWithOwner;
     }
 
-    @Override
+
     public PetWithOwner getFromArchivePetWithOwnerById(int recordId) {
         return petWithOwnerMap.get(recordId);
     }
 
-    @Override
+
     public List<PetWithOwner> getAllFromArchivePetWithOwner() {
         return new ArrayList<>(petWithOwnerMap.values());
     }
 
-    @Override
+
     public PetWithOwner editArchivePetWithOwnerById(int recordId, PetWithOwner petWithOwner) throws EditMapException {
         if (petWithOwnerMap.containsKey(recordId)) {
             petWithOwnerMap.put(recordId, petWithOwner);
@@ -56,13 +54,13 @@ public class PetsOwnerArchiveRepositoryImpl implements PetsOwnerArchiveRepositor
         return petWithOwner;
     }
 
-    @Override
+
     public boolean deleteAllFromArchive() {
         petWithOwnerMap.clear();
         return true;
     }
 
-    @Override
+
     public boolean deleteFromArchivePetWithOwnerById(int recordId) throws DeleteFromMapException {
         if (petWithOwnerMap.containsKey(recordId)) {
             petWithOwnerMap.remove(recordId);
