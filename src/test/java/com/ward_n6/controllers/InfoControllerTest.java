@@ -1,6 +1,5 @@
-package com.ward_n6.controllers;
+package com.ward_n6.Controllers;
 
-import com.ward_n6.Controllers.InfoController;
 import org.junit.jupiter.api.Test;
 
 import static com.ward_n6.OwnerAndPetConstants.INFO;

@@ -60,8 +60,6 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
     Photo photos = new Photo();
 
 
-
-
     public TelegramBotPetShelterUpdatesListener(BotMessageService botMessageService, TelegramBot telegramBot,
                                                 PetsOwnerServiceImpl petsOwnerServiceImpl, ReportService reportService,
                                                 OwnerServiceImpl ownerServiceImpl, PetServiceImpl petService, CatRepository catRepository, DogRepository dogRepository, PetBaseRepository petBaseRepository, PhotoRepository photoRepository) {
@@ -194,7 +192,7 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                                     3. /health - отчёт о здоровье питомца
                                                             
                                     4. /feed - отчёт о питании питомца
-                                    
+                                                                        
                                     * /photo - отправить фото
                                                                         
                                     5. /save - сохранить отчёт""");
@@ -225,20 +223,19 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
 //                            if (ownerCheck != null) { // проверяем, что пользователь есть в базе
 
                             sendMessage(chatId, """
-                                    Если после посещения приюта Вы выбрали питомца и хотите стать его другом, укажите ID питомца для бронирования и подготовки документов.
-                                    Нажмите или введите команду:
-                                    /ID""");
-//                            } else {
-//                                sendMessages(chatId,
-//                                        """
-//                                                В нашей базе отсутствуют Ваши данные. Чтобы продолжить,
-//                                                пожалуйста, сначала зарегистрируйтесь в нашем приюте:
-//                                                 /myData - регистрация в приюте,
-//                                                 или  обратитесь к волонтёру:
-//                                                 /volunteer
-//                                                 """);
-//                            }
+                                    Введите номер ID интересующего питомца, который Вам сообщил волонтёр. 
+                                    Если Вы не знаете ID питомца, позовите волонтёра:
+                                    /volunteer
+                                    Вернуться в начало:
+                                    /start
+                                    /cat
+                                    /dog
+                                    """);
                         }
+                        break;
+                        // проверка метода
+                    case "/1":
+                      sendMessage(chatId, catRepository.getById(1L).toString());
                         break;
 
                     case "/volunteer":
@@ -521,4 +518,5 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
             }
         }
     }
+
 }

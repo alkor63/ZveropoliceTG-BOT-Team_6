@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
+
 /**
  * класс - попытка сохранить хоть как-то фото
  */
@@ -27,10 +28,10 @@ public class Photo {
 
     @Lob
     @Column(name = "photo", nullable = false)
-    PhotoSize photo;
+    private PhotoSize photo;
 
     @Column(name = "date_time", nullable = false)
-    LocalDateTime dateTime;
+    private LocalDateTime dateTime;
 
     @Override
     public boolean equals(Object o) {

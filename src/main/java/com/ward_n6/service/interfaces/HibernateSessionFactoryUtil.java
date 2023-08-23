@@ -1,7 +1,11 @@
-package factory;
+package com.ward_n6.service.interfaces;
 
 import com.ward_n6.entity.owners.Owner;
+import com.ward_n6.entity.owners.PetsOwner;
+import com.ward_n6.entity.pets.Cat;
+import com.ward_n6.entity.pets.Dog;
 import com.ward_n6.entity.pets.Pet;
+import com.ward_n6.entity.reports.OwnerReport;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
@@ -19,6 +23,10 @@ public class HibernateSessionFactoryUtil {
                 Configuration configuration = new Configuration().configure();
                 configuration.addAnnotatedClass(Owner.class);
                 configuration.addAnnotatedClass(Pet.class);
+                configuration.addAnnotatedClass(Cat.class);
+                configuration.addAnnotatedClass(Dog.class);
+                configuration.addAnnotatedClass(PetsOwner.class);
+                configuration.addAnnotatedClass(OwnerReport.class);
                 StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
                         .applySettings(configuration
                                 .getProperties());

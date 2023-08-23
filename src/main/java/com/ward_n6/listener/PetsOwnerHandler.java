@@ -52,13 +52,13 @@ public class PetsOwnerHandler implements EventHandler {
 //                        /ID
 //                        """));
         var text = update.message().text();
-            switch (text) {
-                case "/ID":
-                    telegramBot.execute(new SendMessage(update.message().chat().id(),
-                            """
-                                    Введите номер ID интересующего питомца, который Вам сообщил волонтёр. 
-                                    Если Вы не знаете ID питомца, позовите волонтёра:
-                                    /volunteer"""));
+//            switch (text) {
+//                case "/ID":
+//                    telegramBot.execute(new SendMessage(update.message().chat().id(),
+//                            """
+//                                    Введите номер ID интересующего питомца, который Вам сообщил волонтёр.
+//                                    Если Вы не знаете ID питомца, позовите волонтёра:
+//                                    /volunteer"""));
                     actionOnNextMessage = upd -> {
                         var ownerId = update.message().chat().id();
                         var idMessage = upd.message().text();
@@ -113,10 +113,7 @@ public class PetsOwnerHandler implements EventHandler {
                             telegramBot.execute(new SendMessage(update.message().chat().id(),
                                     "Формат ID неверный, введите числовое значение ID выбранного питомца, нажмите или введите /ID"));
                         }
-                    };
-                   return true;
-
-            }return false;
+                    };return true;
         }
 
 }

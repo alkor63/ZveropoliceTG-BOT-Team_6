@@ -32,7 +32,7 @@ public class PetsOwner {
     @Column(name = "pet_id", nullable = false)
     private long petId;
 
-    @ManyToOne
+//    @ManyToOne
     @Transient
     @JoinColumn(name = "owner_id", referencedColumnName = "owner_id")
     private Owner owner;
@@ -41,7 +41,7 @@ public class PetsOwner {
     @Enumerated(EnumType.STRING)
     private PetsType petsType;
 
-    @ManyToOne
+//    @ManyToOne
     @Transient
     @JoinColumn(name = "pet", insertable = false, updatable = false)
     private Pet pet;
