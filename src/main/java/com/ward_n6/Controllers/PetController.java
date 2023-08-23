@@ -1,10 +1,12 @@
 package com.ward_n6.Controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ward_n6.entity.pets.Cat_2;
 import com.ward_n6.entity.pets.CatsCrud;
 import com.ward_n6.entity.pets.Pet;
-import com.ward_n6.exception.DeleteFromMapException;
-import com.ward_n6.exception.EditMapException;
+import com.ward_n6.service.Impl.DeleteFromMapException;
+import com.ward_n6.service.Impl.EditMapException;
+import com.ward_n6.service.Impl.PutToMapException;
 import com.ward_n6.service.interfaces.PetService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -12,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -23,15 +27,14 @@ import java.util.Optional;
         @Resource
         private CatsCrud catsCrud;
 
-    public PetController(PetService petService) {
-        this.petService = petService;
-    }
-
+        public PetController(PetService petService) {
+            this.petService = petService;
+        }
 
 //        @PostMapping
 //        @Operation(summary = "Добавление животного в список", description = "нужно заполнить все поля карточки животного в Body")
 //        public ResponseEntity<Pet> createPet(@RequestBody Pet pet) throws JsonProcessingException, PutToMapException {
-//            Pet newPet = petRepository.addPet(pet);
+//            Pet newPet = petService.addPet(pet);
 //            return ResponseEntity.ok(newPet);
 //        }
         //    @PostMapping("/json")
@@ -42,7 +45,7 @@ import java.util.Optional;
 //        @GetMapping("/{petId}")
 //        @Operation(summary = "Показать одно животное по id", description = "нужно указать id животного")
 //        public ResponseEntity<Pet> getPet(@PathVariable int petId) {
-//            Pet pet = petRepository.getPetById(petId);
+//            Pet pet = petService.getPetById(petId);
 //            if (pet == null) {
 //                return ResponseEntity.notFound().build();
 //            }
@@ -99,7 +102,7 @@ import java.util.Optional;
 //        @GetMapping
 //        @Operation(summary = "Показать всех животных приюта")
 //        public ResponseEntity<List<Pet>> getAllPets() {
-//            List<Pet> allPets = petRepository.getAllPets();
+//            List<Pet> allPets = petService.getAllPets();
 //            if (allPets.size() > 0) {
 //                return ResponseEntity.ok(allPets);
 //            }

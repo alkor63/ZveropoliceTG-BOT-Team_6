@@ -14,10 +14,10 @@ public enum PetsType { // может понадобиться для кнопо�
         return title;
     }
 
-    @Override
-    public String toString() {
-        return "PetsType{" +
-                "title='" + title + '\'' +
-                '}';
-    }
+//    @Override
+//    public String toString() {
+//        return "PetsType{" +
+//                "title='" + title + '\'' +
+//                '}';
+//    }
 }
