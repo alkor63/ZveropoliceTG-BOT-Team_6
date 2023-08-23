@@ -53,45 +53,31 @@ public class VolunteerService {
         return "Привет, " + firstName + "! Я Игорь - волонтёр приюта для животных. Готов ответить на все вопросы";
     }
 
-    public PetsOwner createPetsOwner(Owner owner, Pet pet) {
-        // собираем в одну таблицу PetWithOwner усыновителя owner, животное pat
-        // и время начала и окончания испытательного срока
-        try {
-            PetsOwner petsOwner = new PetsOwner(LocalDate.now(), LocalDate.now().plusDays(30),
-                    owner.getId(), owner.getFirstName(), owner.getLastName(), owner.getPhoneNumber(),
-                    pet.getId(), pet.getBread(), pet.getPetBirthDay(),pet.getPetName()
-            );
-            return petsOwnerRepository.save(petsOwner);
-        } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
-            return null;
-        }
-    }
 
-    public Boolean removePetsOwnerToArchive(PetsOwner petsOwner) {
-        // убираем парочку из таблицы PetsOwner и заносим в одноименный архив
-        // после успешного прохождения (окончания) испытательного срока
-        try {
-            PetsOwnerArchive newPetsOwnerArchive = new PetsOwnerArchive(
-                    petsOwner.getDateBegin(),
-                    petsOwner.getDateEnd(),
-                    petsOwner.getOwnerId(),
-                    petsOwner.getFirstName(),
-                    petsOwner.getLastName(),
-                    petsOwner.getPhoneNumber(),
-                    petsOwner.getPetId(),
-                    petsOwner.getBread(),
-                    petsOwner.getPetBirthDay(),
-                    petsOwner.getPetName()
-                    );
-            petsOwnerArchiveRepository.save(newPetsOwnerArchive);
-            petsOwnerRepository.deleteById(petsOwner.getId());
-            return true;
-        } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
-            return false;
-        }
-    }
+//    public Boolean removePetsOwnerToArchive(PetsOwner petsOwner) {
+//        // убираем парочку из таблицы PetsOwner и заносим в одноименный архив
+//        // после успешного прохождения (окончания) испытательного срока
+//        try {
+//            PetsOwnerArchive newPetsOwnerArchive = new PetsOwnerArchive(
+//                    petsOwner.getDateBegin(),
+//                    petsOwner.getDateEnd(),
+//                    petsOwner.getOwnerId(),
+//                    petsOwner.getFirstName(),
+//                    petsOwner.getLastName(),
+//                    petsOwner.getPhoneNumber(),
+//                    petsOwner.getPetId(),
+//                    petsOwner.getBread(),
+//                    petsOwner.getPetBirthDay(),
+//                    petsOwner.getPetName()
+//                    );
+//            petsOwnerArchiveRepository.save(newPetsOwnerArchive);
+//            petsOwnerRepository.deleteById(petsOwner.getId());
+//            return true;
+//        } catch (IllegalArgumentException e) {
+//            System.out.println(e.getMessage());
+//            return false;
+//        }
+//    }
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     public String viewAllReports(LocalDate date) {

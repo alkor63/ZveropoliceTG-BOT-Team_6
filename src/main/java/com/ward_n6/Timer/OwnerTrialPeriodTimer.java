@@ -1,10 +1,6 @@
 package com.ward_n6.Timer;
 import com.pengrad.telegrambot.TelegramBot;
-import com.pengrad.telegrambot.request.SendMessage;
-import com.ward_n6.entity.owners.Owner;
 import com.ward_n6.entity.owners.PetsOwner;
-import com.ward_n6.entity.owners.PetsOwnerArchive;
-import com.ward_n6.entity.pets.Pet;
 import com.ward_n6.entity.reports.OwnerReport;
 import com.ward_n6.repository.*;
 import com.ward_n6.service.VolunteerService;
@@ -15,7 +11,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Component
-public class OwnerTrialPriodTimer {
+public class OwnerTrialPeriodTimer {
     // класс для отслкживания испытательного срока
     private final BotMessagingRepository botMessagingRepository;
     private final TelegramBot telegramBot;
@@ -25,11 +21,11 @@ public class OwnerTrialPriodTimer {
     private final OwnerReportRepository ownerReportRepository;
 
 
-    public OwnerTrialPriodTimer(BotMessagingRepository botMessagingRepository,
-                                TelegramBot telegramBot,
-                                VolunteerService volunteerService,
-                                PetsOwnerRepository petsOwnerRepository,
-                                OwnerReportRepository ownerReportRepository) {
+    public OwnerTrialPeriodTimer(BotMessagingRepository botMessagingRepository,
+                                 TelegramBot telegramBot,
+                                 VolunteerService volunteerService,
+                                 PetsOwnerRepository petsOwnerRepository,
+                                 OwnerReportRepository ownerReportRepository) {
         this.botMessagingRepository = botMessagingRepository;
         this.telegramBot = telegramBot;
         this.volunteerService = volunteerService;
@@ -43,8 +39,8 @@ public class OwnerTrialPriodTimer {
     //завершение испытательного срока
 
 
-//    @Scheduled(cron = "* 00 21 * * *") //вызов каждый день в 21:00
-    @Scheduled(cron = "* 12 23 * * *") //вызов каждый день в мм чч на время отладки
+//    @Scheduled(cron = "1 00 21 * * *") //вызов каждый день в 21:00
+    @Scheduled(cron = "1 12 23 * * *") //вызов каждый день в мм чч на время отладки
 
     public void task() {
         long chatId = 1L;  // заменить на owner.getId()
