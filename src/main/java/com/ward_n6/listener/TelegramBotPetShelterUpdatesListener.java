@@ -44,10 +44,8 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
     private final PetsOwnerServiceImpl petsOwnerServiceImpl;
     private final PetShelter petShelter = new PetShelter() {
     };
-    private PhotoService photoService;
 
     private final ReportService reportService;
-    private OwnerRepository ownerRepository;
 
     private final OwnerServiceImpl ownerServiceImpl;
 
@@ -185,7 +183,7 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                     case "/report":
                         if (dogSelect || catSelect) {
                             reportTextSelect = true;
-                            currentHandler = new ReportHandler(reportService, telegramBot);
+                            currentHandler = new ReportHandler(reportService, telegramBot, petService, catRepository, dogRepository, petBaseRepository);
                             sendMessage(chatId, EmojiParser.parseToUnicode("""
                                     Для загрузки отчёта следуйте указаниям бота. Пожалуйста, заполните все пункты отчёта.
                                     Команды для отчёта (нажмите или введите):
@@ -222,7 +220,7 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
 
                     case "/takePet":
                         if (dogSelect || catSelect) {
-                            currentHandler = new PetsOwnerHandler(petsOwnerServiceImpl, telegramBot);
+                            currentHandler = new PetsOwnerHandler(petsOwnerServiceImpl, telegramBot, catRepository, dogRepository);
 //                            Owner ownerCheck = ownerServiceImpl.getOwnerById(chatId);
 //                            if (ownerCheck != null) { // проверяем, что пользователь есть в базе
 
