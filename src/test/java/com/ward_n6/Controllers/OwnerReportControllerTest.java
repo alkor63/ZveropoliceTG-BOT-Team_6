@@ -1,10 +1,10 @@
-package com.ward_n6.controllers;
+package com.ward_n6.Controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ward_n6.Controllers.OwnerReportController;
 import com.ward_n6.entity.reports.OwnerReport;
 import com.ward_n6.enums.PetsType;
-import com.ward_n6.repository.OwnerReportRepository;
+import com.ward_n6.repository.ReportRepository;
+import javassist.NotFoundException;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -24,6 +24,8 @@ import java.util.Optional;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -35,7 +37,7 @@ public class OwnerReportControllerTest {
     ObjectMapper mapper;
 
     @MockBean
-    OwnerReportRepository ownerReportRepository;
+    ReportRepository ownerReportRepository;
     // создаем несколько объектов тестируемого класса
     OwnerReport ownerReport1 = new OwnerReport(1l, 9932688l, LocalDateTime.now(), PetsType.CAT, false,
             "fff","dddd", "dse", 23L);
@@ -125,63 +127,63 @@ public class OwnerReportControllerTest {
                 .andExpect(jsonPath("$.nutrition", Matchers.is("Whiskas")));
     }
 
-//    @Test
-//    public void shouldReturnExceptionWhenReportOrIdIsNull() throws Exception {
+    @Test
+    public void shouldReturnExceptionWhenReportOrIdIsNull() throws Exception {
 //// проверяем бросание исключений при ownerReport or id = null
-//        OwnerReport nullOwnerReport = new OwnerReport();
-//        OwnerReport editedOwnerReport = OwnerReport.builder()
-                //пропустили id
-//                .reportDateTime(LocalDateTime.now())
-//                .havePhoto(true)
-//                .nutrition("Whiskas")
-//                .petsHealth("good")
-//                .petsBehavior("Ok")
-//                .petId(1L)
-//                .id(3L)
-//                .build();
+        OwnerReport nullOwnerReport = new OwnerReport();
+        OwnerReport editedOwnerReport = OwnerReport.builder()
+//                пропустили id
+                .reportDateTime(LocalDateTime.now())
+                .havePhoto(true)
+                .nutrition("Whiskas")
+                .petsHealth("good")
+                .petsBehavior("Ok")
+                .petId(1L)
+                .id(3L)
+                .build();
 
-//        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/report")
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .accept(MediaType.APPLICATION_JSON)
-//                .content(this.mapper.writeValueAsString(nullOwnerReport));
-//
-//        mockMvc.perform(mockRequest)
-//                .andExpect(status().isBadRequest())
-//                .andExpect(result ->
-//                        assertTrue(result.getResolvedException() instanceof NullPointerException))
-//                .andExpect(result ->
-//                        assertEquals(("OwnerRecord или Id не должны быть null"), result.getResolvedException().getMessage()));
-//    }
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/report")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(this.mapper.writeValueAsString(nullOwnerReport));
 
-//    @Test
-//    public void shouldReturnExceptionWhenReportNotFound() throws Exception {
+        mockMvc.perform(mockRequest)
+                .andExpect(status().isBadRequest())
+                .andExpect(result ->
+                        assertTrue(result.getResolvedException() instanceof NullPointerException))
+                .andExpect(result ->
+                        assertEquals(("OwnerRecord или Id не должны быть null"), result.getResolvedException().getMessage()));
+    }
+
+    @Test
+    public void shouldReturnExceptionWhenReportNotFound() throws Exception {
 // проверяем бросание исключений если запись ownerReport не обнаружена
         OwnerReport nullOwnerReport = new OwnerReport();
-//        OwnerReport editedOwnerReport = OwnerReport.builder()
-//                .id(321L)
-//                .reportDateTime(LocalDateTime.now())
-//                .havePhoto(true)
-//                .nutrition("Whiskas")
-//                .petsHealth("good")
-//                .petsBehavior("Ok")
-//                .petId(1L)
-//                .id(3L)
-//                .build();
+        OwnerReport editedOwnerReport = OwnerReport.builder()
+                .id(321L)
+                .reportDateTime(LocalDateTime.now())
+                .havePhoto(true)
+                .nutrition("Whiskas")
+                .petsHealth("good")
+                .petsBehavior("Ok")
+                .petId(1L)
+                .id(3L)
+                .build();
 
-//        Mockito.when(ownerReportRepository.findById(nullOwnerReport.getId())).thenReturn(null);
-//
-//        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/report")
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .accept(MediaType.APPLICATION_JSON)
-//                .content(this.mapper.writeValueAsString(nullOwnerReport));
-//
-//        mockMvc.perform(mockRequest)
-//                .andExpect(status().isBadRequest())
-//                .andExpect(result ->
-//                        assertTrue(result.getResolvedException() instanceof NotFoundException))
-//                .andExpect(result ->
-//                        assertEquals(("Записи OwnerRecord с Id = 321 не существует"), result.getResolvedException().getMessage()));
-//    }
+        Mockito.when(ownerReportRepository.findById(nullOwnerReport.getId())).thenReturn(null);
+
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/report")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(this.mapper.writeValueAsString(nullOwnerReport));
+
+        mockMvc.perform(mockRequest)
+                .andExpect(status().isBadRequest())
+                .andExpect(result ->
+                        assertTrue(result.getResolvedException() instanceof NotFoundException))
+                .andExpect(result ->
+                        assertEquals(("Записи OwnerRecord с Id = 321 не существует"), result.getResolvedException().getMessage()));
+    }
 
     @Test
     public void deleteOwnerReportByIdTest() throws Exception{
@@ -193,17 +195,17 @@ public class OwnerReportControllerTest {
                 .andExpect(status().isOk());
     }
 
-//    @Test
-//    public void deleteOwnerReportByIdTestWhenNotFoundException()throws Exception{
-//        Mockito.when((ownerReportRepository.findById(5L))).thenReturn(null);
-//
-//        mockMvc.perform(MockMvcRequestBuilders
-//                        .delete(("/report/2"))
-//                        .contentType(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isBadRequest())
-//                .andExpect(result ->
-//                        assertTrue(result.getResolvedException() instanceof NotFoundException))
-//                .andExpect(result -> assertEquals("В базе нет отчёта с id = 5 ",
-//                        result.getResolvedException().getMessage()));
-//    }
+    @Test
+    public void deleteOwnerReportByIdTestWhenNotFoundException()throws Exception{
+        Mockito.when((ownerReportRepository.findById(5L))).thenReturn(null);
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .delete(("/report/2"))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(result ->
+                        assertTrue(result.getResolvedException() instanceof NotFoundException))
+                .andExpect(result -> assertEquals("В базе нет отчёта с id = 5 ",
+                        result.getResolvedException().getMessage()));
+    }
 }

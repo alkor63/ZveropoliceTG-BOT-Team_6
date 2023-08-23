@@ -10,7 +10,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.Objects;
-
+/**
+ * класс для отработки БД
+ * будет удалён в финальной версии
+ */
 @Getter
 @Setter
 //@Entity

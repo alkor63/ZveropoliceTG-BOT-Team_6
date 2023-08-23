@@ -1,12 +1,12 @@
 package com.ward_n6.controllers;
 
 import com.ward_n6.Controllers.InfoController;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 
-import static com.ward_n6.OwnerAndPetConstants.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static com.ward_n6.OwnerAndPetConstants.INFO;
+import static com.ward_n6.OwnerAndPetConstants.MESSAGE;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class InfoControllerTest {
 
@@ -27,7 +27,8 @@ public class InfoControllerTest {
         String result = out.info();
         assertTrue(result.contains(INFO));
         assertEquals(INFO, result);
-        assertEquals("Spring-Boot-приложение с функцией telegram-bot, skyPro Java_14, команда Палата_№6 (Анастасия, Алексей, Елизавета, Роман, Тимур), июль-август 2023г.", out.info());
+        assertEquals("Spring-Boot-приложение с функцией telegram-bot, skyPro Java_14, " +
+                "команда Палата_№6 (Анастасия, Алексей, Елизавета, Роман, Тимур), июль-август 2023г.", out.info());
     }
 
 

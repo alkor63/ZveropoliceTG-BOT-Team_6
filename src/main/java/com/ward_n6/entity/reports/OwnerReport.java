@@ -57,6 +57,9 @@ public class OwnerReport {
     @Column(name = "pet_id", nullable = false)
     private long petId; // id питомца
 
+//    @Column(name = "photo", nullable = false)
+//    PhotoSize photo;
+
 
     @Override
     public boolean equals(Object o) {

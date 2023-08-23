@@ -1,9 +1,11 @@
 package com.ward_n6.listener;
 
+import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.GetFile;
 import com.pengrad.telegrambot.request.SendMessage;
-import com.pengrad.telegrambot.TelegramBot;
+import com.ward_n6.entity.Photo;
+import com.ward_n6.repository.PhotoRepository;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.io.File;
@@ -16,9 +18,12 @@ import java.util.function.Consumer;
 
 public class PhotoHandler implements EventHandler {
     private final TelegramBot telegramBot;
+    private final PhotoRepository photoRepository;
+    Photo photos = new Photo();
 
-    public PhotoHandler(TelegramBot telegramBot) {
+    public PhotoHandler(TelegramBot telegramBot, PhotoRepository photoRepository) {
         this.telegramBot = telegramBot;
+        this.photoRepository = photoRepository;
     }
 
     @Value("${path.to.file}")
@@ -37,14 +42,20 @@ public class PhotoHandler implements EventHandler {
         telegramBot.execute(new SendMessage(update.message().chat().id(),
                 "Отправьте фото Вашего питомца."));
         actionOnNextMessage = upd -> {
-            if (messagePhoto != null) {
-                var photo = update.message().photo()[3]; // 3 - самое лучшее качество
+            if (messagePhoto != null ) {
+            var photo = update.message().photo()[3]; // 3 - самое лучшее качество
                 var getFile = telegramBot.execute(new GetFile(photo.fileId()));
                 var outFile = new File(folderPath, (photo.fileId() + "-owner-" + update.message().chat().id() + ".jpeg")); // добавлено
                 try (var in = new URL(telegramBot.getFullFilePath(getFile.file())).openStream();
                      var out = new FileOutputStream(outFile)) {
-                    // для примера просто сделал случайное название файла, лучше прописать путь и расширение
+
                     in.transferTo(out);
+//            photos.setPhoto(photo);
+//            photos.setDateTime(LocalDateTime.now());
+//            photoRepository.save(photos);
+            telegramBot.execute(new SendMessage(update.message().chat().id(),
+                    "Фото загружено."));
+
                 } catch (MalformedURLException e) {
                     throw new RuntimeException(e);
                 } catch (FileNotFoundException e) {
@@ -54,6 +65,7 @@ public class PhotoHandler implements EventHandler {
                 }
             }  else  telegramBot.execute(new SendMessage(update.message().chat().id(),
                     "Вы не отправили фото. Отчёт не полный."));
-        }; return true;
+        };
+        return true;
     }
 }

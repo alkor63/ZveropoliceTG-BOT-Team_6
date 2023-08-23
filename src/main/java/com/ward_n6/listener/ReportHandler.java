@@ -5,21 +5,38 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.ward_n6.entity.reports.OwnerReport;
 import com.ward_n6.enums.PetsType;
+import com.ward_n6.repository.pets.CatRepository;
+import com.ward_n6.repository.pets.DogRepository;
+import com.ward_n6.repository.pets.PetBaseRepository;
+import com.ward_n6.service.PetServiceImpl;
 import com.ward_n6.service.ReportService;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.time.LocalDateTime;
 import java.util.function.Consumer;
-
+/**
+ * класс для обработки и сохранения фото - хоть бы как загрузить уже -> лучше добавить в отчёт
+ * НЕ РАБОТАЕТ!!!!!
+ */
 public class ReportHandler implements EventHandler {
 
     private OwnerReport ownerReport = new OwnerReport();
 
     private final ReportService reportService;
     private final TelegramBot telegramBot;
-    public ReportHandler(ReportService reportService, TelegramBot telegramBot) {
+    private final PetServiceImpl petService;
+    private final CatRepository catRepository;
+    private final DogRepository dogRepository;
+    private final PetBaseRepository petBaseRepository;
+
+    public ReportHandler(ReportService reportService, TelegramBot telegramBot, PetServiceImpl petService, CatRepository catRepository, DogRepository dogRepository, PetBaseRepository petBaseRepository) {
 
         this.reportService = reportService;
         this.telegramBot = telegramBot;
+        this.petService = petService;
+        this.catRepository = catRepository;
+        this.dogRepository = dogRepository;
+        this.petBaseRepository = petBaseRepository;
     }
 
     private Consumer<Update> actionOnNextMessage; // переменная для определения действий над поступаемым сообщением
@@ -28,6 +45,8 @@ public class ReportHandler implements EventHandler {
     boolean isFeed = false;
     boolean isAction = false;
 
+    @Value("${path.to.file}")
+    String folderPath; // путь к файлам
 
     @Override
     public boolean handle(Update update) {
@@ -38,14 +57,16 @@ public class ReportHandler implements EventHandler {
             return false;
         }
         var text = update.message().text();
+        //var messagePhoto = update.message().photo();
         switch (text) {
             case "/ID":
                 telegramBot.execute(new SendMessage(update.message().chat().id(),
                         "Укажите ID Вашего питомца"));
                 actionOnNextMessage = upd -> {
                     var idMessage = upd.message().text();
-                    if (idMessage.matches("\\d+")) { // проверяем, что указано число
-                        ownerReport.setPetId(Long.parseLong(idMessage));
+                    long id = Long.parseLong(idMessage);
+                    if (idMessage.matches("\\d+") && (catRepository.getById(id) != null || dogRepository.getById(id) != null)) { // проверяем, что указано число
+                        ownerReport.setPetId(id);
                         telegramBot.execute(new SendMessage(upd.message().chat().id(),
                                 "ID питомца записан."));
                         isId = true;
@@ -77,6 +98,7 @@ public class ReportHandler implements EventHandler {
                     isFeed = true;
                 };
                 break;
+
             case "/action":
                 telegramBot.execute(new SendMessage(update.message().chat().id(),
                         "Опишите кратко поведение питомца"));
@@ -91,7 +113,7 @@ public class ReportHandler implements EventHandler {
             case "/save":
                 ownerReport.setReportDateTime(LocalDateTime.now());
                 ownerReport.setOwnerId(update.message().chat().id());
-                if (TelegramBotPetShelterUpdatesListener.dogSelect){
+                if (TelegramBotPetShelterUpdatesListener.dogSelect) {
                     ownerReport.setPetsType(PetsType.DOG);
                 } else if (TelegramBotPetShelterUpdatesListener.catSelect) {
                     ownerReport.setPetsType(PetsType.CAT);

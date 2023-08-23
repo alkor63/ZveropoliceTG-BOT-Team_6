@@ -8,7 +8,9 @@ import com.ward_n6.service.OwnerServiceImpl;
 
 import java.util.function.Consumer;
 import java.util.regex.Pattern;
-
+/**
+ * класс для обработки и сохранения данных пользователя
+ */
 public class OwnerHandler implements EventHandler {
     private final OwnerServiceImpl ownerServiceImpl;
     private final TelegramBot telegramBot;

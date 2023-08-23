@@ -2,10 +2,7 @@ package com.ward_n6.entity.pets;
 
 import com.ward_n6.enums.PetsSex;
 import com.ward_n6.enums.PetsType;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 
 import javax.persistence.*;
@@ -21,6 +18,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+
 @Table(name = "pets")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS) // каждому наследнику свою таблицу
 

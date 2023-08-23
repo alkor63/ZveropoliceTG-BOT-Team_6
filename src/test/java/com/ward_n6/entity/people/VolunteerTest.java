@@ -4,13 +4,12 @@ import com.ward_n6.entity.PetWithOwner;
 import com.ward_n6.entity.reports.OwnerReport;
 import com.ward_n6.enums.PetsType;
 import com.ward_n6.exception.PutToMapException;
-import com.ward_n6.repository.OwnerReportRepository;
-import com.ward_n6.repository.pets.PetRepository;
 import com.ward_n6.repository.PetsOwnerArchiveRepository;
 import com.ward_n6.repository.PetsOwnerRepository;
+import com.ward_n6.repository.ReportRepository;
+import com.ward_n6.repository.pets.PetBaseRepository;
 import com.ward_n6.service.PetsOwnerServiceImpl;
 import com.ward_n6.service.VolunteerService;
-import com.ward_n6.service.interfaces.PetService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -39,9 +38,9 @@ class VolunteerTest {
 
 
     private PetsOwnerServiceImpl petsOwnerService;
-    private OwnerReportRepository ownerReportRepository;
+    private ReportRepository ownerReportRepository;
     @Mock
-    private PetRepository petRepository;
+    private PetBaseRepository petBaseRepository;
     @Mock
     private PetsOwnerRepository petsOwnerRepositoryMock;
     @Mock
@@ -50,7 +49,7 @@ class VolunteerTest {
     private PetsOwnerArchiveRepository petsOwnerArchiveRepository;
     @Spy
     final VolunteerService volunteerMock = spy(new VolunteerService(petsOwnerRepository, petsOwnerArchiveRepository,
-            ownerReportRepository, (PetService) petRepository,petsOwnerService ));
+            petsOwnerService, ownerReportRepository,  petBaseRepository ));
 
     @InjectMocks
     private VolunteerService volunteer;

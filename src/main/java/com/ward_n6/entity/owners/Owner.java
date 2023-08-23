@@ -1,6 +1,7 @@
 package com.ward_n6.entity.owners;
 
 import lombok.*;
+import org.springframework.data.annotation.Id;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.Column;
@@ -13,21 +14,18 @@ import java.util.Objects;
 @NoArgsConstructor
 @Getter
 @Setter
-@Builder
 @Entity
 @Table(name = "owner")
+@Builder
 
 
 //@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS) // позволяет классам наследникам сопоставляться со своей собственной таблицей
 // общий класс для владельцев (нужно ли его делать АБСТРАКТНЫМ?)
 
 public class Owner { // хозяин животного, его свойства
-//    @javax.persistence.Id
-//    @Column(name = "id", nullable = false)
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private long id;
 
     @javax.persistence.Id
+    @Id
     @Column(name = "owner_id", nullable = false)
     private Long id;
 

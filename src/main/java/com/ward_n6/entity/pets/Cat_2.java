@@ -1,15 +1,19 @@
 package com.ward_n6.entity.pets;
 
-import com.ward_n6.entity.owners.Owner;
-import com.ward_n6.enums.PetsSex;
-import com.ward_n6.enums.PetsType;
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.time.LocalDate;
 import java.time.Period;
 
-
+/**
+ * класс для отработки БД
+ * будет удалён в финальной версии
+ */
 @Entity
 @NoArgsConstructor
 @Data
