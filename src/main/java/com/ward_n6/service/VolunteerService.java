@@ -88,7 +88,6 @@ public class VolunteerService {
         LocalDateTime stopTime = LocalDateTime.of(date, time).plusNanos(1); // т.к. методы isAfter и isBefore не включают equals
 
         List<OwnerReport> allOwnerReports = ownerReportService.getAllOwnerReports();
-        System.out.println(allOwnerReports);
         for (OwnerReport ownerReport : allOwnerReports) {
             LocalDateTime dateTime = ownerReport.getReportDateTime();
             if (dateTime.isAfter(startTime) && dateTime.isBefore(stopTime))
