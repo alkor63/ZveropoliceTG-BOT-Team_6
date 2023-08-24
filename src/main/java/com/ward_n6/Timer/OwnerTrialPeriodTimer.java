@@ -4,6 +4,8 @@ import com.ward_n6.entity.owners.PetsOwner;
 import com.ward_n6.entity.reports.OwnerReport;
 import com.ward_n6.repository.*;
 import com.ward_n6.service.VolunteerService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -12,7 +14,7 @@ import java.util.List;
 
 @Component
 public class OwnerTrialPeriodTimer {
-    // класс для отслкживания испытательного срока
+    // класс для отслеживания испытательного срока
     private final BotMessagingRepository botMessagingRepository;
     private final TelegramBot telegramBot;
     private final VolunteerService volunteerService;
@@ -20,12 +22,14 @@ public class OwnerTrialPeriodTimer {
 
     private final OwnerReportRepository ownerReportRepository;
 
+    private Logger logger = LoggerFactory.getLogger(OwnerTrialPeriodTimer.class);
 
     public OwnerTrialPeriodTimer(BotMessagingRepository botMessagingRepository,
                                  TelegramBot telegramBot,
                                  VolunteerService volunteerService,
                                  PetsOwnerRepository petsOwnerRepository,
-                                 OwnerReportRepository ownerReportRepository) {
+                                 OwnerReportRepository ownerReportRepository)
+    {
         this.botMessagingRepository = botMessagingRepository;
         this.telegramBot = telegramBot;
         this.volunteerService = volunteerService;
@@ -35,24 +39,25 @@ public class OwnerTrialPeriodTimer {
 
     // продление испытательного срока
     // @Scheduled
-    // удаление из БД / перенос в чёрный список после ИС
-    //завершение испытательного срока
+    // удаление из БД после ИС
+    // завершение испытательного срока
+    // проверка качества отчётов
 
 
 //    @Scheduled(cron = "1 00 21 * * *") //вызов каждый день в 21:00
-    @Scheduled(cron = "1 27 14 * * *") //вызов каждый день в мм чч на время отладки
+    @Scheduled(cron = "11 13 21 * * *") //вызов каждый день в мм чч на время отладки
 
     public void task() {
 //        long chatId = 1L;  // заменить на owner.getId()
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         //проверяем метод Позвать волонтёра
-        System.out.println(volunteerService.callVolunteer("Будущий лучший хозяин"));
+        //System.out.println(volunteerService.callVolunteer("Будущий лучший хозяин"));
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         // Волонтёр просматривает все отчеты за указанную дату
         String svr = volunteerService.viewAllReports(LocalDate.now());
-        System.out.println(svr);
+        logger.info(" \n *** " + svr);
 //                long chatId = petsOwner.getOwnerId();
 //        telegramBot.execute(new SendMessage(chatId, svr));
 
@@ -62,7 +67,7 @@ public class OwnerTrialPeriodTimer {
         List<OwnerReport> allOwnerReports = ownerReportRepository.findAll();
         for (OwnerReport ownerReport : allOwnerReports) {
             String verdict = "Verdict "+ownerReport.getId()+" = " + volunteerService.reportExpertise(ownerReport);
-            System.out.println(verdict);
+            logger.info(" \n *** " + verdict);
 //            long chatId = petsOwner.getOwnerId();
 //            telegramBot.execute(new SendMessage(chatId, verdict));
         }
@@ -75,10 +80,10 @@ public class OwnerTrialPeriodTimer {
                 String finalVerdict = volunteerService.ownersVerdict(petsOwner);
 //                long chatId = petsOwner.getOwnerId();
 //                telegramBot.execute(new SendMessage(chatId, finalVerdict));
-                System.out.println("Сообщение для хозяина с id= " + petsOwner.getOwnerId() + " : \n" + finalVerdict);
+                logger.info("Сообщение для хозяина с id= "
+                        + petsOwner.getOwnerId() + " : \n *** " + finalVerdict);
             }
         }
-//      выполнение зациклено, нужно как-то прервать
     }
 
 }
