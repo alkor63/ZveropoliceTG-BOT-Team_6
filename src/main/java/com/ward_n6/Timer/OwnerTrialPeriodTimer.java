@@ -40,10 +40,10 @@ public class OwnerTrialPeriodTimer {
 
 
 //    @Scheduled(cron = "1 00 21 * * *") //вызов каждый день в 21:00
-    @Scheduled(cron = "1 12 23 * * *") //вызов каждый день в мм чч на время отладки
+    @Scheduled(cron = "1 27 14 * * *") //вызов каждый день в мм чч на время отладки
 
     public void task() {
-        long chatId = 1L;  // заменить на owner.getId()
+//        long chatId = 1L;  // заменить на owner.getId()
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         //проверяем метод Позвать волонтёра
@@ -53,6 +53,7 @@ public class OwnerTrialPeriodTimer {
         // Волонтёр просматривает все отчеты за указанную дату
         String svr = volunteerService.viewAllReports(LocalDate.now());
         System.out.println(svr);
+//                long chatId = petsOwner.getOwnerId();
 //        telegramBot.execute(new SendMessage(chatId, svr));
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -62,6 +63,7 @@ public class OwnerTrialPeriodTimer {
         for (OwnerReport ownerReport : allOwnerReports) {
             String verdict = "Verdict "+ownerReport.getId()+" = " + volunteerService.reportExpertise(ownerReport);
             System.out.println(verdict);
+//            long chatId = petsOwner.getOwnerId();
 //            telegramBot.execute(new SendMessage(chatId, verdict));
         }
 
@@ -71,11 +73,11 @@ public class OwnerTrialPeriodTimer {
             if (petsOwner.getDateEnd().equals(LocalDate.now())) {
 //если сегодня день окончания испытательного срока, Волонтёр выносит "приговор"
                 String finalVerdict = volunteerService.ownersVerdict(petsOwner);
+//                long chatId = petsOwner.getOwnerId();
 //                telegramBot.execute(new SendMessage(chatId, finalVerdict));
-                System.out.println("Сообщение для хозяина с id= " + petsOwner.getOwnerId() + " :/n" + finalVerdict);
+                System.out.println("Сообщение для хозяина с id= " + petsOwner.getOwnerId() + " : \n" + finalVerdict);
             }
         }
-        return;
 //      выполнение зациклено, нужно как-то прервать
     }
 

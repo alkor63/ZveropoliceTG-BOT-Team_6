@@ -35,86 +35,84 @@ public class PetsOwnerArchive {
     @Column(name = "owner_id", nullable = false)
     private Long ownerId;
 
-    @Column(name = "owner_first_name")
-    private String firstName;
-
-    @Column(name = "owner_last_name")
-    private String lastName;
-
-    @Column(name = "owner_phone")
-    private String phoneNumber;
+//    @Column(name = "owner_first_name")
+//    private String firstName;
+//
+//    @Column(name = "owner_last_name")
+//    private String lastName;
+//
+//    @Column(name = "owner_phone")
+//    private String phoneNumber;
 
     @Column(name = "pet_id", nullable = false)
-    private Long pet_id;
+    private Long petId;
 
-    @Column(name = "pet_bread")
-    private String bread;
+//    @Column(name = "pet_bread")
+//    private String bread;
+//
+//    @Column(name = "pet_birthday")
+//    private LocalDate petBirthDay;
+//
+//    @Column(name = "pet_name")
+//    private String petName;
 
-    @Column(name = "pet_birthday")
-    private LocalDate petBirthDay;
-
-    @Column(name = "pet_name")
-    private String petName;
-
-//        @Column(name = "pet_sex")
-//        private PetsSex petsSex;
 
     public PetsOwnerArchive(Long id, LocalDate dateEnd, LocalDate dateBegin, Long ownerId, Long pet_id) {
         this.dateEnd = dateEnd;
         this.dateBegin = dateBegin;
         this.ownerId = ownerId;
-        this.pet_id = pet_id;
+        this.petId = pet_id;
     }
-
-    public PetsOwnerArchive(LocalDate dateEnd, LocalDate dateBegin, Long ownerId,
-                            String firstName, String lastName, String phoneNumber,
-                            Long pet_id, String bread, LocalDate petBirthDay, String petName) {
-        this.dateEnd = dateEnd;
-        this.dateBegin = dateBegin;
-        this.ownerId = ownerId;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.phoneNumber = phoneNumber;
-        this.pet_id = pet_id;
-        this.bread = bread;
-        this.petBirthDay = petBirthDay;
-        this.petName = petName;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        PetsOwnerArchive that = (PetsOwnerArchive) o;
-        return id == that.id && Objects.equals(dateEnd, that.dateEnd) &&
-                Objects.equals(dateBegin, that.dateBegin) && Objects.equals(ownerId, that.ownerId) &&
-                Objects.equals(firstName, that.firstName) && Objects.equals(lastName, that.lastName) &&
-                Objects.equals(phoneNumber, that.phoneNumber) && Objects.equals(pet_id, that.pet_id) &&
-                Objects.equals(bread, that.bread) && Objects.equals(petBirthDay, that.petBirthDay) &&
-                Objects.equals(petName, that.petName);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, dateEnd, dateBegin, ownerId, firstName, lastName, phoneNumber,
-                pet_id, bread, petBirthDay, petName);
-    }
-
-    @Override
-    public String toString() {
-        return "PetsOwnerArchive{" +
-                "id=" + id +
-                ", dateEnd=" + dateEnd +
-                ", dateBegin=" + dateBegin +
-                ", ownerId=" + ownerId +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", pet_id=" + pet_id +
-                ", bread='" + bread + '\'' +
-                ", petBirthDay=" + petBirthDay +
-                ", petName='" + petName + '\'' +
-                '}';
-    }
+//
+//    public PetsOwnerArchive(LocalDate dateEnd, LocalDate dateBegin, Long ownerId,
+//                            String firstName, String lastName, String phoneNumber,
+//                            Long pet_id, String bread, LocalDate petBirthDay, String petName) {
+//        this.dateEnd = dateEnd;
+//        this.dateBegin = dateBegin;
+//        this.ownerId = ownerId;
+//        this.firstName = firstName;
+//        this.lastName = lastName;
+//        this.phoneNumber = phoneNumber;
+//        this.petId = petId;
+//        this.bread = bread;
+//        this.petBirthDay = petBirthDay;
+//        this.petName = petName;
+//    }
+//
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (o == null || getClass() != o.getClass()) return false;
+//        PetsOwnerArchive that = (PetsOwnerArchive) o;
+//        return id == that.id && Objects.equals(dateEnd, that.dateEnd) &&
+//                Objects.equals(dateBegin, that.dateBegin) && Objects.equals(ownerId, that.ownerId) &&
+//                Objects.equals(firstName, that.firstName) && Objects.equals(lastName, that.lastName) &&
+//                Objects.equals(phoneNumber, that.phoneNumber) && Objects.equals(petId, that.petId) &&
+//                Objects.equals(bread, that.bread) && Objects.equals(petBirthDay, that.petBirthDay) &&
+//                Objects.equals(petName, that.petName);
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//        return Objects.hash(id, dateEnd, dateBegin, ownerId, firstName, lastName, phoneNumber,
+//                petId, bread, petBirthDay, petName);
+//    }
+//
+//    @Override
+//    public String toString() {
+//        return "PetsOwnerArchive{" +
+//                "id=" + id +
+//                ", dateEnd=" + dateEnd +
+//                ", dateBegin=" + dateBegin +
+//                ", ownerId=" + ownerId +
+//                ", firstName='" + firstName + '\'' +
+//                ", lastName='" + lastName + '\'' +
+//                ", phoneNumber='" + phoneNumber + '\'' +
+//                ", petId=" + petId +
+//                ", bread='" + bread + '\'' +
+//                ", petBirthDay=" + petBirthDay +
+//                ", petName='" + petName + '\'' +
+//                '}';
+//    }
 }
 

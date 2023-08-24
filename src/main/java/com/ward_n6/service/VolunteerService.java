@@ -19,13 +19,11 @@ import java.util.List;
 @Service
 public class VolunteerService {
     // класс с функционалом волонтёра
-    // метод добавление усыновителя+животного в БД == createCatsOwner и createDogsOwner
     // метод беседы с усыновителем == callVolunteer
-    // номер телефона как ID ???? - нет, только для связи
     // метод просмотр отчётов (точнее подсчета) == viewAllReports
-    // Бот отслеживает испытательный срок и если срок подошел к концу - обращается к волонтёру за приговором
+    // Таймер отслеживает испытательный срок и если срок подошел к концу - обращается к волонтёру за приговором
     // приговор в методе endOfProbationPeriod
-    // вызов этого метода из Бота и его обработка - ниже, в ownersVerdict
+    // вызов этого метода из Таймера и его обработка - ниже, в ownersVerdict
 
 
    private final PetsOwnerRepository petsOwnerRepository;
@@ -88,11 +86,9 @@ public class VolunteerService {
         // чтоб не потерять отчеты, пришедшие с 21:00 по 21:01, время задаём здесь
         LocalDateTime startTime = LocalDateTime.of(date.minusDays(1), time);
         LocalDateTime stopTime = LocalDateTime.of(date, time).plusNanos(1); // т.к. методы isAfter и isBefore не включают equals
-//        List<OwnerReport> ownerReportList = new ArrayList<>();
-        //(ownerReportRepository.getAllOwnerReports());
 
         List<OwnerReport> allOwnerReports = ownerReportService.getAllOwnerReports();
-//        System.out.println("ownerReportList = " + allOwnerReports);
+        System.out.println(allOwnerReports);
         for (OwnerReport ownerReport : allOwnerReports) {
             LocalDateTime dateTime = ownerReport.getReportDateTime();
             if (dateTime.isAfter(startTime) && dateTime.isBefore(stopTime))
