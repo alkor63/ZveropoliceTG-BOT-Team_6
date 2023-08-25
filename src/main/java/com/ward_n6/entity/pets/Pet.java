@@ -3,6 +3,7 @@ package com.ward_n6.entity.pets;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ward_n6.enums.PetsSex;
 import com.ward_n6.enums.PetsType;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,6 +20,7 @@ import java.util.Objects;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "pets")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS) // каждому наследнику свою таблицу
@@ -55,65 +57,53 @@ public abstract class Pet {
     @JoinColumn(name = "owner_id")
     private long ownerId;
 
-
-
-    public Pet(long id, PetsType petsType, PetsSex petsSex, String petName, LocalDate petBirthDay, String bread, Long ownerId) {
+    public Pet(Long id, String bread, LocalDate petBirthDay, String petName, PetsSex petsSex, PetsType petsType) {
         this.id = id;
+        this.bread = bread;
+        this.petBirthDay = petBirthDay;
+        this.petName = petName;
         this.petsSex = petsSex;
         this.petsType = petsType;
-        this.petName = petName;
-        this.petBirthDay = petBirthDay;
-        this.ownerId = ownerId;
-        this.bread = bread;
-
     }
 
-    public Pet(PetsType petsType, PetsSex petsSex, String petName, LocalDate petBirthDay, String bread) {
-        this.petsType = petsType;
-        this.petsSex = petsSex;
-        this.petName = petName;
-        this.petBirthDay = petBirthDay;
-        this.bread = bread;
-    }
+    private int getAge () {
+            return Period.between(petBirthDay, LocalDate.now()).getYears();
+        }
 
+        @Override
+        public String toString () {
+            return "Pet{" +
+                    "ID " + id +
+                    ", животное " + petsType.getTitle() + '\n' +
+                    ", кличка " + petName + '\n' +
+                    ", дата рождения: " + petBirthDay + '\n' +
+                    ", пол: " + petsSex.getTitle() + '\n' +
+                    ", возраст: " + getAge() + '\n' +
+                    ", порода " + bread + '\n' +
+                    ", id владельца: " + ownerId + '}' + '\n';
+        }
 
-    private int getAge() {
-        return Period.between(petBirthDay, LocalDate.now()).getYears();
-    }
+        public String reportToString () {
+            return "Pet{" +
+                    "ID " + id +
+                    " " + petsType.getTitle() +
+                    ", кличка " + petName + '\'' +
+                    ", возраст, лет: " + getAge() +
+                    ", порода " + bread + '\'' +
+                    '}';
 
-    @Override
-    public String toString() {
-        return "Pet{" +
-                "ID " + id +
-                ", животное " + petsType.getTitle() + '\n' +
-                ", кличка " + petName + '\n' +
-                ", дата рождения: " + petBirthDay + '\n' +
-                ", пол: " + petsSex.getTitle() + '\n' +
-                ", возраст: " + getAge() + '\n' +
-                ", порода " + bread + '\n' +
-                ", id владельца: " + ownerId + '}' + '\n';
-    }
-    public String reportToString() {
-        return "Pet{" +
-                "ID " + id +
-                " " + petsType.getTitle() +
-                ", кличка " + petName + '\'' +
-                ", возраст, лет: " + getAge() +
-                ", порода " + bread + '\'' +
-                '}';
+        }
 
-    }
+        @Override
+        public boolean equals (Object o){
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Pet pet = (Pet) o;
+            return Objects.equals(id, pet.id) && Objects.equals(bread, pet.bread) && Objects.equals(petBirthDay, pet.petBirthDay) && Objects.equals(petName, pet.petName) && petsSex == pet.petsSex && petsType == pet.petsType && Objects.equals(ownerId, pet.ownerId);
+        }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Pet pet = (Pet) o;
-        return Objects.equals(id, pet.id) && Objects.equals(bread, pet.bread) && Objects.equals(petBirthDay, pet.petBirthDay) && Objects.equals(petName, pet.petName) && petsSex == pet.petsSex && petsType == pet.petsType && Objects.equals(ownerId, pet.ownerId);
+        @Override
+        public int hashCode () {
+            return Objects.hash(id, bread, petBirthDay, petName, petsSex, petsType, ownerId);
+        }
     }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, bread, petBirthDay, petName, petsSex, petsType, ownerId);
-    }
-}

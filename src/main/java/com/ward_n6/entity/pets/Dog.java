@@ -15,22 +15,14 @@ import java.time.LocalDate;
 @DiscriminatorValue("DOG")
 
 public class Dog extends Pet {
+    public Dog(Long id, String bread, LocalDate petBirthDay, String petName, PetsSex petsSex, PetsType petsType, long ownerId) {
+        super(id, bread, petBirthDay, petName, petsSex, petsType, ownerId);
+    }
+
     public Dog() {
     }
 
-//    public Dog(long id, PetsType petsType, PetsSex petsSex, String petName, LocalDate petBirthDay, int petAge, String bread, Long Owner) {
-//        super(id, petsType, petsSex, petName, petBirthDay, petAge, bread, Owner);
-//    }
-//
-//    public Dog(PetsType petsType, PetsSex petsSex, String petName, LocalDate petBirthDay, int petAge, String bread, Owner Owner) {
-//        super(petsType, petsSex, petName, petBirthDay, petAge, bread, Owner);
-//    }
-
-    public Dog(PetsType petsType, PetsSex petsSex, String petName, LocalDate petBirthDay, String bread) {
-        super(petsType, petsSex, petName, petBirthDay, bread);
+    public Dog(Long id, String bread, LocalDate petBirthDay, String petName, PetsSex petsSex, PetsType petsType) {
+        super(id, bread, petBirthDay, petName, petsSex, petsType);
     }
-
-//    public Dog(long id, PetsType petsType, PetsSex petsSex, String petName, int petAge, String bread, Long Owner) {
-//        super(id, petsType, petsSex, petName, petAge, bread, Owner);
-//    }
 }

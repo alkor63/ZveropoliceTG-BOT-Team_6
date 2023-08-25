@@ -52,8 +52,6 @@ public class PetsOwner {
     @Column(name = "end_date")
     private LocalDate endDate;
 
-
-
     @Column(name = "owner") // заносим сущность в строковом виде в таблицу
     public String getOwnerAsString() {
         return owner != null ? owner.toString() : null;
@@ -63,6 +61,8 @@ public class PetsOwner {
     public String getPetAsString() {
         return pet != null ? pet.toString() : null;
     }
+
+
 
     @Override
     public boolean equals(Object o) {

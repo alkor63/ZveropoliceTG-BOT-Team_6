@@ -1,10 +1,15 @@
 package com.ward_n6.entity.owners;
 
 
-public class DogOwner extends Owner{
+import com.ward_n6.entity.pets.Pet;
+import com.ward_n6.enums.PetsType;
 
-    public DogOwner(Long ownerId, String firstName, String lastName, String phoneNumber) {
-        super(ownerId, firstName, lastName, phoneNumber);
+import java.time.LocalDate;
+
+public class DogOwner extends PetsOwner{
+
+    public DogOwner(Long id, long ownerId, long petId, Owner owner, PetsType petsType, Pet pet, LocalDate startDate, LocalDate endDate) {
+        super(id, ownerId, petId, owner, petsType, pet, startDate, endDate);
     }
 
     public DogOwner() {
