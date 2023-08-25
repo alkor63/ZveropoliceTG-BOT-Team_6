@@ -47,6 +47,7 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
     };
 
     private final ReportService reportService;
+
     private final OwnerServiceImpl ownerServiceImpl;
 
     private EventHandler currentHandler = null;
@@ -58,6 +59,8 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
     private final PetBaseRepository petBaseRepository;
     private final PhotoRepository photoRepository;
     Photo photos = new Photo();
+
+
 
 
     public TelegramBotPetShelterUpdatesListener(BotMessageService botMessageService, TelegramBot telegramBot,
@@ -74,6 +77,7 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
         this.petBaseRepository = petBaseRepository;
         this.photoRepository = photoRepository;
     }
+
 
     @PostConstruct
     public void init() {
@@ -180,9 +184,8 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                     case "/report":
                         if (dogSelect || catSelect) {
                             reportTextSelect = true;
-
                             currentHandler = new ReportHandler(reportService, telegramBot, petService, catRepository, dogRepository, petBaseRepository);
-                            sendMessage(chatId, """
+                            sendMessage(chatId, EmojiParser.parseToUnicode("""
                                     Для загрузки отчёта следуйте указаниям бота. Пожалуйста, заполните все пункты отчёта.
                                     Команды для отчёта (нажмите или введите):
                                     1. /ID - указать id питомца
@@ -192,10 +195,10 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                                     3. /health - отчёт о здоровье питомца
                                                             
                                     4. /feed - отчёт о питании питомца
-                                                                        
+                                    
                                     * /photo - отправить фото
                                                                         
-                                    5. /save - сохранить отчёт""");
+                                    5. /save - сохранить отчёт"""));
                         } else sendMessage(chatId, "Пожалуйста, сначала выберите приют");
                         break;
 
@@ -205,13 +208,13 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                         sendMessage(chatId, """
                                 Пожалуйста, укажите Ваши данные (нажмите или введите команду):
                                 1. /ln - указать фамилию
-                                                                
+                                
                                 2. /fn - указать имя
-                                                                
+                                
                                 3. /phone - указать номер телефона
-                                                                
+                                
                                 4. /save - сохранить мои контактные данные в базе приюта
-                                                                
+                                
                                 5. /delete - удалить мои данные
                                 """);
                         break;
@@ -518,5 +521,4 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
             }
         }
     }
-
 }
