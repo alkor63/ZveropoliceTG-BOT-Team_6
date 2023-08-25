@@ -30,12 +30,6 @@ public class PetServiceImpl implements PetService {
     }
 
     @Override
-    public int getId() {
-        return 0;
-    }
-
-    public Pet addPet(Pet pet){return null;};
-    @Override
     public Pet getPetById(int recordId) {
         return null;
     }
@@ -55,9 +49,9 @@ public class PetServiceImpl implements PetService {
         return null;
     }
 
-
     @Override
     public void deleteAllFromPet() {
+
     }
 
     @Override
@@ -74,9 +68,15 @@ public class PetServiceImpl implements PetService {
     public int idPetByValue(Pet pet) {
         return 0;
     }
+    @Override
+    public Pet addPet(Pet pet){
+        petBaseRepository.save(pet);
+        return pet;
+     };
 
 
     ///**************************** методы репозитория **************
+    //*****************************************************************
     private Pet cat = new Cat();
     private Pet dog = new Dog();
 

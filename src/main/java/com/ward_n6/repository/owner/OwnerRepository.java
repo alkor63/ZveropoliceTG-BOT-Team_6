@@ -1,4 +1,4 @@
-package com.ward_n6.repository;
+package com.ward_n6.repository.owner;
 
 import com.ward_n6.entity.owners.Owner;
 import org.springframework.data.jpa.repository.JpaRepository;

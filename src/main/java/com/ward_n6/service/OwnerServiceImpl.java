@@ -1,9 +1,8 @@
 package com.ward_n6.service;
 
 import com.ward_n6.entity.owners.Owner;
-import com.ward_n6.exception.DeleteFromMapException;
-import com.ward_n6.exception.EditMapException;
-import com.ward_n6.repository.OwnerRepository;
+import com.ward_n6.repository.owner.OwnerRepository;
+import com.ward_n6.service.interfaces.OwnerService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -21,7 +20,7 @@ import java.util.Map;
 
 @Service
 @Repository
-public class OwnerServiceImpl implements com.ward_n6.service.interfaces.OwnerService {
+public class OwnerServiceImpl implements OwnerService {
     private final OwnerRepository ownerRepository;
     private Map<Integer, Owner> ownerMap = new HashMap<>();
     private int mapId = 0;
@@ -31,13 +30,7 @@ public class OwnerServiceImpl implements com.ward_n6.service.interfaces.OwnerSer
     }
 
 
-    @Override
-    public Owner addOwner(Owner owner) {
-        if (owner.equals(null))
-            throw new NullPointerException("ОШИБКА при попытке добавить owner=Null в МАПу ownerMap");
-        ownerMap.putIfAbsent(mapId++, owner);
-        return owner;
-    }
+
 
     @Override
 
@@ -76,42 +69,11 @@ public class OwnerServiceImpl implements com.ward_n6.service.interfaces.OwnerSer
         return new ArrayList<>(ownerMap.values());
     }
 
-
-    public Owner editOwnerById(int recordId, Owner owner) throws EditMapException {
-        if (ownerMap.containsKey(recordId)) {
-            ownerMap.put(recordId, owner);
-            if (!ownerMap.get(recordId).equals(owner)) {
-                throw new EditMapException("ОШИБКА при попытке изменить запись о госте "
-                        + owner.getFirstName() + " " + owner.getLastName() + " в МАПе ownerMap под id=" + recordId);
-            }
-            return null;
-        }
-        return ownerMap.get(recordId);
-    }
-
     @Override
     public void deleteAllFromOwner() {
-        ownerMap.clear();
+
     }
 
-    @Override
-    public boolean deleteOwnerById(int recordId) throws DeleteFromMapException {
-        if (ownerMap.containsKey(recordId)) {
-            ownerMap.remove(recordId);
-            return true;
-        }
-        throw new DeleteFromMapException("ОШИБКА при попытке удалить запись о госте в МАПе ownerMap под id=" + recordId);
-    }
-
-    @Override
-    public boolean deleteOwnerByValue(Owner owner) throws DeleteFromMapException {
-        if (ownerMap.containsValue(owner)) {
-            ownerMap.values().remove(owner);
-            return true;
-        }
-        throw new DeleteFromMapException("ОШИБКА при попытке удалить запись о госте "
-                + owner.getFirstName() + " " + owner.getLastName() + " из МАПы ownerMap");
-    }
 
     @Override
     public int idOwnerByValue(Owner owner) {

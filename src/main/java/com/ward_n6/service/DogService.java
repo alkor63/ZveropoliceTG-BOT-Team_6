@@ -3,7 +3,7 @@ package com.ward_n6.service;
 import com.ward_n6.entity.pets.Dog;
 import com.ward_n6.enums.PetsSex;
 import com.ward_n6.enums.PetsType;
-import com.ward_n6.repository.DogsCrud;
+import com.ward_n6.repository.pets.DogRepository;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -12,9 +12,9 @@ import java.util.Optional;
 @Service
 public class DogService {
     @Resource
-    private DogsCrud dogsCrud;
+    private DogRepository dogsCrud;
 
-    public DogService(DogsCrud dogsCrud) {
+    public DogService(DogRepository dogsCrud) {
         this.dogsCrud = dogsCrud;
     }
 

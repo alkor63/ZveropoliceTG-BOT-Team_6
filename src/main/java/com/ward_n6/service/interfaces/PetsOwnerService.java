@@ -1,28 +1,12 @@
 package com.ward_n6.service.interfaces;
 
-import com.ward_n6.entity.PetWithOwner;
-import com.ward_n6.exception.DeleteFromMapException;
-import com.ward_n6.exception.EditMapException;
-import com.ward_n6.exception.PutToMapException;
+import com.ward_n6.entity.owners.PetsOwner;
+import javassist.NotFoundException;
 
-import java.util.List;
+import java.time.LocalDate;
 
 public interface PetsOwnerService {
-    int getId();
+    PetsOwner editDateEndPetsOwnerById(int petsOwnerId, LocalDate newDateEnd)
+            throws NotFoundException;
 
-    PetWithOwner addToPetWithOwner(PetWithOwner petWithOwner) throws PutToMapException;
-
-    PetWithOwner getFromPetWithOwnerById(int recordId);
-
-    List<PetWithOwner> getAllFromPetWithOwner();
-
-    PetWithOwner editPetWithOwnerById(int recordId, PetWithOwner petWithOwner) throws EditMapException;
-
-    boolean deleteAllFromPetWithOwner();
-
-    boolean deletePetWithOwnerById(int recordId) throws DeleteFromMapException;
-
-    boolean deletePetWithOwnerByValue(PetWithOwner petWithOwner) throws DeleteFromMapException;
-
-    int idByValue(PetWithOwner petWithOwner);
 }

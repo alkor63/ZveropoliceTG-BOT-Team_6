@@ -2,7 +2,7 @@ package com.ward_n6.Controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ward_n6.entity.owners.Owner;
-import com.ward_n6.repository.OwnerRepository;
+import com.ward_n6.repository.owner.OwnerRepository;
 import com.ward_n6.service.OwnerServiceImpl;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;

@@ -1,30 +1,25 @@
 package com.ward_n6.service.interfaces;
 
-import com.ward_n6.entity.PetWithOwner;
-import com.ward_n6.entity.owners.PetsOwner;
-import com.ward_n6.exception.DeleteFromMapException;
-import com.ward_n6.exception.EditMapException;
-import com.ward_n6.exception.PutToMapException;
+import com.ward_n6.entity.owners.PetsOwnerArchive;
 import javassist.NotFoundException;
 
-import java.time.LocalDate;
 import java.util.List;
 
 public interface PetsOwnerArchiveService {
-    int getId();
 
-    PetWithOwner addToArchivePetWithOwner(PetWithOwner petWithOwner) throws PutToMapException;
+    //++++++++++++++++++++++++++++++++++++++++++++++++++++
+    PetsOwnerArchive addPetsOwnerArchive(PetsOwnerArchive petsOwnerArchive);
 
-    PetWithOwner getFromArchivePetWithOwnerById(int recordId);
+    // ++++++++++++++++++++++++++++++++++++
+    List<PetsOwnerArchive> getAllPetsOwnerArchives() throws NotFoundException;
 
-    List<PetWithOwner> getAllFromArchivePetWithOwner();
+    // ++++++++++++++++++++++++++++++++++++
+    PetsOwnerArchive getPetsOwnerArchiveById(Integer petsOwnerArchiveId) throws NotFoundException;
 
-    PetWithOwner editArchivePetWithOwnerById(int recordId, PetWithOwner petWithOwner) throws EditMapException;
+    //+++++++++++++++++++++++++++++++++++++++++
+    PetsOwnerArchive deletePetsOwnerArchiveById(Integer petsOwnerArchiveId)
+            throws NotFoundException;
 
-    boolean deleteAllFromArchive();
-
-    boolean deleteFromArchivePetWithOwnerById(int recordId) throws DeleteFromMapException;
-
-    PetsOwner editDateEndPetsOwnerById(int petsOwnerId, LocalDate newDateEnd)
+    PetsOwnerArchive editPetsOwnerArchiveById(int petsOwnerArchiveId, PetsOwnerArchive petsOwnerArchive)
             throws NotFoundException;
 }

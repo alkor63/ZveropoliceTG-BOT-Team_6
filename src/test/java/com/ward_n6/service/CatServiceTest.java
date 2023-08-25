@@ -3,7 +3,7 @@ package com.ward_n6.service;
 import com.ward_n6.entity.pets.Cat;
 import com.ward_n6.enums.PetsSex;
 import com.ward_n6.enums.PetsType;
-import com.ward_n6.repository.CatsCrud;
+import com.ward_n6.repository.pets.CatRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,7 +22,7 @@ public class CatServiceTest {
     private CatService catService;
 
     @Mock
-    private CatsCrud catsCrud;
+    private CatRepository catsCrud;
 
     @BeforeEach
     public void setUp() {

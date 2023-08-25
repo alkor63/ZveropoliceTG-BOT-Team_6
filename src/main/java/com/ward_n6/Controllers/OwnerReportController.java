@@ -2,90 +2,81 @@ package com.ward_n6.Controllers;
 
 
 import com.ward_n6.entity.reports.OwnerReport;
-import com.ward_n6.exception.InvalidRequestException;
-import com.ward_n6.repository.ReportRepository;
-import com.ward_n6.service.ReportService;
+import com.ward_n6.repository.owner.OwnerReportRepository;
+import com.ward_n6.service.OwnerReportServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.EntityNotFoundException;
+import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/report")
 public class OwnerReportController {
-    //    @Resource
-    private final ReportRepository reportRepository;
-    public final ReportService reportService;
 
-    public OwnerReportController(ReportRepository reportRepository, ReportService reportService) {
-        this.reportRepository = reportRepository;
-        this.reportService = reportService;
-    }
+    //    private final OwnerReportServiceImpl ownerReportService;
+//
+//    public OwnerReportController(OwnerReportServiceImpl ownerReportService) {
+//        this.ownerReportService = ownerReportService;
+//    }
+    @Autowired
+    private OwnerReportServiceImpl ownerReportServiceImpl;
 
+    @Autowired
+    private OwnerReportRepository ownerReportRepository;
     //++++++++++++++++++++++++++++++++++++++++++++++++++++
     @PostMapping
     @Operation(summary = "Добавление отчёта в список",
             description = "нужно заполнить все поля отчёта в Body")
-    public ResponseEntity<OwnerReport> addOwnerReport(@RequestBody OwnerReport ownerReport) {
-        reportRepository.save(ownerReport);
-        return ResponseEntity.ok(ownerReport);
+    public ResponseEntity<OwnerReport> addOwnerReport(@RequestBody @Valid OwnerReport ownerReport)
+    {
+        OwnerReport newOwnerReport = ownerReportRepository.save(ownerReport);
+        return new ResponseEntity<>(newOwnerReport, HttpStatus.CREATED);
+    }
+// ++++++++++++++++++++++++++++++++++++
+
+    @GetMapping
+    @Operation(summary = "Показать все отчёты")
+    public ResponseEntity<List<OwnerReport>> getAllOwnerReports()
+    {
+        return ResponseEntity.ok().body(ownerReportRepository.findAll());
     }
 
     // ++++++++++++++++++++++++++++++++++++
     @GetMapping("/{ownerReportId}")
     @Operation(summary = "Показать один отчёт по id",
             description = "нужно указать id отчёта")
-    public ResponseEntity<OwnerReport> getOwnerReportById(@PathVariable Integer ownerReportId) {
-        long longId = ownerReportId;
-        Optional<OwnerReport> optionalOwnerReport = reportRepository.findById(longId);
-        if (optionalOwnerReport.isPresent()) {
-            final OwnerReport ownerReport = optionalOwnerReport.get();
-            return ResponseEntity.ok(ownerReport);
-        }
-        return ResponseEntity.notFound().build();
+    public ResponseEntity<OwnerReport>  getOwnerReportById(@PathVariable Long ownerReportId)
+    {
+        return ResponseEntity.ok().body(ownerReportRepository.getById(ownerReportId));
     }
 
     //+++++++++++++++++++++++++++++++++++++++++
     @DeleteMapping("/{ownerReportId}")
     @Operation(summary = "Удалить один отчёт из списка",
             description = "нужно указать id отчёта")
-    public ResponseEntity<Void> deleteOwnerReportById(@PathVariable Integer ownerReportId) {
-        long longId = ownerReportId;
-        if (reportRepository.findById(longId).isPresent()) {
-            reportRepository.deleteById(longId);
-            return ResponseEntity.ok().build();
+    public ResponseEntity<String> deleteOwnerReportById(@PathVariable Integer ownerReportId)
+    {
+        boolean deleteOwnerReportById = ownerReportServiceImpl.deleteOwnerReportById(ownerReportId);
+        if (deleteOwnerReportById) {
+            return new ResponseEntity<>(("OwnerReport id = " + ownerReportId + "успешно удален из базы"), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(("Ошибка при попытке удалить запись OwnerReport ID = " + ownerReportId), HttpStatus.BAD_REQUEST);
         }
-        return ResponseEntity.notFound().build();
-    }
+//    public ResponseEntity<String> deleteOwnerReportById(@PathVariable Long id) {
 
-    @GetMapping
-    @Operation(summary = "Показать все отчёты")
-    public ResponseEntity<List<OwnerReport>> getAllOwnerReports() {
-        List<OwnerReport> allOwnerReports = reportRepository.findAll();
-        if (allOwnerReports.size() > 0) {
-            return ResponseEntity.ok(allOwnerReports);
-        }
-        return ResponseEntity.notFound().build();
     }
 
     @PutMapping("/{ownerReportId}")
     @Operation(summary = "Отредактировать отчёт",
             description = "нужно указать id и заполнить все поля отчёта в Body")
-    public ResponseEntity<OwnerReport> editOwnerReportById(@PathVariable int ownerReportId, @RequestBody OwnerReport ownerReport) {
-        if (ownerReport == null) {
-            //удалено: || ownerReport.getId() == null
-            throw new InvalidRequestException("PatientRecord or ID must not be null!");
-        }
-        Optional<OwnerReport> optionalOwnerReport = reportRepository.findById(ownerReport.getOwnerId());
-        if (!optionalOwnerReport.isPresent()) {
-            throw new EntityNotFoundException("Невозможно изменить отчёт, т.к. в базе нет отчёта с id = " + ownerReportId);
-        }
-        reportService.optiOwnerReport(ownerReport);
-        reportRepository.save(ownerReport);
-        return ResponseEntity.ok(ownerReport);
+    public OwnerReport editOwnerReportById(@PathVariable int ownerReportId,
+                                           @RequestBody @Valid OwnerReport ownerReport)
+    {
+        return ownerReportServiceImpl.editOwnerReportById(ownerReportId, ownerReport);
     }
 }

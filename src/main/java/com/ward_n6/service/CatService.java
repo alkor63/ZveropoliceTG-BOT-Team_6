@@ -3,7 +3,7 @@ package com.ward_n6.service;
 import com.ward_n6.entity.pets.Cat;
 import com.ward_n6.enums.PetsSex;
 import com.ward_n6.enums.PetsType;
-import com.ward_n6.repository.CatsCrud;
+import com.ward_n6.repository.pets.CatRepository;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -14,9 +14,9 @@ import java.util.Optional;
 public class CatService {
 
     @Resource
-    private CatsCrud catsCrud;
+    private CatRepository catsCrud;
 
-    public CatService(CatsCrud catsCrud) {
+    public CatService(CatRepository catsCrud) {
         this.catsCrud = catsCrud;
     }
 

@@ -1,15 +1,12 @@
 package com.ward_n6.entity.owners;
 
 import com.ward_n6.entity.pets.Pet;
-import com.ward_n6.enums.PetsSex;
-import com.ward_n6.enums.PetsType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor
@@ -29,13 +26,14 @@ public abstract class PetsOwnerArchive {
 
     @ManyToOne
     @JoinColumn(name = "pet", insertable = false, updatable = false)
-    private com.ward_n6.entity.pets.Pet pet;
+    private Pet pet;
 
     @Column(name = "start_date")
     private LocalDate startDate;
 
     @Column(name = "end_date")
     private LocalDate endDate;
+
 
     public PetsOwnerArchive(Owner owner, Pet pet) {
         this.owner = owner;

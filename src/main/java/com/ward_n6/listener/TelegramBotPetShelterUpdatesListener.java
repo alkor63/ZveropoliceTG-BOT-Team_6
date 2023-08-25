@@ -46,7 +46,7 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
     private final PetShelter petShelter = new PetShelter() {
     };
 
-    private final ReportService reportService;
+    private final OwnerReportServiceImpl ownerReportServiceImpl;
 
     private final OwnerServiceImpl ownerServiceImpl;
 
@@ -64,12 +64,12 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
 
 
     public TelegramBotPetShelterUpdatesListener(BotMessageService botMessageService, TelegramBot telegramBot,
-                                                PetsOwnerServiceImpl petsOwnerServiceImpl, ReportService reportService,
+                                                PetsOwnerServiceImpl petsOwnerServiceImpl, OwnerReportServiceImpl ownerReportServiceImpl,
                                                 OwnerServiceImpl ownerServiceImpl, PetServiceImpl petService, CatRepository catRepository, DogRepository dogRepository, PetBaseRepository petBaseRepository, PhotoRepository photoRepository) {
         this.botMessageService = botMessageService;
         this.telegramBot = telegramBot;
         this.petsOwnerServiceImpl = petsOwnerServiceImpl;
-        this.reportService = reportService;
+        this.ownerReportServiceImpl = ownerReportServiceImpl;
         this.ownerServiceImpl = ownerServiceImpl;
         this.petService = petService;
         this.catRepository = catRepository;
@@ -184,7 +184,7 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                     case "/report":
                         if (dogSelect || catSelect) {
                             reportTextSelect = true;
-                            currentHandler = new ReportHandler(reportService, telegramBot, petService, catRepository, dogRepository, petBaseRepository);
+                            currentHandler = new ReportHandler(ownerReportServiceImpl, telegramBot, petService, catRepository, dogRepository, petBaseRepository);
                             sendMessage(chatId, EmojiParser.parseToUnicode("""
                                     Для загрузки отчёта следуйте указаниям бота. Пожалуйста, заполните все пункты отчёта.
                                     Команды для отчёта (нажмите или введите):

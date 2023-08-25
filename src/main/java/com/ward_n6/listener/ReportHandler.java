@@ -8,8 +8,8 @@ import com.ward_n6.enums.PetsType;
 import com.ward_n6.repository.pets.CatRepository;
 import com.ward_n6.repository.pets.DogRepository;
 import com.ward_n6.repository.pets.PetBaseRepository;
+import com.ward_n6.service.OwnerReportServiceImpl;
 import com.ward_n6.service.PetServiceImpl;
-import com.ward_n6.service.ReportService;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.time.LocalDateTime;
@@ -22,16 +22,16 @@ public class ReportHandler implements EventHandler {
 
     private OwnerReport ownerReport = new OwnerReport();
 
-    private final ReportService reportService;
+    private final OwnerReportServiceImpl ownerReportServiceImpl;
     private final TelegramBot telegramBot;
     private final PetServiceImpl petService;
     private final CatRepository catRepository;
     private final DogRepository dogRepository;
     private final PetBaseRepository petBaseRepository;
 
-    public ReportHandler(ReportService reportService, TelegramBot telegramBot, PetServiceImpl petService, CatRepository catRepository, DogRepository dogRepository, PetBaseRepository petBaseRepository) {
+    public ReportHandler(OwnerReportServiceImpl ownerReportServiceImpl, TelegramBot telegramBot, PetServiceImpl petService, CatRepository catRepository, DogRepository dogRepository, PetBaseRepository petBaseRepository) {
 
-        this.reportService = reportService;
+        this.ownerReportServiceImpl = ownerReportServiceImpl;
         this.telegramBot = telegramBot;
         this.petService = petService;
         this.catRepository = catRepository;
@@ -118,7 +118,7 @@ public class ReportHandler implements EventHandler {
                 } else if (TelegramBotPetShelterUpdatesListener.catSelect) {
                     ownerReport.setPetsType(PetsType.CAT);
                 }
-                reportService.save(ownerReport);
+                ownerReportServiceImpl.save(ownerReport);
                 telegramBot.execute(new SendMessage(update.message().chat().id(), "Ваш отчёт загружен"));
                 return true; // возвращаем true - это значит, что контекст завершен.
         }
