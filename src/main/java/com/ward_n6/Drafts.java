@@ -48,4 +48,27 @@ public class Drafts {
 //
 //    }
 
+    //************************  PET_CONTROLLER****
+    //        @PostMapping
+//        @Operation(summary = "Добавление животного в список", description = "нужно заполнить все поля карточки животного в Body")
+//        public ResponseEntity<Pet> createPet(@RequestBody Pet pet) throws JsonProcessingException, PutToMapException {
+//            Pet newPet = petService.addPet(pet);
+//            return ResponseEntity.ok(newPet);
+//        }
+    //    @PostMapping("/json")
+//    @Operation(summary = "Добавление рецепта из файла в книгу", description = "будем читать файл pets.json")
+//    public ResponseEntity<Pet> readPetFromJsonFile() {
+//        return ResponseEntity.ok().build();
+//    }
+//        @GetMapping("/{petId}")
+//        @Operation(summary = "Показать одно животное по id", description = "нужно указать id животного")
+//        public ResponseEntity<Pet> getPet(@PathVariable int petId) {
+//            Pet pet = petService.getPetById(petId);
+//            if (pet == null) {
+//                return ResponseEntity.notFound().build();
+//            }
+//            return ResponseEntity.ok(pet);
+//        }
+
+
 }

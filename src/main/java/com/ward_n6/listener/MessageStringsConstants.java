@@ -28,6 +28,7 @@ public class MessageStringsConstants {
                                 
                                 5. /delete - удалить мои данные
                                 """;
+
     public static String PET_ID_REQUEST_FOR_PET_BOOKING= """
                                     Введите номер ID интересующего питомца, который Вам сообщил волонтёр. 
                                     Если Вы не знаете ID питомца, позовите волонтёра:
