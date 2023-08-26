@@ -234,7 +234,6 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
 //                if (reportPhotoSelect) {
 //                    getPhoto(update);
 //                }
-
             }
         } catch (
                 Exception e) {
