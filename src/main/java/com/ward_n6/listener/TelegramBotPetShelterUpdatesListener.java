@@ -213,7 +213,7 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
 //                            Owner ownerCheck = ownerServiceImpl.getOwnerById(chatId);
 //                            if (ownerCheck != null) { // проверяем, что пользователь есть в базе
 
-                            sendMessage(chatId, PET_ID_REQUEST_FOR_PET_BOOKING);
+                            sendMessage(chatId, PET_ID_REQUEST_FOR_PET_BOOKING); // запрос ID для бронирования
                         }
                         break;
                     // ПРОВЕРКА РАБОТЫ МЕТОДА -- > УДАЛИТЬ!
