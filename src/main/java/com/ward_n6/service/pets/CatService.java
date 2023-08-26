@@ -1,4 +1,4 @@
-package com.ward_n6.service;
+package com.ward_n6.service.pets;
 
 import com.ward_n6.entity.pets.Cat;
 import com.ward_n6.enums.PetsSex;

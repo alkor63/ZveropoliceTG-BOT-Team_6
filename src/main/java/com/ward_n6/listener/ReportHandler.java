@@ -9,7 +9,7 @@ import com.ward_n6.repository.pets.CatRepository;
 import com.ward_n6.repository.pets.DogRepository;
 import com.ward_n6.repository.pets.PetBaseRepository;
 import com.ward_n6.service.OwnerReportServiceImpl;
-import com.ward_n6.service.PetServiceImpl;
+import com.ward_n6.service.pets.PetServiceImpl;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.time.LocalDateTime;

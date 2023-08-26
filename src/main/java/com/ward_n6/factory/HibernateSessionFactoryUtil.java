@@ -1,4 +1,4 @@
-package com.ward_n6.service.interfaces;
+package com.ward_n6.factory;
 
 import com.ward_n6.entity.owners.Owner;
 import com.ward_n6.entity.owners.PetsOwner;

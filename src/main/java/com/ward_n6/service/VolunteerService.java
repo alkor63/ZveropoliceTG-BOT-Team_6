@@ -2,11 +2,11 @@ package com.ward_n6.service;
 
 import com.ward_n6.entity.owners.PetsOwner;
 import com.ward_n6.entity.reports.OwnerReport;
+import com.ward_n6.service.interfaces.OwnerReportService;
 import com.ward_n6.repository.owner.OwnerReportRepository;
 import com.ward_n6.repository.owner.PetsOwnerArchiveRepository;
 import com.ward_n6.repository.owner.PetsOwnerRepository;
 import com.ward_n6.repository.pets.PetBaseRepository;
-import com.ward_n6.service.interfaces.OwnerReportService;
 import com.ward_n6.service.interfaces.PetsOwnerService;
 import javassist.NotFoundException;
 import org.springframework.stereotype.Service;
