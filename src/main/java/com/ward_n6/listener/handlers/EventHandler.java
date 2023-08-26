@@ -1,4 +1,4 @@
-package com.ward_n6.listener;
+package com.ward_n6.listener.handlers;
 
 import com.pengrad.telegrambot.model.Update;
 

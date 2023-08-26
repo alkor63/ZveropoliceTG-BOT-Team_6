@@ -12,6 +12,7 @@ import com.ward_n6.entity.owners.Owner;
 import com.ward_n6.entity.pets.Pet;
 import com.ward_n6.entity.shelters.PetShelter;
 import com.ward_n6.factory.HibernateSessionFactoryUtil;
+import com.ward_n6.listener.handlers.*;
 import com.ward_n6.repository.PhotoRepository;
 import com.ward_n6.repository.pets.CatRepository;
 import com.ward_n6.repository.pets.DogRepository;
@@ -55,13 +56,13 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
     private final PhotoRepository photoRepository;
     private Photo photos = new Photo();
     private final HibernateSessionFactoryUtil hibernateSessionFactoryUtil;
-    private Buttons buttons;
-    private Messager messager;
+    private final Buttons buttons;
+    private final Messager messager;
 
 
     public TelegramBotPetShelterUpdatesListener(BotMessageService botMessageService, TelegramBot telegramBot,
                                                 PetsOwnerServiceImpl petsOwnerServiceImpl, OwnerReportServiceImpl ownerReportServiceImpl,
-                                                OwnerServiceImpl ownerServiceImpl, PetServiceImpl petService, CatRepository catRepository, DogRepository dogRepository, PetBaseRepository petBaseRepository, PhotoRepository photoRepository, HibernateSessionFactoryUtil hibernateSessionFactoryUtil) {
+                                                OwnerServiceImpl ownerServiceImpl, PetServiceImpl petService, CatRepository catRepository, DogRepository dogRepository, PetBaseRepository petBaseRepository, PhotoRepository photoRepository, HibernateSessionFactoryUtil hibernateSessionFactoryUtil, Buttons buttons, Messager messager) {
         this.botMessageService = botMessageService;
         this.telegramBot = telegramBot;
         this.petsOwnerServiceImpl = petsOwnerServiceImpl;
@@ -73,6 +74,8 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
         this.petBaseRepository = petBaseRepository;
         this.photoRepository = photoRepository;
         this.hibernateSessionFactoryUtil = hibernateSessionFactoryUtil;
+        this.buttons = buttons;
+        this.messager = messager;
     }
 
 
@@ -81,13 +84,13 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
         telegramBot.setUpdatesListener(this);
     }
 
-    private static boolean startSelected = false; // переменная для подтверждения старта
-    private static boolean reportSelect = false;
-    private static boolean reportTextSelect = false;
-    private static boolean reportPhotoSelect = false;
-    protected static  boolean catSelect = false;
-    protected static boolean dogSelect = false;
-    protected static boolean getOwnerDataSelect = false;
+    public static boolean startSelected = false; // переменная для подтверждения старта
+    public static boolean reportSelect = false;
+    public static boolean reportTextSelect = false;
+    public static boolean reportPhotoSelect = false;
+    public static boolean catSelect = false;
+    public static boolean dogSelect = false;
+    public static boolean getOwnerDataSelect = false;
 
     /**
      * ОСНОВНОЙ МЕТОД
@@ -206,7 +209,7 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                     // ПРОВЕРКА РАБОТЫ МЕТОДА -- > ТРЕНИРОВКА НА КОШКАХ!
                     case "/1":
                         long petId = 27L;
-                        Pet cat =catRepository.getById(petId);
+                        Pet cat = catRepository.getById(petId);
                         if (cat != null) {
                             messager.sendMessage(chatId, cat.toString());
                         } else {

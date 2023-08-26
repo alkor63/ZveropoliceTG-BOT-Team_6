@@ -6,9 +6,10 @@ import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
 import com.pengrad.telegrambot.model.request.Keyboard;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.vdurmont.emoji.EmojiParser;
+import org.springframework.stereotype.Component;
 
 import static com.ward_n6.listener.MessageStringsConstants.*;
-
+@Component
 public class Buttons {
     private final TelegramBot telegramBot;
 

@@ -7,7 +7,9 @@ import com.ward_n6.entity.BotMessaging;
 import com.ward_n6.service.BotMessageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
+@Component
 public class Messager {
     private final TelegramBot telegramBot;
     private final BotMessageService botMessageService;

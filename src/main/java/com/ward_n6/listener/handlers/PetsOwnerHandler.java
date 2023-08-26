@@ -1,4 +1,4 @@
-package com.ward_n6.listener;
+package com.ward_n6.listener.handlers;
 
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Update;
@@ -7,6 +7,7 @@ import com.ward_n6.entity.owners.Owner;
 import com.ward_n6.entity.owners.PetsOwner;
 import com.ward_n6.entity.pets.Pet;
 import com.ward_n6.enums.PetsType;
+import com.ward_n6.listener.TelegramBotPetShelterUpdatesListener;
 import com.ward_n6.repository.pets.CatRepository;
 import com.ward_n6.repository.pets.DogRepository;
 import com.ward_n6.service.OwnerServiceImpl;
