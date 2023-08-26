@@ -1,14 +1,14 @@
-package com.ward_n6.service;
+package com.ward_n6.service.pets;
 
 import com.ward_n6.entity.pets.Cat;
 import com.ward_n6.entity.pets.Dog;
 import com.ward_n6.entity.pets.Pet;
 import com.ward_n6.exception.DeleteFromMapException;
 import com.ward_n6.exception.EditMapException;
+import com.ward_n6.service.interfaces.PetService;
 import com.ward_n6.repository.pets.CatRepository;
 import com.ward_n6.repository.pets.DogRepository;
 import com.ward_n6.repository.pets.PetBaseRepository;
-import com.ward_n6.service.interfaces.PetService;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 

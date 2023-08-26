@@ -10,7 +10,7 @@ import com.ward_n6.enums.PetsType;
 import com.ward_n6.repository.pets.CatRepository;
 import com.ward_n6.repository.pets.DogRepository;
 import com.ward_n6.service.OwnerServiceImpl;
-import com.ward_n6.service.PetServiceImpl;
+import com.ward_n6.service.pets.PetServiceImpl;
 import com.ward_n6.service.PetsOwnerServiceImpl;
 
 import java.util.function.Consumer;

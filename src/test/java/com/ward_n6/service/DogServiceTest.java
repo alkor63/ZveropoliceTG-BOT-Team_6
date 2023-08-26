@@ -4,6 +4,7 @@ import com.ward_n6.entity.pets.Dog;
 import com.ward_n6.enums.PetsSex;
 import com.ward_n6.enums.PetsType;
 import com.ward_n6.repository.pets.DogRepository;
+import com.ward_n6.service.pets.DogService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
