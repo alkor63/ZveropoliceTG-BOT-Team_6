@@ -17,7 +17,9 @@ import com.vdurmont.emoji.EmojiParser;
 import com.ward_n6.entity.BotMessaging;
 import com.ward_n6.entity.Photo;
 import com.ward_n6.entity.owners.Owner;
+import com.ward_n6.entity.pets.Cat;
 import com.ward_n6.entity.shelters.PetShelter;
+import com.ward_n6.factory.HibernateSessionFactoryUtil;
 import com.ward_n6.repository.PhotoRepository;
 import com.ward_n6.repository.pets.CatRepository;
 import com.ward_n6.repository.pets.DogRepository;
@@ -27,6 +29,7 @@ import com.ward_n6.service.OwnerReportServiceImpl;
 import com.ward_n6.service.OwnerServiceImpl;
 import com.ward_n6.service.PetsOwnerServiceImpl;
 import com.ward_n6.service.pets.PetServiceImpl;
+import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,6 +42,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 
+import static com.ward_n6.factory.HibernateSessionFactoryUtil.getSessionFactory;
 import static com.ward_n6.listener.MessageStringsConstants.*;
 
 
@@ -64,14 +68,13 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
     private final DogRepository dogRepository;
     private final PetBaseRepository petBaseRepository;
     private final PhotoRepository photoRepository;
-    Photo photos = new Photo();
-
-
+    private Photo photos = new Photo();
+    private final HibernateSessionFactoryUtil hibernateSessionFactoryUtil;
 
 
     public TelegramBotPetShelterUpdatesListener(BotMessageService botMessageService, TelegramBot telegramBot,
                                                 PetsOwnerServiceImpl petsOwnerServiceImpl, OwnerReportServiceImpl ownerReportServiceImpl,
-                                                OwnerServiceImpl ownerServiceImpl, PetServiceImpl petService, CatRepository catRepository, DogRepository dogRepository, PetBaseRepository petBaseRepository, PhotoRepository photoRepository) {
+                                                OwnerServiceImpl ownerServiceImpl, PetServiceImpl petService, CatRepository catRepository, DogRepository dogRepository, PetBaseRepository petBaseRepository, PhotoRepository photoRepository, HibernateSessionFactoryUtil hibernateSessionFactoryUtil) {
         this.botMessageService = botMessageService;
         this.telegramBot = telegramBot;
         this.petsOwnerServiceImpl = petsOwnerServiceImpl;
@@ -82,6 +85,7 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
         this.dogRepository = dogRepository;
         this.petBaseRepository = petBaseRepository;
         this.photoRepository = photoRepository;
+        this.hibernateSessionFactoryUtil = hibernateSessionFactoryUtil;
     }
 
 
@@ -212,10 +216,13 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                             sendMessage(chatId, PET_ID_REQUEST_FOR_PET_BOOKING);
                         }
                         break;
-                        // проверка метода
+                    // ПРОВЕРКА РАБОТЫ МЕТОДА -- > УДАЛИТЬ!
                     case "/1":
-
-                      sendMessage(chatId, catRepository.getById(1L).toString());
+                        Session session = getSessionFactory().openSession();
+                        Cat cat = session.get(Cat.class, 1);
+                        cat = catRepository.getById(1L);
+                        sendMessage(chatId, cat.toString());
+                        session.close();
                         break;
 
                     case "/volunteer":

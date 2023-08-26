@@ -79,9 +79,9 @@ public class CatServiceTest {
         when(catsCrud.findAll()).thenReturn(expectedCats);
         List<Cat> actualCats = catService.allCats();
 
-       assertEquals(expectedCats.size(), actualCats.size());
-            for (int i = 0; i < expectedCats.size(); i++) {
-                assertEquals(expectedCats.get(i), actualCats.get(i));
+        assertEquals(expectedCats.size(), actualCats.size());
+        for (int i = 0; i < expectedCats.size(); i++) {
+            assertEquals(expectedCats.get(i), actualCats.get(i));
         }
     }
 
