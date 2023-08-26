@@ -2,6 +2,7 @@ package com.ward_n6.entity.pets;
 
 import com.ward_n6.enums.PetsSex;
 import com.ward_n6.enums.PetsType;
+import lombok.Builder;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -13,6 +14,7 @@ import java.time.LocalDate;
 @Table(name = "dogs")
 @PrimaryKeyJoinColumn(name = "pets_type")
 @DiscriminatorValue("DOG")
+@Builder
 
 public class Dog extends Pet {
     public Dog() {

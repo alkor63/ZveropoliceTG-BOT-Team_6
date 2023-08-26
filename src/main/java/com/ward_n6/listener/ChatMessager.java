@@ -10,17 +10,18 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Component
-public class Messager {
+public class ChatMessager {
     private final TelegramBot telegramBot;
     private final BotMessageService botMessageService;
 
-    public Messager(TelegramBot telegramBot, BotMessageService botMessageService) {
+    public ChatMessager(TelegramBot telegramBot, BotMessageService botMessageService) {
         this.telegramBot = telegramBot;
         this.botMessageService = botMessageService;
     }
 
     private Logger logger = LoggerFactory.getLogger(TelegramBotPetShelterUpdatesListener.class);
 
+ // сохаранение сообщения в БД
     public void saveMessages(long chatId, String messageText) {
         if (messageText.isEmpty()) { // обрабатываем нулловое значение из парсинга
             sendMessage(chatId, "Неверный формат сообщения");

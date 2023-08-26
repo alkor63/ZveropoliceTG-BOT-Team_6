@@ -38,6 +38,7 @@ public abstract class Pet {
 
     @Column(name = "bread")
     private String bread;
+
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "pet_birthday")
     private LocalDate petBirthDay;
@@ -54,9 +55,9 @@ public abstract class Pet {
     @Column(name = "pets_type")
     private PetsType petsType;
 
-
+    @Column
     @JoinColumn(name = "owner_id")
-    private long ownerId;
+    private Long ownerId;
 
 
     public Pet(long id, PetsType petsType, PetsSex petsSex, String petName, LocalDate petBirthDay, String bread, Long ownerId) {
@@ -85,24 +86,24 @@ public abstract class Pet {
 
     @Override
     public String toString() {
-        return "Pet{" +
+        return
                 "ID " + id +
-                ", животное " + petsType.getTitle() + '\n' +
-                ", кличка " + petName + '\n' +
-                ", дата рождения: " + petBirthDay + '\n' +
-                ", пол: " + petsSex.getTitle() + '\n' +
-                ", возраст: " + getAge() + '\n' +
-                ", порода " + bread + '\n' +
-                ", id владельца: " + ownerId + '}' + '\n';
+                " животное " + petsType.getTitle() + '\n' +
+                " кличка " + petName + '\n' +
+                " дата рождения: " + petBirthDay + '\n' +
+                " пол: " + petsSex.getTitle() + '\n' +
+                " возраст: " + getAge() + '\n' +
+                " порода " + bread + '\n' +
+                " id владельца: " + ownerId + '}' + '\n';
     }
 
     public String reportToString() {
-        return "Pet{" +
+        return "Кошка{" +
                 "ID " + id +
-                " " + petsType.getTitle() +
-                ", кличка " + petName + '\'' +
-                ", возраст, лет: " + getAge() +
-                ", порода " + bread + '\'' +
+                " " + petsType.getTitle() + ", \n " +
+                " кличка " + petName + '\'' + ", \n" +
+                " возраст, лет: " + getAge() + ", \n" +
+                " порода " + bread + '\'' +
                 '}';
 
     }

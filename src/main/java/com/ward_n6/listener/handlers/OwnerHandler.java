@@ -75,7 +75,9 @@ public class OwnerHandler implements EventHandler {
                 owner.setId(update.message().chat().id().longValue());
                 ownerServiceImpl.save(owner);
                 telegramBot.execute(new SendMessage(update.message().chat().id(), "Ваши данные " + "\n" + owner.toString()
-                        + "добавлены в нашу базу. Для удаления данных из нашей базы обратитесь в волонтёру"));
+                        + "добавлены в нашу базу. Спасибо за регистрацию. Для удаления данных из нашей базы обратитесь " +
+                        "к волонтёру или нажмите команду /delet" +
+                        " Для обновления данных нажмите командку /myData и укажате Ваши данные заново."));
 
                 return true;
 

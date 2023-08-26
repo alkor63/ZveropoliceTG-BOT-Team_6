@@ -4,6 +4,9 @@ import com.ward_n6.repository.owner.OwnerRepository;
 
 import java.util.regex.Pattern;
 
+/***
+ * КЛАСС ДЛЯ ХРАНЕНИЯ ЧЕРНОВИКОВ МЕТОДОВ
+ */
 public class Drafts {
     private final OwnerRepository ownerRepository;
 
@@ -91,6 +94,114 @@ public class Drafts {
 //                throw new RuntimeException(e);
 //            }
 //        }
+//    }
+
+    //    public Boolean removePetsOwnerToArchive(PetsOwner petsOwner) {
+//        // убираем парочку из таблицы PetsOwner и заносим в одноименный архив
+//        // после успешного прохождения (окончания) испытательного срока
+//        try {
+//            PetsOwnerArchive newPetsOwnerArchive = new PetsOwnerArchive(
+//                    petsOwner.getDateBegin(),
+//                    petsOwner.getDateEnd(),
+//                    petsOwner.getOwnerId(),
+//                    petsOwner.getFirstName(),
+//                    petsOwner.getLastName(),
+//                    petsOwner.getPhoneNumber(),
+//                    petsOwner.getPetId(),
+//                    petsOwner.getBread(),
+//                    petsOwner.getPetBirthDay(),
+//                    petsOwner.getPetName()
+//                    );
+//            petsOwnerArchiveRepository.save(newPetsOwnerArchive);
+//            petsOwnerRepository.deleteById(petsOwner.getId());
+//            return true;
+//        } catch (IllegalArgumentException e) {
+//            System.out.println(e.getMessage());
+//            return false;
+//        }
+//    }
+//    ********* ОВНЕР-ПЕТС-ХЭНДЛЕР-НАЧАЛЬНЫЙ
+//    @Override
+//    public boolean handle(Update update) {
+//        if (actionOnNextMessage != null) {
+//            actionOnNextMessage.accept(update);
+//            actionOnNextMessage = null;
+//            return false;
+//        }
+//        var text = update.message().text();
+//        switch (text) {
+//            case "/ID":
+//                telegramBot.execute(new SendMessage(update.message().chat().id(),
+//                        PET_ID_REQUEST_FOR_PET_BOOKING));
+//                actionOnNextMessage = upd -> {
+//                    Session session = getSessionFactory().openSession();
+//                    var ownerId = update.message().chat().id();
+//                    var idMessage = upd.message().text();
+//                    if (idMessage.matches("\\d+")) { // проверяем, что число
+//                        long petId = Long.parseLong(idMessage); // парсим строку в число
+//
+//                        // КОШКИ
+//                        if (TelegramBotPetShelterUpdatesListener.catSelect) { // если кошачий приют, ищем в кошках
+//
+//                            petsOwner.setPetsType(PetsType.CAT); // присваиваем тип животного
+//
+//                            Cat cat = session.get(Cat.class, petId);
+//
+//                            if (cat != null) { // проверяем на кошках, что такой ID есть
+//                                petsOwner.setPet(cat);
+//                                cat.setOwnerId(ownerId);// заносим ID пользователя в таблицу питомца
+//                                catRepository.save(cat); // обновляем кощку
+//                                session.close();
+//                                telegramBot.execute(new SendMessage(update.message().chat().id(),
+//                                        "Питомец" + catRepository.getById(petId).getPetsType().getTitle() + " "
+//                                                + catRepository.getById(petId).getId() + " "
+//                                                + catRepository.getById(petId).getPetName() + "забронирован за Вами"));
+//
+//                            } else {
+//                                telegramBot.execute(new SendMessage(update.message().chat().id(),
+//                                        "Питомец с указанным ID отсутствует в нашем приюте. " +
+//                                                "Уточните ID интересующего Вас питомца."));
+//                            }
+//
+//                            // СОБАКИ
+//                        } else if (TelegramBotPetShelterUpdatesListener.dogSelect) {
+//
+//                            petsOwner.setPetsType(PetsType.DOG);
+//
+//                            Pet dog = session.get(Dog.class, petId);
+//
+//                            if (dog != null) { // проверяем, что такая собака есть в приюте
+//                                petsOwner.setPet(dog);
+//                                dog.setOwnerId(ownerId);
+//                                session.close();
+//                                telegramBot.execute(new SendMessage(update.message().chat().id(),
+//                                        "Питомец" + dogRepository.getById(petId).getPetsType().getTitle() + " "
+//                                                + dogRepository.getById(petId).getId() + " "
+//                                                + dogRepository.getById(petId).getPetName() + "забронирован за Вами."));
+//
+//                            } else {
+//                                telegramBot.execute(new SendMessage(update.message().chat().id(),
+//                                        "Питомец с указанным ID отсутствует в нашем приюте. " +
+//                                                "Уточните ID интересующего Вас питомца."));
+//                            }
+//                        }
+//
+//                        petsOwner.setOwnerId(ownerId); // присваиваем ID пользователя
+//                        petsOwner.setPetId(petId); // записываем ID питомца
+//                        Session session1 = getSessionFactory().openSession();
+//                        Owner owner = session1.get(Owner.class, ownerId);
+//                        petsOwner.setOwner(owner);
+//                        session1.close();
+//                        petsOwnerServiceImpl.save(petsOwner);
+//                        telegramBot.execute(new SendMessage(update.message().chat().id(),
+//                                "Спасибо. Скоро с Вами свяжется волонтёр!"));
+//                    } else {
+//                        telegramBot.execute(new SendMessage(update.message().chat().id(),
+//                                "Формат ID неверный, введите числовое значение ID выбранного питомца, нажмите или введите /ID"));
+//                    }
+//                };return true;
+//        }
+//        return false;
 //    }
 
 }

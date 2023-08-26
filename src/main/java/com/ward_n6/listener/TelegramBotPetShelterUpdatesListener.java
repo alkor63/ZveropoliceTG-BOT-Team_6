@@ -9,7 +9,6 @@ import com.pengrad.telegrambot.model.Update;
 import com.vdurmont.emoji.EmojiParser;
 import com.ward_n6.entity.Photo;
 import com.ward_n6.entity.owners.Owner;
-import com.ward_n6.entity.pets.Pet;
 import com.ward_n6.entity.shelters.PetShelter;
 import com.ward_n6.factory.HibernateSessionFactoryUtil;
 import com.ward_n6.listener.handlers.*;
@@ -29,7 +28,8 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import java.util.List;
 
-import static com.ward_n6.listener.MessageStringsConstants.*;
+import static com.ward_n6.listener.MessageStringsConstants.PERSONAL_DATA_REQUEST;
+import static com.ward_n6.listener.MessageStringsConstants.REPORT;
 
 
 @Component
@@ -57,12 +57,13 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
     private Photo photos = new Photo();
     private final HibernateSessionFactoryUtil hibernateSessionFactoryUtil;
     private final Buttons buttons;
-    private final Messager messager;
+    private final ChatMessager chatMessager;
+    private final PetsOwnerFactories petsOwnerFactories;
 
 
     public TelegramBotPetShelterUpdatesListener(BotMessageService botMessageService, TelegramBot telegramBot,
                                                 PetsOwnerServiceImpl petsOwnerServiceImpl, OwnerReportServiceImpl ownerReportServiceImpl,
-                                                OwnerServiceImpl ownerServiceImpl, PetServiceImpl petService, CatRepository catRepository, DogRepository dogRepository, PetBaseRepository petBaseRepository, PhotoRepository photoRepository, HibernateSessionFactoryUtil hibernateSessionFactoryUtil, Buttons buttons, Messager messager) {
+                                                OwnerServiceImpl ownerServiceImpl, PetServiceImpl petService, CatRepository catRepository, DogRepository dogRepository, PetBaseRepository petBaseRepository, PhotoRepository photoRepository, HibernateSessionFactoryUtil hibernateSessionFactoryUtil, Buttons buttons, ChatMessager chatMessager, PetsOwnerFactories petsOwnerFactories) {
         this.botMessageService = botMessageService;
         this.telegramBot = telegramBot;
         this.petsOwnerServiceImpl = petsOwnerServiceImpl;
@@ -75,7 +76,8 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
         this.photoRepository = photoRepository;
         this.hibernateSessionFactoryUtil = hibernateSessionFactoryUtil;
         this.buttons = buttons;
-        this.messager = messager;
+        this.chatMessager = chatMessager;
+        this.petsOwnerFactories = petsOwnerFactories;
     }
 
 
@@ -83,7 +85,7 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
     public void init() {
         telegramBot.setUpdatesListener(this);
     }
-
+//ПЕРЕМЕННЫЕ-ФЛАГИ
     public static boolean startSelected = false; // переменная для подтверждения старта
     public static boolean reportSelect = false;
     public static boolean reportTextSelect = false;
@@ -162,14 +164,14 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                     case "/dogs":
                         dogSelect = true;
                         if (startSelected) {
-                            messager.sendMessage(chatId, "Вас приветствует приют для собак. " +
+                            chatMessager.sendMessage(chatId, "Вас приветствует приют для собак. " +
                                     "Выберите интересующий Вас пункт меню.");
                         }
                         break;
                     case "/cats":
                         catSelect = true;
                         if (startSelected) {
-                            messager.sendMessage(chatId, "Вас приветствует приют для кошек. " +
+                            chatMessager.sendMessage(chatId, "Вас приветствует приют для кошек. " +
                                     "Выберите интересующий Вас пункт меню.");
                         }
                         break;
@@ -177,7 +179,7 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                     case "/photo":
                         if (dogSelect || catSelect) {
                             currentHandler = new PhotoHandler(telegramBot, photoRepository);
-                            messager.sendMessage(chatId, "Отправьте фото Вашего питомца для отчёта.");
+                            chatMessager.sendMessage(chatId, "Отправьте фото Вашего питомца для отчёта.");
                         }
                         break;
 
@@ -186,39 +188,34 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                             reportTextSelect = true;
                             currentHandler = new ReportHandler(ownerReportServiceImpl, telegramBot, petService,
                                     catRepository, dogRepository, petBaseRepository);
-                            messager.sendMessage(chatId, EmojiParser.parseToUnicode(REPORT));
-                        } else messager.sendMessage(chatId, "Пожалуйста, сначала выберите приют");
+                            chatMessager.sendMessage(chatId, EmojiParser.parseToUnicode(REPORT));
+                        } else chatMessager.sendMessage(chatId, "Пожалуйста, сначала выберите приют");
                         break;
 
                     case "/myData":
                         getOwnerDataSelect = true;
                         currentHandler = new OwnerHandler(ownerServiceImpl, telegramBot);
-                        messager.sendMessage(chatId, PERSONAL_DATA_REQUEST);
+                        chatMessager.sendMessage(chatId, PERSONAL_DATA_REQUEST);
                         break;
 
                     case "/takePet":
                         if (dogSelect || catSelect) {
-                            currentHandler = new PetsOwnerHandler(petsOwnerServiceImpl, telegramBot, catRepository,
-                                    dogRepository);
-//                            Owner ownerCheck = ownerServiceImpl.getOwnerById(chatId);
-//                            if (ownerCheck != null) { // проверяем, что пользователь есть в базе
+                            if (petsOwnerFactories.ownerFactory(chatId) != null) { // проверяем, что пользователь есть в базе
+                                chatMessager.sendMessage(chatId, """
+                                        Введите или нажмите команду:
+                                        /ID"""); // запрос ID для бронирования
 
-                            messager.sendMessage(chatId, PET_ID_REQUEST_FOR_PET_BOOKING); // запрос ID для бронирования
+                                currentHandler = new PetsOwnerHandler(petsOwnerServiceImpl, telegramBot, catRepository, dogRepository);
+                            } else chatMessager.sendMessage(chatId, """
+                                    Пожалуйста, сначала зарегистрируйтесь в нашем приюте:
+                                    /myData""");
                         }
                         break;
-                    // ПРОВЕРКА РАБОТЫ МЕТОДА -- > ТРЕНИРОВКА НА КОШКАХ!
-                    case "/1":
-                        long petId = 27L;
-                        Pet cat = catRepository.getById(petId);
-                        if (cat != null) {
-                            messager.sendMessage(chatId, cat.toString());
-                        } else {
-                            messager.sendMessage(chatId, "такой кошки нет");
-                        }
-                        break;
+
+
 
                     case "/volunteer":
-                        messager.sendMessage(chatId,
+                        chatMessager.sendMessage(chatId,
                                 petShelter.getCallVolonteer());
                         break;
                 }
