@@ -219,7 +219,7 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                     // ПРОВЕРКА РАБОТЫ МЕТОДА -- > УДАЛИТЬ!
                     case "/1":
                         long petId = 27;
-                        Session session = getSessionFactory().openSession().getSession();
+                        Session session = getSessionFactory().openSession();
                         Cat cat = session.get(Cat.class, petId);
                         cat = catRepository.getById(petId);
                         sendMessage(chatId, cat.toString());
