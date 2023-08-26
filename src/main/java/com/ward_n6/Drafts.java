@@ -71,4 +71,26 @@ public class Drafts {
 //        }
 
 
+    //**************************************** фОТО ******************************
+//    @Value("${path.to.file}")
+//    String folderPath; // путь к файлам
+//
+//    private void getPhoto(Update update) {
+//        PhotoSize[] messagePhoto = update.message().photo(); // получаем сообщение из текущего обновления
+//        Long chatId = update.message().chat().id(); // получаем идентификатор чата, к которому относится апдейт
+////       PhotoSize[] messagePhoto = message.photo();
+//        if (messagePhoto != null) {
+//            var photo = update.message().photo()[3]; // 3 - самое лучшее качество
+//            var getFile = telegramBot.execute(new GetFile(photo.fileId()));
+//            var outFile = new File(folderPath, (photo.fileId() + "-owner-" + chatId + ".jpeg")); // добавлено
+//            try (var in = new URL(telegramBot.getFullFilePath(getFile.file())).openStream();
+//                 var out = new FileOutputStream(outFile)) {
+//                // для примера просто сделал случайное название файла, лучше прописать путь и расширение
+//                in.transferTo(out);
+//            } catch (IOException e) {
+//                throw new RuntimeException(e);
+//            }
+//        }
+//    }
+
 }
