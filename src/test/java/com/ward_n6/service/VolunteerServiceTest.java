@@ -7,7 +7,6 @@ import com.ward_n6.entity.pets.Cat;
 import com.ward_n6.entity.pets.Pet;
 import com.ward_n6.entity.reports.OwnerReport;
 import com.ward_n6.repository.PetRepository;
-import com.ward_n6.repository.PetsOwnerArchiveRepository;
 import com.ward_n6.repository.PetsOwnerRepository;
 import javassist.NotFoundException;
 import org.junit.jupiter.api.Test;
