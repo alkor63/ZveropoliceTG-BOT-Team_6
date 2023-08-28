@@ -1,14 +1,9 @@
 package com.ward_n6.service;
 
-import com.ward_n6.entity.owners.CatOwner;
-import com.ward_n6.entity.owners.Owner;
 import com.ward_n6.entity.owners.PetsOwner;
-import com.ward_n6.entity.pets.Cat;
-import com.ward_n6.entity.pets.Pet;
 import com.ward_n6.entity.reports.OwnerReport;
 import com.ward_n6.repository.PetRepository;
 import com.ward_n6.repository.PetsOwnerRepository;
-import javassist.NotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -22,22 +17,15 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 
-import static com.ward_n6.enums.PetsSex.*;
-import static com.ward_n6.enums.PetsType.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class VolunteerServiceTest {
-    private static int i;
     String firstName = "Саня";
 
-    private static Owner owner = new CatOwner(110L, "testName", "testLastName", "testPhoneNumber");
-    private static Owner owner1 = new CatOwner(111L, "testName1", "testLastName1", "testPhoneNumber1");
-    private OwnerReport ownerReport1 = new OwnerReport(11L, LocalDateTime.now().minusDays(1), false, "nutrition1", "health1", "bahavior1", 1L);
-    private OwnerReport ownerReport2 = new OwnerReport(12L, LocalDateTime.now(), true, "food", "health2", "bahavior2", 2L);
-    private PetsOwner petsOwner = new PetsOwner(1l, LocalDate.now(), LocalDate.now().minusDays(45), 1L, 1L);
-    private static Pet pet = new Cat(CAT, MALE, "Атос", LocalDate.of(2020, 5, 11), "mixBread");
+    private final OwnerReport ownerReport1 = new OwnerReport(11L, LocalDateTime.now().minusDays(1), false, "nutrition1", "health1", "behavior1", 1L);
+    private final OwnerReport ownerReport2 = new OwnerReport(12L, LocalDateTime.now(), true, "food", "health2", "behavior2", 2L);
     @Mock
     private OwnerReportService ownerReportService;
     @Mock
@@ -71,7 +59,7 @@ class VolunteerServiceTest {
     void viewAllReportsTest() {
         when(ownerReportService.getAllOwnerReports()).thenReturn(Arrays.asList(ownerReport1, ownerReport2));
         DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
-        LocalTime time = LocalTime.of(21, 00);
+        LocalTime time = LocalTime.of(21, 0);
         // запрос на просмотр отчетов может прийти, например, в 21:01
         // чтоб не потерять отчеты, пришедшие с 21:00 по 21:01, время задаём здесь
         LocalDateTime startTime = LocalDateTime.of(LocalDate.now().minusDays(1), time);
@@ -88,7 +76,7 @@ class VolunteerServiceTest {
     }
 
     @Test
-    void shouldReactionByOwnersVerdict_1() throws NotFoundException {
+    void shouldReactionByOwnersVerdict_1()  {
         when(ownerReportService.getAllOwnerReports()).thenReturn(Arrays.asList(ownerReport1, ownerReport2));
 
         assertEquals("Вы очень редко присылали отчеты Испытательный срок продлен на 30 дней",

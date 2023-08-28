@@ -7,7 +7,6 @@ import javassist.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 @Service
 public class PetsOwnerServiceImpl implements PetsOwnerService {
@@ -20,12 +19,11 @@ public class PetsOwnerServiceImpl implements PetsOwnerService {
     @Override
     public PetsOwner editDateEndPetsOwnerById(int petsOwnerId, LocalDate newDateEnd)
             throws NotFoundException {
-        long longId = petsOwnerId;
-        Optional optionalPetsOwner = petsOwnerRepository.findById(longId);
-        if (!optionalPetsOwner.isPresent()) {
+        Optional<PetsOwner> optionalPetsOwner = petsOwnerRepository.findById((long) petsOwnerId);
+        if (optionalPetsOwner.isEmpty()) {
             throw new NotFoundException("Невозможно изменить запись, т.к. в базе pets_owner нет id = " + petsOwnerId);
         }
-        PetsOwner petsOwner = (PetsOwner) optionalPetsOwner.get();
+        PetsOwner petsOwner = optionalPetsOwner.get();
         petsOwner.setDateEnd(newDateEnd);
         return petsOwnerRepository.save(petsOwner);
     }

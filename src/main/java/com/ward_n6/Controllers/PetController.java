@@ -9,8 +9,6 @@ import javassist.NotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,12 +40,11 @@ public class PetController {
     @Operation(summary = "Отредактировать карточку животного",
             description = "нужно указать id и заполнить все поля карточки животного в Body")
     public ResponseEntity<Pet> editPet(@PathVariable int petId, @RequestBody Pet pet) throws NotFoundException {
-        long longId = petId;
-        Optional optionalPet = petRepository.findById(longId);
-        if (!optionalPet.isPresent()) {
-            throw new EntityNotFoundException("Невозможно изменить отчёт, т.к. в базе нет отчёта с id = " + petId);
+        Optional<Pet> optionalPet = petRepository.findById((long) petId);
+        if (optionalPet.isEmpty()) {
+            throw new NotFoundException("Невозможно изменить отчёт, т.к. в базе нет отчёта с id = " + petId);
         }
-        Pet existingPet = (Pet) optionalPet.get();
+        Pet existingPet = optionalPet.get();
 
         existingPet.setPetName(pet.getPetName());
         existingPet.setBread(pet.getBread());
@@ -61,13 +58,12 @@ public class PetController {
     @DeleteMapping("/{petId}")
     @Operation(summary = "Удалить одно животное из списка", description = "нужно указать id животного")
     public ResponseEntity<Pet> deletePet(@PathVariable int petId) throws NotFoundException {
-        long longId = petId;
-        Optional<Pet> optionalPet = petRepository.findById(longId);
+        Optional<Pet> optionalPet = petRepository.findById((long) petId);
         if (optionalPet.isPresent()) {
-            petRepository.deleteById(longId);
+            petRepository.deleteById((long) petId);
             return ResponseEntity.ok().body(optionalPet.get());
         }
-        throw new EntityNotFoundException("Невозможно удалить отчёт, т.к. в базе нет отчёта с id = " + petId);
+        throw new NotFoundException("Невозможно удалить отчёт, т.к. в базе нет отчёта с id = " + petId);
     }
 
     @DeleteMapping
