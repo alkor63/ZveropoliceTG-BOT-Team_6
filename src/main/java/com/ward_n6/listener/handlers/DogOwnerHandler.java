@@ -84,6 +84,7 @@ public class DogOwnerHandler implements EventHandler {
                 petsOwner.setOwnerId(update.message().chat().id()); // присваиваем ID пользователя
                 // записываем ID питомца
                 petsOwner.setStartDate(LocalDate.now());
+                petsOwner.setEndDate(LocalDate.now().plusDays(30));
                 petsOwnerServiceImpl.save(petsOwner);
                 dogRepository.save(dog);
                 telegramBot.execute(new SendMessage(update.message().chat().id(),

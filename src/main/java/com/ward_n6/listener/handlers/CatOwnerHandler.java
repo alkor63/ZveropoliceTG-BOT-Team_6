@@ -86,6 +86,7 @@ public class CatOwnerHandler implements EventHandler {
                     case "/Booking":
                         petsOwner.setOwnerId(update.message().chat().id()); // присваиваем ID пользователя
                         petsOwner.setStartDate(LocalDate.now());
+                        petsOwner.setEndDate(LocalDate.now().plusDays(30));
                         petsOwnerServiceImpl.save(petsOwner);
                         catRepository.save(cat); // обновляем кошку
                         telegramBot.execute(new SendMessage(update.message().chat().id(),
