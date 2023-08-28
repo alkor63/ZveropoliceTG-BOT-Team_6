@@ -4,12 +4,14 @@ import com.ward_n6.entity.owners.PetsOwner;
 import com.ward_n6.repository.owner.PetsOwnerRepository;
 import com.ward_n6.service.interfaces.PetsOwnerService;
 import javassist.NotFoundException;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.Optional;
 
 @Service
+@Repository
 public class PetsOwnerServiceImpl implements PetsOwnerService {
     private final PetsOwnerRepository petsOwnerRepository;
 

@@ -65,8 +65,9 @@ public class ReportHandler implements EventHandler {
                         "Укажите ID Вашего питомца"));
                 actionOnNextMessage = upd -> {
                     var idMessage = upd.message().text();
-                    long id = Long.parseLong(idMessage);
-                    if (idMessage.matches("\\d+") && (catRepository.getById(id) != null || dogRepository.getById(id) != null)) { // проверяем, что указано число
+
+                    if (idMessage.matches("\\d+")) { // проверяем, что указано число
+                        long id = Long.parseLong(idMessage);
                         ownerReport.setPetId(id);
                         telegramBot.execute(new SendMessage(upd.message().chat().id(),
                                 "ID питомца записан."));

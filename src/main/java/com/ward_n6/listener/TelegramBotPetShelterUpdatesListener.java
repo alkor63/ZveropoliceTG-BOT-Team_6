@@ -10,7 +10,7 @@ import com.vdurmont.emoji.EmojiParser;
 import com.ward_n6.entity.Photo;
 import com.ward_n6.entity.owners.Owner;
 import com.ward_n6.entity.shelters.PetShelter;
-import com.ward_n6.factory.HibernateSessionFactoryUtil;
+
 import com.ward_n6.listener.handlers.*;
 import com.ward_n6.repository.PhotoRepository;
 import com.ward_n6.repository.pets.CatRepository;
@@ -55,15 +55,21 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
     private final PetBaseRepository petBaseRepository;
     private final PhotoRepository photoRepository;
     private Photo photos = new Photo();
-    private final HibernateSessionFactoryUtil hibernateSessionFactoryUtil;
+
     private final Buttons buttons;
     private final ChatMessager chatMessager;
     private final PetsOwnerFactories petsOwnerFactories;
 
 
     public TelegramBotPetShelterUpdatesListener(BotMessageService botMessageService, TelegramBot telegramBot,
-                                                PetsOwnerServiceImpl petsOwnerServiceImpl, OwnerReportServiceImpl ownerReportServiceImpl,
-                                                OwnerServiceImpl ownerServiceImpl, PetServiceImpl petService, CatRepository catRepository, DogRepository dogRepository, PetBaseRepository petBaseRepository, PhotoRepository photoRepository, HibernateSessionFactoryUtil hibernateSessionFactoryUtil, Buttons buttons, ChatMessager chatMessager, PetsOwnerFactories petsOwnerFactories) {
+                                                PetsOwnerServiceImpl petsOwnerServiceImpl,
+                                                OwnerReportServiceImpl ownerReportServiceImpl,
+                                                OwnerServiceImpl ownerServiceImpl, PetServiceImpl petService,
+                                                CatRepository catRepository, DogRepository dogRepository,
+                                                PetBaseRepository petBaseRepository,
+                                                PhotoRepository photoRepository, Buttons buttons,
+                                                ChatMessager chatMessager,
+                                                PetsOwnerFactories petsOwnerFactories) {
         this.botMessageService = botMessageService;
         this.telegramBot = telegramBot;
         this.petsOwnerServiceImpl = petsOwnerServiceImpl;
@@ -74,7 +80,7 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
         this.dogRepository = dogRepository;
         this.petBaseRepository = petBaseRepository;
         this.photoRepository = photoRepository;
-        this.hibernateSessionFactoryUtil = hibernateSessionFactoryUtil;
+
         this.buttons = buttons;
         this.chatMessager = chatMessager;
         this.petsOwnerFactories = petsOwnerFactories;
@@ -205,13 +211,20 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                                         Введите или нажмите команду:
                                         /ID"""); // запрос ID для бронирования
 
-                                currentHandler = new PetsOwnerHandler(petsOwnerServiceImpl, telegramBot, catRepository, dogRepository);
-                            } else chatMessager.sendMessage(chatId, """
-                                    Пожалуйста, сначала зарегистрируйтесь в нашем приюте:
-                                    /myData""");
+                                if (catSelect) {
+                                    currentHandler = new CatOwnerHandler(petsOwnerServiceImpl, telegramBot,
+                                            catRepository, petsOwnerFactories, chatMessager);
+
+                                } else if (dogSelect) {
+                                    currentHandler = new DogOwnerHandler(petsOwnerServiceImpl, telegramBot, dogRepository, petsOwnerFactories, chatMessager);
+                                }
+                            } else {
+                                chatMessager.sendMessage(chatId, """
+                                        Пожалуйста, сначала зарегистрируйтесь в нашем приюте:
+                                        /myData""");
+                            }
                         }
                         break;
-
 
 
                     case "/volunteer":

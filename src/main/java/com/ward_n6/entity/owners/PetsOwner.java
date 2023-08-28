@@ -19,46 +19,23 @@ import java.util.Objects;
 
 public class PetsOwner {
 
-    @javax.persistence.Id
+    @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
 
     @Column(name = "owner_id", nullable = false)
-    private long ownerId;
+    private Long ownerId;
 
     @Column(name = "pet_id", nullable = false)
-    private long petId;
+    private Long petId;
 
-//    @ManyToOne
-//    @Transient
-//    @JoinColumn(name = "owner_id", referencedColumnName = "owner_id")
-//    private Owner owner;
-//
-//    @Column(name = "pet_type", nullable = false)
-//    @Enumerated(EnumType.STRING)
-//    private PetsType petsType;
-
-//    @ManyToOne
-//    @Transient
-//    @JoinColumn(name = "pet", insertable = false, updatable = false)
-//    private Pet pet;
 
     @Column(name = "start_date")
     private LocalDate startDate;
 
     @Column(name = "end_date")
     private LocalDate endDate;
-
-//    @Column(name = "owner") // заносим сущность в строковом виде в таблицу
-//    public String getOwnerAsString() {
-//        return owner != null ? owner.toString() : null;
-//    }
-
-//    @Column(name = "pet")
-//    public String getPetAsString() {
-//        return pet != null ? pet.toString() : null;
-//    }
 
 
     @Override

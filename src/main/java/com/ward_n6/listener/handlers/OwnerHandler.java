@@ -71,7 +71,6 @@ public class OwnerHandler implements EventHandler {
                 break;
 
             case "/save":
-
                 owner.setId(update.message().chat().id().longValue());
                 ownerServiceImpl.save(owner);
                 telegramBot.execute(new SendMessage(update.message().chat().id(), "Ваши данные " + "\n" + owner.toString()
