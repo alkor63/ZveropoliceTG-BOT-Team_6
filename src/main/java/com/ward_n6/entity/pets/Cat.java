@@ -13,26 +13,14 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "cats")
-@PrimaryKeyJoinColumn(name = "CAT")
+@PrimaryKeyJoinColumn(name = "pets_type")
 @DiscriminatorValue("CAT")
 
 public class Cat extends Pet {
     public Cat() {
     }
-
-    public Cat(long id, PetsType petsType, PetsSex petsSex, String petName, LocalDate petBirthDay, String bread) {
-        super(id, petsType, petsSex, petName, petBirthDay, bread);
-    }
-
-    public Cat(PetsType petsType, PetsSex petsSex, String petName, LocalDate petBirthDay, int petAge, String bread, Owner Owner) {
-        super(petsType, petsSex, petName, petBirthDay, petAge, bread, Owner);
-    }
-
     public Cat(PetsType petsType, PetsSex petsSex, String petName, LocalDate petBirthDay, String bread) {
         super(petsType, petsSex, petName, petBirthDay, bread);
     }
 
-    public Cat(long id, PetsType petsType, PetsSex petsSex, String petName, int petAge, String bread, Owner Owner) {
-        super(id, petsType, petsSex, petName, petAge, bread, Owner);
-    }
 }

@@ -38,14 +38,11 @@ class VolunteerServiceTest {
     private OwnerReport ownerReport1 = new OwnerReport(11L, LocalDateTime.now().minusDays(1), false, "nutrition1", "health1", "bahavior1", 1L);
     private OwnerReport ownerReport2 = new OwnerReport(12L, LocalDateTime.now(), true, "food", "health2", "bahavior2", 2L);
     private PetsOwner petsOwner = new PetsOwner(1l, LocalDate.now(), LocalDate.now().minusDays(45), 1L, 1L);
-    private static Pet pet = new Cat(99L, CAT, MALE, "Атос", LocalDate.of(2020, 5, 11), "mixBread");
+    private static Pet pet = new Cat(CAT, MALE, "Атос", LocalDate.of(2020, 5, 11), "mixBread");
     @Mock
     private OwnerReportService ownerReportService;
     @Mock
     private PetRepository petRepository;
-
-    @Mock
-    private PetsOwnerArchiveRepository petsOwnerArchiveRepository;
     @Mock
     private PetsOwnerRepository petsOwnerRepository;
     @Mock
@@ -53,7 +50,6 @@ class VolunteerServiceTest {
     @Spy
     final VolunteerService volunteerMock = spy(new VolunteerService(
             petsOwnerRepository,
-            petsOwnerArchiveRepository,
             petsOwnerService,
             ownerReportService,
             petRepository));
@@ -107,7 +103,6 @@ class VolunteerServiceTest {
 
     @Test
     void shouldStringAnswerOnBinaryCodeAfterVerifyReport() {
-        //       VolunteerTest verifyReportMock = new VolunteerTest();
         when(volunteerMock.verifyReport(ownerReport1)).thenReturn(111);
         assertEquals(("Вы забыли прислать фото питомца. Заполните, пожалуйста, это поле"),
                 volunteer.reportExpertise(ownerReport1));

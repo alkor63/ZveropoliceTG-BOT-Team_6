@@ -1,10 +1,7 @@
 package com.ward_n6.service;
 
-import com.ward_n6.entity.owners.Owner;
 import com.ward_n6.entity.owners.PetsOwner;
-import com.ward_n6.entity.owners.PetsOwnerArchive;
 import com.ward_n6.entity.reports.OwnerReport;
-import com.ward_n6.entity.pets.Pet;
 import com.ward_n6.repository.PetRepository;
 import com.ward_n6.repository.PetsOwnerArchiveRepository;
 import com.ward_n6.repository.PetsOwnerRepository;
@@ -27,19 +24,16 @@ public class VolunteerService {
 
 
    private final PetsOwnerRepository petsOwnerRepository;
-    private final PetsOwnerArchiveRepository petsOwnerArchiveRepository;
     private final PetsOwnerService petsOwnerService;
 //    @Resource
     private final OwnerReportService ownerReportService;
     private final PetRepository petRepository;
 
     public VolunteerService(PetsOwnerRepository petsOwnerRepository,
-                            PetsOwnerArchiveRepository petsOwnerArchiveRepository,
                             PetsOwnerService petsOwnerService,
                             OwnerReportService ownerReportService,
                             PetRepository petRepository) {
         this.petsOwnerRepository = petsOwnerRepository;
-        this.petsOwnerArchiveRepository = petsOwnerArchiveRepository;
         this.petsOwnerService = petsOwnerService;
         this.ownerReportService = ownerReportService;
         this.petRepository = petRepository;
@@ -51,31 +45,6 @@ public class VolunteerService {
         return "Привет, " + firstName + "! Я Игорь - волонтёр приюта для животных. Готов ответить на все вопросы";
     }
 
-
-//    public Boolean removePetsOwnerToArchive(PetsOwner petsOwner) {
-//        // убираем парочку из таблицы PetsOwner и заносим в одноименный архив
-//        // после успешного прохождения (окончания) испытательного срока
-//        try {
-//            PetsOwnerArchive newPetsOwnerArchive = new PetsOwnerArchive(
-//                    petsOwner.getDateBegin(),
-//                    petsOwner.getDateEnd(),
-//                    petsOwner.getOwnerId(),
-//                    petsOwner.getFirstName(),
-//                    petsOwner.getLastName(),
-//                    petsOwner.getPhoneNumber(),
-//                    petsOwner.getPetId(),
-//                    petsOwner.getBread(),
-//                    petsOwner.getPetBirthDay(),
-//                    petsOwner.getPetName()
-//                    );
-//            petsOwnerArchiveRepository.save(newPetsOwnerArchive);
-//            petsOwnerRepository.deleteById(petsOwner.getId());
-//            return true;
-//        } catch (IllegalArgumentException e) {
-//            System.out.println(e.getMessage());
-//            return false;
-//        }
-//    }
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     public String viewAllReports(LocalDate date) {
@@ -165,12 +134,12 @@ public class VolunteerService {
             case 3:
                 // поздравить с успешным прохождением испытательного срока
                 try {
-//                    removePetsOwnerToArchive(petWithOwner);
-                    // method is Boolean
-//              перемещаем запись о животном и хозяине в архив
+
 //              удаляем запись о животном и хозяине из таблицы с испытательным сроком
 //              удаляем запись о животном из таблицы Pet - этого животного больше нет в приюте
-//                    petRepository.deleteById(petWithOwner.getPetId());
+
+                    petsOwnerRepository.deleteById(petWithOwner.getId());
+                    petRepository.deleteById(petWithOwner.getPetId());
 
                     return "Поздравляем с завершением испытательного срока! Ваш питомец остаётся с Вами навсегда";
                 } catch (Exception e) {

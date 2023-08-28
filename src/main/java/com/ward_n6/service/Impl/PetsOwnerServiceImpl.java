@@ -17,45 +17,6 @@ public class PetsOwnerServiceImpl implements PetsOwnerService {
         this.petsOwnerRepository = petsOwnerRepository;
     }
 
-//    //++++++++++++++++++++++++++++++++++++++++++++++++++++
-//    @Override
-//    public PetsOwner addPetsOwner(PetsOwner petsOwner) {
-//        return petsOwnerRepository.save(petsOwner);
-//    }
-//
-//    // ++++++++++++++++++++++++++++++++++++
-//    @Override
-//    public List<PetsOwner> getAllPetsOwners() throws NotFoundException {
-//        List<PetsOwner> allPetsOwners = petsOwnerRepository.findAll();
-//        if (allPetsOwners.size() > 0) {
-//            return allPetsOwners;
-//        }
-//        throw new NotFoundException("не удалось обнаружить записей в базе pets_owner");
-//    }
-//
-//    // ++++++++++++++++++++++++++++++++++++
-//    @Override
-//    public PetsOwner getPetsOwnerById(Integer petsOwnerId) throws NotFoundException {
-//        long longId = petsOwnerId;
-//        Optional<PetsOwner> optionalPetsOwner = petsOwnerRepository.findById(longId);
-//        if (optionalPetsOwner.isPresent())
-//            return optionalPetsOwner.get();
-//        throw new NotFoundException("В базе pets_owner нет записи с id = " + petsOwnerId);
-//    }
-//
-//    //+++++++++++++++++++++++++++++++++++++++++
-//    @Override
-//    public PetsOwner deletePetsOwnerById(Integer petsOwnerId)
-//            throws NotFoundException {
-//        long longId = petsOwnerId;
-//        Optional<PetsOwner> optionalPetsOwner = petsOwnerRepository.findById(longId);
-//        if (optionalPetsOwner.isPresent()) {
-//            petsOwnerRepository.deleteById(longId);
-//            return optionalPetsOwner.get();
-//        }
-//        throw new NotFoundException("Невозможно удалить запись, т.к. в базе pets_owner нет id = " + petsOwnerId);
-//    }
-//
     @Override
     public PetsOwner editDateEndPetsOwnerById(int petsOwnerId, LocalDate newDateEnd)
             throws NotFoundException {

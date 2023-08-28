@@ -1,6 +1,6 @@
 package com.ward_n6.Controllers;
 
-import com.ward_n6.entity.pets.Cat_2;
+import com.ward_n6.entity.pets.Cat;
 import com.ward_n6.entity.pets.CatsCrud;
 import com.ward_n6.entity.pets.Pet;
 import com.ward_n6.repository.PetRepository;
@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -29,13 +30,13 @@ import java.util.Optional;
 
 
     @PostMapping("Добавление кошки")
-    public ResponseEntity<Cat_2> addCat(Cat_2 cat_2) {
-        catsCrud.save(cat_2);
-        return ResponseEntity.ok(cat_2);
+    public ResponseEntity<Cat> addCat(Cat cat) {
+        petRepository.save(cat);
+        return ResponseEntity.ok(cat);
     }
       @GetMapping("Поиск кошки")
         public ResponseEntity<String> searchCat(long x) {
-        Optional<Cat_2> search = catsCrud.findById(x);
+        Optional<Pet> search = petRepository.findById(x);
         if (search.isEmpty()) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(search.orElseThrow().toString());
     }
@@ -82,7 +83,7 @@ import java.util.Optional;
         @GetMapping
         @Operation(summary = "Показать всех кошек приюта")
         public String allCats() {
-            Iterable<Cat_2> info = catsCrud.findAll();
+            List<Pet> info = petRepository.findAll();
             return info.toString();
         }
 
