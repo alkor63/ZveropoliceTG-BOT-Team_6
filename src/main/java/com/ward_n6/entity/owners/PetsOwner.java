@@ -3,7 +3,10 @@ package com.ward_n6.entity.owners;
 import lombok.*;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -19,17 +22,16 @@ import java.util.Objects;
 
 public class PetsOwner {
 
+//
+//    @Column(name = "id", nullable = false)
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "pet_id", nullable = false)
     private long id;
+
 
     @Column(name = "owner_id", nullable = false)
     private Long ownerId;
-
-    @Column(name = "pet_id", nullable = false)
-    private Long petId;
-
 
     @Column(name = "start_date")
     private LocalDate startDate;
@@ -37,25 +39,23 @@ public class PetsOwner {
     @Column(name = "end_date")
     private LocalDate endDate;
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof PetsOwner petsOwner)) return false;
-        return getOwnerId() == petsOwner.getOwnerId() && getPetId() == petsOwner.getPetId() && Objects.equals(getId(), petsOwner.getId()) && Objects.equals(getStartDate(), petsOwner.getStartDate()) && Objects.equals(getEndDate(), petsOwner.getEndDate());
+        return getId() == petsOwner.getId() && Objects.equals(getOwnerId(), petsOwner.getOwnerId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getOwnerId(), getPetId(), getStartDate(), getEndDate());
+        return Objects.hash(getId(), getOwnerId());
     }
 
     @Override
     public String toString() {
         return "PetsOwner{" +
-                "id=" + id +
+                "petId=" + id +
                 ", ownerId=" + ownerId +
-                ", petId=" + petId +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
                 '}';

@@ -56,7 +56,7 @@ public abstract class Pet {
     private PetsType petsType;
 
     @Column
-    @JoinColumn(name = "owner_id")
+   (name = "owner_id")
     private Long ownerId;
 
 

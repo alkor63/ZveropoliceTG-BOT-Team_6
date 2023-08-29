@@ -34,7 +34,7 @@ public class DogOwnerHandler implements EventHandler {
         this.petsOwnerFactories = petsOwnerFactories;
         this.chatMessager = chatMessager;
     }
-
+private static long petId;
     @Override
     public boolean handle(Update update) {
         if (actionOnNextMessage != null) {
@@ -51,23 +51,23 @@ public class DogOwnerHandler implements EventHandler {
                     var ownerId = update.message().chat().id().longValue();
                     var idMessage = upd.message().text();
                     if (idMessage.matches("\\d+")) { // проверяем, что число
-                        long petId = Long.parseLong(idMessage); // парсим строку в число
+                         petId = Long.parseLong(idMessage); // парсим строку в число
                         dog = petsOwnerFactories.dogFactory(petId, ownerId);
-                        if ((dog != null) && dog.getOwnerId() == null) { // проверяем, что такая собака есть в приюте
-                            dog.setOwnerId(ownerId);
-
-                            petsOwner.setPetId(petId); // записываем ID питомца
+                        if (dog != null && dog.getOwnerId() == null) { // проверяем, что такая собака есть в приюте
+                            dog.setOwnerId(ownerId); // записываем id овнера питомцу
+                            petsOwner.setId(petId); // записываем ID питомца
 
                             telegramBot.execute(new SendMessage(update.message().chat().id(),
                                     """
                                             Если Вы уверены в своём решении введите или нажмите команду
                                             /Booking
                                             """));
-                        } else if (dog.getOwnerId() != null) {
+                        } else if (petsOwnerFactories.petsOwnerFactory(petId) != null ) {
                             telegramBot.execute(new SendMessage(update.message().chat().id(),
                                     """
                                             Этот питомец был забронирован ранее. Проверьте ID питомца или свяжитесь с волонтёром
                                             /Volunteer
+                                            /ID
                                             """));
                         } else if (dog == null) {
                             telegramBot.execute(new SendMessage(update.message().chat().id(),
@@ -81,7 +81,8 @@ public class DogOwnerHandler implements EventHandler {
                 };
                 break;
             case "/Booking":
-                petsOwner.setOwnerId(update.message().chat().id()); // присваиваем ID пользователя
+                long ownerId = update.message().chat().id();
+                petsOwner.setOwnerId(ownerId); // присваиваем ID пользователя
                 // записываем ID питомца
                 petsOwner.setStartDate(LocalDate.now());
                 petsOwner.setEndDate(LocalDate.now().plusDays(30));

@@ -5,8 +5,9 @@ import java.time.LocalDate;
 
 public class DogOwner extends PetsOwner{
 
-    public DogOwner(Long id, long ownerId, long petId, LocalDate startDate, LocalDate endDate) {
-        super(id, ownerId, petId, startDate, endDate);
+
+    public DogOwner(long id, Long ownerId, LocalDate startDate, LocalDate endDate) {
+        super(id, ownerId, startDate, endDate);
     }
 
     public DogOwner() {

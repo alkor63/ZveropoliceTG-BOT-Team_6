@@ -9,8 +9,8 @@ import com.pengrad.telegrambot.model.Update;
 import com.vdurmont.emoji.EmojiParser;
 import com.ward_n6.entity.Photo;
 import com.ward_n6.entity.owners.Owner;
+import com.ward_n6.entity.owners.PetsOwner;
 import com.ward_n6.entity.shelters.PetShelter;
-
 import com.ward_n6.listener.handlers.*;
 import com.ward_n6.repository.PhotoRepository;
 import com.ward_n6.repository.pets.CatRepository;
@@ -43,12 +43,11 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
     };
 
     private final OwnerReportServiceImpl ownerReportServiceImpl;
-
     private final OwnerServiceImpl ownerServiceImpl;
 
     private EventHandler currentHandler = null;
-
     private Owner owner = new Owner();
+    private PetsOwner petsOwner = new PetsOwner();
     private final PetServiceImpl petService;
     private final CatRepository catRepository;
     private final DogRepository dogRepository;
@@ -80,7 +79,7 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
         this.dogRepository = dogRepository;
         this.petBaseRepository = petBaseRepository;
         this.photoRepository = photoRepository;
-
+//        this.petsOwner = petsOwner;
         this.buttons = buttons;
         this.chatMessager = chatMessager;
         this.petsOwnerFactories = petsOwnerFactories;
@@ -91,10 +90,10 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
     public void init() {
         telegramBot.setUpdatesListener(this);
     }
-//ПЕРЕМЕННЫЕ-ФЛАГИ
+
+    //ПЕРЕМЕННЫЕ-ФЛАГИ
     public static boolean startSelected = false; // переменная для подтверждения старта
     public static boolean reportSelect = false;
-    public static boolean reportTextSelect = false;
     public static boolean reportPhotoSelect = false;
     public static boolean catSelect = false;
     public static boolean dogSelect = false;
@@ -155,89 +154,86 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                             buttons.sendOwnerHowReport(chatId);
                             break;
                     }
-                }
 
-                // меню команд:
-                Message message = update.message(); // получаем сообщение из текущего обновления
-                Long chatId = message.chat().id(); // получаем идентификатор чата, к которому относится апдейт
-                String messageText = message.text(); // получаем текст сообщения
+                } else if (update.message() != null && update.message().text() != null) { // проверка, чтобы не было ошибки при нажатии кнопок
+                    // меню команд:
+                    Message message = update.message(); // получаем сообщение из текущего обновления
+                    Long chatId = message.chat().id(); // получаем идентификатор чата, к которому относится апдейт
+                    String messageText = message.text(); // получаем текст сообщения
 
-                switch (messageText) {
-                    case "/start":
-                        startSelected = true;
-                        buttons.afterStartMenu(chatId, "/start");
-                        break;
-                    case "/dogs":
-                        dogSelect = true;
-                        if (startSelected) {
-                            chatMessager.sendMessage(chatId, "Вас приветствует приют для собак. " +
-                                    "Выберите интересующий Вас пункт меню.");
-                        }
-                        break;
-                    case "/cats":
-                        catSelect = true;
-                        if (startSelected) {
-                            chatMessager.sendMessage(chatId, "Вас приветствует приют для кошек. " +
-                                    "Выберите интересующий Вас пункт меню.");
-                        }
-                        break;
+                    switch (messageText) {
+                        case "/start":
+                            startSelected = true;
+                            buttons.afterStartMenu(chatId, "/start");
+                            break;
 
-                    case "/photo":
-                        if (dogSelect || catSelect) {
-                            currentHandler = new PhotoHandler(telegramBot, photoRepository);
-                            chatMessager.sendMessage(chatId, "Отправьте фото Вашего питомца для отчёта.");
-                        }
-                        break;
-
-                    case "/report":
-                        if (dogSelect || catSelect) {
-                            reportTextSelect = true;
-                            currentHandler = new ReportHandler(ownerReportServiceImpl, telegramBot, petService,
-                                    catRepository, dogRepository, petBaseRepository);
-                            chatMessager.sendMessage(chatId, EmojiParser.parseToUnicode(REPORT));
-                        } else chatMessager.sendMessage(chatId, "Пожалуйста, сначала выберите приют");
-                        break;
-
-                    case "/myData":
-                        getOwnerDataSelect = true;
-                        currentHandler = new OwnerHandler(ownerServiceImpl, telegramBot);
-                        chatMessager.sendMessage(chatId, PERSONAL_DATA_REQUEST);
-                        break;
-
-                    case "/takePet":
-                        if (dogSelect || catSelect) {
-                            if (petsOwnerFactories.ownerFactory(chatId) != null) { // проверяем, что пользователь есть в базе
-                                chatMessager.sendMessage(chatId, """
-                                        Введите или нажмите команду:
-                                        /ID"""); // запрос ID для бронирования
-
-                                if (catSelect) {
-                                    currentHandler = new CatOwnerHandler(petsOwnerServiceImpl, telegramBot,
-                                            catRepository, petsOwnerFactories, chatMessager);
-
-                                } else if (dogSelect) {
-                                    currentHandler = new DogOwnerHandler(petsOwnerServiceImpl, telegramBot, dogRepository, petsOwnerFactories, chatMessager);
-                                }
-                            } else {
-                                chatMessager.sendMessage(chatId, """
-                                        Пожалуйста, сначала зарегистрируйтесь в нашем приюте:
-                                        /myData""");
+                        case "/dogs":
+                            dogSelect = true;
+                            if (startSelected) {
+                                chatMessager.sendMessage(chatId, "Вас приветствует приют для собак. " +
+                                        "Выберите интересующий Вас пункт меню.");
                             }
-                        }
-                        break;
+                            break;
+                        case "/cats":
+                            catSelect = true;
+                            if (startSelected) {
+                                chatMessager.sendMessage(chatId, "Вас приветствует приют для кошек. " +
+                                        "Выберите интересующий Вас пункт меню.");
+                            }
+                            break;
+
+                        case "/photo":
+                            if (reportSelect) {
+                                currentHandler = new PhotoHandler(telegramBot, photoRepository);
+                                chatMessager.sendMessage(chatId, "Отправьте фото Вашего питомца для отчёта.");
+                            }
+                            break;
+
+                        case "/report":
+                            if (dogSelect || catSelect) {
+                                reportSelect = true;
+                                currentHandler = new ReportHandler(ownerReportServiceImpl, telegramBot, photoRepository, petsOwnerFactories);
+                                chatMessager.sendMessage(chatId, EmojiParser.parseToUnicode(REPORT));
+                            } else chatMessager.sendMessage(chatId, "Пожалуйста, сначала выберите приют");
+                            break;
+
+                        case "/myData":
+                            getOwnerDataSelect = true;
+                            currentHandler = new OwnerHandler(ownerServiceImpl, telegramBot);
+                            chatMessager.sendMessage(chatId, PERSONAL_DATA_REQUEST);
+                            break;
+
+                        case "/takePet":
+                            if (dogSelect || catSelect) {
+                                if (petsOwnerFactories.ownerFactory(chatId) != null) { // проверяем, что пользователь есть в базе
+                                    chatMessager.sendMessage(chatId, """
+                                            Введите или нажмите команду:
+                                            /ID"""); // запрос ID для бронирования
+
+                                    if (catSelect) {
+                                        currentHandler = new CatOwnerHandler(petsOwnerServiceImpl, telegramBot,
+                                                catRepository, petsOwnerFactories);
+
+                                    } else if (dogSelect) {
+                                        currentHandler = new DogOwnerHandler(petsOwnerServiceImpl, telegramBot, dogRepository, petsOwnerFactories, chatMessager);
+                                    }
+                                } else {
+                                    chatMessager.sendMessage(chatId, """
+                                            Пожалуйста, сначала зарегистрируйтесь в нашем приюте:
+                                            /myData""");
+                                }
+                            }
+                            break;
 
 
-                    case "/volunteer":
-                        chatMessager.sendMessage(chatId,
-                                petShelter.getCallVolonteer());
-                        break;
+                        case "/volunteer":
+                            chatMessager.sendMessage(chatId,
+                                    petShelter.getCallVolonteer());
+                            break;
+                    }
                 }
-//                if (reportPhotoSelect) {
-//                    getPhoto(update);
-//                }
             }
-        } catch (
-                Exception e) {
+        } catch (Exception e) {
             logger.error(e.getMessage()); // ловим ошибку
         }
         return UpdatesListener.CONFIRMED_UPDATES_ALL; // успешно завершаем метод, без падения

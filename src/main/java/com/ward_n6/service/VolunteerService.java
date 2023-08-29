@@ -85,7 +85,7 @@ public class VolunteerService {
 // т.е. дата = localDate.now()
 // просматриваем все отчеты этого усыновителя за испытательный период и присваиваем ему рейтинг
 
-        long petId = petWithOwner.getPetId();
+        long petId = petWithOwner.getId();
         int numReport = 0;
         int numOldReport = 0;
         LocalDate today = LocalDate.now();

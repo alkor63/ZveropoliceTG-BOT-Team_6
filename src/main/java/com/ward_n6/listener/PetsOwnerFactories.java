@@ -1,6 +1,7 @@
 package com.ward_n6.listener;
 
 import com.ward_n6.entity.owners.Owner;
+import com.ward_n6.entity.owners.PetsOwner;
 import com.ward_n6.entity.pets.Cat;
 import com.ward_n6.entity.pets.Dog;
 import org.hibernate.Session;
@@ -53,5 +54,15 @@ public class PetsOwnerFactories {
         } else
             session.close();
         return owner;
+    }
+
+    public PetsOwner petsOwnerFactory(Long petsOwnerId) {
+        SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
+        Session session = getSessionFactory().openSession();
+        PetsOwner petsOwner = session.get(PetsOwner.class, petsOwnerId);
+        if (petsOwner != null) {
+            session.close();
+
+        } return petsOwner;
     }
 }
