@@ -1,114 +1,82 @@
 package com.ward_n6.Controllers;
 
-import com.ward_n6.entity.pets.Cat_2;
-import com.ward_n6.entity.pets.Dog_2;
-import com.ward_n6.enums.PetsSex;
-import com.ward_n6.service.CatService;
-import com.ward_n6.service.DogService;
+import com.ward_n6.entity.pets.Cat;
+import com.ward_n6.entity.pets.Pet;
+import com.ward_n6.repository.PetRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
+import javassist.NotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/pet")
 @Tag(name = "Список животных приюта", description = "CRUD-операции с животными")
 public class PetController {
-    @Autowired
-    private CatService catService;
+    private final PetRepository petRepository;
 
-    @Autowired
-    private DogService dogService;
-
-    //---------КОШКИ
-
-    @PostMapping("add_cat/{petsSex}")
-    @Operation(summary = "Добавить кошку")
-    public ResponseEntity<Cat_2> addCat(@PathVariable PetsSex petsSex, Cat_2 cat_2) {
-        catService.addCat(petsSex, cat_2);
-        return ResponseEntity.ok(cat_2);
-    }
-
-    @Operation(summary = "Поиск кошки по id")
-    @GetMapping("searchCat")
-    public ResponseEntity<String> searchCat(long id) {
-        Cat_2 cat = catService.findCat(id);
-        if (cat == null) return ResponseEntity.notFound().build();
-        return ResponseEntity.ok().body(cat.toString());
+    public PetController(PetRepository petRepository) {
+        this.petRepository = petRepository;
     }
 
 
-    @GetMapping("allCat")
-    @Operation(summary = "Показать всех кошек приюта")
-    public ResponseEntity<List<Cat_2>> allCats() {
-        List<Cat_2> cat = catService.allCats();
-        if (cat.isEmpty()) return ResponseEntity.notFound().build();
+    @PostMapping("Добавление кошки")
+    public ResponseEntity<Cat> addCat(Cat cat) {
+        petRepository.save(cat);
         return ResponseEntity.ok(cat);
     }
 
-
-    @Operation(summary = "Удалить кошку")
-    @DeleteMapping("delCat")
-    public ResponseEntity<Cat_2> deleteCat(@RequestParam long id) {
-        Cat_2 result = catService.findCat(id);
-        if (result == null) return ResponseEntity.notFound().build();
-        Cat_2 cat2 = catService.deleteCat(id);
-        return ResponseEntity.ok(cat2);
+    @GetMapping("Поиск кошки")
+    public ResponseEntity<String> searchCat(long x) {
+        Optional<Pet> search = petRepository.findById(x);
+        if (search.isEmpty()) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(search.orElseThrow().toString());
     }
 
+    @PutMapping("/{petId}")
+    @Operation(summary = "Отредактировать карточку животного",
+            description = "нужно указать id и заполнить все поля карточки животного в Body")
+    public ResponseEntity<Pet> editPet(@PathVariable int petId, @RequestBody Pet pet) throws NotFoundException {
+        Optional<Pet> optionalPet = petRepository.findById((long) petId);
+        if (optionalPet.isEmpty()) {
+            throw new NotFoundException("Невозможно изменить отчёт, т.к. в базе нет отчёта с id = " + petId);
+        }
+        Pet existingPet = optionalPet.get();
 
-    @Operation(summary = "Поменять кошку")
-    @PutMapping("changeCat")
-    public ResponseEntity<Cat_2> changeCat(@RequestParam long id, @RequestParam PetsSex petsSex, Cat_2 cat_2) {
-        Cat_2 change = catService.change(id, cat_2, petsSex);
-        return ResponseEntity.ok(change);
+        existingPet.setPetName(pet.getPetName());
+        existingPet.setBread(pet.getBread());
+        existingPet.setPetsType(pet.getPetsType());
+        existingPet.setPetBirthDay(pet.getPetBirthDay());
+
+        return ResponseEntity.ok().body(petRepository.save(pet));
+
     }
 
-
-    //------СОБАКИ
-
-
-    @PostMapping("add_dog/{petsSex}")
-    @Operation(summary = "Добавить собаку")
-    public ResponseEntity<Dog_2> addDog(@PathVariable PetsSex petsSex, Dog_2 dog_2) {
-        dogService.addDog(petsSex, dog_2);
-        return ResponseEntity.ok(dog_2);
+    @DeleteMapping("/{petId}")
+    @Operation(summary = "Удалить одно животное из списка", description = "нужно указать id животного")
+    public ResponseEntity<Pet> deletePet(@PathVariable int petId) throws NotFoundException {
+        Optional<Pet> optionalPet = petRepository.findById((long) petId);
+        if (optionalPet.isPresent()) {
+            petRepository.deleteById((long) petId);
+            return ResponseEntity.ok().body(optionalPet.get());
+        }
+        throw new NotFoundException("Невозможно удалить отчёт, т.к. в базе нет отчёта с id = " + petId);
     }
 
-    @Operation(summary = "Поиск собаки по id")
-    @GetMapping("searchDog")
-    public ResponseEntity<String> searchDog(long id) {
-        Dog_2 dog = dogService.findDog(id);
-        if (dog == null) return ResponseEntity.notFound().build();
-        return ResponseEntity.ok().body(dog.toString());
+    @DeleteMapping
+    @Operation(summary = "Удалить из списка всех животных - приют закрывается")
+    public ResponseEntity<Void> deleteAllPets() {
+        petRepository.deleteAll();
+        return ResponseEntity.ok().build();
     }
 
-
-    @GetMapping("allDog")
-    @Operation(summary = "Показать всех собак приюта")
-    public ResponseEntity<List<Dog_2>> allDogs() {
-        List<Dog_2> dog = dogService.allDogs();
-        if (dog.isEmpty()) return ResponseEntity.notFound().build();
-        return ResponseEntity.ok(dog);
+    @GetMapping
+    @Operation(summary = "Показать всех кошек приюта")
+    public String allCats() {
+        List<Pet> info = petRepository.findAll();
+        return info.toString();
     }
-
-
-    @Operation(summary = "Удалить собаку")
-    @DeleteMapping("delDog")
-    public ResponseEntity<Dog_2> deleteDog(@RequestParam long id) {
-        Dog_2 result = dogService.findDog(id);
-        if (result == null) return ResponseEntity.notFound().build();
-        Dog_2 dog = dogService.deleteDog(id);
-        return ResponseEntity.ok(dog);
-    }
-    @Operation(summary = "Поменять собаку")
-    @PutMapping("changeDog")
-    public ResponseEntity<Dog_2> changeDog(@RequestParam long id, @RequestParam PetsSex petsSex, Dog_2 dog_2) {
-        Dog_2 change = dogService.change(id, dog_2, petsSex);
-        return ResponseEntity.ok(change);
-    }
-
 }

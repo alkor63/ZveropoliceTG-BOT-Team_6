@@ -1,11 +1,14 @@
 package com.ward_n6.service.Impl;
 
+
 import com.ward_n6.entity.reports.OwnerReport;
-import com.ward_n6.exception.InvalidRequestException;
+import com.ward_n6.exception.RecordNotFoundException;
 import com.ward_n6.repository.OwnerReportRepository;
 import com.ward_n6.service.OwnerReportService;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -15,24 +18,65 @@ public class OwnerReportServiceImpl implements OwnerReportService {
     public OwnerReportServiceImpl(OwnerReportRepository ownerReportRepository) {
         this.ownerReportRepository = ownerReportRepository;
     }
-//
-//    @Override
-//    public OwnerReport getOwnerReportById(int recordId) {
-//        long longId = recordId;
-//        return ownerReportRepository.findById(longId).orElseThrow(
-//                () -> new InvalidRequestException("Отчёта с id = " + recordId + " нет в нашей базе."));
-//    }
-//
-//
-//    @Override
-//    public OwnerReport getOwnerReportById(Long recordId) {
-//            Optional<OwnerReport> optionalOwnerReport = ownerReportRepository.findById(recordId);
-//            if(optionalOwnerReport.isPresent()) {
-//                final OwnerReport ownerReport = optionalOwnerReport.get();
-//                return ownerReport;
-//        }
-//        throw new InvalidRequestException("ОШИБКА: не удалось найти отчёт с id = "+recordId);
-//    }
 
+
+    //++++++++++++++++++++++++++++++++++++++++++++++++++++
+    @Override
+    public OwnerReport addOwnerReport(OwnerReport ownerReport) {
+        return ownerReportRepository.save(ownerReport);
+    }
+
+    // ++++++++++++++++++++++++++++++++++++
+    @Override
+    public List<OwnerReport> getAllOwnerReports() {
+        return ownerReportRepository.findAll();
+    }
+
+
+    @Override
+    public OwnerReport getOwnerReportById(Integer ownerReportId) {
+        long longId = ownerReportId;
+        return ownerReportRepository.findById(longId).orElseThrow(() -> throwException(String.valueOf(ownerReportId)));
+    }
+
+    //+++++++++++++++++++++++++++++++++++++++++
+    @Override
+    public boolean deleteOwnerReportById(Integer ownerReportId) {
+        long longId = ownerReportId;
+        Optional<OwnerReport> optionalOwnerReport = ownerReportRepository.findById(longId);
+        if (optionalOwnerReport.isPresent()) {
+            ownerReportRepository.deleteById(longId);
+            return true;
+        } else {
+            throwException(String.valueOf(ownerReportId));
+//            throw new EntityNotFoundException("Невозможно удалить отчёт, т.к. в базе нет отчёта с id = " + ownerReportId);
+            return false;
+        }
+    }
+
+
+    @Override
+    public OwnerReport editOwnerReportById(int ownerReportId, OwnerReport ownerReport)
+            throws EntityNotFoundException {
+        long longId = ownerReportId;
+        Optional optionalOwnerReport = ownerReportRepository.findById(longId);
+        if (!optionalOwnerReport.isPresent()) {
+            throwException(String.valueOf(ownerReportId));
+//            throw new EntityNotFoundException("Невозможно изменить отчёт, т.к. в базе нет отчёта с id = " + ownerReportId);
+        }
+        OwnerReport existingOwnerReport = (OwnerReport) optionalOwnerReport.get();
+
+        existingOwnerReport.setHavePhoto(ownerReport.isHavePhoto());
+        existingOwnerReport.setNutrition(ownerReport.getNutrition());
+        existingOwnerReport.setPetsBehavior(ownerReport.getPetsBehavior());
+        existingOwnerReport.setPetsHealth(ownerReport.getPetsHealth());
+        existingOwnerReport.setReportDateTime(ownerReport.getReportDateTime());
+
+        return ownerReportRepository.save(ownerReport);
+    }
+
+    private RecordNotFoundException throwException(String value) {
+        throw new RecordNotFoundException("OwnerReport Not Found with ID: " + value);
+    }
 }
 
