@@ -7,9 +7,6 @@ import com.ward_n6.exception.EditMapException;
 import java.util.List;
 
 public interface PetService {
-    int getId();
-
-
 
     Pet getPetById(int recordId);
 
@@ -26,4 +23,6 @@ public interface PetService {
     boolean deletePetByValue(Pet pet) throws DeleteFromMapException;
 
     int idPetByValue(Pet pet);
+
+    Pet addPet(Pet pet);
 }

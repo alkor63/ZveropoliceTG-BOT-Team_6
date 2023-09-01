@@ -12,22 +12,14 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "cats")
-@PrimaryKeyJoinColumn(name = "CAT")
+@PrimaryKeyJoinColumn(name = "pets_type")
 @DiscriminatorValue("CAT")
 @Builder
-
-
-
 public class Cat extends Pet {
-    public Cat(Long id, String bread, int petAge, LocalDate petBirthDay, String petName, PetsSex petsSex, PetsType petsType, long ownerId) {
-        super(id, bread, petAge, petBirthDay, petName, petsSex, petsType, ownerId);
-    }
-
     public Cat() {
     }
-
-    @Override
-    public String toString() {
-        return super.toString();
+    public Cat(PetsType petsType, PetsSex petsSex, String petName, LocalDate petBirthDay, String bread) {
+        super(petsType, petsSex, petName, petBirthDay, bread);
     }
+
 }

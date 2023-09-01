@@ -3,7 +3,7 @@ package com.ward_n6.Controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ward_n6.entity.reports.OwnerReport;
 import com.ward_n6.enums.PetsType;
-import com.ward_n6.repository.ReportRepository;
+import com.ward_n6.repository.owner.OwnerReportRepository;
 import javassist.NotFoundException;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -37,7 +37,7 @@ public class OwnerReportControllerTest {
     ObjectMapper mapper;
 
     @MockBean
-    ReportRepository ownerReportRepository;
+    OwnerReportRepository ownerReportRepository;
     // создаем несколько объектов тестируемого класса
     OwnerReport ownerReport1 = new OwnerReport(1l, 9932688l, LocalDateTime.now(), PetsType.CAT, false,
             "fff","dddd", "dse", 23L);

@@ -1,4 +1,4 @@
-package com.ward_n6.listener;
+package com.ward_n6.listener.handlers;
 
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Update;
@@ -8,6 +8,9 @@ import com.ward_n6.service.OwnerServiceImpl;
 
 import java.util.function.Consumer;
 import java.util.regex.Pattern;
+
+import static com.ward_n6.listener.MessageStringsConstants.PERSONAL_DATA_REQUEST;
+
 /**
  * класс для обработки и сохранения данных пользователя
  */
@@ -38,14 +41,7 @@ public class OwnerHandler implements EventHandler {
                 actionOnNextMessage = upd -> {
                     owner.setLastName(upd.message().text());
                     telegramBot.execute(new SendMessage(update.message().chat().id(), "Фамилия записана!" +
-                            """
-                                        Команды для записи контактных данных:
-                                    1. /ln - указать фамилию
-                                    2. /fn - указать имя
-                                    3. /phone - указать номер телефона
-                                    4. /save - сохранить мои контактные данные в базе приюта
-                                    5. /delete - удалить мои данные
-                                            """
+                            PERSONAL_DATA_REQUEST
                     ));
                 };
                 break;
@@ -55,33 +51,14 @@ public class OwnerHandler implements EventHandler {
                 actionOnNextMessage = upd -> {
                     owner.setFirstName(upd.message().text());
                     telegramBot.execute(new SendMessage(update.message().chat().id(), "Имя записано!" +
-                            """
-                                        Команды для записи контактных данных:
-                                    1. /ln - указать фамилию
-                                    2. /fn - указать имя
-                                    3. /phone - указать номер телефона
-                                    4. /save - сохранить мои контактные данные в базе приюта
-                                    5. /delete - удалить мои данные
-                                            """
+                           PERSONAL_DATA_REQUEST
                     ));
                 };
                 break;
 
             case "/phone":
                 telegramBot.execute(new SendMessage(update.message().chat().id(), "Укажите Ваш телефон для связи в формате: " +
-                        "" + "\n" + "8-XXX-XXX-XX-XX " +
-                        """
-                                Команды для записи контактных данных:
-                                1. /ln - указать фамилию
-                                
-                                2. /fn - указать имя
-                                
-                                3. /phone - указать номер телефона
-                                
-                                4. /save - сохранить мои контактные данные в базе приюта
-                                
-                                5. /delete - удалить мои данные
-                                """));
+                        "" + "\n" + "8-XXX-XXX-XX-XX " + PERSONAL_DATA_REQUEST));
                 actionOnNextMessage = upd -> {
                     String phoneMessage = upd.message().text();
                     if (phoneMessage.matches("8-\\d{3}-\\d{3}-\\d{2}-\\d{2}")) {
@@ -94,11 +71,12 @@ public class OwnerHandler implements EventHandler {
                 break;
 
             case "/save":
-
                 owner.setId(update.message().chat().id().longValue());
                 ownerServiceImpl.save(owner);
                 telegramBot.execute(new SendMessage(update.message().chat().id(), "Ваши данные " + "\n" + owner.toString()
-                        + "добавлены в нашу базу. Для удаления данных из нашей базы обратитесь в волонтёру"));
+                        + "добавлены в нашу базу. Спасибо за регистрацию. Для удаления данных из нашей базы обратитесь " +
+                        "к волонтёру или нажмите команду /delet" +
+                        " Для обновления данных нажмите командку /myData и укажате Ваши данные заново."));
 
                 return true;
 

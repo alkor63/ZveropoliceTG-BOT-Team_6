@@ -54,8 +54,8 @@ public class Owner { // хозяин животного, его свойства
     @Override
     public String toString() {
         return "ID: " + id + ", \n" +
-                "имя " + firstName + ", \n" +
-                "фамилия " + lastName + ", \n" +
+                "имя: " + firstName + ", \n" +
+                "фамилия: " + lastName + ", \n" +
                 "номер телефона: " + phoneNumber + ". \n";
     }
 

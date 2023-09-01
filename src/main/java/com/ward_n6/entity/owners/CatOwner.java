@@ -1,11 +1,12 @@
 package com.ward_n6.entity.owners;
 
 
+import java.time.LocalDate;
 
-public class CatOwner extends  Owner{
+public class CatOwner extends  PetsOwner{
 
-    public CatOwner(Long ownerId, String firstName, String lastName, String phoneNumber) {
-        super(ownerId, firstName, lastName, phoneNumber);
+    public CatOwner(long id, Long ownerId, LocalDate startDate, LocalDate endDate) {
+        super(id, ownerId, startDate, endDate);
     }
 
     public CatOwner() {

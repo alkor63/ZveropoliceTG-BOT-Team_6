@@ -15,20 +15,13 @@ import java.time.LocalDate;
 @PrimaryKeyJoinColumn(name = "pets_type")
 @DiscriminatorValue("DOG")
 @Builder
-//@NoArgsConstructor
-//@AllArgsConstructor
 
 public class Dog extends Pet {
-
-    public Dog(Long id, String bread, int petAge, LocalDate petBirthDay, String petName, PetsSex petsSex, PetsType petsType, long ownerId) {
-        super(id, bread, petAge, petBirthDay, petName, petsSex, petsType, ownerId);
-    }
-
     public Dog() {
     }
 
-    @Override
-    public String toString() {
-        return super.toString();
+    public Dog(PetsType petsType, PetsSex petsSex, String petName, LocalDate petBirthDay, String bread) {
+        super(petsType, petsSex, petName, petBirthDay, bread);
     }
+
 }

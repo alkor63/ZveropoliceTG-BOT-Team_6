@@ -3,13 +3,13 @@ package com.ward_n6.entity.people;
 import com.ward_n6.entity.PetWithOwner;
 import com.ward_n6.entity.reports.OwnerReport;
 import com.ward_n6.enums.PetsType;
-import com.ward_n6.exception.PutToMapException;
-import com.ward_n6.repository.PetsOwnerArchiveRepository;
-import com.ward_n6.repository.PetsOwnerRepository;
-import com.ward_n6.repository.ReportRepository;
+import com.ward_n6.repository.owner.OwnerReportRepository;
+import com.ward_n6.repository.owner.PetsOwnerArchiveRepository;
+import com.ward_n6.repository.owner.PetsOwnerRepository;
 import com.ward_n6.repository.pets.PetBaseRepository;
 import com.ward_n6.service.PetsOwnerServiceImpl;
 import com.ward_n6.service.VolunteerService;
+import com.ward_n6.service.interfaces.OwnerReportService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -38,7 +38,7 @@ class VolunteerTest {
 
 
     private PetsOwnerServiceImpl petsOwnerService;
-    private ReportRepository ownerReportRepository;
+    private OwnerReportRepository ownerReportRepository;
     @Mock
     private PetBaseRepository petBaseRepository;
     @Mock
@@ -47,9 +47,11 @@ class VolunteerTest {
     private PetWithOwner petWithOwnerMock;
     @Mock
     private PetsOwnerArchiveRepository petsOwnerArchiveRepository;
+    @Mock
+    private OwnerReportService ownerReportService;
     @Spy
     final VolunteerService volunteerMock = spy(new VolunteerService(petsOwnerRepository, petsOwnerArchiveRepository,
-            petsOwnerService, ownerReportRepository,  petBaseRepository ));
+           petsOwnerService, ownerReportService,ownerReportRepository,petBaseRepository));
 
     @InjectMocks
     private VolunteerService volunteer;
@@ -66,15 +68,15 @@ class VolunteerTest {
 //public void testPutToMapExceptionFromVolunteer(){
 //        assertThrows(PutToMapException.class, () -> petRepository.addPet(null));
 //}
-    @Test
-    public void shouldAddPetAndOwnerToPetsOwnerDB() throws PutToMapException {
+//    @Test
+//    public void shouldAddPetAndOwnerToPetsOwnerDB() throws PutToMapException {
 //        when(petWithOwnerMock. = new PetWithOwner()).thenReturn(petWithOwner);
 //        when(volunteerMock.petsOwnerRepository.addToPetWithOwner(petWithOwner)).thenReturn(petWithOwner);
 //        assertDoesNotThrow((Executable) new PetWithOwner(owner,pet));
 //        verify(new PetWithOwner(owner,pet),atLeast(1));
 //             собираем в одну таблицу PetWithOwner усыновителя owner, животное pat
 //             и время начала и окончания испытательного срока
-    }
+//    }
 
     @Test
     void removePetWithOwnerToArchive() {

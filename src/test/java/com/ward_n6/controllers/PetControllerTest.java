@@ -1,7 +1,8 @@
 package com.ward_n6.Controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ward_n6.service.PetServiceImpl;
+import com.ward_n6.repository.pets.PetBaseRepository;
+import com.ward_n6.service.interfaces.PetService;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
@@ -19,7 +20,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class PetControllerTest {
+class PetControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -28,7 +29,9 @@ public class PetControllerTest {
     private ObjectMapper objectMapper;
 
     @MockBean
-    private PetServiceImpl petService;
+    private PetBaseRepository petRepository;
+    @MockBean
+    private PetService petService;
 
 
     @Test
@@ -48,7 +51,8 @@ public class PetControllerTest {
 
     @Test
     void deletePet() throws Exception {
-        when(petService.deletePetById(Math.toIntExact(PET_1.getId()))).thenReturn(true);
+        when(petService.deletePetById(Math.toIntExact(PET_1.getId())))
+                .thenReturn(true);
         mockMvc.perform(
                         delete("/{petId}", PET_1.getId()))
                 .andExpect(status().isOk());
@@ -56,7 +60,7 @@ public class PetControllerTest {
 
     @Test
     void deleteAllPets() {
-        petService.deleteAllFromPet();
+        petRepository.deleteAll();
         assertEquals(0, LIST_OF_PETS.size());
     }
 
