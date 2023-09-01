@@ -153,6 +153,18 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                         case "ОТЧЁТ":
                             buttons.sendOwnerHowReport(chatId);
                             break;
+                        case "РЕКОМЕНДАЦИЯ_СОБАКИ":
+                            buttons.dogRecommendation(chatId);
+                            break;
+                        case "РЕКОМЕНДАЦИЯ_КОШКИ":
+                            buttons.catRecommendation(chatId);
+                            break;
+                        case "РЕГИСТРАЦИЯ_ПОЛЬЗОВАТЕЛЯ":
+                            buttons.registerUser(chatId);
+                            break;
+                        case "БРОНЬ_ПИТОМЦА":
+                            buttons.reservePet(chatId);
+                            break;
                     }
 
                 } else if (update.message() != null && update.message().text() != null) { // проверка, чтобы не было ошибки при нажатии кнопок
@@ -164,7 +176,7 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                     switch (messageText) {
                         case "/start":
                             startSelected = true;
-                            buttons.afterStartMenu(chatId, "/start");
+                            buttons.afterStartMenu(chatId);
                             break;
 
                         case "/dogs":
@@ -204,8 +216,8 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                             break;
 
                         case "/takePet":
-                            if (dogSelect || catSelect) {
-                                if (petsOwnerFactories.ownerFactory(chatId) != null) { // проверяем, что пользователь есть в базе
+//                            if (dogSelect || catSelect) {
+//                                if (petsOwnerFactories.ownerFactory(chatId) != null) { // проверяем, что пользователь есть в базе
                                     chatMessager.sendMessage(chatId, """
                                             Введите или нажмите команду:
                                             /ID"""); // запрос ID для бронирования
@@ -217,12 +229,12 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                                     } else if (dogSelect) {
                                         currentHandler = new DogOwnerHandler(petsOwnerServiceImpl, telegramBot, dogRepository, petsOwnerFactories, chatMessager);
                                     }
-                                } else {
-                                    chatMessager.sendMessage(chatId, """
-                                            Пожалуйста, сначала зарегистрируйтесь в нашем приюте:
-                                            /myData""");
-                                }
-                            }
+//                                } else {
+//                                    chatMessager.sendMessage(chatId, """
+//                                            Пожалуйста, сначала зарегистрируйтесь в нашем приюте, нажмите или введите команду:
+//                                            /myData""");
+//                                }
+//                            }
                             break;
 
 
