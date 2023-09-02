@@ -4,7 +4,6 @@ import com.ward_n6.entity.PetWithOwner;
 import com.ward_n6.entity.reports.OwnerReport;
 import com.ward_n6.enums.PetsType;
 import com.ward_n6.repository.owner.OwnerReportRepository;
-import com.ward_n6.repository.owner.PetsOwnerArchiveRepository;
 import com.ward_n6.repository.owner.PetsOwnerRepository;
 import com.ward_n6.repository.pets.PetBaseRepository;
 import com.ward_n6.service.PetsOwnerServiceImpl;
@@ -45,13 +44,13 @@ class VolunteerTest {
     private PetsOwnerRepository petsOwnerRepositoryMock;
     @Mock
     private PetWithOwner petWithOwnerMock;
-    @Mock
-    private PetsOwnerArchiveRepository petsOwnerArchiveRepository;
+
+
     @Mock
     private OwnerReportService ownerReportService;
     @Spy
-    final VolunteerService volunteerMock = spy(new VolunteerService(petsOwnerRepository, petsOwnerArchiveRepository,
-           petsOwnerService, ownerReportService,ownerReportRepository,petBaseRepository));
+    final VolunteerService volunteerMock = spy(new VolunteerService(petsOwnerRepository,petsOwnerService,
+            ownerReportService,petBaseRepository));
 
     @InjectMocks
     private VolunteerService volunteer;

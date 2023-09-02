@@ -2,7 +2,6 @@ package com.ward_n6.service;
 
 import com.ward_n6.entity.owners.PetsOwner;
 import com.ward_n6.entity.reports.OwnerReport;
-import com.ward_n6.repository.owner.OwnerReportRepository;
 import com.ward_n6.repository.owner.PetsOwnerRepository;
 import com.ward_n6.repository.pets.PetBaseRepository;
 import com.ward_n6.service.interfaces.OwnerReportService;
@@ -10,6 +9,7 @@ import com.ward_n6.service.interfaces.PetsOwnerService;
 import javassist.NotFoundException;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -26,25 +26,20 @@ public class VolunteerService {
 
 
     private final PetsOwnerRepository petsOwnerRepository;
-
     private final PetsOwnerService petsOwnerService;
     //    @Resource
     private final OwnerReportService ownerReportService;
-    private final OwnerReportRepository ownerReportRepository;
+@Resource
     private final PetBaseRepository petBaseRepository;
 
-    public VolunteerService(PetsOwnerRepository petsOwnerRepository,
-
-                            PetsOwnerService petsOwnerService,
-                            OwnerReportService ownerReportService,
-                            OwnerReportRepository ownerReportRepository, PetBaseRepository petBaseRepository) {
+    public VolunteerService(PetsOwnerRepository petsOwnerRepository, PetsOwnerService petsOwnerService,
+                            OwnerReportService ownerReportService, PetBaseRepository petBaseRepository) {
         this.petsOwnerRepository = petsOwnerRepository;
-
         this.petsOwnerService = petsOwnerService;
         this.ownerReportService = ownerReportService;
-        this.ownerReportRepository = ownerReportRepository;
         this.petBaseRepository = petBaseRepository;
     }
+
 
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     public String callVolunteer(String firstName) {
@@ -53,19 +48,17 @@ public class VolunteerService {
     }
 
 
-
-
     // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     public String viewAllReports(LocalDate date) {
         // просмотр всех отчетов за прошедшие сутки (с 21:00 предыдущего дня по 21:00 дня = date
         int num = 0;
-        LocalTime time = LocalTime.of(21, 00);
+        LocalTime time = LocalTime.of(21, 0);
         // запрос на просмотр отчетов может прийти, например, в 21:01
         // чтоб не потерять отчеты, пришедшие с 21:00 по 21:01, время задаём здесь
         LocalDateTime startTime = LocalDateTime.of(date.minusDays(1), time);
         LocalDateTime stopTime = LocalDateTime.of(date, time).plusNanos(1); // т.к. методы isAfter и isBefore не включают equals
 
-        List<OwnerReport> allOwnerReports = ownerReportRepository.findAll();
+        List<OwnerReport> allOwnerReports = ownerReportService.getAllOwnerReports();
         for (OwnerReport ownerReport : allOwnerReports) {
             LocalDateTime dateTime = ownerReport.getReportDateTime();
             if (dateTime.isAfter(startTime) && dateTime.isBefore(stopTime))
@@ -74,8 +67,7 @@ public class VolunteerService {
         DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
         String ss = "";
         if (num > 0) ss = ", все отчеты обработаны";
-        String s = "С " + startTime.format(fmt) + " по " + stopTime.format(fmt) + " поступило " + num + " отчетов усыновителей"+ss;
-        return s;
+        return "С " + startTime.format(fmt) + " по " + stopTime.format(fmt) + " поступило " + num + " отчетов усыновителей"+ss;
         // num - количество отчетов за 24 часа до 21:00 указанной даты
     }
 
@@ -93,7 +85,7 @@ public class VolunteerService {
         LocalDate before60 = today.minusDays(61);
         // list всех отчетов
         // foreach для всех отчетов
-        for (OwnerReport ownerReport : ownerReportRepository.findAll()) {
+        for (OwnerReport ownerReport : ownerReportService.getAllOwnerReports()) {
             LocalDate date = ownerReport.getReportDateTime().toLocalDate();
             if (petId == ownerReport.getPetId()) {
                 if (date.isBefore(before30) && date.isAfter(before60)) {
@@ -112,8 +104,7 @@ public class VolunteerService {
     // метод обработки "приговора", вызывающий endOfProbationPeriod() - перенести в Timer
     public String ownersVerdict(PetsOwner petWithOwner) {
         int rating = endOfProbationPeriod(petWithOwner);
-//       Integer id = Math.toIntExact(petWithOwner.getId());
-//        long id = petWithOwner.getId();
+
         switch (rating) {
             case 0:
                 // вернуть животное в приют
@@ -124,7 +115,7 @@ public class VolunteerService {
                 LocalDate newEndDate30 = LocalDate.now().plusDays(30);
                 //увеличили дату окончания испытательного срока на 30 дней
                 try {
-                    petsOwnerService.editDateEndPetsOwnerById(Math.toIntExact(petWithOwner.getId()), newEndDate30);//перезаписали с новой датой окончания исп.срока
+                    petsOwnerService.editDateEndPetsOwnerById(Math.toIntExact(petWithOwner.getId()), newEndDate30);//перезаписали с новой датой окончания испытательного срока
                 } catch (NotFoundException e) {
                     throw new RuntimeException(e);
                 }
@@ -135,7 +126,7 @@ public class VolunteerService {
                 LocalDate newEndDate14 = LocalDate.now().plusDays(14);
                 //увеличили дату окончания испытательного срока на 14 дней
                 try {
-                    petsOwnerService.editDateEndPetsOwnerById(Math.toIntExact(petWithOwner.getId()), newEndDate14);//перезаписали с новой датой окончания исп.срока
+                    petsOwnerService.editDateEndPetsOwnerById(Math.toIntExact(petWithOwner.getId()), newEndDate14);//перезаписали с новой датой окончания испытательного срока
                 } catch (NotFoundException e) {
                     throw new RuntimeException(e);
                 }
@@ -143,6 +134,12 @@ public class VolunteerService {
             case 3:
                 // поздравить с успешным прохождением испытательного срока
                 try {
+
+//              удаляем запись о животном и хозяине из таблицы с испытательным сроком
+//              удаляем запись о животном из таблицы Pet - этого животного больше нет в приюте
+
+                    petsOwnerRepository.deleteById(petWithOwner.getId());
+                    petBaseRepository.deleteById(petWithOwner.getId());
 
                     return "Поздравляем с завершением испытательного срока! Ваш питомец остаётся с Вами навсегда";
                 } catch (Exception e) {
@@ -169,64 +166,59 @@ public class VolunteerService {
     public String reportExpertise(OwnerReport ownerReport){
         // проверяем как заполнены поля отчёта и возвращаем соответствующий ответ
         int n = verifyReport(ownerReport);
-        switch (n){
-            case 0:
+        return switch (n) {
+            case 0 ->
                 // все поля пустые
-                return "Вы прислали отчет. Потрудитесь заполнить все поля!";
-            case 1:
+                    "Вы прислали отчет. Потрудитесь заполнить все поля!";
+            case 1 ->
                 // заполнено только поле "поведение"
-                return "Вы рассказали только о поведении питомца. Заполните, пожалуйста, остальные поля";
-            case 10:
+                    "Вы рассказали только о поведении питомца. Заполните, пожалуйста, остальные поля";
+            case 10 ->
                 // заполнено только поле "самочувствие"
-                return "Вы рассказали только о самочувствии питомца. Заполните, пожалуйста, остальные поля";
-            case 100:
+                    "Вы рассказали только о самочувствии питомца. Заполните, пожалуйста, остальные поля";
+            case 100 ->
                 // заполнено только поле "питание"
-                return "Вы рассказали только о питании питомца. Заполните, пожалуйста, остальные поля";
-            case 1000:
+                    "Вы рассказали только о питании питомца. Заполните, пожалуйста, остальные поля";
+            case 1000 ->
                 // заполнено только поле "фото"
-                return "Вы прислали только фото питомца. Заполните, пожалуйста, остальные поля";
-
-            case 11:
+                    "Вы прислали только фото питомца. Заполните, пожалуйста, остальные поля";
+            case 11 ->
                 // заполнены поля "поведение" и "самочувствие"
-                return "Вы рассказали только о поведении питомца. Заполните, пожалуйста, остальные поля";
-            case 101:
+                    "Вы рассказали только о поведении питомца. Заполните, пожалуйста, остальные поля";
+            case 101 ->
                 // заполнены поля "поведение" и "питание"
-                return "Вы рассказали только о самочувствии питомца. Заполните, пожалуйста, остальные поля";
-            case 1001:
+                    "Вы рассказали только о самочувствии питомца. Заполните, пожалуйста, остальные поля";
+            case 1001 ->
                 // заполнены поля "поведение" и "фото"
-                return "Вы рассказали о поведении питомца и прислали фото. Заполните, пожалуйста, остальные поля";
-            case 110:
+                    "Вы рассказали о поведении питомца и прислали фото. Заполните, пожалуйста, остальные поля";
+            case 110 ->
                 // заполнены поля "питание" и "самочувствие"
-                return "Вы рассказали о питании и самочувствие питомца. Заполните, пожалуйста, остальные поля";
-            case 1010:
+                    "Вы рассказали о питании и самочувствие питомца. Заполните, пожалуйста, остальные поля";
+            case 1010 ->
                 // заполнены поля "самочувствие" и "фото"
-                return "Вы рассказали о самочувствии питомца и прислали фото. Заполните, пожалуйста, остальные поля";
-            case 1100:
+                    "Вы рассказали о самочувствии питомца и прислали фото. Заполните, пожалуйста, остальные поля";
+            case 1100 ->
                 // заполнены поля "питание" и "фото"
-                return "Вы рассказали о питании питомца и прислали фото. Заполните, пожалуйста, остальные поля";
-
-            case 111:
+                    "Вы рассказали о питании питомца и прислали фото. Заполните, пожалуйста, остальные поля";
+            case 111 ->
                 // заполнены все поля кроме "фото"
-                return "Вы забыли прислать фото питомца. Заполните, пожалуйста, это поле";
-            case 1011:
+                    "Вы забыли прислать фото питомца. Заполните, пожалуйста, это поле";
+            case 1011 ->
                 // заполнены все поля кроме "питание"
-                return "Вы забыли рассказать о питании питомца. Заполните, пожалуйста, это поле";
-            case 1101:
+                    "Вы забыли рассказать о питании питомца. Заполните, пожалуйста, это поле";
+            case 1101 ->
                 // заполнены все поля кроме "самочувствие"
-                return "Вы забыли рассказать о самочувствии питомца. Заполните, пожалуйста, это поле";
-            case 1110:
+                    "Вы забыли рассказать о самочувствии питомца. Заполните, пожалуйста, это поле";
+            case 1110 ->
                 // заполнены все поля кроме "поведение"
-                return "Вы забыли рассказать о поведении питомца. Заполните, пожалуйста, это поле";
-
-            case 1111:
+                    "Вы забыли рассказать о поведении питомца. Заполните, пожалуйста, это поле";
+            case 1111 ->
                 // заполнены все поля
-                return "Отличный отчёт!";
-            default:
-                return "Некорректное значение кода отчета. Разработчик что-то накосячил";
-        }
+                    "Отличный отчёт!";
+            default -> "Некорректное значение кода отчета. Разработчик что-то накосячил";
+        };
     }
     public static boolean nullString(String s) {
         return (s == null || s.isEmpty() || s.isBlank());
     }
 }
-

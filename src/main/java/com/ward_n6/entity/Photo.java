@@ -18,7 +18,7 @@ import java.util.Objects;
 @Builder
 @Entity
 @AllArgsConstructor
-@Table(name = "Photos")
+@Table(name = "photos")
 
 public class Photo {
     @javax.persistence.Id
@@ -29,7 +29,6 @@ public class Photo {
     @Column(name ="file_name")
     private String fileName;
 
-    @Lob
     @Column(name = "photo", nullable = false)
     private PhotoSize photo;
 
@@ -37,19 +36,21 @@ public class Photo {
     private LocalDateTime dateTime;
 
     @Column(name = "owner_Id")
+
     private long ownerId;
     @Column(name = "pet_Id")
+
     private long petId;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Photo photo1)) return false;
-        return getId() == photo1.getId() && getOwnerId() == photo1.getOwnerId() && getPetId() == photo1.getPetId() && Objects.equals(getPhoto(), photo1.getPhoto()) && Objects.equals(getDateTime(), photo1.getDateTime());
+        return getId() == photo1.getId() && getOwnerId() == photo1.getOwnerId() && getPetId() == photo1.getPetId() && Objects.equals(getFileName(), photo1.getFileName()) && Objects.equals(getPhoto(), photo1.getPhoto()) && Objects.equals(getDateTime(), photo1.getDateTime());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getPhoto(), getDateTime(), getOwnerId(), getPetId());
+        return Objects.hash(getId(), getFileName(), getPhoto(), getDateTime(), getOwnerId(), getPetId());
     }
 }

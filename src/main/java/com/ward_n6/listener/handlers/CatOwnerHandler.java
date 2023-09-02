@@ -42,63 +42,62 @@ public class CatOwnerHandler implements EventHandler {
             actionOnNextMessage = null;
             return false;
         }
-        var text = update.message().text();
-        switch (text) {
-            case "/ID":
-                telegramBot.execute(new SendMessage(update.message().chat().id(),
-                        PET_ID_REQUEST_FOR_PET_BOOKING));
-                actionOnNextMessage = upd -> {
-                    var ownerId = update.message().chat().id().longValue();
-                    var idMessage = upd.message().text();
-                    if (idMessage.matches("\\d+")) { // проверяем, что число
-                        long petId = Long.parseLong(idMessage); // парсим строку в число
-                        cat = petsOwnerFactories.catFactory(petId, ownerId);
-                        if (cat != null && cat.getOwnerId() == null) {
-                            cat.setOwnerId(ownerId);
-                            catRepository.save(cat);
-                            petsOwner.setId(petId);
-                            telegramBot.execute(new SendMessage(update.message().chat().id(),
-                                    """
-                                            Если Вы уверены в своём решении введите или нажмите команду
-                                            /Booking
-                                            """));
-                        } else if (cat.getOwnerId() != null) {
-                            telegramBot.execute(new SendMessage(update.message().chat().id(),
-                                    """
-                                            Этот питомец был забронирован ранее. Проверьте ID питомца или свяжитесь с волонтёром
-                                            /Volunteer
-                                            /ID
-                                            """));
-                        } else if (cat == null) {
-                            telegramBot.execute(new SendMessage(update.message().chat().id(),
-                                    PET_NOT_FOUND));
+        if (update.message() != null && update.message().text() != null) { // проверка, чтобы не "зависали" кнопки
+            var text = update.message().text();
+            switch (text) {
+                case "/ID":
+                    telegramBot.execute(new SendMessage(update.message().chat().id(),
+                            PET_ID_REQUEST_FOR_PET_BOOKING));
+                    actionOnNextMessage = upd -> {
+                        var ownerId = update.message().chat().id().longValue();
+                        var idMessage = upd.message().text();
+                        if (idMessage.matches("\\d+")) { // проверяем, что число
+                            long petId = Long.parseLong(idMessage); // парсим строку в число
+                            cat = petsOwnerFactories.catFactory(petId, ownerId);
+                            if (cat != null && cat.getOwnerId() == null) {
+                                cat.setOwnerId(ownerId);
+                                catRepository.save(cat);
+                                petsOwner.setId(petId);
+                                telegramBot.execute(new SendMessage(update.message().chat().id(),
+                                        """
+                                                Если Вы уверены в своём решении введите или нажмите команду
+                                                /Booking
+                                                """));
+                            } else if (cat.getOwnerId() != null) {
+                                telegramBot.execute(new SendMessage(update.message().chat().id(),
+                                        """
+                                                Этот питомец был забронирован ранее. Проверьте ID питомца или свяжитесь с волонтёром
+                                                /Volunteer
+                                                /ID
+                                                """));
+                            } else if (cat == null) {
+                                telegramBot.execute(new SendMessage(update.message().chat().id(),
+                                        PET_NOT_FOUND));
 
+                            }
+                        } else {
+                            telegramBot.execute(new SendMessage(update.message().chat().id(),
+                                    "Формат ID неверный, введите числовое значение ID выбранного питомца, " +
+                                            "нажмите или введите /ID"));
                         }
-                    } else {
-                        telegramBot.execute(new SendMessage(update.message().chat().id(),
-                                "Формат ID неверный, введите числовое значение ID выбранного питомца, " +
-                                        "нажмите или введите /ID"));
-                    }
-                };
-                break;
+                    };
+                    break;
 
-            case "/Booking":
-                petsOwner.setOwnerId(update.message().chat().id()); // присваиваем ID пользователя
-                petsOwner.setStartDate(LocalDate.now());
-                petsOwner.setEndDate(LocalDate.now().plusDays(30));
-                petsOwnerServiceImpl.save(petsOwner);
-                catRepository.save(cat); // обновляем кошку
-                telegramBot.execute(new SendMessage(update.message().chat().id(),
-                        "Питомец " + cat.toString() + "\n" +
-                                "забронирован за Вами. Скоро с Вами свяжется волонтёр, чтобы " +
-                                "обсудить подробности переезда питомца в Ваш дом и" +
-                                "оформить документы!"));
-                return true;
-            case "/cancelBooking":
-
+                case "/Booking":
+                    petsOwner.setOwnerId(update.message().chat().id()); // присваиваем ID пользователя
+                    petsOwner.setStartDate(LocalDate.now());
+                    petsOwner.setEndDate(LocalDate.now().plusDays(30));
+                    petsOwnerServiceImpl.save(petsOwner);
+                    catRepository.save(cat); // обновляем кошку
+                    telegramBot.execute(new SendMessage(update.message().chat().id(),
+                            "Питомец " + cat.toString() + "\n" +
+                                    "забронирован за Вами. Скоро с Вами свяжется волонтёр, чтобы " +
+                                    "обсудить подробности переезда питомца в Ваш дом и" +
+                                    "оформить документы!"));
+                    return true;
+            }
         }
         return false;
-
     }
 }
 
