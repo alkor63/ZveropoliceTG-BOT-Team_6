@@ -48,6 +48,7 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
     private final ChatMessager chatMessager;
     private final PetsOwnerFactories petsOwnerFactories;
 
+
     private Owner owner = new Owner();
     private PetsOwner petsOwner = new PetsOwner();
     private Photo photos = new Photo();
@@ -71,8 +72,6 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
         this.photoRepository = photoRepository;
         this.buttons = buttons;
         this.chatMessager = chatMessager;
-
-
         this.petsOwnerFactories = petsOwnerFactories;
     }
 
@@ -190,7 +189,7 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                         case "/photo":
                             if (reportSelect && ReportHandler.isId) {
                                 chatMessager.sendMessage(chatId, "Загрузите фото");
-                                currentHandler = new PhotoHandler(telegramBot, photoRepository);
+                                currentHandler = new PhotoHandler(telegramBot, photoRepository, ownerReportServiceImpl);
                             } else chatMessager.sendMessage(chatId, "Сначала укажите ID питомца");
                             break;
 

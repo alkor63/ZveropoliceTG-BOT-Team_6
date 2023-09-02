@@ -36,7 +36,7 @@ class PhotoHandlerTest {
         when(photoSizes[0].fileId()).thenReturn("photo_file_id");
 
         // create instance of the class under test
-        PhotoHandler photoHandler = new PhotoHandler(telegramBot, photoRepository);
+        PhotoHandler photoHandler = new PhotoHandler(telegramBot, photoRepository, ownerReportService);
 
         // call the method to be tested
         photoHandler.handle(update);
