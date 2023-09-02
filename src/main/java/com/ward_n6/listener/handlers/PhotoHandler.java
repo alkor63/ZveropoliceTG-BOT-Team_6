@@ -73,12 +73,9 @@ public class PhotoHandler implements EventHandler {
                     telegramBot.execute(new SendMessage(update.message().chat().id(), // отправка сообщения в чат о загрузке фото
                             """
                                     Фото-отчёт загружен.
-                                                   
-                                    Загрузить ещё фото: /photo
-                                                    
-                                    Отправить текстовый отчёт: /report
-                                                    
-                                    Вернуться к выбору приюта: /start
+                                    \n Загрузить ещё фото: /photo
+                                    \n Отправить текстовый отчёт: /report
+                                    \n Вернуться к выбору приюта: /start
                                     """));
 
 

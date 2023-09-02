@@ -72,6 +72,8 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
         this.photoRepository = photoRepository;
         this.buttons = buttons;
         this.chatMessager = chatMessager;
+
+
         this.petsOwnerFactories = petsOwnerFactories;
     }
 
