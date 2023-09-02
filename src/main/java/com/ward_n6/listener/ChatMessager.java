@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+
 @Component
 public class ChatMessager {
     private final TelegramBot telegramBot;
@@ -21,7 +22,7 @@ public class ChatMessager {
 
     private Logger logger = LoggerFactory.getLogger(TelegramBotPetShelterUpdatesListener.class);
 
- // сохаранение сообщения в БД
+    // сохаранение сообщения в БД
     public void saveMessages(long chatId, String messageText) {
         if (messageText.isEmpty()) { // обрабатываем нулловое значение из парсинга
             sendMessage(chatId, "Неверный формат сообщения");
@@ -45,3 +46,4 @@ public class ChatMessager {
         }
     }
 }
+

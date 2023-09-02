@@ -59,8 +59,8 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                                                 OwnerReportServiceImpl ownerReportServiceImpl,
                                                 OwnerServiceImpl ownerServiceImpl,
                                                 CatRepository catRepository, DogRepository dogRepository,
-                                                PhotoRepository photoRepository, Buttons buttons, ChatMessager chatMessager,
-                                                PetsOwnerFactories petsOwnerFactories) {
+                                                PhotoRepository photoRepository, Buttons buttons,
+                                                ChatMessager chatMessager, PetsOwnerFactories petsOwnerFactories) {
         this.botMessageService = botMessageService;
         this.telegramBot = telegramBot;
         this.petsOwnerServiceImpl = petsOwnerServiceImpl;
@@ -71,6 +71,8 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
         this.photoRepository = photoRepository;
         this.buttons = buttons;
         this.chatMessager = chatMessager;
+
+
         this.petsOwnerFactories = petsOwnerFactories;
     }
 
@@ -85,9 +87,6 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
     public static boolean catSelect = false;
     public static boolean dogSelect = false;
     public static boolean getOwnerDataSelect = false;
-
-
-
 
 
     /**
@@ -139,6 +138,17 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
 
                         case "КАК_ЗАБРАТЬ_КОШКУ":
                             buttons.wantToTakeCatButton(chatId);
+                            break;
+
+                        case "РЕКОМЕНДАЦИЯ_СОБАКИ":
+                            buttons.dogRecommendation(chatId);
+                            break;
+                        case "РЕКОМЕНДАЦИЯ_КОШКИ":
+                            buttons.catRecommendation(chatId);
+                            break;
+
+                        case "ЗАБРОНИРОВАТЬ_ПИТОМЦА":
+                            buttons.reservePet(chatId);
                             break;
 
                         case "ВОЛОНТЁР":
@@ -217,13 +227,14 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                                                 catRepository, petsOwnerFactories);
 
                                     } else if (dogSelect) {
-                                        currentHandler = new DogOwnerHandler(petsOwnerServiceImpl, telegramBot, dogRepository, petsOwnerFactories, chatMessager);
+                                        currentHandler = new DogOwnerHandler(petsOwnerServiceImpl, telegramBot,
+                                                dogRepository, petsOwnerFactories, chatMessager);
                                     }
                                 } else {
                                     chatMessager.sendMessage(chatId, """
                                             Пожалуйста, сначала зарегистрируйтесь в нашем приюте:
                                             /myData""");
-                                }
+                                } break;
                             }
                             break;
 

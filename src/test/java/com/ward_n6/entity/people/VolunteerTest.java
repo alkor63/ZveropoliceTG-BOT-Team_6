@@ -49,8 +49,8 @@ class VolunteerTest {
     @Mock
     private OwnerReportService ownerReportService;
     @Spy
-    final VolunteerService volunteerMock = spy(new VolunteerService(petsOwnerRepository,
-           petsOwnerService, ownerReportService,ownerReportRepository,petBaseRepository));
+    final VolunteerService volunteerMock = spy(new VolunteerService(petsOwnerRepository,petsOwnerService,
+            ownerReportService,petBaseRepository));
 
     @InjectMocks
     private VolunteerService volunteer;

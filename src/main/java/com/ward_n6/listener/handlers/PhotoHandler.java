@@ -64,7 +64,8 @@ public class PhotoHandler implements EventHandler {
         } else {
             telegramBot.execute(new SendMessage(update.message().chat().id(),
                     "Вы не отправили фото. "));
-        }return false;
+        }
+        return false;
 
     }
 }
