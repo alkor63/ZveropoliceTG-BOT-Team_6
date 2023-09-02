@@ -189,7 +189,7 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                             break;
 
                         case "/photo":
-                            if (reportSelect && ReportHandler.isId) {
+                            if (ReportHandler.isId) {
                                 chatMessager.sendMessage(chatId, "Загрузите фото");
                                 currentHandler = new PhotoHandler(telegramBot, photoRepository, ownerReportServiceImpl);
                             } else chatMessager.sendMessage(chatId, "Сначала укажите ID питомца");
@@ -199,9 +199,11 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                         case "/report":
                             if (dogSelect || catSelect) {
                                 reportSelect = true;
-                                currentHandler = new ReportHandler(ownerReportServiceImpl, telegramBot, photoRepository,
-                                        petsOwnerFactories);
-                                chatMessager.sendMessage(chatId, EmojiParser.parseToUnicode(REPORT));
+
+                                    currentHandler = new ReportHandler(ownerReportServiceImpl, telegramBot, photoRepository,
+                                            petsOwnerFactories);
+                                    chatMessager.sendMessage(chatId, EmojiParser.parseToUnicode(REPORT));
+
                             } else {
                                 chatMessager.sendMessage(chatId, """
                                          Пожалуйста, сначала выберите приют:
@@ -235,7 +237,8 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                                     chatMessager.sendMessage(chatId, """
                                             Пожалуйста, сначала зарегистрируйтесь в нашем приюте:
                                             /myData""");
-                                } break;
+                                }
+                                break;
                             }
                             break;
 

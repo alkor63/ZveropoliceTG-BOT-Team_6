@@ -144,6 +144,7 @@ public class ReportHandler implements EventHandler {
 
                 case "/save":
                     if (isId && (isPhoto || isAction || isFeed || isHealth)) {
+
                             ownerReport.setReportDateTime(LocalDateTime.now());
                             ownerReport.setOwnerId(update.message().chat().id());
                             if (TelegramBotPetShelterUpdatesListener.dogSelect) {
