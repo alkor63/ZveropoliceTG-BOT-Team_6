@@ -9,9 +9,12 @@ import com.ward_n6.service.pets.DogService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 
@@ -29,7 +32,10 @@ public class PetController {
 
     @PostMapping("add_cat/{petsSex}")
     @Operation(summary = "Добавить кошку")
-    public ResponseEntity<Cat> addCat(@PathVariable PetsSex petsSex, Cat cat) {
+    public ResponseEntity<Cat> addCat(@RequestParam String petsBread,
+                                      @DateTimeFormat(pattern = "yyyy-MM-dd") @RequestParam LocalDate petsBirthDay,
+                                      String petsName,
+                                      @PathVariable PetsSex petsSex, Cat cat) {
         PetsType petsType = PetsType.CAT;
         catService.addCat(petsSex, petsType, cat);
         return ResponseEntity.ok(cat);
@@ -37,7 +43,7 @@ public class PetController {
 
     @Operation(summary = "Поиск кошки по id")
     @GetMapping("searchCat")
-    public ResponseEntity<String> searchCat(long id) {
+    public ResponseEntity<String> searchCat(@RequestParam long id) {
         Cat cat = catService.findCat(id);
         if (cat == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok().body(cat.toString());
@@ -62,12 +68,19 @@ public class PetController {
         return ResponseEntity.ok(cat);
     }
 
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    String dateString;
 
     @Operation(summary = "Поменять кошку")
     @PutMapping("changeCat/{id}/{petsSex}")
-    public ResponseEntity<Cat> changeCat(@PathVariable long id, @PathVariable PetsSex petsSex, Cat cat) {
+    public ResponseEntity<Cat> changeCat(@PathVariable long id, @PathVariable PetsSex petsSex, Cat cat,
+                                         @RequestParam String petsBread,
+                                         @DateTimeFormat(pattern = "yyyy-MM-dd") @RequestParam LocalDate petsBirthDay,
+                                         String petsName, Long ownerId) {
+
+
         PetsType petsType = PetsType.CAT;
-        Cat change = catService.change(id,petsSex, petsType, cat);
+        Cat change = catService.change(id, petsSex, petsType, cat);
         return ResponseEntity.ok(change);
     }
 
@@ -77,7 +90,9 @@ public class PetController {
 
     @PostMapping("add_dog/{petsSex}")
     @Operation(summary = "Добавить собаку")
-    public ResponseEntity<Dog> addDog(@PathVariable PetsSex petsSex, Dog dog) {
+    public ResponseEntity<Dog> addDog(@RequestParam String petsBread,
+                                      @DateTimeFormat(pattern = "yyyy-MM-dd") @RequestParam LocalDate petsBirthDay,
+                                      String petsName, @PathVariable PetsSex petsSex, Dog dog) {
         PetsType petsType = PetsType.DOG;
         dogService.addDog(petsSex, petsType, dog);
         return ResponseEntity.ok(dog);
@@ -113,9 +128,12 @@ public class PetController {
 
     @Operation(summary = "Поменять собаку")
     @PutMapping("changeDog/{id}/{petsSex}")
-    public ResponseEntity<Dog> changeCat(@PathVariable long id, @PathVariable PetsSex petsSex, Dog dog) {
+    public ResponseEntity<Dog> changeCat(@PathVariable long id, @PathVariable PetsSex petsSex, Dog dog,
+                                         @RequestParam String petsBread,
+                                         @DateTimeFormat(pattern = "yyyy-MM-dd") @RequestParam LocalDate petsBirthDay,
+                                         String petsName, Long ownerId) {
         PetsType petsType = PetsType.CAT;
-        Dog change = dogService.change(id,petsSex, petsType, dog);
+        Dog change = dogService.change(id, petsSex, petsType, dog);
         return ResponseEntity.ok(change);
     }
 
