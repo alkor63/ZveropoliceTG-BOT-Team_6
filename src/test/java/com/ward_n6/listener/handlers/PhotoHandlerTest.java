@@ -13,7 +13,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import java.io.IOException;
 
 import static org.mockito.Mockito.*;
-
+//ТЕСТЫ В РАБОТЕ
 class PhotoHandlerTest {
     @Mock
     private TelegramBot telegramBot;

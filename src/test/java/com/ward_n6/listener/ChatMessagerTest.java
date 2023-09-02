@@ -12,7 +12,7 @@ import org.mockito.Mock;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
-
+//ТЕСТЫ В РАБОТЕ
 class ChatMessagerTest {
     @Mock
     private TelegramBot telegramBot;

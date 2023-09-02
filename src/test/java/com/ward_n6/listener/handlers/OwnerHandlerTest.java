@@ -13,7 +13,7 @@ import static org.mockito.Mockito.*;
 
 class OwnerHandlerTest {
 
-
+    //ТЕСТЫ В РАБОТЕ
     @Test
     public void testHandle() {
         // Создание моков для зависимостей
