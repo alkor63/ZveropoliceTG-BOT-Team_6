@@ -51,7 +51,7 @@ public class OwnerHandler implements EventHandler {
                 actionOnNextMessage = upd -> {
                     owner.setFirstName(upd.message().text());
                     telegramBot.execute(new SendMessage(update.message().chat().id(), "Имя записано!" +
-                           PERSONAL_DATA_REQUEST
+                            PERSONAL_DATA_REQUEST
                     ));
                 };
                 break;
@@ -73,12 +73,15 @@ public class OwnerHandler implements EventHandler {
             case "/save":
                 owner.setId(update.message().chat().id().longValue());
                 ownerServiceImpl.save(owner);
-                telegramBot.execute(new SendMessage(update.message().chat().id(), "Ваши данные " + "\n" + owner.toString()
-                        + "добавлены в нашу базу. Спасибо за регистрацию. Для удаления данных из нашей базы обратитесь " +
-                        "к волонтёру или нажмите команду /delet" +
-                        " Для обновления данных нажмите командку /myData и укажате Ваши данные заново."));
+                telegramBot.execute(new SendMessage(update.message().chat().id(), "Ваши данные  \n" +
+                        owner.toString() + " добавлены в нашу базу. Спасибо за регистрацию. \n" +
+                        """
+                  
+                        Для обновления или удаления данных введите нажмите команду: 
+                        /myData 
+                        Для обновления записи укажите Ваши данные заново."""));
 
-                return true;
+               return true;
 
 
             case "/delete":

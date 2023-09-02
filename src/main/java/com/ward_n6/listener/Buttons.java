@@ -17,6 +17,7 @@ public class Buttons {
         this.telegramBot = telegramBot;
     }
 
+//СТАРТ
     public void afterStartMenu(long chatId, String message) {
         SendMessage sendMessage = new SendMessage(chatId, "Здравствуйте. " +
                 "Это чат-бот приюта для животных. " +
@@ -24,10 +25,19 @@ public class Buttons {
         InlineKeyboardButton chooseDogHouseButton = new InlineKeyboardButton(EmojiParser
                 .parseToUnicode("Приют для собак" + ":dog:"));
         chooseDogHouseButton.callbackData("КНОПКА_ПРИЮТ_ДЛЯ_СОБАК");
+
         InlineKeyboardButton chooseCatHouseButton = new InlineKeyboardButton(EmojiParser
                 .parseToUnicode("Приют для кошек" + ":cat:"));
         chooseCatHouseButton.callbackData("КНОПКА_ПРИЮТ_ДЛЯ_КОШЕК");
-        Keyboard keyboard = new InlineKeyboardMarkup(chooseDogHouseButton, chooseCatHouseButton);
+
+        InlineKeyboardButton chooseOwnerDataButton = new InlineKeyboardButton(EmojiParser
+                .parseToUnicode("Зарегистрироваться в приюте" + ":white_check_mark:"));
+        chooseOwnerDataButton.callbackData("ЗАРЕГИСТРИРОВАТЬСЯ_В_ПРИЮТЕ");
+
+        Keyboard keyboard = new InlineKeyboardMarkup()
+                .addRow(chooseDogHouseButton, chooseCatHouseButton)
+                .addRow(chooseOwnerDataButton);
+
         sendMessage.replyMarkup(keyboard);
         telegramBot.execute(sendMessage);
     }
@@ -62,15 +72,19 @@ public class Buttons {
         InlineKeyboardButton dogHouseInfoButton = new InlineKeyboardButton(EmojiParser
                 .parseToUnicode("Информация о приюте " + ":information_source:"));
         dogHouseInfoButton.callbackData("ИНФО_СОБАКИ");
+
         InlineKeyboardButton dogHouseHowToTakeButton = new InlineKeyboardButton(EmojiParser
                 .parseToUnicode("Как взять собаку из приюта " + ":dog:"));
         dogHouseHowToTakeButton.callbackData("КАК_ЗАБРАТЬ_СОБАКУ");
+
         InlineKeyboardButton dogHouseOwnerReportButton = new InlineKeyboardButton(EmojiParser
                 .parseToUnicode("Прислать отчёт о питомце " + ":memo:"));
         dogHouseOwnerReportButton.callbackData("ОТЧЁТ");
+
         InlineKeyboardButton callVoluntier = new InlineKeyboardButton(EmojiParser
                 .parseToUnicode("Позвать волонтёра " + ":necktie:"));
         callVoluntier.callbackData("ВОЛОНТЁР");
+
         Keyboard keyboard = new InlineKeyboardMarkup()
                 .addRow(dogHouseInfoButton)
                 .addRow(dogHouseHowToTakeButton)
@@ -148,6 +162,7 @@ public class Buttons {
     // ОТЧЁТ
     public void sendOwnerHowReport(long chatId) {
         SendMessage sendMessage = new SendMessage(chatId, EmojiParser.parseToUnicode(HOW_REPORT));
+        TelegramBotPetShelterUpdatesListener.reportSelect = true;
 //        InlineKeyboardButton textButton = new InlineKeyboardButton(EmojiParser
 //                .parseToUnicode("Отправить текст :memo:"));
 //        InlineKeyboardButton photoButton = new InlineKeyboardButton(EmojiParser
@@ -156,6 +171,17 @@ public class Buttons {
 //        photoButton.callbackData("ОТЧЁТ_ФОТО");
 //        Keyboard keyboard = new InlineKeyboardMarkup().addRow(textButton).addRow(photoButton);
 //        sendMessage.replyMarkup(keyboard);
+        telegramBot.execute(sendMessage);
+
+    }
+
+    // ДАННЫЕ
+    public void sendOwnerData(long chatId) {
+        SendMessage sendMessage = new SendMessage(chatId, EmojiParser.parseToUnicode("""
+                :white_check_mark: Введите или нажмите команду
+                 /myData"""
+                ));
+        TelegramBotPetShelterUpdatesListener.getOwnerDataSelect = true;
         telegramBot.execute(sendMessage);
 
     }

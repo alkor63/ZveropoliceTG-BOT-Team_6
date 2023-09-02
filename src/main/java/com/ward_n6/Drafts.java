@@ -95,7 +95,37 @@ public class Drafts {
 //            }
 //        }
 //    }
-
+    //ИЛИ ФОТО ПО-ДРУГОМУ
+//    public void getPhoto (Update update, long chatId,long petId) {
+//        GetFile getFile = new GetFile(update.message().photo()[2].fileId());
+//        GetFileResponse getFileResponse = telegramBot.execute(getFile);
+//        var messagePhoto = update.message().photo(); //создаём переменную и присваиваем ей значение из сообщения
+//        if (messagePhoto != null && messagePhoto.length > 0) {
+//            try {
+//                File file = getFileResponse.file();
+//                file.fileSize();
+//
+//                byte[] fileContent = telegramBot.getFileContent(file);
+//                photo.setOwnerId(chatId);
+//                photo.setPetId(petId);
+//                photo.setFileName(folderPath + file.fileId() + "-owner-" + chatId);
+//                photo.setDateTime(LocalDateTime.now());
+//                photo.setPhoto(fileContent);
+//                photoRepository.save(photo);
+//                isPhoto = true;
+//
+//                telegramBot.execute(new SendMessage(update.message().chat().id(), "Фото загружено!" + REPORT));
+//
+//            } catch (IOException e) {
+//                System.out.println("Ошибка загрузки фото!");
+//                logger.error("Ошибка: файл не загружен");
+//            }
+//        } else {
+//            telegramBot.execute(new SendMessage(update.message().chat().id(), "Вы не загрузили фото" + REPORT));
+//
+//        }
+//    }
+//********************************************АРХИВ
     //    public Boolean removePetsOwnerToArchive(PetsOwner petsOwner) {
 //        // убираем парочку из таблицы PetsOwner и заносим в одноименный архив
 //        // после успешного прохождения (окончания) испытательного срока

@@ -24,7 +24,7 @@ public class PetsOwnerFactories {
         Session session = getSessionFactory().openSession();
         Cat cat = session.get(Cat.class, petId);
         if (cat == null) {
-            chatMessager.sendMessage(chatId, "такой кошки нет в приюте, проверьте ID питомца");
+            chatMessager.sendMessage(chatId, "Такой кошки нет в приюте, проверьте ID питомца: /ID");
             session.close();
         } else
             session.close();
@@ -36,7 +36,7 @@ public class PetsOwnerFactories {
         Session session = getSessionFactory().openSession();
         Dog dog = session.get(Dog.class, petId);
         if (dog == null) {
-            chatMessager.sendMessage(chatId, "такой собаки нет в приюте, проверьте ID животного");
+            chatMessager.sendMessage(chatId, "такой собаки нет в приюте, проверьте ID животного: /ID");
             session.close();
         } else
             session.close();
