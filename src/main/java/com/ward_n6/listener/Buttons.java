@@ -17,7 +17,7 @@ public class Buttons {
         this.telegramBot = telegramBot;
     }
 
-    public void afterStartMenu(long chatId, String message) {
+    public void afterStartMenu(long chatId) {
         SendMessage sendMessage = new SendMessage(chatId, "Здравствуйте. " +
                 "Это чат-бот приюта для животных. " +
                 "Какой приют Вас интересует?");
@@ -34,10 +34,12 @@ public class Buttons {
 
     // КОШКИ
     public void catButton(long chatId) {
-        SendMessage sendMessage = new SendMessage(chatId, "Вы выбрали приют для кошек");
+        SendMessage sendMessage = new SendMessage(chatId, "Вы выбрали приют для кошек!\n" + CAT_DESCRIPTION);
         InlineKeyboardButton catHouseInfoButton = new InlineKeyboardButton(EmojiParser
                 .parseToUnicode("Информация о приюте " + ":information_source:"));
         catHouseInfoButton.callbackData("ИНФО_КОШКИ");
+        InlineKeyboardButton userRegisterData = new InlineKeyboardButton("РЕГИСТРАЦИЯ В НАШЕЙ БАЗЕ ДАННЫХ");
+        userRegisterData.callbackData("РЕГИСТРАЦИЯ_ПОЛЬЗОВАТЕЛЯ");
         InlineKeyboardButton catHouseHowToTakeButton = new InlineKeyboardButton(EmojiParser
                 .parseToUnicode("Как взять кошку из приюта " + ":cat:"));
         catHouseHowToTakeButton.callbackData("КАК_ЗАБРАТЬ_КОШКУ");
@@ -212,5 +214,7 @@ public class Buttons {
         telegramBot.execute(sendMessage);
 
     }
+
+
 
 }

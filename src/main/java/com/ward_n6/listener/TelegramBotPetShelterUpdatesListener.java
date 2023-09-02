@@ -169,7 +169,7 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                     switch (messageText) {
                         case "/start":
                             startSelected = true;
-                            buttons.afterStartMenu(chatId, "/start");
+                            buttons.afterStartMenu(chatId);
                             break;
 
                         case "/dogs":
@@ -203,7 +203,7 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                                 chatMessager.sendMessage(chatId, """
                                          Пожалуйста, сначала выберите приют:
                                         """);
-                                buttons.afterStartMenu(chatId, "/start");
+                                buttons.afterStartMenu(chatId);
                             }
                             break;
 
