@@ -6,6 +6,7 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.GetFile;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.ward_n6.repository.PhotoRepository;
+import com.ward_n6.service.OwnerReportServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -19,6 +20,8 @@ class PhotoHandlerTest {
     private TelegramBot telegramBot;
     @Mock
     private PhotoRepository photoRepository;
+    @Mock
+    private OwnerReportServiceImpl ownerReportServiceImpl;
 
     @Test
     public void handleTest() throws IOException, TelegramApiException {
@@ -36,7 +39,7 @@ class PhotoHandlerTest {
         when(photoSizes[0].fileId()).thenReturn("photo_file_id");
 
         // create instance of the class under test
-        PhotoHandler photoHandler = new PhotoHandler(telegramBot, photoRepository, ownerReportService);
+        PhotoHandler photoHandler = new PhotoHandler(telegramBot, photoRepository, ownerReportServiceImpl);
 
         // call the method to be tested
         photoHandler.handle(update);

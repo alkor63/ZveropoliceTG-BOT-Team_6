@@ -78,4 +78,8 @@ Owner owner;
     public Owner getOwnerById (long ownerId){
         return owner = ownerRepository.getById(ownerId);
     }
+
+    public void deleteById(long ownerId) {
+        ownerRepository.deleteById(ownerId);
+    }
 }
