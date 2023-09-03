@@ -2,6 +2,7 @@ package com.ward_n6.entity.reports;
 
 import com.ward_n6.enums.PetsType;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
@@ -35,6 +36,7 @@ public class OwnerReport {
     private long ownerId;
 
     @Column(name = "report_date_time", nullable = false)
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime reportDateTime; // дата, время
 
     @Enumerated(EnumType.STRING) // для сохранения названия, а не цифры

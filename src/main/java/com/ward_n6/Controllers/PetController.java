@@ -9,11 +9,9 @@ import com.ward_n6.service.pets.DogService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -32,10 +30,8 @@ public class PetController {
 
     @PostMapping("add_cat/{petsSex}")
     @Operation(summary = "Добавить кошку")
-    public ResponseEntity<Cat> addCat(@RequestParam String petsBread,
-                                      @DateTimeFormat(pattern = "yyyy-MM-dd") @RequestParam LocalDate petsBirthDay,
-                                      String petsName,
-                                      @PathVariable PetsSex petsSex, Cat cat) {
+    public ResponseEntity<Cat> addCat(@PathVariable PetsSex petsSex, Cat cat) {
+
         PetsType petsType = PetsType.CAT;
         catService.addCat(petsSex, petsType, cat);
         return ResponseEntity.ok(cat);
@@ -73,10 +69,7 @@ public class PetController {
 
     @Operation(summary = "Поменять кошку")
     @PutMapping("changeCat/{id}/{petsSex}")
-    public ResponseEntity<Cat> changeCat(@PathVariable long id, @PathVariable PetsSex petsSex, Cat cat,
-                                         @RequestParam String petsBread,
-                                         @DateTimeFormat(pattern = "yyyy-MM-dd") @RequestParam LocalDate petsBirthDay,
-                                         String petsName, Long ownerId) {
+    public ResponseEntity<Cat> changeCat(@PathVariable long id, @PathVariable PetsSex petsSex, Cat cat) {
 
 
         PetsType petsType = PetsType.CAT;
@@ -90,9 +83,7 @@ public class PetController {
 
     @PostMapping("add_dog/{petsSex}")
     @Operation(summary = "Добавить собаку")
-    public ResponseEntity<Dog> addDog(@RequestParam String petsBread,
-                                      @DateTimeFormat(pattern = "yyyy-MM-dd") @RequestParam LocalDate petsBirthDay,
-                                      String petsName, @PathVariable PetsSex petsSex, Dog dog) {
+    public ResponseEntity<Dog> addDog(@PathVariable PetsSex petsSex, Dog dog) {
         PetsType petsType = PetsType.DOG;
         dogService.addDog(petsSex, petsType, dog);
         return ResponseEntity.ok(dog);
@@ -128,10 +119,7 @@ public class PetController {
 
     @Operation(summary = "Поменять собаку")
     @PutMapping("changeDog/{id}/{petsSex}")
-    public ResponseEntity<Dog> changeCat(@PathVariable long id, @PathVariable PetsSex petsSex, Dog dog,
-                                         @RequestParam String petsBread,
-                                         @DateTimeFormat(pattern = "yyyy-MM-dd") @RequestParam LocalDate petsBirthDay,
-                                         String petsName, Long ownerId) {
+    public ResponseEntity<Dog> changeCat(@PathVariable long id, @PathVariable PetsSex petsSex, Dog dog) {
         PetsType petsType = PetsType.CAT;
         Dog change = dogService.change(id, petsSex, petsType, dog);
         return ResponseEntity.ok(change);
