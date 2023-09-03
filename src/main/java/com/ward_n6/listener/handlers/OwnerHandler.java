@@ -86,8 +86,7 @@ public class OwnerHandler implements EventHandler {
 
 
                 case "/delete":
-//                telegramBot.execute(new SendMessage(update.message().chat().id(), "К сожалению, эта функция пока не работает. " +
-//                        "Для удаления данных из нашей базы обратитесь в волонтёру."));
+//
                     long ownerId = update.message().chat().id();
                     int id = (int) ownerId;
 
