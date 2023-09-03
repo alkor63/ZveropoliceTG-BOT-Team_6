@@ -24,12 +24,12 @@ public class OwnerReportController {
 //    }
     @Autowired
     private OwnerReportService ownerReportService;
+
     //++++++++++++++++++++++++++++++++++++++++++++++++++++
-    @PostMapping
+    @PostMapping("/{petsType}/{havePhoto}/" )
     @Operation(summary = "Добавление отчёта в список",
-            description = "нужно заполнить все поля отчёта в Body")
-    public ResponseEntity<OwnerReport> addOwnerReport(@RequestBody @Valid OwnerReport ownerReport)
-    {
+            description = "нужно заполнить все поля отчёта в Body. ")
+    public ResponseEntity<OwnerReport> addOwnerReport(@RequestBody @Valid OwnerReport ownerReport) {
         OwnerReport newOwnerReport = ownerReportService.addOwnerReport(ownerReport);
         return new ResponseEntity<>(newOwnerReport, HttpStatus.CREATED);
     }
@@ -37,8 +37,7 @@ public class OwnerReportController {
 
     @GetMapping
     @Operation(summary = "Показать все отчёты")
-    public ResponseEntity<List<OwnerReport>> getAllOwnerReports()
-    {
+    public ResponseEntity<List<OwnerReport>> getAllOwnerReports() {
         return ResponseEntity.ok().body(ownerReportService.getAllOwnerReports());
     }
 
@@ -46,8 +45,7 @@ public class OwnerReportController {
     @GetMapping("/{ownerReportId}")
     @Operation(summary = "Показать один отчёт по id",
             description = "нужно указать id отчёта")
-    public ResponseEntity<OwnerReport>  getOwnerReportById(@PathVariable Integer ownerReportId)
-    {
+    public ResponseEntity<OwnerReport> getOwnerReportById(@PathVariable Integer ownerReportId) {
         return ResponseEntity.ok().body(ownerReportService.getOwnerReportById(ownerReportId));
     }
 
@@ -55,8 +53,7 @@ public class OwnerReportController {
     @DeleteMapping("/{ownerReportId}")
     @Operation(summary = "Удалить один отчёт из списка",
             description = "нужно указать id отчёта")
-    public ResponseEntity<String> deleteOwnerReportById(@PathVariable Integer ownerReportId)
-    {
+    public ResponseEntity<String> deleteOwnerReportById(@PathVariable Integer ownerReportId) {
         boolean deleteOwnerReportById = ownerReportService.deleteOwnerReportById(ownerReportId);
         if (deleteOwnerReportById) {
             return new ResponseEntity<>(("OwnerReport id = " + ownerReportId + "успешно удален из базы"), HttpStatus.OK);
@@ -67,12 +64,11 @@ public class OwnerReportController {
 
     }
 
-    @PutMapping("/{ownerReportId}")
+    @PutMapping("/{ownerReportId}/{havePhoto}")
     @Operation(summary = "Отредактировать отчёт",
             description = "нужно указать id и заполнить все поля отчёта в Body")
     public OwnerReport editOwnerReportById(@PathVariable int ownerReportId,
-                                           @RequestBody @Valid OwnerReport ownerReport)
-    {
+                                           @RequestBody @Valid OwnerReport ownerReport) {
         return ownerReportService.editOwnerReportById(ownerReportId, ownerReport);
     }
 }
