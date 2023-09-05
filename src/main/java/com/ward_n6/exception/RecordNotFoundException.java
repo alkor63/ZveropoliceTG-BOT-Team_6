@@ -5,8 +5,4 @@ public class RecordNotFoundException extends RuntimeException {
         super(s);
     }
 
-    public RecordNotFoundException(String s, Throwable throwable) {
-        super(s, throwable);
-    }
-
 }

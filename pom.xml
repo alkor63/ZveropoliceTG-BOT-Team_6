@@ -31,7 +31,14 @@
             <artifactId>emoji-java</artifactId>
             <version>5.1.1</version>
         </dependency>
-
+        <!-- попытка убрать ошибку -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+            <version>5.8.1</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- попытка убрать ошибку -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>

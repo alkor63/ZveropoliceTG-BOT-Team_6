@@ -5,12 +5,13 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.ward_n6.entity.owners.Owner;
 import com.ward_n6.service.OwnerServiceImpl;
+import lombok.Getter;
 
 import java.util.function.Consumer;
 import java.util.regex.Pattern;
 
 import static com.ward_n6.listener.MessageStringsConstants.PERSONAL_DATA_REQUEST;
-
+@Getter
 /**
  * класс для обработки и сохранения данных пользователя
  */
@@ -73,11 +74,11 @@ public class OwnerHandler implements EventHandler {
 
                 case "/save":
                     owner.setId(update.message().chat().id().longValue());
+
                     ownerServiceImpl.save(owner);
                     telegramBot.execute(new SendMessage(update.message().chat().id(), "Ваши данные  \n" +
                             owner.toString() + " добавлены в нашу базу. Спасибо за регистрацию. \n" +
-                            """
-                                                      
+                            """ 
                                     Для обновления или удаления данных введите нажмите команду: 
                                     /myData 
                                     Для обновления записи укажите Ваши данные заново."""));
@@ -97,6 +98,7 @@ public class OwnerHandler implements EventHandler {
         }
         return false;
     }
+
 }
 
 

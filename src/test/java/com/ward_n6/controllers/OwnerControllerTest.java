@@ -3,7 +3,6 @@ package com.ward_n6.Controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ward_n6.entity.owners.Owner;
 import com.ward_n6.repository.owner.OwnerRepository;
-import com.ward_n6.service.OwnerServiceImpl;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -41,13 +40,12 @@ public class OwnerControllerTest {
 
     @MockBean
     private OwnerRepository ownerRepository;
-    private OwnerServiceImpl ownerService;
 
 
     @Test
         //тест метода по добавлению владельца
     void ShouldCreateOwner() throws Exception {
-        Mockito.when(ownerRepository.save(any())).thenReturn(OWNER_1);
+        Mockito.when(ownerRepository.save(Mockito.any())).thenReturn(OWNER_1);
         mockMvc.perform(MockMvcRequestBuilders
                         .post("createOwner")
                         .content(objectMapper.writeValueAsString(OWNER_1))
@@ -163,7 +161,7 @@ public class OwnerControllerTest {
     @Test
         //тест метода по получению всех владельцев
     void ShouldGetAllOwners() throws Exception {
-        List<Owner> allOwners = new ArrayList<>(Arrays.asList(OWNER_1, OWNER_2));
+        List allOwners = new ArrayList<>(Arrays.asList(OWNER_1, OWNER_2));
 
         Mockito.when(ownerRepository.findAll()).thenReturn(allOwners);
 

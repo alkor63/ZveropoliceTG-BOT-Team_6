@@ -4,15 +4,12 @@ import com.ward_n6.entity.pets.Cat;
 import com.ward_n6.entity.pets.Dog;
 import com.ward_n6.entity.pets.Pet;
 import com.ward_n6.exception.DeleteFromMapException;
-import com.ward_n6.exception.EditMapException;
-import com.ward_n6.service.interfaces.PetService;
 import com.ward_n6.repository.pets.CatRepository;
 import com.ward_n6.repository.pets.DogRepository;
 import com.ward_n6.repository.pets.PetBaseRepository;
+import com.ward_n6.service.interfaces.PetService;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @Repository
@@ -29,30 +26,6 @@ public class PetServiceImpl implements PetService {
         this.dog = dog;
     }
 
-    @Override
-    public Pet getPetById(int recordId) {
-        return null;
-    }
-
-    @Override
-    public Pet getPetByIdInt(int recordId) {
-        return null;
-    }
-
-    @Override
-    public List<Pet> getAllPets() {
-        return null;
-    }
-
-    @Override
-    public Pet editPetById(int recordId, Pet pet) throws EditMapException {
-        return null;
-    }
-
-    @Override
-    public void deleteAllFromPet() {
-
-    }
 
     @Override
     public boolean deletePetById(int recordId) throws DeleteFromMapException {
@@ -60,14 +33,16 @@ public class PetServiceImpl implements PetService {
     }
 
     @Override
+    public Pet getPetById(int recordId) {
+        return null;
+    }
+
+
+    @Override
     public boolean deletePetByValue(Pet pet) throws DeleteFromMapException {
         return false;
     }
 
-    @Override
-    public int idPetByValue(Pet pet) {
-        return 0;
-    }
     @Override
     public Pet addPet(Pet pet){
         petBaseRepository.save(pet);

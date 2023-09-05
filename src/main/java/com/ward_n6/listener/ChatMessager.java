@@ -34,9 +34,7 @@ public class ChatMessager {
         }
     }
 
-    /**
-     * метод покрыть тестом ->
-     */
+
     // ОТПРАВКА ОТВЕТА БОТА:
     public void sendMessage(long chatId, String message) { // выносим отправку в отдельный метод
         SendMessage sendMessage = new SendMessage(chatId, message);
