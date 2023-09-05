@@ -39,11 +39,11 @@ public class OwnerReportControllerTest {
     @MockBean
     OwnerReportRepository ownerReportRepository;
     // создаем несколько объектов тестируемого класса
-    OwnerReport ownerReport1 = new OwnerReport(1l, 9932688l, LocalDateTime.now(), PetsType.CAT, false,
-            "fff","dddd", "dse", 23L);
-    OwnerReport ownerReport2 = new OwnerReport(2l, 1236688l, LocalDateTime.now(), PetsType.CAT, false,
+    OwnerReport ownerReport1 = new OwnerReport(1l, LocalDateTime.now(), false,
+            "Pedigree","dddd", "dse", 23L);
+    OwnerReport ownerReport2 = new OwnerReport(2l, LocalDateTime.now(), false,
             "f[pf","diudd", ";ose", 21L);
-    OwnerReport ownerReport3 = new OwnerReport(3l, 1236458l, LocalDateTime.now(), PetsType.DOG, false,
+    OwnerReport ownerReport3 = new OwnerReport(3l, LocalDateTime.now(), false,
             "efWQ","dduiyu", "Fg", 27L);
 
     @Test

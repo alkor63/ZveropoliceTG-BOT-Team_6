@@ -9,12 +9,13 @@ import com.ward_n6.repository.owner.PetsOwnerRepository;
 import com.ward_n6.service.VolunteerService;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.logging.Logger;
 
-//@Component
+@Component
 public class OwnerTrialPeriodTimer {
     // класс для отслеживания испытательного срока
     private final BotMessagingRepository botMessagingRepository;
@@ -47,7 +48,7 @@ public class OwnerTrialPeriodTimer {
 
 
     //    @Scheduled(cron = "1 00 21 * * *") //вызов каждый день в 21:00
-    @Scheduled(cron = "11 13 21 * * *") //вызов каждый день в мм чч на время отладки
+    @Scheduled(cron = "11 56 20 * * *") //вызов каждый день в мм чч на время отладки
 
     public void task() {
 //        long chatId = 1L;  // заменить на owner.getId()
