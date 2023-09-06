@@ -1,20 +1,18 @@
 package com.ward_n6.Timer;
-
 import com.pengrad.telegrambot.TelegramBot;
 import com.ward_n6.entity.owners.PetsOwner;
 import com.ward_n6.entity.reports.OwnerReport;
-import com.ward_n6.repository.BotMessagingRepository;
-import com.ward_n6.repository.owner.OwnerReportRepository;
-import com.ward_n6.repository.owner.PetsOwnerRepository;
+import com.ward_n6.repository.*;
 import com.ward_n6.service.VolunteerService;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.logging.Logger;
 
-//@Component
+@Component
 public class OwnerTrialPeriodTimer {
     // класс для отслеживания испытательного срока
     private final BotMessagingRepository botMessagingRepository;
@@ -24,7 +22,7 @@ public class OwnerTrialPeriodTimer {
 
     private final OwnerReportRepository ownerReportRepository;
 
-    private Logger logger = (Logger) LoggerFactory.getLogger(OwnerTrialPeriodTimer.class);
+    private Logger logger = LoggerFactory.getLogger(OwnerTrialPeriodTimer.class);
 
     public OwnerTrialPeriodTimer(BotMessagingRepository botMessagingRepository,
                                  TelegramBot telegramBot,
@@ -46,7 +44,7 @@ public class OwnerTrialPeriodTimer {
     // проверка качества отчётов
 
 
-    //    @Scheduled(cron = "1 00 21 * * *") //вызов каждый день в 21:00
+//    @Scheduled(cron = "1 00 21 * * *") //вызов каждый день в 21:00
     @Scheduled(cron = "11 13 21 * * *") //вызов каждый день в мм чч на время отладки
 
     public void task() {
@@ -77,7 +75,7 @@ public class OwnerTrialPeriodTimer {
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         List<PetsOwner> allPetOwners = petsOwnerRepository.findAll();
         for (PetsOwner petsOwner : allPetOwners) {
-            if (petsOwner.getEndDate().equals(LocalDate.now())) {
+            if (petsOwner.getDateEnd().equals(LocalDate.now())) {
 //если сегодня день окончания испытательного срока, Волонтёр выносит "приговор"
                 String finalVerdict = volunteerService.ownersVerdict(petsOwner);
 //                long chatId = petsOwner.getOwnerId();

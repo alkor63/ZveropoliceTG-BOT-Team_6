@@ -23,7 +23,6 @@ import java.util.Objects;
 @Builder
 @Entity
 @Table(name = "owner_report")
-// нужно делать класс абстрактным???
 public class OwnerReport {
 
     @javax.persistence.Id
@@ -62,6 +61,15 @@ public class OwnerReport {
 //    @Column(name = "photo", nullable = false)
 //    PhotoSize photo;
 
+
+    public OwnerReport(LocalDateTime reportDateTime, boolean havePhoto, String nutrition, String petsHealth, String petsBehavior, long petId) {
+        this.reportDateTime = reportDateTime;
+        this.havePhoto = havePhoto;
+        this.nutrition = nutrition;
+        this.petsHealth = petsHealth;
+        this.petsBehavior = petsBehavior;
+        this.petId = petId;
+    }
 
     @Override
     public boolean equals(Object o) {
