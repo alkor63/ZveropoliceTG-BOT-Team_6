@@ -71,7 +71,7 @@ public class VolunteerService {
         // num - количество отчетов за 24 часа до 21:00 указанной даты
     }
 
-    int endOfProbationPeriod(PetsOwner petWithOwner) {
+public int endOfProbationPeriod(PetsOwner petWithOwner) {
 
 // Исходим из того, что запрос на "приговор" приходит в день окончания испытательного срока
 // т.е. дата = localDate.now()

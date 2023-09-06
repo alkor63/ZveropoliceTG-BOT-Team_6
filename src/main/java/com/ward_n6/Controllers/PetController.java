@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 
@@ -64,8 +63,6 @@ public class PetController {
         return ResponseEntity.ok(cat);
     }
 
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    String dateString;
 
     @Operation(summary = "Поменять кошку")
     @PutMapping("changeCat/{id}/{petsSex}")

@@ -64,16 +64,13 @@ class OwnerHandlerTest {
         when(message.text()).thenReturn("/ln");
         when(message.chat()).thenReturn(chat);
         when(chat.id()).thenReturn(123456789L);
-        Owner owner = new Owner();
+        Owner owner = new Owner(123654L, "ln", "fn", "8-999-999-99-99");
 
         // Создание объекта OwnerHandler с моками зависимостей
         OwnerHandler ownerHandler = new OwnerHandler(ownerServiceImpl, telegramBot);
 
         // Вызов метода для тестирования
         ownerHandler.handle(update);
-        owner.setLastName("ln");
-        owner.setFirstName("fn");
-        owner.setPhoneNumber("8-999-999-99-99");
         // Проверка вызовов методов для зависимостей
         verify(telegramBot).execute(any(SendMessage.class));
 
