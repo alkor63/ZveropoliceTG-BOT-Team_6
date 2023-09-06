@@ -4,7 +4,7 @@ import com.ward_n6.entity.pets.Cat;
 import com.ward_n6.entity.pets.Dog;
 import com.ward_n6.entity.pets.Pet;
 import com.ward_n6.exception.DeleteFromMapException;
-import com.ward_n6.exception.EditMapException;
+import com.ward_n6.exception.RecordNotFoundException;
 import com.ward_n6.service.interfaces.PetService;
 import com.ward_n6.repository.pets.CatRepository;
 import com.ward_n6.repository.pets.DogRepository;
@@ -45,7 +45,7 @@ public class PetServiceImpl implements PetService {
     }
 
     @Override
-    public Pet editPetById(int recordId, Pet pet) throws EditMapException {
+    public Pet editPetById(int recordId, Pet pet) throws RecordNotFoundException {
         return null;
     }
 

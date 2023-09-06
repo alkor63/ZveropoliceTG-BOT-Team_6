@@ -10,6 +10,3 @@ public class RecordNotFoundException extends RuntimeException {
     }
 
 }
-=======
-
->>>>>>> feature-AlexeyK

@@ -2,8 +2,8 @@ package com.ward_n6.service;
 
 import com.ward_n6.entity.owners.PetsOwner;
 import com.ward_n6.entity.reports.OwnerReport;
-import com.ward_n6.repository.PetRepository;
-import com.ward_n6.repository.PetsOwnerRepository;
+import com.ward_n6.repository.owner.PetsOwnerRepository;
+import com.ward_n6.repository.pets.PetBaseRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -24,28 +24,29 @@ import static org.mockito.Mockito.*;
 class VolunteerServiceTest {
     String firstName = "Саня";
 
-    private final OwnerReport ownerReport1 = new OwnerReport(11L, LocalDateTime.now().minusDays(1), false, "nutrition1", "health1", "behavior1", 1L);
-    private final OwnerReport ownerReport2 = new OwnerReport(12L, LocalDateTime.now(), true, "food", "health2", "behavior2", 2L);
+    private final OwnerReport ownerReport1 = new OwnerReport(11,1,1, LocalDateTime.now().minusDays(1),
+            false, "nutrition1", "health1", "behavior1");
+    private final OwnerReport ownerReport2 = new OwnerReport(12,2,2, LocalDateTime.now(),
+            true, "food", "health2", "behavior2");
+
+    @Mock
+    PetsOwnerRepository petsOwnerRepository;
+
+    @Mock
+    private PetsOwnerService petsOwnerService;
     @Mock
     private OwnerReportService ownerReportService;
     @Mock
-    private PetRepository petRepository;
-    @Mock
-    private PetsOwnerRepository petsOwnerRepository;
-    @Mock
-    private PetsOwnerService petsOwnerService;
+    private PetBaseRepository petBaseRepository;
     @Spy
-    final VolunteerService volunteerMock = spy(new VolunteerService(
-            petsOwnerRepository,
-            petsOwnerService,
-            ownerReportService,
-            petRepository));
+    final VolunteerService volunteerMock = spy(new VolunteerService(petsOwnerRepository, (com.ward_n6.service.interfaces.PetsOwnerService) petsOwnerService,
+            (com.ward_n6.service.interfaces.OwnerReportService) ownerReportService, petBaseRepository));
 
     @InjectMocks
     private VolunteerService volunteer;
 
-    PetsOwner petWithOwner = new PetsOwner(2L, LocalDate.now().minusDays(30),
-            LocalDate.now(), 2L, 2L);
+    PetsOwner petWithOwner = new PetsOwner(2L,2L, LocalDate.now().minusDays(30),
+            LocalDate.now());
 
 
     @Test

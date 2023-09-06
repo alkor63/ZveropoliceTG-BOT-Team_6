@@ -40,8 +40,8 @@ public class OwnerReportServiceTest {
 
         @Test
         public void testGetOwnerReportsList() {
-                OwnerReport ownerReport1 = new OwnerReport(1L, LocalDateTime.now(), true, "Pedigree", "good", "Ok", 1L);
-                OwnerReport ownerReport2 = new OwnerReport(2L, LocalDateTime.now(), true, "meat", "very good", "Ok", 2L);
+                OwnerReport ownerReport1 = new OwnerReport(1L,2L,3L, LocalDateTime.now(), true, "Pedigree", "good", "Ok");
+                OwnerReport ownerReport2 = new OwnerReport(2L,3L,5L, LocalDateTime.now(), true, "meat", "very good", "Ok");
                 when(ownerReportRepository.findAll()).thenReturn(Arrays.asList(ownerReport1, ownerReport2));
                 List<OwnerReport> ownerReportList = ownerReportService.getAllOwnerReports();
                 Assertions.assertEquals(ownerReportList.size(), 2);
@@ -53,7 +53,7 @@ public class OwnerReportServiceTest {
 
         @Test
         public void testGetOwnerReportById() {
-                OwnerReport ownerReport = new OwnerReport(7L, LocalDateTime.now(), false, "fish", "normal", "Ok", 3L);
+                OwnerReport ownerReport = new OwnerReport(7L,8L,9L, LocalDateTime.now(), false, "fish", "normal", "Ok");
                 when(ownerReportRepository.findById(7L)).thenReturn(Optional.of(ownerReport));
                 OwnerReport ownerReportById = ownerReportService.getOwnerReportById(7);
                 Assertions.assertNotEquals(ownerReportById, null);
@@ -73,7 +73,7 @@ public class OwnerReportServiceTest {
 
         @Test
         public void testAddOwnerReport() {
-                OwnerReport ownerReport = new OwnerReport(12L, LocalDateTime.now(), true, "Pedigree", "good", "Ok", 12L);
+                OwnerReport ownerReport = new OwnerReport(12L,15L,17L, LocalDateTime.now(), true, "Pedigree", "good", "Ok");
                 ownerReportService.addOwnerReport(ownerReport);
                 verify(ownerReportRepository, times(1)).save(ownerReport);
                 ArgumentCaptor<OwnerReport> ownerReportArgumentCaptor = ArgumentCaptor.forClass(OwnerReport.class);
@@ -85,7 +85,7 @@ public class OwnerReportServiceTest {
 
         @Test
         public void testDeleteOwnerReport() {
-                OwnerReport ownerReport = new OwnerReport(13L, LocalDateTime.now(), true, "Pedigree", "good", "Ok", 13L);
+                OwnerReport ownerReport = new OwnerReport(13L,16L,18L, LocalDateTime.now(), true, "Pedigree", "good", "Ok");
                 when(ownerReportRepository.findById(13L)).thenReturn(Optional.of(ownerReport));
                 ownerReportService.deleteOwnerReportById(Math.toIntExact(ownerReport.getId()));
                 verify(ownerReportRepository, times(1)).deleteById(ownerReport.getId());

@@ -75,7 +75,7 @@ public class OwnerTrialPeriodTimer {
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         List<PetsOwner> allPetOwners = petsOwnerRepository.findAll();
         for (PetsOwner petsOwner : allPetOwners) {
-            if (petsOwner.getDateEnd().equals(LocalDate.now())) {
+            if (petsOwner.getEndDate().equals(LocalDate.now())) {
 //если сегодня день окончания испытательного срока, Волонтёр выносит "приговор"
                 String finalVerdict = volunteerService.ownersVerdict(petsOwner);
 //                long chatId = petsOwner.getOwnerId();

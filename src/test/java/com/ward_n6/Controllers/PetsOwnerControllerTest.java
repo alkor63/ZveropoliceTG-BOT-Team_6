@@ -11,12 +11,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -38,9 +36,9 @@ public class PetsOwnerControllerTest {
     PetsOwnerRepository petsOwnerRepository;
     // создаем несколько объектов тестируемого класса
     //java.time.LocalDate dateEnd, LocalDate dateBegin, Long ownerId, Long petId
-    PetsOwner petsOwner1 = new PetsOwner(1l, LocalDate.now(), LocalDate.now().plusDays(10), 1L, 1L);
-    PetsOwner petsOwner2 = new PetsOwner(2L, LocalDate.now(), LocalDate.now().plusDays(20), 2L, 2L);
-    PetsOwner petsOwner3 = new PetsOwner(3L, LocalDate.now(), LocalDate.now().plusDays(30), 5L, 3L);
+    PetsOwner petsOwner1 = new PetsOwner(1,1L, LocalDate.now(), LocalDate.now().plusDays(10));
+    PetsOwner petsOwner2 = new PetsOwner(2L, 2L, LocalDate.now(), LocalDate.now().plusDays(20));
+    PetsOwner petsOwner3 = new PetsOwner(3L, 5L,LocalDate.now(), LocalDate.now().plusDays(30));
 
 
     @Test

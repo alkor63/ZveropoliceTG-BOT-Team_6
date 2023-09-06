@@ -30,6 +30,8 @@ public class OwnerReport {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
+    @Column(name = "pet_id", nullable = false)
+    private long petId; // id питомца
 
     @Column(name = "owner_id", nullable = false)
     private long ownerId;
@@ -54,9 +56,18 @@ public class OwnerReport {
     @Column(name = "pets_behavior")
     private String petsBehavior; // поведение
 
-
-    @Column(name = "pet_id", nullable = false)
-    private long petId; // id питомца
+    public OwnerReport(long id, long petId, long ownerId,
+                       LocalDateTime reportDateTime, boolean havePhoto, String nutrition,
+                       String petsHealth, String petsBehavior) {
+        this.id = id;
+        this.petId = petId;
+        this.ownerId = ownerId;
+        this.reportDateTime = reportDateTime;
+        this.havePhoto = havePhoto;
+        this.nutrition = nutrition;
+        this.petsHealth = petsHealth;
+        this.petsBehavior = petsBehavior;
+    }
 
 //    @Column(name = "photo", nullable = false)
 //    PhotoSize photo;

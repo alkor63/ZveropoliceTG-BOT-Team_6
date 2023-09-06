@@ -2,7 +2,7 @@ package com.ward_n6.service.interfaces;
 
 import com.ward_n6.entity.pets.Pet;
 import com.ward_n6.exception.DeleteFromMapException;
-import com.ward_n6.exception.EditMapException;
+import com.ward_n6.exception.RecordNotFoundException;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ public interface PetService {
 
     List<Pet> getAllPets();
 
-    Pet editPetById(int recordId, Pet pet) throws EditMapException;
+    Pet editPetById(int recordId, Pet pet) throws RecordNotFoundException;
 
     void deleteAllFromPet();
 

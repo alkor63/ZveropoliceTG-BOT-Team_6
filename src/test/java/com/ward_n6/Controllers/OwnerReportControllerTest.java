@@ -2,7 +2,6 @@ package com.ward_n6.Controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ward_n6.entity.reports.OwnerReport;
-import com.ward_n6.exception.InvalidRequestException;
 import com.ward_n6.repository.OwnerReportRepository;
 import javassist.NotFoundException;
 import org.hamcrest.Matchers;
@@ -37,9 +36,12 @@ public class OwnerReportControllerTest {
     @MockBean
     OwnerReportRepository ownerReportRepository;
     // создаем несколько объектов тестируемого класса
-    OwnerReport ownerReport1 = new OwnerReport(1L, LocalDateTime.now(), true, "Pedigree", "good", "Ok", 1L);
-    OwnerReport ownerReport2 = new OwnerReport(2L, LocalDateTime.now(), true, "meat", "very good", "Ok", 2L);
-    OwnerReport ownerReport3 = new OwnerReport(3L, LocalDateTime.now(), false, "fish", "normal", "Ok", 3L);
+    OwnerReport ownerReport1 = new OwnerReport(1,1,1, LocalDateTime.now(), true,
+            "Pedigree", "good", "Ok");
+    OwnerReport ownerReport2 = new OwnerReport(2,2,2, LocalDateTime.now(), true,
+            "meat", "very good", "Ok");
+    OwnerReport ownerReport3 = new OwnerReport(3,3,3, LocalDateTime.now(), false,
+            "fish", "normal", "Ok");
 
     @Test
     public void getOwnerReportByIdTest() throws Exception {
