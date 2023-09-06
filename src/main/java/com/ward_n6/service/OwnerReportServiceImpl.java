@@ -4,6 +4,7 @@ import com.ward_n6.entity.reports.OwnerReport;
 import com.ward_n6.exception.RecordNotFoundException;
 import com.ward_n6.repository.owner.OwnerReportRepository;
 import com.ward_n6.service.interfaces.OwnerReportService;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -12,6 +13,7 @@ import java.util.Optional;
 
 
 @Service
+@Repository
 public class OwnerReportServiceImpl implements OwnerReportService {
     private final OwnerReportRepository ownerReportRepository;
 

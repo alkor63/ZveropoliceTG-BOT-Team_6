@@ -11,9 +11,12 @@ import com.ward_n6.service.interfaces.PetService;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
+
 @Service
 @Repository
 public class PetServiceImpl implements PetService {
+    @Resource
     private PetBaseRepository petBaseRepository;
 
     private CatRepository catRepository;

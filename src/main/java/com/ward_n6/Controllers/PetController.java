@@ -4,6 +4,7 @@ import com.ward_n6.entity.pets.Cat;
 import com.ward_n6.entity.pets.Dog;
 import com.ward_n6.enums.PetsSex;
 import com.ward_n6.enums.PetsType;
+import com.ward_n6.service.interfaces.PetService;
 import com.ward_n6.service.pets.CatService;
 import com.ward_n6.service.pets.DogService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,8 +23,11 @@ public class PetController {
     @Autowired
     private CatService catService;
 
-    @Autowired
+
     private DogService dogService;
+
+    @Autowired
+    private PetService petService;
 
     //---------КОШКИ
 
@@ -44,15 +48,13 @@ public class PetController {
         return ResponseEntity.ok().body(cat.toString());
     }
 
-
-    @GetMapping("allCat")
+    @GetMapping("/allCat")
     @Operation(summary = "Показать всех кошек приюта")
     public ResponseEntity<List<Cat>> allCats() {
         List<Cat> cat = catService.allCats();
         if (cat.isEmpty()) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(cat);
     }
-
 
     @Operation(summary = "Удалить кошку")
     @DeleteMapping("delCat")
@@ -63,12 +65,9 @@ public class PetController {
         return ResponseEntity.ok(cat);
     }
 
-
     @Operation(summary = "Поменять кошку")
     @PutMapping("changeCat/{id}/{petsSex}")
     public ResponseEntity<Cat> changeCat(@PathVariable long id, @PathVariable PetsSex petsSex, Cat cat) {
-
-
         PetsType petsType = PetsType.CAT;
         Cat change = catService.change(id, petsSex, petsType, cat);
         return ResponseEntity.ok(change);
@@ -76,8 +75,6 @@ public class PetController {
 
 
     //------СОБАКИ
-
-
     @PostMapping("add_dog/{petsSex}")
     @Operation(summary = "Добавить собаку")
     public ResponseEntity<Dog> addDog(@PathVariable PetsSex petsSex, Dog dog) {

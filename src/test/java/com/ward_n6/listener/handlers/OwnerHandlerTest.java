@@ -24,32 +24,18 @@ class OwnerHandlerTest {
     //     Создание моков для зависимостей
     @Mock
     private TelegramBot telegramBot;
-    //    @Mock
-//    private Update update;
-//    @Mock
-//    private Message message;
-//    @Mock
-//    private Chat chat;
-//    @Mock
-//    ChatMessager chatMessager;
-//    @Mock
-//    private MessageStringsConstants messageStringsConstants;
-//    @Mock
-//    EventHandler eventHandler;
+
     @InjectMocks
     private OwnerServiceImpl ownerServiceImpl;
-//    @Mock
-//    SendResponse sendResponse;
+
+    private OwnerHandler ownerHandler;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this); // Инициализируем моки и спай-объекты
+        ownerHandler = new OwnerHandler(ownerServiceImpl, telegramBot);
         when(telegramBot.execute(any(SendMessage.class))).thenReturn(mock(SendResponse.class));
     }
-
-//    @InjectMocks
-//    private OwnerHandler ownerHandler = new OwnerHandler(ownerServiceImpl, telegramBot);
-
 
     @Test
     public void testHandle() {
@@ -64,10 +50,7 @@ class OwnerHandlerTest {
         when(message.text()).thenReturn("/ln");
         when(message.chat()).thenReturn(chat);
         when(chat.id()).thenReturn(123456789L);
-        Owner owner = new Owner(123654L, "ln", "fn", "8-999-999-99-99");
-
-        // Создание объекта OwnerHandler с моками зависимостей
-        OwnerHandler ownerHandler = new OwnerHandler(ownerServiceImpl, telegramBot);
+        Owner owner = new Owner();
 
         // Вызов метода для тестирования
         ownerHandler.handle(update);

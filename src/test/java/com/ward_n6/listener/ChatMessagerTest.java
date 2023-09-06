@@ -24,11 +24,9 @@ class ChatMessagerTest {
     private BotMessageService botMessageService;
     @Captor
     private ArgumentCaptor<SendMessage> captor;
-
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this); // Инициализируем моки и спай-объекты
-
         telegramBot = mock(TelegramBot.class);
     }
     @InjectMocks
