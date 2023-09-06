@@ -24,7 +24,7 @@ public class PetsOwnerServiceImpl implements PetsOwnerService {
             throw new NotFoundException("Невозможно изменить запись, т.к. в базе pets_owner нет id = " + petsOwnerId);
         }
         PetsOwner petsOwner = optionalPetsOwner.get();
-        petsOwner.setDateEnd(newDateEnd);
+        petsOwner.setEndDate(newDateEnd);
         return petsOwnerRepository.save(petsOwner);
     }
 }

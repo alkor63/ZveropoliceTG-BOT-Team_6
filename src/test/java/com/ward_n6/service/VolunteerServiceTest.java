@@ -2,6 +2,8 @@ package com.ward_n6.service;
 
 import com.ward_n6.entity.owners.PetsOwner;
 import com.ward_n6.entity.reports.OwnerReport;
+import com.ward_n6.service.interfaces.OwnerReportService;
+import com.ward_n6.service.interfaces.PetsOwnerService;
 import com.ward_n6.repository.owner.PetsOwnerRepository;
 import com.ward_n6.repository.pets.PetBaseRepository;
 import org.junit.jupiter.api.Test;
@@ -14,7 +16,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -31,22 +32,25 @@ class VolunteerServiceTest {
 
     @Mock
     PetsOwnerRepository petsOwnerRepository;
-
     @Mock
-    private PetsOwnerService petsOwnerService;
+    PetsOwnerService petsOwnerService;
     @Mock
-    private OwnerReportService ownerReportService;
+    OwnerReportService ownerReportService;
     @Mock
     private PetBaseRepository petBaseRepository;
     @Spy
-    final VolunteerService volunteerMock = spy(new VolunteerService(petsOwnerRepository, (com.ward_n6.service.interfaces.PetsOwnerService) petsOwnerService,
-            (com.ward_n6.service.interfaces.OwnerReportService) ownerReportService, petBaseRepository));
+    final VolunteerService volunteerMock = spy(new VolunteerService(petsOwnerRepository, petsOwnerService,
+            ownerReportService, petBaseRepository));
 
     @InjectMocks
     private VolunteerService volunteer;
 
     PetsOwner petWithOwner = new PetsOwner(2L,2L, LocalDate.now().minusDays(30),
             LocalDate.now());
+
+//    VolunteerServiceTest(OwnerReportService ownerReportService) {
+//        this.ownerReportService = ownerReportService;
+//    }
 
 
     @Test
@@ -59,13 +63,14 @@ class VolunteerServiceTest {
     @Test
     void viewAllReportsTest() {
         when(ownerReportService.getAllOwnerReports()).thenReturn(Arrays.asList(ownerReport1, ownerReport2));
-        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+//        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
         LocalTime time = LocalTime.of(21, 0);
         // запрос на просмотр отчетов может прийти, например, в 21:01
         // чтоб не потерять отчеты, пришедшие с 21:00 по 21:01, время задаём здесь
         LocalDateTime startTime = LocalDateTime.of(LocalDate.now().minusDays(1), time);
         LocalDateTime stopTime = LocalDateTime.of(LocalDate.now(), time);
-        String s = "С " + startTime.format(fmt) + " по " + stopTime.format(fmt) +
+//        String s = "С " + startTime.format(fmt) + " по " + stopTime.format(fmt) +
+        String s = "С " + startTime + " по " + stopTime +
                 " поступило 1 отчетов усыновителей, все отчеты обработаны";
         assertEquals(s, volunteer.viewAllReports(LocalDate.now()));
     }
