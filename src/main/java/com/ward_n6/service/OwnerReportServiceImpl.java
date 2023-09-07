@@ -7,12 +7,12 @@ import com.ward_n6.service.interfaces.OwnerReportService;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
+//import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-//@Repository
+@Repository
 public class OwnerReportServiceImpl implements OwnerReportService {
 
         private final OwnerReportRepository ownerReportRepository;
@@ -59,14 +59,13 @@ public class OwnerReportServiceImpl implements OwnerReportService {
 
         @Override
         public OwnerReport editOwnerReportById(int ownerReportId, OwnerReport ownerReport)
-                throws EntityNotFoundException {
-            long longId = ownerReportId;
-            Optional optionalOwnerReport = ownerReportRepository.findById(longId);
-            if (!optionalOwnerReport.isPresent()) {
+                throws RecordNotFoundException {
+            Optional<OwnerReport> optionalOwnerReport = ownerReportRepository.findById((long) ownerReportId);
+            if (optionalOwnerReport.isEmpty()) {
                 throwException(String.valueOf(ownerReportId));
 //            throw new EntityNotFoundException("Невозможно изменить отчёт, т.к. в базе нет отчёта с id = " + ownerReportId);
             }
-            OwnerReport existingOwnerReport = (OwnerReport) optionalOwnerReport.get();
+            OwnerReport existingOwnerReport = optionalOwnerReport.get();
 
             existingOwnerReport.setHavePhoto(ownerReport.isHavePhoto());
             existingOwnerReport.setNutrition(ownerReport.getNutrition());
