@@ -2,8 +2,9 @@ package com.ward_n6.service.interfaces;
 
 import com.ward_n6.entity.pets.Pet;
 import com.ward_n6.exception.DeleteFromMapException;
+import org.springframework.stereotype.Service;
 
-
+@Service
 public interface PetService {
 
 

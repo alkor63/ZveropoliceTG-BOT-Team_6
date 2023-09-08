@@ -23,7 +23,6 @@ public class PetController {
     @Autowired
     private CatService catService;
 
-
     private DogService dogService;
 
     @Autowired
