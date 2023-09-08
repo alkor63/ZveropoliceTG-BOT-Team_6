@@ -4,6 +4,7 @@ import com.ward_n6.entity.pets.Cat;
 import com.ward_n6.entity.pets.Dog;
 import com.ward_n6.enums.PetsSex;
 import com.ward_n6.enums.PetsType;
+import com.ward_n6.service.interfaces.PetService;
 import com.ward_n6.service.pets.CatService;
 import com.ward_n6.service.pets.DogService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,14 +23,18 @@ public class PetController {
     @Autowired
     private CatService catService;
 
-    @Autowired
+
     private DogService dogService;
+
+    @Autowired
+    private PetService petService;
 
     //---------КОШКИ
 
     @PostMapping("add_cat/{petsSex}")
     @Operation(summary = "Добавить кошку")
     public ResponseEntity<Cat> addCat(@PathVariable PetsSex petsSex, Cat cat) {
+
         PetsType petsType = PetsType.CAT;
         catService.addCat(petsSex, petsType, cat);
         return ResponseEntity.ok(cat);
@@ -37,21 +42,19 @@ public class PetController {
 
     @Operation(summary = "Поиск кошки по id")
     @GetMapping("searchCat")
-    public ResponseEntity<String> searchCat(long id) {
+    public ResponseEntity<String> searchCat(@RequestParam long id) {
         Cat cat = catService.findCat(id);
         if (cat == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok().body(cat.toString());
     }
 
-
-    @GetMapping("allCat")
+    @GetMapping("/allCat")
     @Operation(summary = "Показать всех кошек приюта")
     public ResponseEntity<List<Cat>> allCats() {
         List<Cat> cat = catService.allCats();
         if (cat.isEmpty()) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(cat);
     }
-
 
     @Operation(summary = "Удалить кошку")
     @DeleteMapping("delCat")
@@ -62,19 +65,16 @@ public class PetController {
         return ResponseEntity.ok(cat);
     }
 
-
     @Operation(summary = "Поменять кошку")
     @PutMapping("changeCat/{id}/{petsSex}")
     public ResponseEntity<Cat> changeCat(@PathVariable long id, @PathVariable PetsSex petsSex, Cat cat) {
         PetsType petsType = PetsType.CAT;
-        Cat change = catService.change(id,petsSex, petsType, cat);
+        Cat change = catService.change(id, petsSex, petsType, cat);
         return ResponseEntity.ok(change);
     }
 
 
     //------СОБАКИ
-
-
     @PostMapping("add_dog/{petsSex}")
     @Operation(summary = "Добавить собаку")
     public ResponseEntity<Dog> addDog(@PathVariable PetsSex petsSex, Dog dog) {
@@ -115,7 +115,7 @@ public class PetController {
     @PutMapping("changeDog/{id}/{petsSex}")
     public ResponseEntity<Dog> changeCat(@PathVariable long id, @PathVariable PetsSex petsSex, Dog dog) {
         PetsType petsType = PetsType.CAT;
-        Dog change = dogService.change(id,petsSex, petsType, dog);
+        Dog change = dogService.change(id, petsSex, petsType, dog);
         return ResponseEntity.ok(change);
     }
 

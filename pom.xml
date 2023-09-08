@@ -24,7 +24,7 @@
         <dependency>
             <groupId>com.github.pengrad</groupId>
             <artifactId>java-telegram-bot-api</artifactId>
-            <version>5.7.0</version>
+            <version>6.5.0</version>
         </dependency>
         <dependency>
             <groupId>com.vdurmont</groupId>
@@ -71,11 +71,11 @@
             <artifactId>telegrambots</artifactId>
             <version>6.5.0</version>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
-            <version>2.6.3</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-starter</artifactId>-->
+<!--            <version>2.6.3</version>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger2</artifactId>
@@ -86,6 +86,14 @@
             <artifactId>hibernate-core</artifactId>
             <version>5.6.14.Final</version>
         </dependency>
+        <!-- попытка убрать ошибку -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+            <version>5.8.1</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- попытка убрать ошибку -->
     </dependencies>
 
     <build>

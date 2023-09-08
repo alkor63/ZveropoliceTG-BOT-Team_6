@@ -7,15 +7,16 @@ import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
-
-class Buttons {
-
+@ExtendWith(MockitoExtension.class)
+class ButtonsTest {
 
     @Mock
     TelegramBot bot;
@@ -53,4 +54,5 @@ class Buttons {
                 assertEquals(value.getParameters().get("text"), "Вы выбрали приют для собак"); // проверили, что текст верный, однако сейчас текст записан строкой прям в коде, поэтому имеет смысл вынести все тексты сообщений в отдельные класс констант, в тестах будет проще
                 assertEquals(value.getParameters().get("reply_markup"), ""); // проверили, что клавиатура поставилась верно, аналогичный момент, можно вынести создание клавиатуры в отдельный метод, чтобы в тестах можно было вызвать этот метод
                 // вставить вторым аргументов вызов метода, который создает клавиатуру
-            }    }
+            }
+}

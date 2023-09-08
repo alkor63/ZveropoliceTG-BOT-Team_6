@@ -23,7 +23,7 @@ import static com.ward_n6.listener.MessageStringsConstants.REPORT;
  */
 public class ReportHandler implements EventHandler {
 
-    private OwnerReport ownerReport = new OwnerReport();
+    private  OwnerReport ownerReport = new OwnerReport();
     private final OwnerReportServiceImpl ownerReportServiceImpl;
     private final TelegramBot telegramBot;
     private final PhotoRepository photoRepository;
@@ -37,8 +37,6 @@ public class ReportHandler implements EventHandler {
         this.telegramBot = telegramBot;
         this.photoRepository = photoRepository;
         this.petsOwnerFactories = petsOwnerFactories;
-
-
     }
 
     private Consumer<Update> actionOnNextMessage; // переменная для определения действий над поступаемым сообщением
@@ -65,6 +63,7 @@ public class ReportHandler implements EventHandler {
         }
         if (update.message() != null && update.message().text() != null) { // проверка, чтобы не "зависали" кнопки
             var text = update.message().text();
+
             switch (text) {
                 case "/ID":
                     telegramBot.execute(new SendMessage(update.message().chat().id(),
@@ -144,17 +143,17 @@ public class ReportHandler implements EventHandler {
                     break;
 
                 case "/save":
-                    if (isId && (isAction || isFeed || isHealth)) {
+                    if (isId && (isPhoto || isAction || isFeed || isHealth)) {
 
-                        ownerReport.setReportDateTime(LocalDateTime.now());
-                        ownerReport.setOwnerId(update.message().chat().id());
-                        if (TelegramBotPetShelterUpdatesListener.dogSelect) {
-                            ownerReport.setPetsType(PetsType.DOG);
-                        } else if (TelegramBotPetShelterUpdatesListener.catSelect) {
-                            ownerReport.setPetsType(PetsType.CAT);
-                        }
-                        ownerReportServiceImpl.save(ownerReport);
-                        telegramBot.execute(new SendMessage(update.message().chat().id(), "Ваш отчёт загружен"));
+                            ownerReport.setReportDateTime(LocalDateTime.now());
+                            ownerReport.setOwnerId(update.message().chat().id());
+                            if (TelegramBotPetShelterUpdatesListener.dogSelect) {
+                                ownerReport.setPetsType(PetsType.DOG);
+                            } else if (TelegramBotPetShelterUpdatesListener.catSelect) {
+                                ownerReport.setPetsType(PetsType.CAT);
+                            }
+                            ownerReportServiceImpl.save(ownerReport);
+                            telegramBot.execute(new SendMessage(update.message().chat().id(), "Ваш отчёт загружен"));
                     } else telegramBot.execute(new SendMessage(update.message().chat().id(),
                             """
                                     Пустой отчёт не может быть принят

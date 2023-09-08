@@ -1,80 +1,70 @@
 package com.ward_n6.Controllers;
 
 import com.ward_n6.entity.owners.Owner;
-import com.ward_n6.repository.owner.OwnerRepository;
+import com.ward_n6.service.interfaces.OwnerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.EntityNotFoundException;
+import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/owner")
 @Tag(name = "Список посетителей приюта",
         description = "CRUD-операции с усыновителями")
 public class OwnerController {
-    private final OwnerRepository ownerRepository;
 
-    public OwnerController(OwnerRepository ownerRepository) {
-        this.ownerRepository = ownerRepository;
-    }
+    @Autowired
+    private OwnerService ownerService;
 
 
     @Operation(summary = "Добавление посетителя в список",
-            description = "нужно заполнить все поля карточки посетителя в Body")
+            description = "нужно заполнить все поля карточки посетителя в Body, телефон указать в форматк 8-ХХХ-ХХХ-ХХ-ХХ")
     @PostMapping("createOwner")
-    public ResponseEntity<Owner> createOwner(@RequestBody Owner owner)  {
-        Owner newOwner = ownerRepository.save(owner);
+    public ResponseEntity<Owner> createOwner(@RequestBody @Valid Owner owner) {
+
+        Owner newOwner = ownerService.createOwner(owner);
         return ResponseEntity.ok(newOwner);
     }
-
 
     @Operation(summary = "Показать одного усыновителя по id",
             description = "нужно указать id усыновителя")
     @GetMapping("getOwner")
-    public ResponseEntity<Owner> getOwner(long ownerId) {
-        Owner owner = ownerRepository.getById(ownerId);
-        if (owner == null) return ResponseEntity.notFound().build();
-        return ResponseEntity.ok(owner);
+    public ResponseEntity<Owner> getOwner(@PathVariable Integer id) {
+        return ResponseEntity.ok().body(ownerService.getOwnerById(id));
     }
-
 
 
     @Operation(summary = "Отредактировать карточку усыновителя",
             description = "нужно указать id и заполнить все поля карточки усыновителя в Body")
     @PutMapping("editOwner")
-    public ResponseEntity<Owner> editOwner(@RequestParam long ownerId, @RequestBody Owner owner) {
-        Owner newOwner = ownerRepository.save(owner);
-        if (newOwner == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(newOwner);
+    public Owner editOwnerById(@PathVariable int id,
+                               @RequestBody @Valid Owner owner) {
+        return ownerService.editOwnerById(id, owner);
     }
+
 
     @Operation(summary = "Удалить одного усыновителя из списка",
             description = "нужно указать id усыновителя")
     @DeleteMapping("deleteOwner")
-    public ResponseEntity<Void> deleteOwner(@RequestParam long ownerId)  {
-        Optional<Owner> optionalOwner = ownerRepository.findById(ownerId);
-        if (optionalOwner.isPresent()) {
-            ownerRepository.deleteById(ownerId);
-            ResponseEntity.ok().body(optionalOwner.get());
+    public ResponseEntity<String> deleteOwnerById(@PathVariable Integer id) {
+        boolean deleteOwnerById = ownerService.deleteOwnerById(id);
+        if (deleteOwnerById) {
+            return new ResponseEntity<>(("Owner id = " + id + "удален"), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(("Ошибка ID = " + id), HttpStatus.BAD_REQUEST);
         }
-        throw new EntityNotFoundException("Невозможно удалить Owner, т.к. в базе нет owner с id = "+ownerId);
     }
 
     @Operation(summary = "Показать всех усыновителей приюта")
     @GetMapping("getAllOwners")
-    public ResponseEntity<List<Owner>> getAllOwners() {
-        List<Owner> allOwners = ownerRepository.findAll();
-        if (allOwners.size() > 0) {
-            return ResponseEntity.ok(allOwners);
-        }
-        return ResponseEntity.notFound().build();
+    public ResponseEntity<List<Owner>> getAllOwners()
+    {
+        return ResponseEntity.ok().body(ownerService.getAllOwners());
     }
-
 
 }
