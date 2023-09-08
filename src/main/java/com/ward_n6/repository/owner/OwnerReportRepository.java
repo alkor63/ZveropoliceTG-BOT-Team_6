@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import java.util.List;
 @EnableJpaRepositories
+
 public interface OwnerReportRepository extends JpaRepository<OwnerReport, Long> {
 
 

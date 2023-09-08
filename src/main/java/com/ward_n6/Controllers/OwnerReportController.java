@@ -14,6 +14,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
+
 @RequestMapping(value = "/report")
 public class OwnerReportController {
 
@@ -22,8 +23,10 @@ public class OwnerReportController {
 //    public OwnerReportController(OwnerReportService ownerReportService) {
 //        this.ownerReportService = ownerReportService;
 //    }
-    @Autowired
-    private OwnerReportService ownerReportService;
+@Autowired
+    private  OwnerReportService ownerReportService;
+
+
     //++++++++++++++++++++++++++++++++++++++++++++++++++++
     @PostMapping
     @Operation(summary = "Добавление отчёта в список",
