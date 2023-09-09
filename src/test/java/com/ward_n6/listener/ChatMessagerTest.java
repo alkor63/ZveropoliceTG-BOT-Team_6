@@ -13,6 +13,7 @@ import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -23,11 +24,9 @@ class ChatMessagerTest {
     private BotMessageService botMessageService;
     @Captor
     private ArgumentCaptor<SendMessage> captor;
-
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this); // Инициализируем моки и спай-объекты
-
         telegramBot = mock(TelegramBot.class);
     }
     @InjectMocks

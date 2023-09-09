@@ -11,15 +11,15 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 
 @Configuration
-    @EnableScheduling
-    @Data
-    @PropertySource("application.properties")
-    public class TelegramBotConfiguration {
+@EnableScheduling
+@Data
+@PropertySource("application.properties")
+public class TelegramBotConfiguration {
 
 
-        @Bean // спринг помещает бота в свой контекст для дальнейшего инжекта
-        public TelegramBot telegramBot(@Value("${telegram.bot.token}") String token) {
-            return new TelegramBot(token);
-        }
-
+    @Bean // спринг помещает бота в свой контекст для дальнейшего инжекта
+    public TelegramBot telegramBot(@Value("${telegram.bot.token}") String token) {
+        return new TelegramBot(token);
     }
+
+}
