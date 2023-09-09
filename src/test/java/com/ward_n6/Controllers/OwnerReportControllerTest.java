@@ -6,12 +6,10 @@ import com.ward_n6.enums.PetsType;
 import com.ward_n6.repository.owner.OwnerReportRepository;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.web.servlet.MockMvc;
@@ -30,27 +28,27 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 @WebMvcTest(OwnerReportController.class)
 @TestExecutionListeners
-@ExtendWith(MockitoExtension.class)
+
 public class OwnerReportControllerTest {
     @Autowired
     MockMvc mockMvc;
     @Autowired
     ObjectMapper mapper;
 
-   @Mock
+    @MockBean
     private OwnerReportRepository ownerReportRepository;
-   private OwnerReportController ownerReportController;
-
 
     // создаем несколько объектов тестируемого класса:
-    OwnerReport ownerReport1 = new OwnerReport(1, 1, LocalDateTime.now(), DOG, true,
-            "Pedigree", "good", "Ok", 1);
-    OwnerReport ownerReport2 = new OwnerReport(2, 2, LocalDateTime.now(), PetsType.CAT, true,
-            "meat", "very good", "Ok", 2);
-    OwnerReport ownerReport3 = new OwnerReport(3, 3, LocalDateTime.now(), DOG, false,
-            "fish", "normal", "Ok", 3);
+    OwnerReport ownerReport1 = new OwnerReport(1,1, LocalDateTime.now(), DOG,true,
+            "Pedigree", "good", "Ok",1);
+    OwnerReport ownerReport2 = new OwnerReport(2,2, LocalDateTime.now(), PetsType.CAT,true,
+            "meat", "very good", "Ok",2);
+    OwnerReport ownerReport3 = new OwnerReport(3,3, LocalDateTime.now(), DOG,false,
+            "fish", "normal", "Ok",3);
+
 
     @Test
     public void getOwnerReportByIdTest() throws Exception {
@@ -195,7 +193,7 @@ public class OwnerReportControllerTest {
 //    }
 
     @Test
-    public void deleteOwnerReportByIdTest() throws Exception {
+    public void deleteOwnerReportByIdTest() throws Exception{
         Mockito.when(ownerReportRepository.findById(ownerReport2.getId())).thenReturn(Optional.of(ownerReport2));
 
         mockMvc.perform(MockMvcRequestBuilders
