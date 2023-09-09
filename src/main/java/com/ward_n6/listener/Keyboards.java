@@ -1,4 +1,4 @@
-package com.ward_n6.listener.handlers;
+package com.ward_n6.listener;
 
 import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
 import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;

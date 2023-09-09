@@ -3,7 +3,6 @@ package com.ward_n6.listener;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.vdurmont.emoji.EmojiParser;
-import com.ward_n6.listener.handlers.Keyboards;
 import org.springframework.stereotype.Component;
 
 import static com.ward_n6.listener.MessageStringsConstants.*;
