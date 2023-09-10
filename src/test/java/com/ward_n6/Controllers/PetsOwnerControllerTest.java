@@ -65,7 +65,7 @@ public class PetsOwnerControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(3)))
-                .andExpect(jsonPath("$[2].petId", Matchers.is(3)));
+                .andExpect(jsonPath("$[2].id", Matchers.is(3)));
     }
 
     @Test
