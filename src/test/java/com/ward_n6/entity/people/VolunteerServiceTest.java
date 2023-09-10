@@ -40,7 +40,7 @@ class VolunteerServiceTest {
     OwnerReportService ownerReportService;
     @Mock
     private PetBaseRepository petBaseRepository;
-    @Spy
+    @Spy // частичный мок
     final VolunteerService volunteerMock = spy(new VolunteerService(petsOwnerRepository, petsOwnerService,
             ownerReportService, petBaseRepository));
 

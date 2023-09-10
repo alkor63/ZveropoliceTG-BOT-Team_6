@@ -4,9 +4,7 @@ import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Objects;
 
 @Component
@@ -27,6 +25,7 @@ public class Owner { // хозяин животного, его свойства
     @javax.persistence.Id
     @Id
     @Column(name = "owner_id", nullable = false)
+//    @GeneratedValue(strategy = GenerationType.TABLE)
     private Long id;
 
     @Column(name = "first_name")
@@ -44,6 +43,22 @@ public class Owner { // хозяин животного, его свойства
         if (this == o) return true;
         if (!(o instanceof Owner owner)) return false;
         return Objects.equals(getId(), owner.getId()) && Objects.equals(getFirstName(), owner.getFirstName()) && Objects.equals(getLastName(), owner.getLastName()) && Objects.equals(getPhoneNumber(), owner.getPhoneNumber());
+    }
+
+
+//    public void setId(Long id, String source) {
+//        if ("bot".equalsIgnoreCase(source)) {
+//            // Источник - бот, используем ID чата для присваивания ID сущности
+//            this.id = id;
+//        } else {
+//            // Источник - Swagger или другой, генерируем ID автоматически
+//            this.id = generateAutomaticId();
+//        }
+//    }
+
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     @Override

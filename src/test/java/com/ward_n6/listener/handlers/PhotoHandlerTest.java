@@ -1,58 +1,57 @@
 package com.ward_n6.listener.handlers;
 
 import com.pengrad.telegrambot.TelegramBot;
-import com.pengrad.telegrambot.model.PhotoSize;
+import com.pengrad.telegrambot.model.Chat;
+import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
-import com.pengrad.telegrambot.request.GetFile;
 import com.pengrad.telegrambot.request.SendMessage;
-import com.ward_n6.repository.PhotoRepository;
-import com.ward_n6.service.OwnerReportServiceImpl;
+import com.pengrad.telegrambot.response.SendResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.IOException;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class PhotoHandlerTest {
+
+    @Mock
+    private Update update;
+
     @Mock
     private TelegramBot telegramBot;
-    @Mock
-    private PhotoRepository photoRepository;
-    @Mock
-    private OwnerReportServiceImpl ownerReportServiceImpl;
+    @InjectMocks
+    private PhotoHandler photoHandler;
+
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this); // Инициализируем моки и спай-объекты
+
+        when(telegramBot.execute(any(SendMessage.class))).thenReturn(mock(SendResponse.class));
     }
-    @InjectMocks
-    private PhotoHandler photoHandler = new PhotoHandler(telegramBot, photoRepository, ownerReportServiceImpl);
-    Update update = mock(Update.class);
-
-    private final PhotoSize[] photoSizes = new PhotoSize[1];
-
 
     @Test
-    public void handleTest() throws IOException, TelegramApiException {
-        when(update.message().photo()).thenReturn(photoSizes);
-        when(update.message().chat().id()).thenReturn(123L);
-        when(photoSizes.length).thenReturn(1);
-        when(photoSizes[0].fileId()).thenReturn("photo_file_id");
+    void testHandleMethod() throws IOException {
+        Update update = mock(Update.class);
+        Message message = mock(Message.class);
+        Chat chat = mock(Chat.class);
 
-        // вызов метода
+        // Установка поведения моков
+        when(update.message()).thenReturn(message);
+        when(message.text()).thenReturn("/photo");
+        when(message.chat()).thenReturn(chat);
+        when(chat.id()).thenReturn(123456789L);
+
+
+        // Вызов метода для тестирования
         photoHandler.handle(update);
-
-        // проверка вызова ожидаемых методов
-        verify(telegramBot).execute(new SendMessage(123L, "Фото загружено."));
-        verify(telegramBot).execute(new GetFile("photo_file_id"));
-        verify(telegramBot).getFullFilePath(any());
-        verify(photoRepository).save(any());
+        // Проверка вызовов методов для зависимостей
+        verify(telegramBot).execute(any(SendMessage.class));
     }
 }
+

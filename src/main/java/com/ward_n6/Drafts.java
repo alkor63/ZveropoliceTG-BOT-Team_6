@@ -233,5 +233,143 @@ public class Drafts {
 //        }
 //        return false;
 //    }
+//    @Test
+//    public void testAddOwnerReport() {
+//        OwnerReport ownerReport = new OwnerReport(12L, 15L, LocalDateTime.now(), PetsType.CAT, true,
+//                "Pedigree", "good", "Ok", 17L);
+//        ownerReportService.addOwnerReport(ownerReport);
+//        verify(ownerReportRepository, times(1)).save(ownerReport);
+//        ArgumentCaptor<OwnerReport> ownerReportArgumentCaptor = ArgumentCaptor.forClass(OwnerReport.class);
+//        verify(ownerReportRepository).save(ownerReportArgumentCaptor.capture());
+//        OwnerReport ownerReportCreated = ownerReportArgumentCaptor.getValue();
+//        Assertions.assertNotNull(ownerReportCreated.getId());
+//        assertEquals("good", ownerReportCreated.getPetsHealth());
+//    }
+//    @Test
+//    public void shouldReturnExceptionWhenReportOrIdIsNull() throws Exception {
+//// проверяем бросание исключений при ownerReport or id = null
+//        OwnerReport nullOwnerReport = new OwnerReport();
+//        OwnerReport editedOwnerReport = OwnerReport.builder()
+    //пропустили id
+//                .reportDateTime(LocalDateTime.now())
+//                .havePhoto(true)
+//                .nutrition("Whiskas")
+//                .petsHealth("good")
+//                .petsBehavior("Ok")
+//                .petId(1L)
+//                .ownerId(3L)
+//                .build();
 
+//        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/report")
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .accept(MediaType.APPLICATION_JSON)
+//                .content(this.mapper.writeValueAsString(nullOwnerReport));
+//
+//        mockMvc.perform(mockRequest)
+//                .andExpect(status().isBadRequest())
+//                .andExpect(result ->
+//                        assertTrue(result.getResolvedException() instanceof NullPointerException))
+//                .andExpect(result ->
+//                        assertEquals(("OwnerRecord или Id не должны быть null"), result.getResolvedException().getMessage()));
+//    }
+
+    //    @Test
+//    public void shouldReturnExceptionWhenReportNotFound() throws Exception {
+// проверяем бросание исключений если запись ownerReport не обнаружена
+//    OwnerReport nullOwnerReport = new OwnerReport();
+//        OwnerReport editedOwnerReport = OwnerReport.builder()
+//                .id(321L)
+//                .reportDateTime(LocalDateTime.now())
+//                .havePhoto(true)
+//                .nutrition("Whiskas")
+//                .petsHealth("good")
+//                .petsBehavior("Ok")
+//                .petId(1L)
+//                .ownerId(3L)
+//                .build();
+
+//        Mockito.when(ownerReportRepository.findById(nullOwnerReport.getId())).thenReturn(null);
+//
+//        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/report")
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .accept(MediaType.APPLICATION_JSON)
+//                .content(this.mapper.writeValueAsString(nullOwnerReport));
+//
+//        mockMvc.perform(mockRequest)
+//                .andExpect(status().isBadRequest())
+//                .andExpect(result ->
+//                        assertTrue(result.getResolvedException() instanceof NotFoundException))
+//                .andExpect(result ->
+//                        assertEquals(("Записи OwnerRecord с Id = 321 не существует"), result.getResolvedException().getMessage()));
+//    }
+
+
+//    @Test
+//    public void deleteOwnerReportByIdTestWhenNotFoundException()throws Exception{
+//        Mockito.when((ownerReportRepository.findById(5L))).thenReturn(null);
+//
+//        mockMvc.perform(MockMvcRequestBuilders
+//                        .delete(("/report/2"))
+//                        .contentType(MediaType.APPLICATION_JSON))
+//                .andExpect(status().isBadRequest())
+//                .andExpect(result ->
+//                        assertTrue(result.getResolvedException() instanceof NotFoundException))
+//                .andExpect(result -> assertEquals("В базе нет отчёта с id = 5 ",
+//                        result.getResolvedException().getMessage()));
+//    }
+//public void getOwnerReportByIdTest() throws Exception {
+//        //тест для метода getById()
+//        when(ownerReportRepository.findById(ownerReport1.getId())).thenReturn(java.util.Optional.of(ownerReport1));
+//
+//        mockMvc.perform(MockMvcRequestBuilders
+//                        .get("/report/1")
+//                        .contentType(MediaType.APPLICATION_JSON))
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$", notNullValue()))
+//                .andExpect(jsonPath("$.nutrition", Matchers.is("Pedigree")));
+//}
+//}
+
+//    @Test
+//    public void getAllOwnerReportsTest() throws Exception {
+//        //тест для метода getAll()
+//        List<OwnerReport> ownerReports = new ArrayList<>(Arrays.asList(ownerReport1, ownerReport2, ownerReport3));
+//
+//        when(ownerReportRepository.findAll()).thenReturn(ownerReports);
+//
+//        mockMvc.perform(MockMvcRequestBuilders.get("/report")
+//                        .contentType(MediaType.APPLICATION_JSON))
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$", hasSize(3)))
+//                .andExpect(jsonPath("$[1].nutrition", Matchers.is("meat")));
+//    }
+
+//    @Test
+//    public void editOwnerReportByIdTest() throws Exception {
+//        //тест для метода editById()
+//        OwnerReport editedOwnerReport = OwnerReport.builder()
+//                .id(1L)
+//                .reportDateTime(LocalDateTime.now())
+//                .havePhoto(true)
+//                .nutrition("Whiskas")
+//                .petsHealth("good")
+//                .petsBehavior("Ok")
+//                .petId(1L)
+//                .ownerId(3L)
+//                .petsType(PetsType.CAT)
+//                .build();
+//
+//        when(ownerReportRepository.findById(ownerReport1.getId())).thenReturn(Optional.of(ownerReport1));
+//        when(ownerReportRepository.save(editedOwnerReport)).thenReturn(editedOwnerReport);
+//
+//        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/report")
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .accept(MediaType.APPLICATION_JSON)
+//                .content(this.mapper.writeValueAsString(editedOwnerReport));
+//
+//        mockMvc.perform(mockRequest)
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$", notNullValue()))
+//                .andExpect(jsonPath("$.nutrition", Matchers.is("Whiskas")));
+//    }
 }

@@ -19,10 +19,11 @@ public class DogService {
     }
 
 
-    public void addDog(PetsSex petsSex, PetsType petsType, Dog dog) {
+    public Dog addDog(PetsSex petsSex, PetsType petsType, Dog dog) {
         dog.setPetsType(petsType);
         dog.setPetsSex(petsSex);
         dogsCrud.save(dog);
+        return dog;
     }
 
     public Dog findDog(long id) {
