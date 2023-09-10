@@ -21,10 +21,11 @@ public class CatService {
     }
 
 
-    public void addCat(PetsSex petsSex, PetsType petsType, Cat cat) {
+    public Cat addCat(PetsSex petsSex, PetsType petsType, Cat cat) {
         cat.setPetsType(petsType);
         cat.setPetsSex(petsSex);
         catsCrud.save(cat);
+        return cat;
     }
 
     public Cat findCat(long id) {

@@ -5,7 +5,6 @@ import com.ward_n6.entity.reports.OwnerReport;
 import com.ward_n6.enums.PetsType;
 import com.ward_n6.exception.RecordNotFoundException;
 import com.ward_n6.repository.owner.OwnerReportRepository;
-import com.ward_n6.service.interfaces.OwnerReportService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,8 +19,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
-@WebMvcTest(OwnerReportService.class)
+
+@WebMvcTest(OwnerReportServiceImpl.class)
 public class OwnerReportServiceTest {
 
     @Autowired
@@ -31,37 +32,35 @@ public class OwnerReportServiceTest {
 
     @MockBean
     OwnerReportRepository ownerReportRepository;
-    // создаем несколько объектов тестируемого класса
-//        OwnerReport ownerReport3 = new OwnerReport(3L, LocalDateTime.now(), false, "fish", "normal", "Ok", 3L);
+
     @Autowired
-    OwnerReportServiceImpl ownerReportService;
+    private OwnerReportServiceImpl ownerReportService;
 
     @BeforeEach
     public void setup() {
 
     }
-
     @Test
     public void testGetOwnerReportsList() {
-        OwnerReport ownerReport1 = new OwnerReport(1L,2L, LocalDateTime.now(),PetsType.DOG, true, "Pedigree", "good", "Ok",3L);
-        OwnerReport ownerReport2 = new OwnerReport(2L,3L, LocalDateTime.now(), PetsType.CAT, true, "meat", "very good", "Ok",5L);
+        OwnerReport ownerReport1 = new OwnerReport(1L, 2L, LocalDateTime.now(), PetsType.DOG, true, "Pedigree", "good", "Ok", 3L);
+        OwnerReport ownerReport2 = new OwnerReport(2L, 3L, LocalDateTime.now(), PetsType.CAT, true, "meat", "very good", "Ok", 5L);
         when(ownerReportRepository.findAll()).thenReturn(Arrays.asList(ownerReport1, ownerReport2));
         List<OwnerReport> ownerReportList = ownerReportService.getAllOwnerReports();
-        Assertions.assertEquals(ownerReportList.size(), 2);
-        Assertions.assertEquals(ownerReportList.get(0).getPetsHealth(), "good");
-        Assertions.assertEquals(ownerReportList.get(1).getPetsHealth(), "very good");
-        Assertions.assertEquals(ownerReportList.get(0).getPetsBehavior(), "Ok");
-        Assertions.assertEquals(ownerReportList.get(1).getNutrition(), "meat");
+        assertEquals(ownerReportList.size(), 2);
+        assertEquals(ownerReportList.get(0).getPetsHealth(), "good");
+        assertEquals(ownerReportList.get(1).getPetsHealth(), "very good");
+        assertEquals(ownerReportList.get(0).getPetsBehavior(), "Ok");
+        assertEquals(ownerReportList.get(1).getNutrition(), "meat");
     }
 
     @Test
     public void testGetOwnerReportById() {
-        OwnerReport ownerReport = new OwnerReport(7L, 8L, LocalDateTime.now(), PetsType.DOG,false, "fish", "normal", "Ok",9L);
+        OwnerReport ownerReport = new OwnerReport(7L, 8L, LocalDateTime.now(), PetsType.DOG, false, "fish", "normal", "Ok", 9L);
         when(ownerReportRepository.findById(7L)).thenReturn(Optional.of(ownerReport));
         OwnerReport ownerReportById = ownerReportService.getOwnerReportById(7);
         Assertions.assertNotEquals(ownerReportById, null);
-        Assertions.assertEquals(ownerReportById.getNutrition(), "fish");
-        Assertions.assertEquals(ownerReportById.getId(), 7L);
+        assertEquals(ownerReportById.getNutrition(), "fish");
+        assertEquals(ownerReportById.getId(), 7L);
     }
 
 
@@ -74,21 +73,10 @@ public class OwnerReportServiceTest {
         Assertions.assertTrue(exception.getMessage().contains("OwnerReport Not Found with ID"));
     }
 
-    @Test
-    public void testAddOwnerReport() {
-        OwnerReport ownerReport = new OwnerReport(12L,15L, LocalDateTime.now(), PetsType.CAT, true, "Pedigree", "good", "Ok",17L);
-        ownerReportService.addOwnerReport(ownerReport);
-        verify(ownerReportRepository, times(1)).save(ownerReport);
-        ArgumentCaptor<OwnerReport> ownerReportArgumentCaptor = ArgumentCaptor.forClass(OwnerReport.class);
-        verify(ownerReportRepository).save(ownerReportArgumentCaptor.capture());
-        OwnerReport ownerReportCreated = ownerReportArgumentCaptor.getValue();
-        Assertions.assertNotNull(ownerReportCreated.getId());
-        Assertions.assertEquals("good", ownerReportCreated.getPetsHealth());
-    }
 
     @Test
     public void testDeleteOwnerReport() {
-        OwnerReport ownerReport = new OwnerReport(13L,16L, LocalDateTime.now(), PetsType.DOG, true, "Pedigree", "good", "Ok",18L);
+        OwnerReport ownerReport = new OwnerReport(13L, 16L, LocalDateTime.now(), PetsType.DOG, true, "Pedigree", "good", "Ok", 18L);
         when(ownerReportRepository.findById(13L)).thenReturn(Optional.of(ownerReport));
         ownerReportService.deleteOwnerReportById(Math.toIntExact(ownerReport.getId()));
         verify(ownerReportRepository, times(1)).deleteById(ownerReport.getId());
@@ -96,7 +84,48 @@ public class OwnerReportServiceTest {
         verify(ownerReportRepository).deleteById(ownerReportArgumentCaptor.capture());
         Long ownerReportIdDeleted = ownerReportArgumentCaptor.getValue();
         Assertions.assertNotNull(ownerReportIdDeleted);
-        Assertions.assertEquals(13L, ownerReportIdDeleted);
+        assertEquals(13L, ownerReportIdDeleted);
+    }
+
+
+    @Test
+    public void testAddOwnerReportFromController() {
+        long ownerId = 1;
+        PetsType petsType = PetsType.DOG;
+        boolean photo = true;
+        String nutrition = "good";
+        String health = "excellent";
+        String behavior = "friendly";
+        long petId = 1;
+
+        ownerReportService.addOwnerReportFromController(ownerId, petsType, photo,
+                nutrition, health, behavior, petId);
+        ArgumentCaptor<OwnerReport> ownerReportArgumentCaptor = ArgumentCaptor.forClass(OwnerReport.class);
+        verify(ownerReportRepository).save(ownerReportArgumentCaptor.capture());
+        OwnerReport ownerReportCreated = ownerReportArgumentCaptor.getValue();
+        Assertions.assertNotNull(ownerReportCreated.getId());
+        assertEquals("good", ownerReportCreated.getNutrition());
+    }
+
+    @Test
+    public void editOwnerReportByIdFromController() {
+        OwnerReport ownerReport = new OwnerReport(13L, 16L, LocalDateTime.now(), PetsType.DOG, true,
+                "Pedigree", "good", "Ok", 18L);
+       long reportId = ownerReport.getId();
+        when(ownerReportRepository.findById(reportId)).thenReturn(Optional.of(ownerReport));
+        boolean photo = true;
+        String nutrition = "good";
+        String health = "excellent";
+        String behavior = "friendly";
+        ownerReportService.editOwnerReportByIdFromController(reportId, photo,
+                nutrition, health, behavior);
+        when(ownerReportRepository.save(ownerReport)).thenReturn(ownerReport);
+        ArgumentCaptor<OwnerReport> ownerReportArgumentCaptor = ArgumentCaptor.forClass(OwnerReport.class);
+        verify(ownerReportRepository).save(ownerReportArgumentCaptor.capture());
+        OwnerReport ownerReportCreated = ownerReportArgumentCaptor.getValue();
+        Assertions.assertNotNull(ownerReportCreated.getId());
+        assertEquals("good", ownerReportCreated.getNutrition());
+
     }
 
 }

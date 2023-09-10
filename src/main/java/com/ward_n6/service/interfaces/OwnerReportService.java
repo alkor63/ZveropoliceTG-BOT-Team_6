@@ -1,6 +1,7 @@
 package com.ward_n6.service.interfaces;
 
 import com.ward_n6.entity.reports.OwnerReport;
+import com.ward_n6.enums.PetsType;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -10,7 +11,7 @@ import java.util.List;
 public interface OwnerReportService {
 
     //++++++++++++++++++++++++++++++++++++++++++++++++++++
-    OwnerReport addOwnerReport(OwnerReport ownerReport);
+//    OwnerReport addOwnerReport(OwnerReport ownerReport);
 
     // ++++++++++++++++++++++++++++++++++++
     List<OwnerReport> getAllOwnerReports();
@@ -20,10 +21,18 @@ public interface OwnerReportService {
     OwnerReport getOwnerReportById(Integer ownerReportId);
 
     //+++++++++++++++++++++++++++++++++++++++++
-    boolean deleteOwnerReportById(Integer ownerReportId);
+    boolean deleteOwnerReportById(long ownerReportId);
 
-    OwnerReport editOwnerReportById(int ownerReportId, OwnerReport ownerReport)
+    OwnerReport editOwnerReportById(long ownerReportId, OwnerReport ownerReport)
             throws EntityNotFoundException;
-    //++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+    OwnerReport addOwnerReportFromController(long ownerId, PetsType petsType, boolean photo,
+                                             String nutrition, String health, String behavior, long petId);
+
+    OwnerReport editOwnerReportByIdFromController(long ownerReportId, boolean photo,
+                                                  String nutrition, String health, String behavior)
+                                                     throws EntityNotFoundException;
+
+
+//++++++++++++++++++++++++++++++++++++++++++++++++++++
 }
