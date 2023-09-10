@@ -36,7 +36,7 @@ public class OwnerReport {
     private long ownerId;
 
     @Column(name = "report_date_time", nullable = false)
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+//    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime reportDateTime; // дата, время
 
     @Enumerated(EnumType.STRING) // для сохранения названия, а не цифры

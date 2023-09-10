@@ -68,7 +68,7 @@ class PetControllerTest {
         PetsSex petsSex = PetsSex.FEM;
         Dog dog = new Dog();
 
-        CatService catService = Mockito.mock(CatService.class);
+        DogService dogService = Mockito.mock(DogService.class);
         Mockito.when(dogService.addDog(petsSex, DOG, dog)).thenReturn(dog);
 
         PetController petController = new PetController(catService, dogService, petService);

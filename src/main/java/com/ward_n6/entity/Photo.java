@@ -38,6 +38,7 @@ public class Photo {
     @Column(name = "owner_Id")
 
     private long ownerId;
+
     @Column(name = "pet_Id")
 
     private long petId;
