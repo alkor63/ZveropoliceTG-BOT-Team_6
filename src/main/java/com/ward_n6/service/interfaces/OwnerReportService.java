@@ -18,7 +18,7 @@ public interface OwnerReportService {
 
     // ++++++++++++++++++++++++++++++++++++
 
-    OwnerReport getOwnerReportById(Integer ownerReportId);
+    OwnerReport getOwnerReportById(long ownerReportId);
 
     //+++++++++++++++++++++++++++++++++++++++++
     boolean deleteOwnerReportById(long ownerReportId);

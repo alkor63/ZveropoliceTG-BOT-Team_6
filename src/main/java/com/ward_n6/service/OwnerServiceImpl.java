@@ -4,7 +4,6 @@ import com.ward_n6.entity.owners.Owner;
 import com.ward_n6.exception.RecordNotFoundException;
 import com.ward_n6.repository.owner.OwnerRepository;
 import com.ward_n6.service.interfaces.OwnerService;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -12,15 +11,15 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@Repository
-public class OwnerServiceImpl implements OwnerService {
+
+public class OwnerServiceImpl implements OwnerService  {
     private final OwnerRepository ownerRepository;
     public OwnerServiceImpl(OwnerRepository ownerRepository) {
         this.ownerRepository = ownerRepository;
     }
 
     @Override
-    public int getId() {
+    public long getId() {
         return 0;
     }
 
@@ -34,16 +33,16 @@ public class OwnerServiceImpl implements OwnerService {
     }
 
     @Override
-    public Owner getOwnerById(Integer id) {
-        long longId = id;
-        return ownerRepository.findById(longId).orElseThrow(() -> throwException(String.valueOf(id)));
+    public Owner findOwnerById(long id) {
+        return ownerRepository.findById(id).orElseThrow(() -> throwException(String.valueOf(id)));
     }
+
     @Override
-    public boolean deleteOwnerById(Integer id) {
-        long longId = id;
-        Optional<Owner> optionalOwner = ownerRepository.findById(longId);
+    public boolean deleteOwnerById(long id) {
+
+        Optional<Owner> optionalOwner = ownerRepository.findById(id);
         if (optionalOwner.isPresent()) {
-            ownerRepository.deleteById(longId);
+            ownerRepository.deleteById(id);
             return true;
         } else {
             throwException(String.valueOf(id));
@@ -52,10 +51,10 @@ public class OwnerServiceImpl implements OwnerService {
     }
 
     @Override
-    public Owner editOwnerById(int id, Owner owner)
+    public Owner editOwnerById(long id, Owner owner)
             throws EntityNotFoundException {
-        long longId = id;
-        Optional optionalOwner = ownerRepository.findById(longId);
+
+        Optional optionalOwner = ownerRepository.findById(id);
         if (!optionalOwner.isPresent()) {
             throwException(String.valueOf(ownerRepository));
         }

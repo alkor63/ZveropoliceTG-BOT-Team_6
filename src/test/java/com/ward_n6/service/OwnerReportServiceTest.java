@@ -6,7 +6,6 @@ import com.ward_n6.enums.PetsType;
 import com.ward_n6.exception.RecordNotFoundException;
 import com.ward_n6.repository.owner.OwnerReportRepository;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,14 +35,13 @@ public class OwnerReportServiceTest {
     @Autowired
     private OwnerReportServiceImpl ownerReportService;
 
-    @BeforeEach
-    public void setup() {
 
-    }
     @Test
     public void testGetOwnerReportsList() {
-        OwnerReport ownerReport1 = new OwnerReport(1L, 2L, LocalDateTime.now(), PetsType.DOG, true, "Pedigree", "good", "Ok", 3L);
-        OwnerReport ownerReport2 = new OwnerReport(2L, 3L, LocalDateTime.now(), PetsType.CAT, true, "meat", "very good", "Ok", 5L);
+        OwnerReport ownerReport1 = new OwnerReport(1L, 2L, LocalDateTime.now(), PetsType.DOG, true,
+                "Pedigree", "good", "Ok", 3L);
+        OwnerReport ownerReport2 = new OwnerReport(2L, 3L, LocalDateTime.now(), PetsType.CAT, true,
+                "meat", "very good", "Ok", 5L);
         when(ownerReportRepository.findAll()).thenReturn(Arrays.asList(ownerReport1, ownerReport2));
         List<OwnerReport> ownerReportList = ownerReportService.getAllOwnerReports();
         assertEquals(ownerReportList.size(), 2);
@@ -55,7 +53,8 @@ public class OwnerReportServiceTest {
 
     @Test
     public void testGetOwnerReportById() {
-        OwnerReport ownerReport = new OwnerReport(7L, 8L, LocalDateTime.now(), PetsType.DOG, false, "fish", "normal", "Ok", 9L);
+        OwnerReport ownerReport = new OwnerReport(7L, 8L, LocalDateTime.now(), PetsType.DOG, false,
+                "fish", "normal", "Ok", 9L);
         when(ownerReportRepository.findById(7L)).thenReturn(Optional.of(ownerReport));
         OwnerReport ownerReportById = ownerReportService.getOwnerReportById(7);
         Assertions.assertNotEquals(ownerReportById, null);

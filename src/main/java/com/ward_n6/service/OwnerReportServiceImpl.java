@@ -5,7 +5,6 @@ import com.ward_n6.enums.PetsType;
 import com.ward_n6.exception.RecordNotFoundException;
 import com.ward_n6.repository.owner.OwnerReportRepository;
 import com.ward_n6.service.interfaces.OwnerReportService;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -15,7 +14,6 @@ import java.util.Optional;
 
 
 @Service
-@Repository
 
 public class OwnerReportServiceImpl implements OwnerReportService {
     private final OwnerReportRepository ownerReportRepository;
@@ -32,9 +30,9 @@ public class OwnerReportServiceImpl implements OwnerReportService {
 
 
     @Override
-    public OwnerReport getOwnerReportById(Integer ownerReportId) {
-        long longId = ownerReportId;
-        return ownerReportRepository.findById(longId).orElseThrow(() -> throwException(String.valueOf(ownerReportId)));
+    public OwnerReport getOwnerReportById(long ownerReportId) {
+
+        return ownerReportRepository.findById(ownerReportId).orElseThrow(() -> throwException(String.valueOf(ownerReportId)));
     }
 
     //+++++++++++++++++++++++++++++++++++++++++

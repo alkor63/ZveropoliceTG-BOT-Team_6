@@ -34,8 +34,8 @@ public class OwnerController {
     @Operation(summary = "Показать одного усыновителя по id",
             description = "нужно указать id усыновителя")
     @GetMapping("getOwner")
-    public ResponseEntity<Owner> getOwner(@PathVariable Integer id) {
-        return ResponseEntity.ok().body(ownerService.getOwnerById(id));
+    public ResponseEntity<Owner> getOwner(@PathVariable long id) {
+        return ResponseEntity.ok().body(ownerService.findOwnerById(id));
     }
 
 

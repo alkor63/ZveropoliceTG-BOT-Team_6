@@ -7,18 +7,19 @@ import javax.persistence.EntityNotFoundException;
 import java.util.List;
 @Service
 public interface OwnerService {
-    int getId();
+    long getId();
 
 
     Owner createOwner(Owner owner);
 
     List<Owner> getAllOwners();
 
-    Owner getOwnerById(Integer id);
 
-    boolean deleteOwnerById(Integer id);
+    Owner findOwnerById(long id);
 
-    Owner editOwnerById(int id, Owner owner)
+    boolean deleteOwnerById(long id);
+
+    Owner editOwnerById(long id, Owner owner)
             throws EntityNotFoundException;
 
 }
