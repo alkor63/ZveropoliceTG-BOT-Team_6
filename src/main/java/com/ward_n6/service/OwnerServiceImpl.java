@@ -39,7 +39,6 @@ public class OwnerServiceImpl implements OwnerService  {
 
     @Override
     public boolean deleteOwnerById(long id) {
-
         Optional<Owner> optionalOwner = ownerRepository.findById(id);
         if (optionalOwner.isPresent()) {
             ownerRepository.deleteById(id);
