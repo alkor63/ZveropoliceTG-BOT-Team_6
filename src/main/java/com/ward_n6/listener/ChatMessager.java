@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 
 @Component
+
 public class ChatMessager {
     private final TelegramBot telegramBot;
     private final BotMessageService botMessageService;

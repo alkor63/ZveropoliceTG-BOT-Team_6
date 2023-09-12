@@ -133,7 +133,24 @@ public class OwnerReportControllerTest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals("OwnerReport id = " + ownerReportId + "успешно удален из базы", response.getBody());
     }
+    @Test
+    public void testDeleteOwnerReportById_WithError() {
 
+        long ownerReportId = 1;
+        boolean deleteOwnerReportById = false;
+        OwnerReportService ownerReportService = Mockito.mock(OwnerReportService.class);
+        Mockito.when(ownerReportService.deleteOwnerReportById(ownerReportId)).thenReturn(deleteOwnerReportById);
+
+        OwnerReportController ownerReportController = new OwnerReportController(ownerReportService);
+
+
+        ResponseEntity<String> result = ownerReportController.deleteOwnerReportById(ownerReportId);
+
+
+        assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
+        assertEquals("Ошибка при попытке удалить запись OwnerReport ID = " + ownerReportId, result.getBody());
+        Mockito.verify(ownerReportService, Mockito.times(1)).deleteOwnerReportById(ownerReportId);
+    }
 
     @Test
     public void editOwnerReportByIdTest() throws Exception {
