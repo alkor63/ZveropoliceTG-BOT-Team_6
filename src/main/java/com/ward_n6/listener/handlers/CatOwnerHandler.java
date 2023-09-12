@@ -22,7 +22,7 @@ public class CatOwnerHandler implements EventHandler {
     private PetsOwnerFactories petsOwnerFactories;
 
     private Consumer<Update> actionOnNextMessage;
-    private String PET_NOT_FOUND = "Питомец с указанным ID отсутствует в нашем приюте. Уточните ID интересующего Вас питомца. /ID";
+    private String PET_NOT_FOUND = "Питомец с указанным ID отсутствует в нашем приюте. Уточните ID интересующего Вас питомца. \n /ID";
     private Cat cat = new Cat();
     private PetsOwner petsOwner = new PetsOwner();
 
@@ -92,7 +92,7 @@ public class CatOwnerHandler implements EventHandler {
                     telegramBot.execute(new SendMessage(update.message().chat().id(),
                             "Питомец " + cat.toString() + "\n" +
                                     "забронирован за Вами. Скоро с Вами свяжется волонтёр, чтобы " +
-                                    "обсудить подробности переезда питомца в Ваш дом и" +
+                                    "обсудить подробности переезда питомца в Ваш дом и " +
                                     "оформить документы!"));
                     return true;
             }

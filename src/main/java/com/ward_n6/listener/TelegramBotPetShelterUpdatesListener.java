@@ -238,7 +238,6 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                                             Пожалуйста, сначала зарегистрируйтесь в нашем приюте:
                                             /myData""");
                                 }
-                                break;
                             }
                             break;
 

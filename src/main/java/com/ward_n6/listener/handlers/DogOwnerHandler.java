@@ -24,7 +24,7 @@ public class DogOwnerHandler implements EventHandler {
     private PetsOwnerFactories petsOwnerFactories;
     private Consumer<Update> actionOnNextMessage;
     private ChatMessager chatMessager;
-    private String PET_NOT_FOUND = "Питомец с указанным ID отсутствует в нашем приюте. Уточните ID интересующего Вас питомца.";
+    private String PET_NOT_FOUND = "Питомец с указанным ID отсутствует в нашем приюте. Уточните ID интересующего Вас питомца. \n /ID";
 
     public DogOwnerHandler(PetsOwnerServiceImpl petsOwnerServiceImpl, TelegramBot telegramBot, DogRepository dogRepository, PetsOwnerFactories petsOwnerFactories, ChatMessager chatMessager) {
         this.petsOwnerServiceImpl = petsOwnerServiceImpl;
@@ -96,7 +96,7 @@ public class DogOwnerHandler implements EventHandler {
                     telegramBot.execute(new SendMessage(update.message().chat().id(),
                             "Питомец" + dog.toString() +
                                     "забронирован за Вами. Скоро с Вами свяжется волонтёр, чтобы " +
-                                    "обсудить подробности переезда питомца в Ваш дом и" +
+                                    "обсудить подробности переезда питомца в Ваш дом и " +
                                     "оформить документы!"));
                     return true;
             }
