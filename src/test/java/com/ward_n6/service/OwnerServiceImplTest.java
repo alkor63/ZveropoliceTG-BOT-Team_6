@@ -2,22 +2,28 @@ package com.ward_n6.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ward_n6.entity.owners.Owner;
+import com.ward_n6.exception.RecordNotFoundException;
 import com.ward_n6.repository.owner.OwnerRepository;
-import javassist.NotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.test.web.servlet.MockMvc;
 
+import javax.persistence.EntityNotFoundException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
+/**
+ *Тесты методов овнерСервиса
+ */ // ЛИЗА + я
 @WebMvcTest(OwnerServiceImpl.class)
 class OwnerServiceImplTest {
     @Autowired
@@ -31,47 +37,107 @@ class OwnerServiceImplTest {
     @Autowired
     OwnerServiceImpl ownerService;
     Owner owner = new Owner(1L, "Макс", "Фрай", "8-999-999-99-99");
-    @Test
-    void testGetOwnerById() {
 
-        when(ownerRepository.findById(1L)).thenReturn(Optional.of(owner));
-        Owner ownerById = ownerService.findOwnerById(1);
+
+    @Test
+    public void shouldCreateOwner() {
+        Owner owner = new Owner(1L, "Max", "Ivanov", "+79999999999");
+        ownerService.createOwner(owner);
+        verify(ownerRepository, times(1)).save(owner);
+        ArgumentCaptor<Owner> ownerArgumentCaptor = ArgumentCaptor.forClass(Owner.class);
+        verify(ownerRepository).save(ownerArgumentCaptor.capture());
+        Owner ownerCreated = ownerArgumentCaptor.getValue();
+        Assertions.assertNotNull(ownerCreated.getId());
+        assertEquals("Max", ownerCreated.getFirstName());
+    }
+
+    @Test
+    public void shouldGetAllOwners() {
+        Owner owner1 = new Owner(1L, "Max", "Ivanov", "+79999999999");
+        Owner owner2 = new Owner(1L, "Ivan", "Petrov", "+79999999998");
+        when(ownerRepository.findAll()).thenReturn(Arrays.asList(owner1, owner2));
+        List<Owner> ownerList = ownerService.getAllOwners();
+        assertEquals(ownerList.size(), 2);
+        assertEquals(ownerList.get(0).getFirstName(), "Max");
+        assertEquals(ownerList.get(1).getFirstName(), "Ivan");
+
+        assertEquals(ownerList.get(0).getLastName(), "Ivanov");
+        assertEquals(ownerList.get(1).getLastName(), "Petrov");
+
+        assertEquals(ownerList.get(0).getPhoneNumber(), "+79999999999");
+        assertEquals(ownerList.get(1).getPhoneNumber(), "+79999999998");
+    }
+
+    @Test
+    public void shouldGetOwnerById() {
+        Owner owner = new Owner(5L, "Max", "Ivanov", "+79999999999");
+        when(ownerRepository.findById(5L)).thenReturn(Optional.of(owner));
+        Owner ownerById = ownerService.findOwnerById(5L);
         Assertions.assertNotEquals(ownerById, null);
-        assertEquals(ownerById.getLastName(), "Фрай");
-        assertEquals(ownerById.getId(), 1L);
+        assertEquals(ownerById.getFirstName(), "Max");
+        assertEquals(ownerById.getLastName(), "Ivanov");
+        assertEquals(ownerById.getPhoneNumber(), "+79999999999");
+        assertEquals(ownerById.getId(), 5L);
+    }
+
+
+    @Test
+    public void shouldGet400OwnerById() {
+        when(ownerRepository.findById(100L)).thenThrow(new RecordNotFoundException("OwnerId Not Found"));
+        Exception exception = assertThrows(RecordNotFoundException.class, () -> {
+            ownerService.findOwnerById(100);
+        });
+        Assertions.assertTrue(exception.getMessage().contains("OwnerId Not Found"));
     }
 
     @Test
-    void testGetOwnerByIdNotFound() {
-        OwnerServiceImpl ownerService = Mockito.mock(OwnerServiceImpl.class);
-
-        long ownerId = 1;
-        when(ownerRepository.findById(ownerId)).thenReturn(Optional.empty());
-
-        assertThrows(ChangeSetPersister.NotFoundException.class, () -> ownerService.findOwnerById(ownerId));
-    }
-    @Test
-    void testDeleteOwnerById() {
-        OwnerServiceImpl ownerService = Mockito.mock(OwnerServiceImpl.class);
-        long ownerId = 1;
-
-        when(ownerRepository.findById(ownerId)).thenReturn(Optional.of(owner));
-
-        boolean result = ownerService.deleteOwnerById(ownerId);
-
-
-        assertTrue(result);
-        verify(ownerRepository, times(1)).deleteById(ownerId);
+    public void shouldDeleteOwner() {
+        Owner owner = new Owner(10L, "Anna", "Ivanova", "+79999990000");
+        when(ownerRepository.findById(10L)).thenReturn(Optional.of(owner));
+        ownerService.deleteOwnerById(Math.toIntExact(owner.getId()));
+        verify(ownerRepository, times(1)).deleteById(owner.getId());
+        ArgumentCaptor<Long> ownerArgumentCaptor = ArgumentCaptor.forClass(Long.class);
+        verify(ownerRepository).deleteById(ownerArgumentCaptor.capture());
+        Long ownerDeleted = ownerArgumentCaptor.getValue();
+        Assertions.assertNotNull(ownerDeleted);
+        assertEquals(10L, ownerDeleted);
     }
 
+    //***************** редактировние *************
     @Test
-    void testDeleteOwnerByIdNotFound() {
-        OwnerServiceImpl ownerService = Mockito.mock(OwnerServiceImpl.class);
-        // Arrange
-        long ownerId = 1;
-        when(ownerRepository.findById(ownerId)).thenReturn(Optional.empty());
+    public void editOwnerById_SuccessTest () throws EntityNotFoundException {
 
-        // Act and Assert
-        assertThrows(NotFoundException.class, () -> ownerService.deleteOwnerById(ownerId));
+        Owner existingOwner = new Owner(1L, "Уатя", "Пиванова", "123456789");
+
+        Owner updatedOwner = new Owner();
+        updatedOwner.setId(1L);
+        updatedOwner.setFirstName("Катя");
+        updatedOwner.setLastName("Иванова");
+        updatedOwner.setPhoneNumber("80987654321");
+
+        when(ownerRepository.findById(1L)).thenReturn(Optional.of(existingOwner));
+        when(ownerRepository.save(any(Owner.class))).thenReturn(updatedOwner);
+
+        // Act
+        Owner result = ownerService.editOwnerById(1L, updatedOwner);
+
+        // Assert
+        verify(ownerRepository, times(1)).findById(1L);
+        verify(ownerRepository, times(1)).save(updatedOwner);
+        assertEquals(updatedOwner.getFirstName(), result.getFirstName());
+        assertEquals(updatedOwner.getLastName(), result.getLastName());
+        assertEquals(updatedOwner.getPhoneNumber(), result.getPhoneNumber());
+    }
+
+    @Test
+    public void testEditOwnerById_EntityNotFoundException() {
+
+        Owner owner = new Owner(1L, "Уатя", "Пиванова", "123456789");
+
+        when(ownerRepository.findById(1L)).thenReturn(Optional.empty());
+
+        assertThrows(RecordNotFoundException.class, () -> ownerService.editOwnerById(1L, owner));
+        verify(ownerRepository, times(1)).findById(1L);
+        verify(ownerRepository, never()).save(any(Owner.class));
     }
 }

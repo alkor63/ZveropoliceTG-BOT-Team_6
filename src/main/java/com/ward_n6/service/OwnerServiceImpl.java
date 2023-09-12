@@ -12,8 +12,9 @@ import java.util.Optional;
 
 @Service
 
-public class OwnerServiceImpl implements OwnerService  {
+public class OwnerServiceImpl implements OwnerService {
     private final OwnerRepository ownerRepository;
+
     public OwnerServiceImpl(OwnerRepository ownerRepository) {
         this.ownerRepository = ownerRepository;
     }
@@ -24,9 +25,10 @@ public class OwnerServiceImpl implements OwnerService  {
     }
 
     @Override
-    public Owner createOwner (Owner owner) {
+    public Owner createOwner(Owner owner) {
         return ownerRepository.save(owner);
     }
+
     @Override
     public List<Owner> getAllOwners() {
         return ownerRepository.findAll();
@@ -50,8 +52,7 @@ public class OwnerServiceImpl implements OwnerService  {
     }
 
     @Override
-    public Owner editOwnerById(long id, Owner owner)
-            throws EntityNotFoundException {
+    public Owner editOwnerById(long id, Owner owner) throws EntityNotFoundException {
 
         Optional optionalOwner = ownerRepository.findById(id);
         if (!optionalOwner.isPresent()) {
@@ -65,15 +66,19 @@ public class OwnerServiceImpl implements OwnerService  {
 
         return ownerRepository.save(owner);
     }
+
     private RecordNotFoundException throwException(String value) {
         throw new RecordNotFoundException("OwnerReport Not Found with ID: " + value);
     }
-// ***************************** для БД *************
+
+    // ***************************** для БД *************
     public void save(Owner owner) {
         ownerRepository.save(owner);
     }
-Owner owner;
-    public Owner getOwnerById (long ownerId){
+
+    Owner owner;
+
+    public Owner getOwnerById(long ownerId) {
         return owner = ownerRepository.getById(ownerId);
     }
 

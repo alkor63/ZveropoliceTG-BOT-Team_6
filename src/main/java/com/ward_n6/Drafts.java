@@ -372,4 +372,31 @@ public class Drafts {
 //                .andExpect(jsonPath("$", notNullValue()))
 //                .andExpect(jsonPath("$.nutrition", Matchers.is("Whiskas")));
 //    }
+
+
+
+
+    //    @Test
+//    public void editOwnerByIdTest() throws Exception {
+//        //тест для метода editById()
+//        Owner editedOwner = Owner.builder()
+//                .id(1L)
+//                .firstName("Вася")
+//                .lastName("Пупкин")
+//                .phoneNumber("O+79244444444")
+//                .build();
+//
+//        Mockito.when(ownerService.findOwnerById(1L)).thenReturn(owner1);
+//        Mockito.when(ownerService.createOwner(editedOwner)).thenReturn(editedOwner);
+//
+//        MockHttpServletRequestBuilder mockRequest = put("/owner/editOwner/1")
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .accept(MediaType.APPLICATION_JSON)
+//                .content(this.mapper.writeValueAsString(editedOwner));
+//
+//        mockMvc.perform(mockRequest)
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$", notNullValue()))
+//                .andExpect(jsonPath("$.lastName", Matchers.is("Пупкин")));
+//    }
 }

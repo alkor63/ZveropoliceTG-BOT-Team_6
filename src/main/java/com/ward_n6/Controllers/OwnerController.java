@@ -54,14 +54,14 @@ public class OwnerController {
     public ResponseEntity<String> deleteOwnerById(@PathVariable long id) {
         boolean deleteOwnerById = ownerService.deleteOwnerById(id);
         if (deleteOwnerById) {
-            return new ResponseEntity<>(("Owner id = " + id + "удален"), HttpStatus.OK);
+            return new ResponseEntity<>(("Owner id = " + id + " удален"), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(("Ошибка ID = " + id), HttpStatus.BAD_REQUEST);
         }
     }
 
     @Operation(summary = "Показать всех усыновителей приюта")
-    @GetMapping("getAllOwners")
+    @GetMapping("/getAllOwners")
     public ResponseEntity<List<Owner>> getAllOwners()
     {
         return ResponseEntity.ok().body(ownerService.getAllOwners());

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 @Service
 public interface PetsOwnerService {
-    PetsOwner editDateEndPetsOwnerById(int petsOwnerId, LocalDate newDateEnd)
+    PetsOwner editDateEndPetsOwnerById(long petsOwnerId, LocalDate newDateEnd)
             throws NotFoundException;
 
 }

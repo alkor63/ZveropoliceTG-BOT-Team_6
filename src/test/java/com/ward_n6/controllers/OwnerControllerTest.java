@@ -3,11 +3,10 @@ package com.ward_n6.Controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ward_n6.entity.owners.Owner;
 import com.ward_n6.repository.owner.OwnerRepository;
+import com.ward_n6.service.interfaces.OwnerService;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -19,166 +18,125 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
-import static com.ward_n6.OwnerAndPetConstants.OWNER_1;
-import static com.ward_n6.OwnerAndPetConstants.OWNER_2;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+// Алексей + я
 @WebMvcTest(OwnerController.class)
-@ExtendWith(MockitoExtension.class)
 public class OwnerControllerTest {
-    @Autowired
-    private MockMvc mockMvc;
 
     @Autowired
-    private ObjectMapper objectMapper;
+    MockMvc mockMvc;
+    @Autowired
+    ObjectMapper mapper;
+    @MockBean
+    OwnerRepository ownerRepository;
 
     @MockBean
-    private OwnerRepository ownerRepository;
-
+    OwnerService ownerService;
+    // создаем несколько объектов тестируемого класса
+    Owner owner1 = new Owner(1L, "Pierre", "Goodman", "+79211111111");
+    Owner owner2 = new Owner(2L, "Michael", "Verbin", "+79222222222");
+    Owner owner3 = new Owner(3L, "Sofiya", "Normann", "+79233333333");
 
     @Test
-        //тест метода по добавлению владельца
-    void ShouldCreateOwner() throws Exception {
-        Mockito.when(ownerRepository.save(Mockito.any())).thenReturn(OWNER_1);
-        mockMvc.perform(MockMvcRequestBuilders
-                        .post("createOwner")
-                        .content(objectMapper.writeValueAsString(OWNER_1))
+    public void testGetOwnerById() throws Exception {
+        when(ownerService.findOwnerById(3)).thenReturn(owner3);
+        Owner ownerById = ownerService.findOwnerById(3);
+
+        Mockito.when(ownerService.findOwnerById(3)).thenReturn(owner3);
+        mockMvc.perform(MockMvcRequestBuilders.get("/owner/getOwner/3")
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated())
-                .andExpect(content().json(objectMapper.writeValueAsString(OWNER_1)));
-    }
-
-
-//   НЕ РАБОТАЕТ, ЧТО МОЖНО ИЗМЕНИТЬ?
-//    @Test
-//        //выведение ошибки на метод createOwner
-//    void createOwner_ShouldReturn400() throws Exception {
-//        when(ownerRepository.save(INCORRECT_OWNER)).thenReturn(false);
-//        this.mockMvc.perform(
-//                        post("/cat")
-//                                .contentType(MediaType.APPLICATION_JSON)
-//                                .content(objectMapper.writeValueAsString(INCORRECT_OWNER)))
-//                .andExpect(status().isBadRequest());
-//    }
-
-
-    @Test
-        //тест метода по поиска владельца при наличии его id
-    void ShouldGetOwner() throws Exception {
-        Mockito.when(ownerRepository.findById(OWNER_1.getId())).thenReturn(java.util.Optional.of(OWNER_1));
-        this.mockMvc.perform(MockMvcRequestBuilders
-                        .get("getOwner", 1))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", Matchers.is(OWNER_1.getId())))
-                .andExpect(jsonPath("$.first_name", Matchers.is(OWNER_1.getFirstName())))
-                .andExpect(jsonPath("$.last_name", Matchers.is(OWNER_1.getLastName())))
-                .andExpect(jsonPath("$.phone_number", Matchers.is(OWNER_1.getPhoneNumber())));
+                .andExpect(jsonPath("$", notNullValue()))
+                .andExpect(jsonPath("$.firstName", Matchers.is("Sofiya")));
     }
 
-
-//   РАБОТАЕТ НЕПРАВИЛЬНО, ЧТО МОЖНО СДЕЛАТЬ?
-//    @Test
-//    //выведение ошибки на метод findById
-//    void findById_ShouldReturn404() throws Exception {
-//        when(ownerRepository.findById(5L)).thenReturn(Optional.empty());
-//        this.mockMvc.perform(
-//                        get("getOwner", 5))
-//                .andExpect(status().isNotFound());
-//    }
-
-
     @Test
-        //тест выбрасывания исключения для findById
-    void ShouldReturnExceptionToGetOwner() throws Exception {
-        when(ownerRepository.findById(any())).thenReturn(Optional.empty());
-        this.mockMvc.perform(
-                        get("getOwner", 5))
-                .andExpect(status().isNotFound());
+    public void getAllOwnersTest() throws Exception {
+        //тест для метода getAll()
+        List owners = new ArrayList<>(Arrays.asList(owner1, owner2, owner3));
+
+        Mockito.when(ownerService.getAllOwners()).thenReturn(owners);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/owner/getAllOwners")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(3)))
+                .andExpect(jsonPath("$[1].firstName", Matchers.is("Michael")));
     }
 
-//    КАЖЕТСЯ, РАБОТАЕТ НЕПРАВИЛЬНО, ЧТО МОЖНО СДЕЛАТЬ?
-//    @Test
-//    void findById_ShouldReturn404() throws Exception {
-//        when(ownerRepository.findById(5L)).thenReturn(Optional.empty());
-//        this.mockMvc.perform(
-//                        get("getOwner}", 5))
-//                .andExpect(status().isNotFound());
-//    }
-
-
     @Test
-        //тест метода по редактированию данных владельца
-    void ShouldEditOwner() throws Exception {
-        Owner editedOwner = Owner.builder()
-                .id(1L)
-                .firstName("Vasya")
-                .lastName("Popov")
-                .phoneNumber("+79000000000")
-                .build();
-        when(ownerRepository.findById(OWNER_1.getId())).thenReturn(Optional.of(OWNER_1));
-        when(ownerRepository.save(editedOwner)).thenReturn(editedOwner);
+    public void createOwnerTest() throws Exception {
+        //тест для метода save()
 
-        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("editOwner")
+        Mockito.when(ownerService.createOwner(owner3)).thenReturn(owner3);
+
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/owner/createOwner")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .content(this.objectMapper.writeValueAsString(editedOwner));
+                .content(this.mapper.writeValueAsString(owner3));
 
         mockMvc.perform(mockRequest)
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.first_name", Matchers.is("Vasya")))
-                .andExpect(jsonPath("$.last_name", Matchers.is("Popov")))
-                .andExpect(jsonPath("$.phone_number", Matchers.is("+79000000000")));
+                .andExpect(jsonPath("$", notNullValue()))
+                .andExpect(jsonPath("$.firstName", Matchers.is("Sofiya")));
     }
-
-    //ПОДСКАЖИТЕ, ПОЖАЛУЙСТА, КАК МОЖНО РЕАЛИЗОВАТЬ ИЛИ КАКИМ ПУТЁМ СТОИТ ПОЙТИ, ЧТОБЫ НАПИСАТЬ ТЕСТ НА ВЫВЕДЕНИЕ ОШИБКИ К МЕТОДУ НА ОБНОВЛЕНИЕ КАРТОЧКИ?
-
-    @Test
-        //тест метода по удалению владельца
-    void ShouldDeleteOwner() throws Exception {
-        Mockito.when(ownerRepository.findById(OWNER_2.getId())).thenReturn(Optional.of(OWNER_2));
-        mockMvc.perform(MockMvcRequestBuilders
-                        .delete(("deleteOwner"))
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
-    }
-
-//   НЕ РАБОТАЕТ ТЕСТ
-//    @Test
-//    void deleteById_ShouldReturn404() throws Exception {
-//        when(ownerRepository.deleteById(INCORRECT_OWNER.getId())).thenReturn(false);
-//        mockMvc.perform(
-//                        delete("deleteOwner", INCORRECT_OWNER.getId()))
-//                .andExpect(status().isNotFound());
-//    }
 
 
     @Test
-        //тест метода по получению всех владельцев
-    void ShouldGetAllOwners() throws Exception {
-        List allOwners = new ArrayList<>(Arrays.asList(OWNER_1, OWNER_2));
+    public void testEditOwnerById() throws Exception {
+        // Создаем объект Owner для использования в тесте
+        Owner owner = new Owner();
+        owner.setId(1L);
+        owner.setFirstName("Вася");
+        owner.setLastName("Пупкин");
 
-        Mockito.when(ownerRepository.findAll()).thenReturn(allOwners);
+        // Определяем поведение сервиса ownerService при вызове метода editOwnerById
+        when(ownerService.editOwnerById(eq(1L), any(Owner.class))).thenReturn(owner);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("getAllOwners")
-                        .contentType(MediaType.APPLICATION_JSON))
+        // Выполняем запрос PUT на owner/editOwner/1 с JSON телом объекта Owner
+        mockMvc.perform(put("/owner/editOwner/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"id\": 1, \"firstName\": \"Вася\", \"lastName\": \"Пупкин\"}"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(2)));
+                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.firstName").value("Вася"))
+                .andExpect(jsonPath("$.lastName").value("Пупкин"));
+
+        // Проверяем, что метод editOwnerById был вызван с правильными аргументами
+        verify(ownerService).editOwnerById(eq(1L), any(Owner.class));
     }
 
-//   МОЖНО ЛИ ТАК РЕАЛИЗОВАТЬ ТЕСТ НА ВЫВЕДЕНИЕ ОШИБКИ?
-//    @Test
-//    void findAll_ShouldReturn404() throws Exception {
-//        when(ownerRepository.findAll()).thenReturn(new ArrayList<>());
-//        this.mockMvc.perform(
-//                        get("getAllOwners"))
-//                .andExpect(status().isNotFound());
-//    }
 
+    @Test
+    public void testDeleteOwnerById() throws Exception {
+        // Определяем поведение сервиса овнерСервис при вызове метода deleteOwnerById
+        when(ownerService.deleteOwnerById(eq(1L))).thenReturn(true);
 
+        // Выполняем запрос DELETE на адрес
+        mockMvc.perform(delete("/owner/deleteOwner/1"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Owner id = 1 удален"));
+
+        // Проверяем, что метод deleteOwnerById был вызван с правильным аргументом
+        verify(ownerService).deleteOwnerById(eq(1L));
+    }
+
+    @Test
+    public void deleteOwnerByIdTestWhenReturnFalse() throws Exception {
+        when(ownerService.deleteOwnerById(5)).thenReturn(false);
+        mockMvc.perform(delete("/owner/deleteOwner/5"))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Ошибка ID = 5"));
+        verify(ownerService).deleteOwnerById(eq(5L));
+    }
 }
