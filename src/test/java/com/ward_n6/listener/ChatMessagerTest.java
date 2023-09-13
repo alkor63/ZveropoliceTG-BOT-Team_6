@@ -47,9 +47,6 @@ class ChatMessagerTest {
 //        telegramBot = mock(TelegramBot.class);
 //    }
 
-
-
-
     @Test
     public void testSendMessage() {
         ChatMessager chatMessager = new ChatMessager(telegramBot, botMessageService);
@@ -64,5 +61,6 @@ class ChatMessagerTest {
         assertEquals(sendMessage.getParameters().get("Сообщение"), text);
         assertEquals(sendMessage.getParameters().get("111L"), chatId);
     }
+
 }
 

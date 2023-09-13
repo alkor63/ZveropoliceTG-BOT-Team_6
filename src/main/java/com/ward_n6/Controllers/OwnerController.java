@@ -21,7 +21,6 @@ public class OwnerController {
     @Autowired
     private OwnerService ownerService;
 
-
     @Operation(summary = "Добавление посетителя в список",
             description = "нужно заполнить все поля карточки посетителя в Body, телефон указать в формате 8-ХХХ-ХХХ-ХХ-ХХ")
     @PostMapping("/createOwner")
@@ -62,8 +61,7 @@ public class OwnerController {
 
     @Operation(summary = "Показать всех усыновителей приюта")
     @GetMapping("/getAllOwners")
-    public ResponseEntity<List<Owner>> getAllOwners()
-    {
+    public ResponseEntity<List<Owner>> getAllOwners() {
         return ResponseEntity.ok().body(ownerService.getAllOwners());
     }
 

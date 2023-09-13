@@ -11,6 +11,9 @@ import org.springframework.stereotype.Component;
 
 import static com.ward_n6.factory.HibernateSessionFactoryUtil.getSessionFactory;
 
+/**
+ *сессии для проверки наличия записей в БД при создании сущностей из бота
+ */
 @Component
 public class PetsOwnerFactories {
     private final ChatMessager chatMessager;

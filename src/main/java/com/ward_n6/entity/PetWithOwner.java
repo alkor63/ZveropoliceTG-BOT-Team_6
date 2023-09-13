@@ -25,12 +25,10 @@ public class PetWithOwner {
     }
 
     public PetWithOwner(Owner owner, Pet pet) {
-//      try {
-            this.owner = owner;
-            this.pet = pet;
-//      } catch
-//      (throw new IllegalArgumentException("кривой аргумент в конструкторе PetWithOwner");)
+        this.owner = owner;
+        this.pet = pet;
     }
+
     public PetWithOwner() {
 
     }

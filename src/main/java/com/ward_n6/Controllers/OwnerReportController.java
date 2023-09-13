@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 @Setter
 @Getter
 @RestController
@@ -30,10 +31,10 @@ public class OwnerReportController {
     @PostMapping
     @Operation(summary = "Добавление отчёта в список",
             description = "нужно заполнить все поля отчёта")
-    public ResponseEntity<OwnerReport> addOwnerReport(long ownerId,  PetsType petsType, boolean photo,
+    public ResponseEntity<OwnerReport> addOwnerReport(long ownerId, PetsType petsType, boolean photo,
                                                       String nutrition, String health, String behavior, long petId) {
 
-        OwnerReport newOwnerReport = ownerReportService.addOwnerReportFromController(ownerId,  petsType, photo,
+        OwnerReport newOwnerReport = ownerReportService.addOwnerReportFromController(ownerId, petsType, photo,
                 nutrition, health, behavior, petId);
         return new ResponseEntity<>(newOwnerReport, HttpStatus.CREATED); // код 201
     }
@@ -64,8 +65,6 @@ public class OwnerReportController {
         } else {
             return new ResponseEntity<>(("Ошибка при попытке удалить запись OwnerReport ID = " + ownerReportId), HttpStatus.BAD_REQUEST);
         }
-//    public ResponseEntity<String> deleteOwnerReportById(@PathVariable Long id) {
-
     }
 
     @PutMapping("/{ownerReportId}")
@@ -73,9 +72,8 @@ public class OwnerReportController {
             description = "нужно указать id и заполнить все поля отчёта в Body")
     public OwnerReport editOwnerReportById(@PathVariable long ownerReportId,
                                            @RequestParam boolean photo,
-                                           String nutrition, String health, String behavior)
-    {
-        return ownerReportService.editOwnerReportByIdFromController(ownerReportId, photo,nutrition, health, behavior);
+                                           String nutrition, String health, String behavior) {
+        return ownerReportService.editOwnerReportByIdFromController(ownerReportId, photo, nutrition, health, behavior);
     }
 
 }

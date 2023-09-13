@@ -24,6 +24,7 @@ public class PetController {
     private final CatService catService;
     private final DogService dogService;
     private final PetService petService;
+
     public PetController(CatService catService, DogService dogService, PetService petService) {
         this.catService = catService;
         this.dogService = dogService;
@@ -74,7 +75,6 @@ public class PetController {
         return ResponseEntity.ok(cat);
     }
 
-
     //------СОБАКИ
     @PostMapping("/add_dog/{petsSex}")
     @Operation(summary = "Добавить собаку")
@@ -92,7 +92,6 @@ public class PetController {
         return ResponseEntity.ok().body(dog.toString());
     }
 
-
     @GetMapping("/allDog")
     @Operation(summary = "Показать всех собак приюта")
     public ResponseEntity<List<Dog>> allDogs() {
@@ -100,7 +99,6 @@ public class PetController {
         if (dog.isEmpty()) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(dog);
     }
-
 
     @Operation(summary = "Удалить собаку")
     @DeleteMapping("/delDog")
@@ -111,7 +109,6 @@ public class PetController {
         return ResponseEntity.ok(dog);
     }
 
-
     @Operation(summary = "Поменять собаку")
     @PutMapping("/changeDog/{id}/{petsSex}")
     public ResponseEntity<Dog> changeDog(@PathVariable long id, @PathVariable PetsSex petsSex, Dog dog) {
@@ -119,5 +116,4 @@ public class PetController {
         Dog change = dogService.change(id, petsSex, petsType, dog);
         return ResponseEntity.ok(change);
     }
-
 }

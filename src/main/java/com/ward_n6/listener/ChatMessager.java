@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 
 
 @Component
-
 public class ChatMessager {
     private final TelegramBot telegramBot;
     private final BotMessageService botMessageService;
@@ -28,8 +27,8 @@ public class ChatMessager {
         if (messageText.isEmpty()) { // обрабатываем нулловое значение из парсинга
             sendMessage(chatId, "Неверный формат сообщения");
         } else {
-            BotMessaging botMessaging = new BotMessaging(); // создаём новое напоминание
-            botMessaging.setChatId(chatId); // присваиваем созданному напоминанию значения из нашего апдейта
+            BotMessaging botMessaging = new BotMessaging();
+            botMessaging.setChatId(chatId);
             botMessaging.setBotMessage(messageText);
             botMessageService.save(botMessaging); // сохранили наше сообщение в БД
         }
