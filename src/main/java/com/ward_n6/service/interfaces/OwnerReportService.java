@@ -10,9 +10,6 @@ import java.util.List;
 
 public interface OwnerReportService {
 
-    //++++++++++++++++++++++++++++++++++++++++++++++++++++
-//    OwnerReport addOwnerReport(OwnerReport ownerReport);
-
     // ++++++++++++++++++++++++++++++++++++
     List<OwnerReport> getAllOwnerReports();
 
@@ -23,8 +20,6 @@ public interface OwnerReportService {
     //+++++++++++++++++++++++++++++++++++++++++
     boolean deleteOwnerReportById(long ownerReportId);
 
-    OwnerReport editOwnerReportById(long ownerReportId, OwnerReport ownerReport)
-            throws EntityNotFoundException;
 
     OwnerReport addOwnerReportFromController(long ownerId, PetsType petsType, boolean photo,
                                              String nutrition, String health, String behavior, long petId);

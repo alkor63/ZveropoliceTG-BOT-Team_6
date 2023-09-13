@@ -46,7 +46,6 @@ public class OwnerTrialPeriodTimer {
     // проверка качества отчётов
 
 
-    //    @Scheduled(cron = "1 00 21 * * *") //вызов каждый день в 21:00
     @Scheduled(cron = "11 13 21 * * *") //вызов каждый день в мм чч на время отладки
 
     public void task() {

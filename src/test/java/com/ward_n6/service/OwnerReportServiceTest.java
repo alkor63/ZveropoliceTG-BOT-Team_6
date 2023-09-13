@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @WebMvcTest(OwnerReportServiceImpl.class)
@@ -66,7 +67,7 @@ public class OwnerReportServiceTest {
     @Test
     public void testGetInvalidOwnerReportById() {
         when(ownerReportRepository.findById(17L)).thenThrow(new RecordNotFoundException("OwnerReport Not Found with ID"));
-        Exception exception = Assertions.assertThrows(RecordNotFoundException.class, () -> {
+        Exception exception = assertThrows(RecordNotFoundException.class, () -> {
             ownerReportService.getOwnerReportById(17);
         });
         Assertions.assertTrue(exception.getMessage().contains("OwnerReport Not Found with ID"));
@@ -108,9 +109,9 @@ public class OwnerReportServiceTest {
 
     @Test
     public void editOwnerReportByIdFromController() {
-        OwnerReport ownerReport = new OwnerReport(13L, 16L, LocalDateTime.now(), PetsType.DOG, true,
+        OwnerReport ownerReport = new OwnerReport(13L, 16L, LocalDateTime.now(), PetsType.DOG, false,
                 "Pedigree", "good", "Ok", 18L);
-       long reportId = ownerReport.getId();
+        long reportId = ownerReport.getId();
         when(ownerReportRepository.findById(reportId)).thenReturn(Optional.of(ownerReport));
         boolean photo = true;
         String nutrition = "good";
@@ -124,7 +125,9 @@ public class OwnerReportServiceTest {
         OwnerReport ownerReportCreated = ownerReportArgumentCaptor.getValue();
         Assertions.assertNotNull(ownerReportCreated.getId());
         assertEquals("good", ownerReportCreated.getNutrition());
-
+        assertEquals("excellent", ownerReportCreated.getPetsHealth());
+        assertEquals("friendly", ownerReportCreated.getPetsBehavior());
+        assertEquals(true, ownerReportCreated.isHavePhoto());
     }
 
 }

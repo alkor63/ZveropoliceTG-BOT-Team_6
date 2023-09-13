@@ -399,4 +399,25 @@ public class Drafts {
 //                .andExpect(jsonPath("$", notNullValue()))
 //                .andExpect(jsonPath("$.lastName", Matchers.is("Пупкин")));
 //    }
+
+
+//    @Override
+//    public OwnerReport editOwnerReportById(long ownerReportId, OwnerReport ownerReport)
+//            throws EntityNotFoundException {
+//
+//        Optional optionalOwnerReport = ownerReportRepository.findById(ownerReportId);
+//        if (!optionalOwnerReport.isPresent()) {
+//            throwException(String.valueOf(ownerReportId));
+////            throw new EntityNotFoundException("Невозможно изменить отчёт, т.к. в базе нет отчёта с id = " + ownerReportId);
+//        }
+//        OwnerReport existingOwnerReport = (OwnerReport) optionalOwnerReport.get();
+//
+//        existingOwnerReport.setHavePhoto(ownerReport.isHavePhoto());
+//        existingOwnerReport.setNutrition(ownerReport.getNutrition());
+//        existingOwnerReport.setPetsBehavior(ownerReport.getPetsBehavior());
+//        existingOwnerReport.setPetsHealth(ownerReport.getPetsHealth());
+//        existingOwnerReport.setReportDateTime(ownerReport.getReportDateTime());
+//
+//        return ownerReportRepository.save(ownerReport);
+//    }
 }

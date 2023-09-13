@@ -51,27 +51,7 @@ public class OwnerReportServiceImpl implements OwnerReportService {
     }
 
 
-    @Override
-    public OwnerReport editOwnerReportById(long ownerReportId, OwnerReport ownerReport)
-            throws EntityNotFoundException {
-
-        Optional optionalOwnerReport = ownerReportRepository.findById(ownerReportId);
-        if (!optionalOwnerReport.isPresent()) {
-            throwException(String.valueOf(ownerReportId));
-//            throw new EntityNotFoundException("Невозможно изменить отчёт, т.к. в базе нет отчёта с id = " + ownerReportId);
-        }
-        OwnerReport existingOwnerReport = (OwnerReport) optionalOwnerReport.get();
-
-        existingOwnerReport.setHavePhoto(ownerReport.isHavePhoto());
-        existingOwnerReport.setNutrition(ownerReport.getNutrition());
-        existingOwnerReport.setPetsBehavior(ownerReport.getPetsBehavior());
-        existingOwnerReport.setPetsHealth(ownerReport.getPetsHealth());
-        existingOwnerReport.setReportDateTime(ownerReport.getReportDateTime());
-
-        return ownerReportRepository.save(ownerReport);
-    }
-
-    private RecordNotFoundException throwException(String value) {
+    public RecordNotFoundException throwException(String value) {
         throw new RecordNotFoundException("OwnerReport Not Found with ID: " + value);
     }
 @Override
