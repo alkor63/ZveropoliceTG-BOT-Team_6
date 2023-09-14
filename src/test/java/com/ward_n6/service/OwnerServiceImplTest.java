@@ -103,6 +103,10 @@ class OwnerServiceImplTest {
         assertEquals(10L, ownerDeleted);
     }
 
+    
+
+
+
     //***************** редактировние *************
     @Test
     public void editOwnerById_SuccessTest () throws EntityNotFoundException {

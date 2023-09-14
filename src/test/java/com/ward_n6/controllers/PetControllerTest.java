@@ -4,7 +4,7 @@ import com.ward_n6.entity.pets.Cat;
 import com.ward_n6.entity.pets.Dog;
 import com.ward_n6.enums.PetsSex;
 import com.ward_n6.enums.PetsType;
-import com.ward_n6.service.interfaces.PetService;
+
 import com.ward_n6.service.pets.CatService;
 import com.ward_n6.service.pets.DogService;
 import org.junit.jupiter.api.Test;
@@ -38,8 +38,6 @@ class PetControllerTest {
 
 
     @MockBean
-    private PetService petService;
-    @MockBean
     private CatService catService;
     @MockBean
     private DogService dogService;
@@ -54,7 +52,7 @@ class PetControllerTest {
         CatService catService = Mockito.mock(CatService.class);
         Mockito.when(catService.addCat(petsSex, CAT, cat)).thenReturn(cat);
 
-        PetController petController = new PetController(catService, dogService, petService);
+        PetController petController = new PetController(catService, dogService);
 
         ResponseEntity<Cat> response = petController.addCat(petsSex, cat);
 
@@ -71,7 +69,7 @@ class PetControllerTest {
         DogService dogService = Mockito.mock(DogService.class);
         Mockito.when(dogService.addDog(petsSex, DOG, dog)).thenReturn(dog);
 
-        PetController petController = new PetController(catService, dogService, petService);
+        PetController petController = new PetController(catService, dogService);
 
         ResponseEntity<Dog> response = petController.addDog(petsSex, dog);
 
@@ -88,7 +86,7 @@ class PetControllerTest {
     @Test
     public void changeCatTest() throws Exception {// working
         CatService catService = Mockito.mock(CatService.class);
-        PetController petController = new PetController(catService, dogService, petService);
+        PetController petController = new PetController(catService, dogService);
         long id = 1;
         PetsSex petsSex = PetsSex.MALE;
         cat.setOwnerId(2L);
@@ -110,7 +108,7 @@ class PetControllerTest {
     @Test
     public void changeDogTest() throws Exception { // рабочий
         DogService dogService = Mockito.mock(DogService.class);
-        PetController petController = new PetController(catService, dogService, petService);
+        PetController petController = new PetController(catService, dogService);
         long id = 1;
         PetsSex petsSex = PetsSex.MALE;
         dog.setPetName("ШАР");
@@ -128,7 +126,7 @@ class PetControllerTest {
     @Test
     void searchCatTest() {
         CatService catService = Mockito.mock(CatService.class);
-        PetController petController = new PetController(catService, dogService, petService);
+        PetController petController = new PetController(catService, dogService);
 
         long id = 1;
 
@@ -143,7 +141,7 @@ class PetControllerTest {
     @Test
     void searchCatNotFoundTest() {
         CatService catService = Mockito.mock(CatService.class);
-        PetController petController = new PetController(catService, dogService, petService);
+        PetController petController = new PetController(catService, dogService);
 
         long id = 3;
         when(catService.findCat(id)).thenReturn(null);
@@ -156,7 +154,7 @@ class PetControllerTest {
     @Test
     void searchDogTest() {
         DogService dogService = Mockito.mock(DogService.class);
-        PetController petController = new PetController(catService, dogService, petService);
+        PetController petController = new PetController(catService, dogService);
 
         long id = 1;
 
@@ -171,7 +169,7 @@ class PetControllerTest {
     @Test
     void searchDogNotFoundTest() {
         DogService dogService = Mockito.mock(DogService.class);
-        PetController petController = new PetController(catService, dogService, petService);
+        PetController petController = new PetController(catService, dogService);
 
         long id = 3;
         when(dogService.findDog(id)).thenReturn(null);
@@ -185,7 +183,7 @@ class PetControllerTest {
     @Test
     void allCatsTest() {
         CatService catService = Mockito.mock(CatService.class);
-        PetController petController = new PetController(catService, dogService, petService);
+        PetController petController = new PetController(catService, dogService);
         List<Cat> cats = new ArrayList<>();
         cats.add(cat);
         cats.add(cat2);
@@ -201,7 +199,7 @@ class PetControllerTest {
     @Test
     void testAllCatsNotFound() {
         CatService catService = Mockito.mock(CatService.class);
-        PetController petController = new PetController(catService, dogService, petService);
+        PetController petController = new PetController(catService, dogService);
         when(catService.allCats()).thenReturn(Collections.emptyList());
 
         ResponseEntity<List<Cat>> response = petController.allCats();
@@ -212,7 +210,7 @@ class PetControllerTest {
     @Test
     void allDogsTest() {
         DogService dogService = Mockito.mock(DogService.class);
-        PetController petController = new PetController(catService, dogService, petService);
+        PetController petController = new PetController(catService, dogService);
         List<Dog> dogs = new ArrayList<>();
         dogs.add(dog);
         dogs.add(dog2);
@@ -228,7 +226,7 @@ class PetControllerTest {
     @Test
     void testAllDogsNotFound() {
         DogService dogService = Mockito.mock(DogService.class);
-        PetController petController = new PetController(catService, dogService, petService);
+        PetController petController = new PetController(catService, dogService);
         when(dogService.allDogs()).thenReturn(Collections.emptyList());
 
         ResponseEntity<List<Dog>> response = petController.allDogs();
@@ -240,7 +238,7 @@ class PetControllerTest {
 @Test
 void deleteCatTest() {
     CatService catService = Mockito.mock(CatService.class);
-    PetController petController = new PetController(catService, dogService, petService);
+    PetController petController = new PetController(catService, dogService);
     long catId = 1;
     when(catService.findCat(catId)).thenReturn(cat);
     when(catService.deleteCat(catId)).thenReturn(cat);
@@ -254,7 +252,7 @@ void deleteCatTest() {
     @Test
     void deleteCatNotFoundTest() {
         CatService catService = Mockito.mock(CatService.class);
-        PetController petController = new PetController(catService, dogService, petService);
+        PetController petController = new PetController(catService, dogService);
         long catId = 1;
 
         when(catService.findCat(catId)).thenReturn(null);
@@ -267,7 +265,7 @@ void deleteCatTest() {
     @Test
     void deleteDogTest() {
         DogService dogService = Mockito.mock(DogService.class);
-        PetController petController = new PetController(catService, dogService, petService);
+        PetController petController = new PetController(catService, dogService);
         long dogId = 1;
         when(dogService.findDog(dogId)).thenReturn(dog);
         when(dogService.deleteDog(dogId)).thenReturn(dog);
@@ -281,7 +279,7 @@ void deleteCatTest() {
     @Test
     void deleteDogNotFoundTest() {
         DogService dogService = Mockito.mock(DogService.class);
-        PetController petController = new PetController(catService, dogService, petService);
+        PetController petController = new PetController(catService, dogService);
         long dogId = 1;
 
         when(dogService.findDog(dogId)).thenReturn(null);

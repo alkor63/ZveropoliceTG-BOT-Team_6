@@ -9,11 +9,9 @@ import java.util.List;
 public interface OwnerService {
     long getId();
 
-
     Owner createOwner(Owner owner);
 
     List<Owner> getAllOwners();
-
 
     Owner findOwnerById(long id);
 

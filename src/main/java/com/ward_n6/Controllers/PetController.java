@@ -4,7 +4,7 @@ import com.ward_n6.entity.pets.Cat;
 import com.ward_n6.entity.pets.Dog;
 import com.ward_n6.enums.PetsSex;
 import com.ward_n6.enums.PetsType;
-import com.ward_n6.service.interfaces.PetService;
+
 import com.ward_n6.service.pets.CatService;
 import com.ward_n6.service.pets.DogService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -23,12 +23,12 @@ public class PetController {
 
     private final CatService catService;
     private final DogService dogService;
-    private final PetService petService;
 
-    public PetController(CatService catService, DogService dogService, PetService petService) {
+
+    public PetController(CatService catService, DogService dogService) {
         this.catService = catService;
         this.dogService = dogService;
-        this.petService = petService;
+
     }
 
     //---------КОШКИ

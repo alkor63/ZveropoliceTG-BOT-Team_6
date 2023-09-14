@@ -23,12 +23,10 @@ class OwnerTrialPeriodTimerTest {
     @MockBean
     private OwnerReportRepository ownerReportRepository;
 
-    @Mock
+    @MockBean
     private PetsOwnerRepository petsOwnerRepository;
-
     @Mock
     private VolunteerService volunteerService;
-
     @Mock
     private Logger logger;
 

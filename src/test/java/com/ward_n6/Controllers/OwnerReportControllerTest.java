@@ -86,7 +86,7 @@ public class OwnerReportControllerTest {
     }
 
     @Test
-    public void getOwnerReportByIdTest() throws Exception { //working
+    public void getOwnerReportById() throws Exception { //working
 
         // Mock the owner report service
         OwnerReportService ownerReportService = Mockito.mock(OwnerReportService.class);
