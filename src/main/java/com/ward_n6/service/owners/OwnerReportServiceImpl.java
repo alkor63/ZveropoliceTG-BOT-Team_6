@@ -1,4 +1,4 @@
-package com.ward_n6.service;
+package com.ward_n6.service.owners;
 
 import com.ward_n6.entity.reports.OwnerReport;
 import com.ward_n6.enums.PetsType;

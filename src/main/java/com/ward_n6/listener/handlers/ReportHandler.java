@@ -9,7 +9,7 @@ import com.ward_n6.enums.PetsType;
 import com.ward_n6.listener.PetsOwnerFactories;
 import com.ward_n6.listener.TelegramBotPetShelterUpdatesListener;
 import com.ward_n6.repository.PhotoRepository;
-import com.ward_n6.service.OwnerReportServiceImpl;
+import com.ward_n6.service.owners.OwnerReportServiceImpl;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.time.LocalDateTime;

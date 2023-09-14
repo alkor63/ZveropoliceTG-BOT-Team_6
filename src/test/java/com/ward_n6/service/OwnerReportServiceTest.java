@@ -5,6 +5,7 @@ import com.ward_n6.entity.reports.OwnerReport;
 import com.ward_n6.enums.PetsType;
 import com.ward_n6.exception.RecordNotFoundException;
 import com.ward_n6.repository.owner.OwnerReportRepository;
+import com.ward_n6.service.owners.OwnerReportServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;

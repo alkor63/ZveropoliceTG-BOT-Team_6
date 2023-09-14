@@ -7,7 +7,7 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.response.SendResponse;
 import com.ward_n6.entity.owners.PetsOwner;
-import com.ward_n6.service.PetsOwnerServiceImpl;
+import com.ward_n6.service.owners.PetsOwnerServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
