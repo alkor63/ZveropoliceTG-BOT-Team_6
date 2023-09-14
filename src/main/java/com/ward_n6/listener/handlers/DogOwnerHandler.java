@@ -8,7 +8,7 @@ import com.ward_n6.entity.pets.Dog;
 import com.ward_n6.listener.ChatMessager;
 import com.ward_n6.listener.PetsOwnerFactories;
 import com.ward_n6.repository.pets.DogRepository;
-import com.ward_n6.service.PetsOwnerServiceImpl;
+import com.ward_n6.service.owners.PetsOwnerServiceImpl;
 
 import java.time.LocalDate;
 import java.util.function.Consumer;

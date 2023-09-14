@@ -3,6 +3,7 @@ package com.ward_n6.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ward_n6.entity.owners.PetsOwner;
 import com.ward_n6.repository.owner.PetsOwnerRepository;
+import com.ward_n6.service.owners.PetsOwnerServiceImpl;
 import javassist.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

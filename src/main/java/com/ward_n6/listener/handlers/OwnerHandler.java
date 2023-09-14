@@ -4,7 +4,7 @@ import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.ward_n6.entity.owners.Owner;
-import com.ward_n6.service.OwnerServiceImpl;
+import com.ward_n6.service.owners.OwnerServiceImpl;
 import lombok.Getter;
 
 import java.util.function.Consumer;

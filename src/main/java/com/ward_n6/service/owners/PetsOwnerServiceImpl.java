@@ -1,4 +1,4 @@
-package com.ward_n6.service;
+package com.ward_n6.service.owners;
 
 import com.ward_n6.entity.owners.PetsOwner;
 import com.ward_n6.repository.owner.PetsOwnerRepository;
