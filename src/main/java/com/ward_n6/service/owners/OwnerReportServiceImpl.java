@@ -45,7 +45,6 @@ public class OwnerReportServiceImpl implements OwnerReportService {
         }
     }
 
-
     public RecordNotFoundException throwException(String value) {
         throw new RecordNotFoundException("OwnerReport Not Found with ID: " + value);
     }
@@ -72,7 +71,7 @@ public class OwnerReportServiceImpl implements OwnerReportService {
         Optional optionalOwnerReport = ownerReportRepository.findById(ownerReportId);
         if (!optionalOwnerReport.isPresent()) {
             throwException(String.valueOf(ownerReportId));
-//            throw new EntityNotFoundException("Невозможно изменить отчёт, т.к. в базе нет отчёта с id = " + ownerReportId);
+
         }
         OwnerReport existingOwnerReport = (OwnerReport) optionalOwnerReport.get();
 

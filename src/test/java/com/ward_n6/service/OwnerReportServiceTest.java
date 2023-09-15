@@ -14,13 +14,13 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @WebMvcTest(OwnerReportServiceImpl.class)
@@ -88,6 +88,17 @@ public class OwnerReportServiceTest {
         assertEquals(13L, ownerReportIdDeleted);
     }
 
+    // ************* на ошибку ********
+    @Test
+    public void testDeleteOwnerReportById_WhenOwnerReportDoesNotExist_ThrowsException() {
+        long ownerReportId = 4L;
+        Optional<OwnerReport> optionalOwnerReport = Optional.empty();
+        when(ownerReportRepository.findById(ownerReportId)).thenReturn(optionalOwnerReport);
+
+        assertThrows(RecordNotFoundException.class, () -> {
+            ownerReportService.deleteOwnerReportById(ownerReportId);
+        });
+    }
 
     @Test
     public void testAddOwnerReportFromController() {
@@ -109,7 +120,7 @@ public class OwnerReportServiceTest {
     }
 
     @Test
-    public void editOwnerReportByIdFromController() {
+    public void editOwnerReportByIdFromControllerTest() {
         OwnerReport ownerReport = new OwnerReport(13L, 16L, LocalDateTime.now(), PetsType.DOG, false,
                 "Pedigree", "good", "Ok", 18L);
         long reportId = ownerReport.getId();
@@ -130,12 +141,31 @@ public class OwnerReportServiceTest {
         assertEquals("friendly", ownerReportCreated.getPetsBehavior());
         assertEquals(true, ownerReportCreated.isHavePhoto());
     }
+
+    // *********** на ошибку *******
     @Test
-    public void testSave (){
-        OwnerReport ownerReport = new OwnerReport(13L, 16L, LocalDateTime.now(), PetsType.DOG, false,
-                "Pedigree", "good", "Ok", 18L);
-        ownerReportService.save(ownerReport);
-        verify(ownerReportRepository, times(1)).save(ownerReport);
+    public void editOwnerReportByIdFromControllerTest_WhenOwnerReportDoesNotExist_ThrowsException() {
+        long ownerReportId = 1;
+        boolean photo = true;
+        String nutrition = "good";
+        String health = "excellent";
+        String behavior = "friendly";
+
+        when(ownerReportRepository.findById(ownerReportId)).thenReturn(Optional.empty());
+
+        assertThrows(RecordNotFoundException.class, () -> {
+            ownerReportService.editOwnerReportByIdFromController
+                    (ownerReportId, photo, nutrition, health, behavior);
+        });
     }
 
-}
+                // ************* тест метода репозитория ********
+        @Test
+        public void testSave () {
+            OwnerReport ownerReport = new OwnerReport(13L, 16L, LocalDateTime.now(), PetsType.DOG, false,
+                    "Pedigree", "good", "Ok", 18L);
+            ownerReportService.save(ownerReport);
+            verify(ownerReportRepository, times(1)).save(ownerReport);
+        }
+
+    }
