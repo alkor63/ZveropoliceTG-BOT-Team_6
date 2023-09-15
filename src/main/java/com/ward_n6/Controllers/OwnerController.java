@@ -22,7 +22,8 @@ public class OwnerController {
     private OwnerService ownerService;
 
     @Operation(summary = "Добавление посетителя в список",
-            description = "нужно заполнить все поля карточки посетителя в Body, телефон указать в формате 8-ХХХ-ХХХ-ХХ-ХХ")
+            description = "нужно заполнить все поля карточки посетителя в Body, телефон указать в формате 8-ХХХ-ХХХ-ХХ-ХХ. \n" +
+                    "В качестве ID укажите номер телефона без дефисов.")
     @PostMapping("/createOwner")
     public ResponseEntity<Owner> createOwner(@RequestBody @Valid Owner owner) {
 

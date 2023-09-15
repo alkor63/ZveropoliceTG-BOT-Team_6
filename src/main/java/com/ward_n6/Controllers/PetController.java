@@ -32,11 +32,9 @@ public class PetController {
     }
 
     //---------КОШКИ
-
-    @PostMapping("/add_cat/{petsSex}")
-    @Operation(summary = "Добавить кошку")
+    @PostMapping("/addCat/{petsSex}")
+    @Operation(summary = "Добавить кошку. ID указывать не надо.")
     public ResponseEntity<Cat> addCat(@PathVariable PetsSex petsSex, Cat cat) {
-
         PetsType petsType = PetsType.CAT;
         catService.addCat(petsSex, petsType, cat);
         return ResponseEntity.ok(cat);
@@ -76,8 +74,8 @@ public class PetController {
     }
 
     //------СОБАКИ
-    @PostMapping("/add_dog/{petsSex}")
-    @Operation(summary = "Добавить собаку")
+    @PostMapping("/addDog/{petsSex}")
+    @Operation(summary = "Добавить собаку. ID указывать не надо.")
     public ResponseEntity<Dog> addDog(@PathVariable PetsSex petsSex, Dog dog) {
         PetsType petsType = PetsType.DOG;
         dogService.addDog(petsSex, petsType, dog);

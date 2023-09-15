@@ -13,11 +13,12 @@ import java.util.Optional;
 @Service
 public class DogService {
     @Resource
-    private DogRepository dogsCrud;
+    private final DogRepository dogsCrud;
 
     public DogService(DogRepository dogsCrud) {
         this.dogsCrud = dogsCrud;
     }
+
 
     public Dog addDog(PetsSex petsSex, PetsType petsType, Dog dog) {
         dog.setPetsType(petsType);
