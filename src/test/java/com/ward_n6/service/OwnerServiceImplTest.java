@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 /**
- *Тесты методов овнерСервиса
+ * Тесты методов овнерСервиса
  */ // ЛИЗА + я
 @WebMvcTest(OwnerServiceImpl.class)
 class OwnerServiceImplTest {
@@ -109,7 +109,7 @@ class OwnerServiceImplTest {
 
     //***************** редактировние *************
     @Test
-    public void editOwnerById_SuccessTest () throws EntityNotFoundException {
+    public void editOwnerById_SuccessTest() throws EntityNotFoundException {
 
         Owner existingOwner = new Owner(1L, "Уатя", "Пиванова", "123456789");
 

@@ -9,8 +9,6 @@ import java.util.List;
 @EnableJpaRepositories
 @Service
 public interface OwnerReportRepository extends JpaRepository<OwnerReport, Long> {
-
-
     @Override
     List<OwnerReport> findAll();
 }

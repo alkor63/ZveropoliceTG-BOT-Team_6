@@ -20,7 +20,6 @@ public class CatService {
         this.catsCrud = catsCrud;
     }
 
-
     public Cat addCat(PetsSex petsSex, PetsType petsType, Cat cat) {
         cat.setPetsType(petsType);
         cat.setPetsSex(petsSex);
@@ -38,7 +37,6 @@ public class CatService {
         if (cat != null) catsCrud.deleteById(id);
         return cat;
     }
-
 
     public List<Cat> allCats() {
         return catsCrud.findAll();

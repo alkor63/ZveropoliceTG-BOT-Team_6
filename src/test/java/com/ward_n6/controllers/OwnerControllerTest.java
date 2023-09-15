@@ -39,7 +39,6 @@ public class OwnerControllerTest {
     ObjectMapper mapper;
     @MockBean
     OwnerRepository ownerRepository;
-
     @MockBean
     OwnerService ownerService;
     // создаем несколько объектов тестируемого класса

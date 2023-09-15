@@ -21,7 +21,6 @@ public class OwnerTrialPeriodTimer {
     private final TelegramBot telegramBot;
     private final VolunteerService volunteerService;
     private final PetsOwnerRepository petsOwnerRepository;
-
     private final OwnerReportRepository ownerReportRepository;
 
     private Logger logger = (Logger) LoggerFactory.getLogger(OwnerTrialPeriodTimer.class);
@@ -30,8 +29,7 @@ public class OwnerTrialPeriodTimer {
                                  TelegramBot telegramBot,
                                  VolunteerService volunteerService,
                                  PetsOwnerRepository petsOwnerRepository,
-                                 OwnerReportRepository ownerReportRepository)
-    {
+                                 OwnerReportRepository ownerReportRepository) {
         this.botMessagingRepository = botMessagingRepository;
         this.telegramBot = telegramBot;
         this.volunteerService = volunteerService;
@@ -67,7 +65,7 @@ public class OwnerTrialPeriodTimer {
         // можно выбрать только отчёты с конкретным id животного и/или хозяина
         List<OwnerReport> allOwnerReports = ownerReportRepository.findAll();
         for (OwnerReport ownerReport : allOwnerReports) {
-            String verdict = "Verdict "+ownerReport.getId()+" = " + volunteerService.reportExpertise(ownerReport);
+            String verdict = "Verdict " + ownerReport.getId() + " = " + volunteerService.reportExpertise(ownerReport);
             logger.info(" \n *** " + verdict);
 //            long chatId = petsOwner.getOwnerId();
 //            telegramBot.execute(new SendMessage(chatId, verdict));
@@ -86,5 +84,4 @@ public class OwnerTrialPeriodTimer {
             }
         }
     }
-
 }

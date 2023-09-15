@@ -200,9 +200,9 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                             if (dogSelect || catSelect) {
                                 reportSelect = true;
 
-                                    currentHandler = new ReportHandler(ownerReportServiceImpl, telegramBot, photoRepository,
-                                            petsOwnerFactories);
-                                    chatMessager.sendMessage(chatId, EmojiParser.parseToUnicode(REPORT));
+                                currentHandler = new ReportHandler(ownerReportServiceImpl, telegramBot, photoRepository,
+                                        petsOwnerFactories);
+                                chatMessager.sendMessage(chatId, EmojiParser.parseToUnicode(REPORT));
 
                             } else {
                                 chatMessager.sendMessage(chatId, """

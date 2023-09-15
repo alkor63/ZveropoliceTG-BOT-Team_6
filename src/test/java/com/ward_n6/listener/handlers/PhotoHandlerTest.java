@@ -23,7 +23,6 @@ class PhotoHandlerTest {
 
     @Mock
     private Update update;
-
     @Mock
     private TelegramBot telegramBot;
     @InjectMocks

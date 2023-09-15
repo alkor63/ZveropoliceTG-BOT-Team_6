@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Optional;
+
 @Service
 public class DogService {
     @Resource
@@ -17,7 +18,6 @@ public class DogService {
     public DogService(DogRepository dogsCrud) {
         this.dogsCrud = dogsCrud;
     }
-
 
     public Dog addDog(PetsSex petsSex, PetsType petsType, Dog dog) {
         dog.setPetsType(petsType);

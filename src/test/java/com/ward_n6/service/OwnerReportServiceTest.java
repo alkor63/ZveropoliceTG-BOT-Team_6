@@ -14,13 +14,13 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @WebMvcTest(OwnerReportServiceImpl.class)
@@ -144,7 +144,7 @@ public class OwnerReportServiceTest {
 
     // *********** на ошибку *******
     @Test
-    public void editOwnerReportByIdFromControllerTest_WhenOwnerReportDoesNotExist_ThrowsException() {
+    public void testEditOwnerReportByIdFromControllerTest_WhenOwnerReportDoesNotExist_ThrowsException() {
         long ownerReportId = 1;
         boolean photo = true;
         String nutrition = "good";

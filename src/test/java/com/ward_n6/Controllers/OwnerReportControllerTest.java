@@ -82,7 +82,6 @@ public class OwnerReportControllerTest {
 
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertEquals(newOwnerReport, response.getBody());
-
     }
 
     @Test
@@ -133,6 +132,7 @@ public class OwnerReportControllerTest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals("OwnerReport id = " + ownerReportId + "успешно удален из базы", response.getBody());
     }
+
     @Test
     public void testDeleteOwnerReportById_WithError() {
 
@@ -181,5 +181,4 @@ public class OwnerReportControllerTest {
         assertEquals(health, response.getPetsHealth());
         assertEquals(behavior, response.getPetsBehavior());
     }
-
 }

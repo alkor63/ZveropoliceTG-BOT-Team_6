@@ -28,8 +28,8 @@ import static org.mockito.Mockito.when;
 class VolunteerServiceTest {
     String firstName = "Саня";
 
-    private final OwnerReport ownerReport1 = new OwnerReport(11L, 2L,LocalDateTime.now().minusDays(1),
-            PetsType.DOG,false,"nutrition","health", "behavior",2L);
+    private final OwnerReport ownerReport1 = new OwnerReport(11L, 2L, LocalDateTime.now().minusDays(1),
+            PetsType.DOG, false, "nutrition", "health", "behavior", 2L);
     private final OwnerReport ownerReport2 = new OwnerReport(12L, 21L, LocalDateTime.now(), PetsType.CAT,
             true, "food", "health2", "behavior2", 2L);
     @Mock
@@ -47,13 +47,8 @@ class VolunteerServiceTest {
     @InjectMocks
     private VolunteerService volunteer;
 
-    PetsOwner petWithOwner = new PetsOwner(2L,2L, LocalDate.now().minusDays(30),
+    PetsOwner petWithOwner = new PetsOwner(2L, 2L, LocalDate.now().minusDays(30),
             LocalDate.now());
-
-//    VolunteerServiceTest(OwnerReportService ownerReportService) {
-//        this.ownerReportService = ownerReportService;
-//    }
-
 
     @Test
     void shouldCallVolunteerTest() {
@@ -84,7 +79,7 @@ class VolunteerServiceTest {
     }
 
     @Test
-    void shouldReactionByOwnersVerdict_1()  {
+    void shouldReactionByOwnersVerdict_1() {
         when(ownerReportService.getAllOwnerReports()).thenReturn(Arrays.asList(ownerReport1, ownerReport2));
 
         assertEquals("Вы очень редко присылали отчеты Испытательный срок продлен на 30 дней",
@@ -102,5 +97,4 @@ class VolunteerServiceTest {
         assertEquals(("Вы забыли прислать фото питомца. Заполните, пожалуйста, это поле"),
                 volunteer.reportExpertise(ownerReport1));
     }
-
 }

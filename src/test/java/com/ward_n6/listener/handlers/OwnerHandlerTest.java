@@ -18,13 +18,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-
-
 class OwnerHandlerTest {
     //     Создание моков для зависимостей
     @Mock
     private TelegramBot telegramBot;
-
     @InjectMocks
     private OwnerHandler ownerHandler;
 
@@ -52,7 +49,6 @@ class OwnerHandlerTest {
         ownerHandler.handle(update);
         // Проверка вызовов методов для зависимостей
         verify(telegramBot).execute(any(SendMessage.class));
-
     }
 }
 

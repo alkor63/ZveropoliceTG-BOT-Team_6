@@ -14,6 +14,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+
 @Service
 public class VolunteerService {
     // класс с функционалом волонтёра
@@ -22,7 +23,6 @@ public class VolunteerService {
     // Таймер отслеживает испытательный срок и если срок подошел к концу - обращается к волонтёру за приговором
     // приговор в методе endOfProbationPeriod
     // вызов этого метода из Таймера и его обработка - ниже, в ownersVerdict
-
 
     private final PetsOwnerRepository petsOwnerRepository;
     private final PetsOwnerService petsOwnerService;
@@ -67,11 +67,11 @@ public class VolunteerService {
 //        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
         String ss = "";
         if (num > 0) ss = ", все отчеты обработаны";
-        return "С " + startTime + " по " + stopTime.plusNanos(1) + " поступило " + num + " отчетов усыновителей"+ss;
+        return "С " + startTime + " по " + stopTime.plusNanos(1) + " поступило " + num + " отчетов усыновителей" + ss;
         // num - количество отчетов за 24 часа до 21:00 указанной даты
     }
 
-   public int endOfProbationPeriod(PetsOwner petWithOwner) {
+    public int endOfProbationPeriod(PetsOwner petWithOwner) {
 
 // Исходим из того, что запрос на "приговор" приходит в день окончания испытательного срока
 // т.е. дата = localDate.now()
@@ -163,7 +163,7 @@ public class VolunteerService {
         return n;
     }
 
-    public String reportExpertise(OwnerReport ownerReport){
+    public String reportExpertise(OwnerReport ownerReport) {
         // проверяем как заполнены поля отчёта и возвращаем соответствующий ответ
         int n = verifyReport(ownerReport);
         return switch (n) {
@@ -218,6 +218,7 @@ public class VolunteerService {
             default -> "Некорректное значение кода отчета. Разработчик что-то накосячил";
         };
     }
+
     public static boolean nullString(String s) {
         return (s == null || s.isEmpty() || s.isBlank());
     }
