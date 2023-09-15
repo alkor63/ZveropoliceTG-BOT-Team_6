@@ -52,7 +52,6 @@ public class OwnerServiceImpl implements OwnerService {
     }
 
 
-
     @Override
     public Owner editOwnerById(long id, Owner owner) throws EntityNotFoundException {
 

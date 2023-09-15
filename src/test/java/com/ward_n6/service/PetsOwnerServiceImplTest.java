@@ -7,8 +7,9 @@ import com.ward_n6.service.owners.PetsOwnerServiceImpl;
 import javassist.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -21,6 +22,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @WebMvcTest(PetsOwnerServiceImpl.class)
+@ExtendWith(MockitoExtension.class)
+
 class PetsOwnerServiceImplTest {
     @Autowired
     MockMvc mockMvc;
@@ -71,10 +74,19 @@ class PetsOwnerServiceImplTest {
         long petsOwnerId = 1;
         LocalDate newDateEnd = LocalDate.now();
 
-        Mockito.when(petsOwnerRepository.findById(petsOwnerId)).thenReturn(Optional.empty());
+        when(petsOwnerRepository.findById(petsOwnerId)).thenReturn(Optional.empty());
         assertThrows(NotFoundException.class, () -> petsOwnerServiceImpl.editDateEndPetsOwnerById(petsOwnerId, newDateEnd));
         verify(petsOwnerRepository, times(1)).findById(1L);
         verify(petsOwnerRepository, never()).save(any(PetsOwner.class));
+    }
+
+    @Test
+    public void testSave (){
+        PetsOwner  petsOwner = new PetsOwner(1L, 2L, LocalDate.of(2023,9,15),
+                LocalDate.of(2023, 9, 15).plusDays(30));
+//        when(petsOwnerRepository.save(petsOwner)).thenReturn(petsOwner);
+        petsOwnerServiceImpl.save(petsOwner);
+        verify(petsOwnerRepository, times(1)).save(petsOwner);
     }
 }
 

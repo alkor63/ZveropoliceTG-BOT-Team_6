@@ -130,5 +130,12 @@ public class OwnerReportServiceTest {
         assertEquals("friendly", ownerReportCreated.getPetsBehavior());
         assertEquals(true, ownerReportCreated.isHavePhoto());
     }
+    @Test
+    public void testSave (){
+        OwnerReport ownerReport = new OwnerReport(13L, 16L, LocalDateTime.now(), PetsType.DOG, false,
+                "Pedigree", "good", "Ok", 18L);
+        ownerReportService.save(ownerReport);
+        verify(ownerReportRepository, times(1)).save(ownerReport);
+    }
 
 }

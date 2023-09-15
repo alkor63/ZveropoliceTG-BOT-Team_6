@@ -2,9 +2,11 @@ package com.ward_n6.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ward_n6.entity.owners.Owner;
+import com.ward_n6.entity.owners.PetsOwner;
 import com.ward_n6.exception.RecordNotFoundException;
 import com.ward_n6.repository.owner.OwnerRepository;
 import com.ward_n6.service.owners.OwnerServiceImpl;
+import javassist.NotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -14,6 +16,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import javax.persistence.EntityNotFoundException;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -104,10 +107,6 @@ class OwnerServiceImplTest {
         assertEquals(10L, ownerDeleted);
     }
 
-    
-
-
-
     //***************** редактировние *************
     @Test
     public void editOwnerById_SuccessTest () throws EntityNotFoundException {
@@ -144,5 +143,30 @@ class OwnerServiceImplTest {
         assertThrows(RecordNotFoundException.class, () -> ownerService.editOwnerById(1L, owner));
         verify(ownerRepository, times(1)).findById(1L);
         verify(ownerRepository, never()).save(any(Owner.class));
+    }
+    // **************тест на репозиторий (для покрытия) *****
+    @Test
+    public void testSave (){
+        ownerService.save(owner);
+        verify(ownerRepository, times(1)).save(owner);
+    }
+
+    @Test
+    public void testGetOwnerById() {
+        long id = 1L;
+        owner.setId(id);
+
+        when(ownerRepository.getById(id)).thenReturn(owner);
+
+        Owner result = ownerService.getOwnerById(id);
+
+        assertEquals(owner, result);
+        verify(ownerRepository).getById(id);
+    }
+    @Test
+    public void testDeleteById() {
+        long id = 1L;
+        ownerService.deleteById(id);
+        verify(ownerRepository).deleteById(id);
     }
 }

@@ -33,9 +33,8 @@ public class PetsOwnerServiceImpl implements PetsOwnerService {
     }
 
 
-    /////************************* методы репозитория **************
+    //************************* методы репозитория **************
     public void save(PetsOwner petsOwner) {
         petsOwnerRepository.save(petsOwner);
-
     }
 }

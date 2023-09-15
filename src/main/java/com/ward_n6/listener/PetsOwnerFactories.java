@@ -4,6 +4,7 @@ import com.ward_n6.entity.owners.Owner;
 import com.ward_n6.entity.owners.PetsOwner;
 import com.ward_n6.entity.pets.Cat;
 import com.ward_n6.entity.pets.Dog;
+import lombok.Setter;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -65,8 +66,11 @@ public class PetsOwnerFactories {
         PetsOwner petsOwner = session.get(PetsOwner.class, petsOwnerId);
         if (petsOwner != null) {
             session.close();
-
         } return petsOwner;
-
     }
+
+    public ChatMessager getChatMessager() {
+        return chatMessager;
+    }
+
 }

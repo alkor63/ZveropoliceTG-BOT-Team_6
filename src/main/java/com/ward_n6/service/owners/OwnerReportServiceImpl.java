@@ -11,10 +11,7 @@ import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-
-
 @Service
-
 public class OwnerReportServiceImpl implements OwnerReportService {
     private final OwnerReportRepository ownerReportRepository;
 
@@ -22,12 +19,10 @@ public class OwnerReportServiceImpl implements OwnerReportService {
         this.ownerReportRepository = ownerReportRepository;
     }
 
-
     @Override
     public List<OwnerReport> getAllOwnerReports() {
         return ownerReportRepository.findAll();
     }
-
 
     @Override
     public OwnerReport getOwnerReportById(long ownerReportId) {
