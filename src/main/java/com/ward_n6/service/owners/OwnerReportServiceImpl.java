@@ -3,7 +3,7 @@ package com.ward_n6.service.owners;
 import com.ward_n6.entity.reports.OwnerReport;
 import com.ward_n6.enums.PetsType;
 import com.ward_n6.exception.RecordNotFoundException;
-import com.ward_n6.repository.owner.OwnerReportRepository;
+import com.ward_n6.repository.reports.OwnerReportRepository;
 import com.ward_n6.service.interfaces.OwnerReportService;
 import org.springframework.stereotype.Service;
 

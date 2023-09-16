@@ -4,7 +4,7 @@ import com.pengrad.telegrambot.TelegramBot;
 import com.ward_n6.entity.owners.PetsOwner;
 import com.ward_n6.entity.reports.OwnerReport;
 import com.ward_n6.repository.BotMessagingRepository;
-import com.ward_n6.repository.owner.OwnerReportRepository;
+import com.ward_n6.repository.reports.OwnerReportRepository;
 import com.ward_n6.repository.owner.PetsOwnerRepository;
 import com.ward_n6.service.VolunteerService;
 import org.slf4j.LoggerFactory;

@@ -4,7 +4,7 @@ package com.ward_n6.Controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ward_n6.entity.reports.OwnerReport;
 import com.ward_n6.enums.PetsType;
-import com.ward_n6.repository.owner.OwnerReportRepository;
+import com.ward_n6.repository.reports.OwnerReportRepository;
 import com.ward_n6.service.interfaces.OwnerReportService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

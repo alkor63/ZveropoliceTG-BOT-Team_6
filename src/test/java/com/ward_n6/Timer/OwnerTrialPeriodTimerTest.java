@@ -2,7 +2,7 @@ package com.ward_n6.Timer;
 
 import com.ward_n6.entity.owners.PetsOwner;
 import com.ward_n6.entity.reports.OwnerReport;
-import com.ward_n6.repository.owner.OwnerReportRepository;
+import com.ward_n6.repository.reports.OwnerReportRepository;
 import com.ward_n6.repository.owner.PetsOwnerRepository;
 import com.ward_n6.service.VolunteerService;
 import org.junit.jupiter.api.Test;
