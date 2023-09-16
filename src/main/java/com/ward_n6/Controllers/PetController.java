@@ -20,7 +20,6 @@ import java.util.List;
 @Tag(name = "Список животных приюта", description = "CRUD-операции с животными")
 public class PetController {
 
-
     private final CatService catService;
     private final DogService dogService;
 
@@ -28,7 +27,6 @@ public class PetController {
     public PetController(CatService catService, DogService dogService) {
         this.catService = catService;
         this.dogService = dogService;
-
     }
 
     //---------КОШКИ
