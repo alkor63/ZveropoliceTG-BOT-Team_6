@@ -15,6 +15,9 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
+/**
+ *
+ */
 @Service
 public class VolunteerService {
     // класс с функционалом волонтёра
@@ -120,7 +123,7 @@ public class VolunteerService {
                     throw new RuntimeException(e);
                 }
 
-                return "Вы очень редко присылали отчеты Испытательный срок продлен на 30 дней";
+                return "Вы очень редко присылали отчеты. Испытательный срок продлен на 30 дней";
             case 2:
                 // продлить испытательный срок на 14 дней
                 LocalDate newEndDate14 = LocalDate.now().plusDays(14);
@@ -130,7 +133,7 @@ public class VolunteerService {
                 } catch (NotFoundException e) {
                     throw new RuntimeException(e);
                 }
-                return "Вы очень редко присылали отчеты Испытательный срок продлен на 14 дней";
+                return "Вы очень редко присылали отчеты. Испытательный срок продлен на 14 дней";
             case 3:
                 // поздравить с успешным прохождением испытательного срока
                 try {
