@@ -1,4 +1,4 @@
-package com.ward_n6.entity;
+package com.ward_n6.entity.reports;
 
 import com.pengrad.telegrambot.model.PhotoSize;
 import lombok.*;
