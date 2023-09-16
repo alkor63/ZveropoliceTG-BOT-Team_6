@@ -47,8 +47,8 @@ OwnerReportController: CRUD-методы сущности при работе ч
 тестирование указанных классов и уорректировака тестов по OwnerController.
 <br />
 <br /> **Насибуллин Роман:** создание первоначальных таблиц БД Cats и Dogs, реализация функционала классов CatService,
-DogService, PetController, доработка под текущие условия сущностей-наследников класса Pet и CRUD-методов 
-при работе через SwaggerUI, тестирование CatService, DogService.
+DogService, PetController, доработка под текущие условия сущностей-наследников класса Pet и создание CRUD-методов 
+для работы приложения через SwaggerUI, тестирование CatService, DogService.
 <br />
 <br /> **Попова Елизавета:** реализация функционала классов OwnerService, OwnerController: CRUD-методы сущности 
 Owner через SwaggerUI, тестирование указанных классов, формирование наполнения пакета shelters;
