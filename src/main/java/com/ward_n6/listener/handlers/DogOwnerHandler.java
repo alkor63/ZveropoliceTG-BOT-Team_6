@@ -62,7 +62,7 @@ public class DogOwnerHandler implements EventHandler {
                         else {
                             petId = Long.parseLong(idMessage); // парсим строку в число
                             dog = petsOwnerFactories.dogFactory(petId, ownerId);
-                            if (dog != null && dog.getOwnerId() == null) { // проверяем, что такая собака есть в приюте
+                            if (dog != null && (dog.getOwnerId() == null || dog.getOwnerId() == 0)) { // проверяем, что такая собака есть в приюте
                                 dog.setOwnerId(ownerId); // записываем id овнера питомцу
                                 petsOwner.setId(petId); // записываем ID питомца
 

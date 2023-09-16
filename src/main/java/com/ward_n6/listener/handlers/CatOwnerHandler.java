@@ -55,7 +55,7 @@ public class CatOwnerHandler implements EventHandler {
                         if (idMessage.matches("\\d+")) { // проверяем, что число
                             long petId = Long.parseLong(idMessage); // парсим строку в число
                             cat = petsOwnerFactories.catFactory(petId, ownerId);
-                            if (cat != null && cat.getOwnerId() == null) {
+                            if (cat != null && (cat.getOwnerId() == null || cat.getOwnerId() == 0)) {
                                 cat.setOwnerId(ownerId);
                                 catRepository.save(cat);
                                 petsOwner.setId(petId);

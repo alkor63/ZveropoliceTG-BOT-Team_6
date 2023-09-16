@@ -87,9 +87,8 @@ public class OwnerHandler implements EventHandler {
 
                     return true;
 
-
                 case "/delete":
-//
+
                     long ownerId = update.message().chat().id();
                     int id = (int) ownerId;
 
@@ -100,7 +99,6 @@ public class OwnerHandler implements EventHandler {
         }
         return false;
     }
-
 }
 
 
