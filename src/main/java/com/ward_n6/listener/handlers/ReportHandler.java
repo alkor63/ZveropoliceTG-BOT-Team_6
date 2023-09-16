@@ -172,7 +172,10 @@ public class ReportHandler implements EventHandler {
                                 ownerReport.setPetsType(PetsType.CAT);
                             }
                             ownerReportServiceImpl.save(ownerReport);
-                            telegramBot.execute(new SendMessage(update.message().chat().id(), "Ваш отчёт загружен"));
+                            telegramBot.execute(new SendMessage(update.message().chat().id(), "Ваш отчёт загружен. \n" +
+                                    "Для загрузки ещё одного отчёта или фото ввндите или нажмите команду \n /report \n" +
+                                    "Для возврата к выбору приюта нажмите или введите командку \n" +
+                                    "/start"));
                             return true;// возвращаем true - это значит, что контекст завершен.
 
                     } else telegramBot.execute(new SendMessage(update.message().chat().id(),
