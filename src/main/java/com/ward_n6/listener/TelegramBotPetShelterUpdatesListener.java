@@ -28,6 +28,8 @@ import java.util.List;
 
 import static com.ward_n6.listener.MessageStringsConstants.PERSONAL_DATA_REQUEST;
 import static com.ward_n6.listener.MessageStringsConstants.REPORT;
+import static com.ward_n6.listener.handlers.ReportHandler.isCatId;
+import static com.ward_n6.listener.handlers.ReportHandler.isDogId;
 
 
 @Component
@@ -113,11 +115,17 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                     switch (data) {
                         case "КНОПКА_ПРИЮТ_ДЛЯ_СОБАК":
                             dogSelect = true;
+                            catSelect = false;
+                            isCatId = false;
+                            isDogId = false;
                             buttons.dogButton(chatId);
                             break;
 
                         case "КНОПКА_ПРИЮТ_ДЛЯ_КОШЕК":
                             catSelect = true;
+                            dogSelect = false;
+                            isCatId = false;
+                            isDogId = false;
                             buttons.catButton(chatId);
                             break;
 
@@ -176,6 +184,9 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
 
                         case "/dogs":
                             dogSelect = true;
+                            catSelect = false;
+                            isCatId = false;
+                            isDogId = false;
                             if (startSelected) {
                                 buttons.dogButton(chatId);
                             }
@@ -183,13 +194,16 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
 
                         case "/cats":
                             catSelect = true;
+                            dogSelect = false;
+                            isCatId = false;
+                            isDogId = false;
                             if (startSelected) {
                                 buttons.catButton(chatId);
                             }
                             break;
 
                         case "/photo":
-                            if (ReportHandler.isId) {
+                            if (isCatId || isDogId) {
                                 chatMessager.sendMessage(chatId, "Загрузите фото");
                                 currentHandler = new PhotoHandler(telegramBot, photoRepository, ownerReportServiceImpl);
                             } else chatMessager.sendMessage(chatId, "Сначала укажите ID питомца");

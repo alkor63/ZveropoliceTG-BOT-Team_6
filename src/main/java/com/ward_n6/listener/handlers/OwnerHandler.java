@@ -6,12 +6,14 @@ import com.pengrad.telegrambot.request.SendMessage;
 import com.ward_n6.entity.owners.Owner;
 import com.ward_n6.service.owners.OwnerServiceImpl;
 import lombok.Getter;
+import org.springframework.stereotype.Component;
 
 import java.util.function.Consumer;
 import java.util.regex.Pattern;
 
 import static com.ward_n6.listener.MessageStringsConstants.PERSONAL_DATA_REQUEST;
 @Getter
+@Component
 /**
  * класс для обработки и сохранения данных пользователя
  */
@@ -67,7 +69,7 @@ public class OwnerHandler implements EventHandler {
                             owner.setPhoneNumber(upd.message().text());
                             telegramBot.execute(new SendMessage(update.message().chat().id(), "Номер записан!"));
                         } else {
-                            telegramBot.execute(new SendMessage(update.message().chat().id(), "Телефон указан неверно, попробуйте ещё раз"));
+                            telegramBot.execute(new SendMessage(update.message().chat().id(), "Телефон указан неверно, попробуйте ещё раз \n /phone"));
                         }
                     };
                     break;

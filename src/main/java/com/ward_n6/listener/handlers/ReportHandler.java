@@ -11,12 +11,16 @@ import com.ward_n6.listener.TelegramBotPetShelterUpdatesListener;
 import com.ward_n6.repository.reports.PhotoRepository;
 import com.ward_n6.service.owners.OwnerReportServiceImpl;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.function.Consumer;
 
 import static com.ward_n6.listener.MessageStringsConstants.REPORT;
+import static com.ward_n6.listener.TelegramBotPetShelterUpdatesListener.catSelect;
+import static com.ward_n6.listener.TelegramBotPetShelterUpdatesListener.dogSelect;
 
+@Component
 /**
  * класс для обработки и сохранения фото - хоть бы как загрузить уже -> лучше добавить в отчёт
  * НЕ РАБОТАЕТ!!!!!
@@ -40,15 +44,19 @@ public class ReportHandler implements EventHandler {
     }
 
     private Consumer<Update> actionOnNextMessage; // переменная для определения действий над поступаемым сообщением
-    public static boolean isId = false;
+    public static boolean isCatId = false;
+    public static boolean isDogId = false;
     private boolean isHealth = false;
     private boolean isFeed = false;
     private boolean isAction = false;
     public static boolean isPhoto = false;
     public static Long petIdForPhoto = null;
+    private Long dogId = null;
+    private Long catId = null;
 
 
-    private String CHOICE_ID = " Сначала введите ID питомца";
+    private String CHOICE_ID = " Сначала введите ID питомца \n " +
+            "введите или нажмите команду /ID";
 
 
     @Value("${path.to.file}")
@@ -73,18 +81,29 @@ public class ReportHandler implements EventHandler {
 
                         if (idMessage.matches("\\d+")) { // проверяем, что указано число
                             long id = Long.parseLong(idMessage);
-                            if ((TelegramBotPetShelterUpdatesListener.dogSelect && petsOwnerFactories.dogFactory(id, // проверка ID
-                                    update.message().chat().id()) != null)
-                                    || (TelegramBotPetShelterUpdatesListener.catSelect && petsOwnerFactories.catFactory(id,
+                            if ((dogSelect && petsOwnerFactories.dogFactory(id, // проверка ID
                                     update.message().chat().id()) != null)) {
                                 ownerReport.setPetId(id);
+                                isDogId = true;
+                                isCatId = false;
+                                dogId = id;
                                 telegramBot.execute(new SendMessage(upd.message().chat().id(),
                                         "ID питомца записан."));
-                                isId = true;
-                                petIdForPhoto = id;
-
-
-                            }
+                            }else if
+                                    (catSelect && petsOwnerFactories.catFactory(id,
+                                    update.message().chat().id()) != null){
+                                    ownerReport.setPetId(id);
+                                isCatId = true;
+                                isDogId = false;
+                                catId = id;
+                                    telegramBot.execute(new SendMessage(upd.message().chat().id(),
+                                            "ID питомца записан."));
+                                }
+                                if(dogSelect && isDogId){
+                                petIdForPhoto = dogId;
+                            } else if (catSelect || isCatId) {
+                                    petIdForPhoto = catId;
+                                }
                         } else {
                             telegramBot.execute(new SendMessage(upd.message().chat().id(),
                                     "Формат ID неверный. Попробуйте ещё раз, введите числовое значение: /ID"));
@@ -93,7 +112,7 @@ public class ReportHandler implements EventHandler {
                     break;
 
                 case "/health":
-                    if (isId) {
+                    if (isCatId || isDogId) {
                         telegramBot.execute(new SendMessage(update.message().chat().id(),
                                 "Опишите кратко самочувствие питомца"));
                         actionOnNextMessage = upd -> {
@@ -111,7 +130,7 @@ public class ReportHandler implements EventHandler {
                     break;
 
                 case "/feed":
-                    if (isId) {
+                    if (isCatId || isDogId) {
                         telegramBot.execute(new SendMessage(update.message().chat().id(),
                                 "Опишите рацион питомца"));
                         actionOnNextMessage = upd -> {
@@ -127,7 +146,7 @@ public class ReportHandler implements EventHandler {
                     break;
 
                 case "/action":
-                    if (isId) {
+                    if (isCatId || isDogId) {
                         telegramBot.execute(new SendMessage(update.message().chat().id(),
                                 "Опишите кратко поведение питомца"));
                         actionOnNextMessage = upd -> {
@@ -143,22 +162,24 @@ public class ReportHandler implements EventHandler {
                     break;
 
                 case "/save":
-                    if (isId && (isPhoto || isAction || isFeed || isHealth)) {
+                    if ((isCatId || isDogId) && (isPhoto || isAction || isFeed || isHealth)) {
 
                             ownerReport.setReportDateTime(LocalDateTime.now());
                             ownerReport.setOwnerId(update.message().chat().id());
-                            if (TelegramBotPetShelterUpdatesListener.dogSelect) {
+                            if (dogSelect) {
                                 ownerReport.setPetsType(PetsType.DOG);
                             } else if (TelegramBotPetShelterUpdatesListener.catSelect) {
                                 ownerReport.setPetsType(PetsType.CAT);
                             }
                             ownerReportServiceImpl.save(ownerReport);
                             telegramBot.execute(new SendMessage(update.message().chat().id(), "Ваш отчёт загружен"));
+                            return true;// возвращаем true - это значит, что контекст завершен.
+
                     } else telegramBot.execute(new SendMessage(update.message().chat().id(),
                             """
                                     Пустой отчёт не может быть принят
                                     /report"""));
-                    return true; // возвращаем true - это значит, что контекст завершен.
+                    return false;
             }
         }
         return false;

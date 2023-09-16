@@ -8,12 +8,13 @@ import com.ward_n6.entity.pets.Cat;
 import com.ward_n6.listener.PetsOwnerFactories;
 import com.ward_n6.repository.pets.CatRepository;
 import com.ward_n6.service.owners.PetsOwnerServiceImpl;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.function.Consumer;
 
 import static com.ward_n6.listener.MessageStringsConstants.PET_ID_REQUEST_FOR_PET_BOOKING;
-
+@Component
 public class CatOwnerHandler implements EventHandler {
     private final PetsOwnerServiceImpl petsOwnerServiceImpl;
     private final TelegramBot telegramBot;
