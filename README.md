@@ -6,7 +6,7 @@
 <br /> 2023 г.
 <br /> Разработал: команда ПАЛАТА № 6 
 
-<br /> **Состав команды:**
+<br /> **Пациенты палаты:**
 <br /> Ахмедов Тимур, github: [Timur Ahmedov](https://github.com/Rumonz1) (Rumonz1);
 <br /> Корниенко Алексей, github: [Alkor](https://github.com/alkor63) (alkor63);
 <br /> Насибуллин Роман, github: [Roman-1901](https://github.com/Roman-1901);
