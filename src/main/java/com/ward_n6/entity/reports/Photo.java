@@ -29,7 +29,7 @@ public class Photo {
     @Column(name ="file_name")
     private String fileName;
 
-    @Lob
+//    @Lob
     @Column(name = "photo", nullable = false)
     private PhotoSize photo;
 

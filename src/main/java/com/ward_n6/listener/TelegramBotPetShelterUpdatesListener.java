@@ -7,14 +7,14 @@ import com.pengrad.telegrambot.model.CallbackQuery;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
 import com.vdurmont.emoji.EmojiParser;
-import com.ward_n6.entity.reports.Photo;
 import com.ward_n6.entity.owners.Owner;
 import com.ward_n6.entity.owners.PetsOwner;
+import com.ward_n6.entity.reports.Photo;
 import com.ward_n6.entity.shelters.PetShelter;
 import com.ward_n6.listener.handlers.*;
-import com.ward_n6.repository.reports.PhotoRepository;
 import com.ward_n6.repository.pets.CatRepository;
 import com.ward_n6.repository.pets.DogRepository;
+import com.ward_n6.repository.reports.PhotoRepository;
 import com.ward_n6.service.BotMessageService;
 import com.ward_n6.service.owners.OwnerReportServiceImpl;
 import com.ward_n6.service.owners.OwnerServiceImpl;
@@ -206,9 +206,8 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                             if (isCatId || isDogId) {
                                 chatMessager.sendMessage(chatId, "Загрузите фото");
                                 currentHandler = new PhotoHandler(telegramBot, photoRepository, ownerReportServiceImpl);
-                            } else chatMessager.sendMessage(chatId, "Сначала укажите ID питомца");
+                            } else chatMessager.sendMessage(chatId, "Сначала укажите ID питомца \n /ID");
                             break;
-
 
                         case "/report":
                             if (dogSelect || catSelect) {
@@ -255,10 +254,8 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                             }
                             break;
 
-
                         case "/volunteer":
-                            chatMessager.sendMessage(chatId,
-                                    petShelter.getCallVolonteer());
+                            buttons.callVoluntier(chatId);
                             break;
                     }
                 }
@@ -268,6 +265,4 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
         }
         return UpdatesListener.CONFIRMED_UPDATES_ALL; // успешно завершаем метод, без падения
     }
-
-
 }

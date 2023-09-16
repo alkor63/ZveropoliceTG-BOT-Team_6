@@ -13,7 +13,6 @@ import static com.ward_n6.listener.MessageStringsConstants.*;
 @Component
 public class Buttons {
     private final TelegramBot telegramBot;
-
     public Buttons(TelegramBot telegramBot) {
         this.telegramBot = telegramBot;
     }
