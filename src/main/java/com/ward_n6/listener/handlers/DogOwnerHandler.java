@@ -95,8 +95,8 @@ public class DogOwnerHandler implements EventHandler {
                     petsOwnerServiceImpl.save(petsOwner);
                     dogRepository.save(dog);
                     telegramBot.execute(new SendMessage(update.message().chat().id(),
-                            "Питомец" + dog.toString() +
-                                    "забронирован за Вами. Скоро с Вами свяжется волонтёр, чтобы " +
+                            "Питомец " + dog.toString() +
+                                    " забронирован за Вами. Скоро с Вами свяжется волонтёр, чтобы " +
                                     "обсудить подробности переезда питомца в Ваш дом и " +
                                     "оформить документы!"));
                     return true;

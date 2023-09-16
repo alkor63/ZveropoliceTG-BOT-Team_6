@@ -92,7 +92,7 @@ public class CatOwnerHandler implements EventHandler {
                     catRepository.save(cat); // обновляем кошку
                     telegramBot.execute(new SendMessage(update.message().chat().id(),
                             "Питомец " + cat.toString() + "\n" +
-                                    "забронирован за Вами. Скоро с Вами свяжется волонтёр, чтобы " +
+                                    " забронирован за Вами. Скоро с Вами свяжется волонтёр, чтобы " +
                                     "обсудить подробности переезда питомца в Ваш дом и " +
                                     "оформить документы!"));
                     return true;
