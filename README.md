@@ -14,7 +14,7 @@
  * Корниенко Алексей, github: [Alkor](https://github.com/alkor63) (alkor63);
  * Насибуллин Роман, github: [Roman-1901](https://github.com/Roman-1901);
  * Попова Елизавета, github: [elizaveta-popova](https://github.com/elizaveta-popova);
- * Руднева Анастасия, github: [RuAna](https://github.com/Stellareign) (Stellareign)
+ * Руднева Анастасия, github: [Hummingbird](https://github.com/Stellareign) (Stellareign)
    
 *****************************
 
@@ -31,12 +31,19 @@
 <br /> **Функции:** В интерфейсе ТБ задействованы функциональные кнопки и применение команд. Подсказки по применению команд 
 изложены в сообщениях бота, которые отсылаются пользователю при переходе к следующему шагу.
 <br />
-<br /> **Технологии:** проект разработан в сборщике проектов Maven с применением фреймворка SpringBoot, в приложении 
-используется реляционная база данных (БД) PostgreSQL и библиотека Liquibase для взаимодействия с БД, для работы 
-с интерфейсом REST API применён фреймворк SwaggerUI, так же задействована библиотека Pengrad Java Telegram bot API 
-для взаимодействия с ТБ.
-<br />
-<br /> **Язык программирования:** проект разработан с использованием языка программирования JAVA.
+<br /> **Технологии:** 
+
+* Maven 
+* SpringBoot
+* PostgreSQL 
+* Liquibase
+* REST API 
+* SwaggerUI
+* Pengrad Java Telegram bot API 
+
+<br /> 
+
+**Язык программирования:** проект разработан с использованием языка программирования JAVA.
 
 *****************************
 
