@@ -10,7 +10,7 @@ public class Keyboards extends Keyboard {
     public Keyboards() {
     }
 
-    public void afterStartMenuKeyboard() {
+    public Keyboard afterStartMenuKeyboard() {
         InlineKeyboardButton chooseDogHouseButton = new InlineKeyboardButton(EmojiParser
                 .parseToUnicode("Приют для собак" + ":dog:"));
         chooseDogHouseButton.callbackData("КНОПКА_ПРИЮТ_ДЛЯ_СОБАК");
@@ -19,9 +19,10 @@ public class Keyboards extends Keyboard {
         chooseCatHouseButton.callbackData("КНОПКА_ПРИЮТ_ДЛЯ_КОШЕК");
         Keyboard keyboard = new InlineKeyboardMarkup(chooseDogHouseButton, chooseCatHouseButton);
 
+        return keyboard;
     }
 
-    public void catButtonKeyboard() {
+    public Keyboard catButtonKeyboard() {
         InlineKeyboardButton catHouseInfoButton = new InlineKeyboardButton(EmojiParser
                 .parseToUnicode("Информация о приюте " + ":information_source:"));
         catHouseInfoButton.callbackData("ИНФО_КОШКИ");
@@ -47,10 +48,11 @@ public class Keyboards extends Keyboard {
                 .addRow(catHouseOwnerReportButton)
                 .addRow(callVoluntier)
                 .addRow(chooseOwnerDataButton);
+        return keyboard;
 
     }
 
-    public  void dogButtonKeyboard() {
+    public Keyboard dogButtonKeyboard() {
         InlineKeyboardButton dogHouseInfoButton = new InlineKeyboardButton(EmojiParser
                 .parseToUnicode("Информация о приюте " + ":information_source:"));
         dogHouseInfoButton.callbackData("ИНФО_СОБАКИ");
@@ -74,10 +76,11 @@ public class Keyboards extends Keyboard {
                 .addRow(dogHouseOwnerReportButton)
                 .addRow(callVoluntier)
                 .addRow(chooseOwnerDataButton);
+        return keyboard;
 
     }
 
-    public void dogInfoButtonKeyboard() {
+    public Keyboard dogInfoButtonKeyboard() {
         InlineKeyboardButton wantToHelpButton = new InlineKeyboardButton(EmojiParser
                 .parseToUnicode(":two_hearts: " + "Я хочу пожертвовать в приют ".toUpperCase() + ":two_hearts:"));
         wantToHelpButton.callbackData("СДЕЛАТЬ_ПОЖЕРТВОВАНИЕ");
@@ -87,10 +90,11 @@ public class Keyboards extends Keyboard {
         Keyboard keyboard = new InlineKeyboardMarkup()
                 .addRow(wantToHelpButton)
                 .addRow(callVoluntier);
+        return keyboard;
 
     }
 
-    public void catInfoButtonKeyboard() {
+    public Keyboard catInfoButtonKeyboard() {
         InlineKeyboardButton wantToHelpButton = new InlineKeyboardButton(EmojiParser
                 .parseToUnicode(":two_hearts: " + "Я хочу пожертвовать в приют ".toUpperCase() + ":two_hearts:"));
         wantToHelpButton.callbackData("СДЕЛАТЬ_ПОЖЕРТВОВАНИЕ");
@@ -100,10 +104,11 @@ public class Keyboards extends Keyboard {
         Keyboard keyboard = new InlineKeyboardMarkup()
                 .addRow(wantToHelpButton)
                 .addRow(callVoluntier);
+        return keyboard;
 
     }
 
-    public void wantToTakeDogButtonKeyboard() {
+    public Keyboard wantToTakeDogButtonKeyboard() {
         InlineKeyboardButton callVoluntier = new InlineKeyboardButton(EmojiParser
                 .parseToUnicode("Позвать волонтёра " + ":necktie:"));
         callVoluntier.callbackData("ВОЛОНТЁР");
@@ -118,10 +123,11 @@ public class Keyboards extends Keyboard {
                 .addRow(recommendationDog)
                 .addRow(callVoluntier)
                 .addRow(chooseDog);
+        return keyboard;
 
     }
 
-    public void wantToTakeCatButtonKeyboard() {
+    public Keyboard wantToTakeCatButtonKeyboard() {
         InlineKeyboardButton callVoluntier = new InlineKeyboardButton(EmojiParser
                 .parseToUnicode("Позвать волонтёра " + ":necktie:"));
         callVoluntier.callbackData("ВОЛОНТЁР");
@@ -137,6 +143,7 @@ public class Keyboards extends Keyboard {
                 .addRow(recommendationCat)
                 .addRow(callVoluntier)
                 .addRow(chooseCat);
+        return keyboard;
 
     }
 }

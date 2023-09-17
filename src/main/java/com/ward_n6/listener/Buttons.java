@@ -9,24 +9,25 @@ import static com.ward_n6.listener.MessageStringsConstants.*;
 @Component
 public class Buttons extends Keyboards {
     private final TelegramBot telegramBot;
-    Keyboards keyboards;
 
-    public Buttons(TelegramBot telegramBot, Keyboards keyboards) {
+    public Buttons(TelegramBot telegramBot) {
         this.telegramBot = telegramBot;
 
-        this.keyboards = keyboards;
+
     }
 
     public void afterStartMenu(long chatId) {
+        Keyboards keyboards = new Keyboards();
         SendMessage sendMessage = new SendMessage(chatId, "Здравствуйте. Это чат-бот приюта для животных. \n Какой приют Вас интересует?");
-        keyboards.afterStartMenuKeyboard();
-        sendMessage.replyMarkup(keyboards);
+        afterStartMenuKeyboard();
+        sendMessage.replyMarkup(keyboards.afterStartMenuKeyboard());
         telegramBot.execute(sendMessage);
     }
 
     // КОШКИ
     public void catButton(long chatId) {
         SendMessage sendMessage = new SendMessage(chatId, "Вы выбрали приют для кошек!\n" + CAT_DESCRIPTION);
+        Keyboards keyboards = new Keyboards();
 //        InlineKeyboardButton catHouseInfoButton = new InlineKeyboardButton(EmojiParser
 //                .parseToUnicode("Информация о приюте " + ":information_source:"));
 //        catHouseInfoButton.callbackData("ИНФО_КОШКИ");
@@ -52,14 +53,16 @@ public class Buttons extends Keyboards {
 //                .addRow(catHouseOwnerReportButton)
 //                .addRow(callVoluntier)
 //                .addRow(chooseOwnerDataButton);
-        keyboards.catButtonKeyboard();
-        sendMessage.replyMarkup(keyboards);
+
+        catButtonKeyboard();
+        sendMessage.replyMarkup(keyboards.catButtonKeyboard());
         telegramBot.execute(sendMessage);
     }
 
     //СОБАКИ
     public void dogButton(long chatId) {
         SendMessage sendMessage = new SendMessage(chatId, "Вы выбрали приют для собак!\n" + DOG_DESCRIPTION);
+        Keyboards keyboards = new Keyboards();
 //        InlineKeyboardButton dogHouseInfoButton = new InlineKeyboardButton(EmojiParser
 //                .parseToUnicode("Информация о приюте " + ":information_source:"));
 //        dogHouseInfoButton.callbackData("ИНФО_СОБАКИ");
@@ -83,8 +86,8 @@ public class Buttons extends Keyboards {
 //                .addRow(dogHouseOwnerReportButton)
 //                .addRow(callVoluntier)
 //                .addRow(chooseOwnerDataButton);
-        keyboards.dogButtonKeyboard();
-        sendMessage.replyMarkup(keyboards);
+        dogButtonKeyboard();
+        sendMessage.replyMarkup(keyboards.dogButtonKeyboard());
         telegramBot.execute(sendMessage);
     }
 
@@ -92,6 +95,7 @@ public class Buttons extends Keyboards {
     public void dogInfoButton(long chatId) {
 //        SendMessage sendMessage = new SendMessage(chatId, petShelter.getDescription()+"\n"+petShelter.getShelterAddress()+"\n"+petShelter.getSecurityContact()+"\n"+petShelter.getSafetyAdvice()+"\n"+petShelter.getHelpShelter());
         SendMessage sendMessage = new SendMessage(chatId, SHELTER_INFO);
+        Keyboards keyboards = new Keyboards();
 //        InlineKeyboardButton wantToHelpButton = new InlineKeyboardButton(EmojiParser
 //                .parseToUnicode(":two_hearts: " + "Я хочу пожертвовать в приют ".toUpperCase() + ":two_hearts:"));
 //        wantToHelpButton.callbackData("СДЕЛАТЬ_ПОЖЕРТВОВАНИЕ");
@@ -101,8 +105,8 @@ public class Buttons extends Keyboards {
 //        Keyboard keyboard = new InlineKeyboardMarkup()
 //                .addRow(wantToHelpButton)
 //                .addRow(callVoluntier);
-        keyboards.dogInfoButtonKeyboard();
-        sendMessage.replyMarkup(keyboards);
+        dogInfoButtonKeyboard();
+        sendMessage.replyMarkup(keyboards.dogInfoButtonKeyboard());
         telegramBot.execute(sendMessage);
     }
 
@@ -110,6 +114,7 @@ public class Buttons extends Keyboards {
     public void catInfoButton(long chatId) {
 //        SendMessage sendMessage = new SendMessage(chatId, petShelter.getDescription()+"\n"+petShelter.getShelterAddress()+"\n"+petShelter.getSecurityContact()+"\n"+petShelter.getSafetyAdvice()+"\n"+petShelter.getHelpShelter());
         SendMessage sendMessage = new SendMessage(chatId, SHELTER_INFO);
+        Keyboards keyboards = new Keyboards();
 //        InlineKeyboardButton wantToHelpButton = new InlineKeyboardButton(EmojiParser
 //                .parseToUnicode(":two_hearts: " + "Я хочу пожертвовать в приют ".toUpperCase() + ":two_hearts:"));
 //        wantToHelpButton.callbackData("СДЕЛАТЬ_ПОЖЕРТВОВАНИЕ");
@@ -119,14 +124,15 @@ public class Buttons extends Keyboards {
 //        Keyboard keyboard = new InlineKeyboardMarkup()
 //                .addRow(wantToHelpButton)
 //                .addRow(callVoluntier);
-        keyboards.catInfoButtonKeyboard();
-        sendMessage.replyMarkup(keyboards);
+        catInfoButtonKeyboard();
+        sendMessage.replyMarkup(keyboards.catInfoButtonKeyboard());
         telegramBot.execute(sendMessage);
     }
 
     //TAKE PET DOG
     public void wantToTakeDogButton(long chatId) {
         SendMessage sendMessage = new SendMessage(chatId, EmojiParser.parseToUnicode(HOW_TO_TAKE_PET));
+        Keyboards keyboards = new Keyboards();
 //        InlineKeyboardButton callVoluntier = new InlineKeyboardButton(EmojiParser
 //                .parseToUnicode("Позвать волонтёра " + ":necktie:"));
 //        callVoluntier.callbackData("ВОЛОНТЁР");
@@ -141,14 +147,15 @@ public class Buttons extends Keyboards {
 //                .addRow(recommendationDog)
 //                .addRow(callVoluntier)
 //                .addRow(chooseDog);
-        keyboards.wantToTakeDogButtonKeyboard();
-        sendMessage.replyMarkup(keyboards);
+        wantToTakeDogButtonKeyboard();
+        sendMessage.replyMarkup(keyboards.wantToTakeDogButtonKeyboard());
         telegramBot.execute(sendMessage);
     }
 
     //TAKE PET CAT
     public void wantToTakeCatButton(long chatId) {
         SendMessage sendMessage = new SendMessage(chatId, EmojiParser.parseToUnicode(HOW_TO_TAKE_PET));
+        Keyboards keyboards = new Keyboards();
 //        InlineKeyboardButton callVoluntier = new InlineKeyboardButton(EmojiParser
 //                .parseToUnicode("Позвать волонтёра " + ":necktie:"));
 //        callVoluntier.callbackData("ВОЛОНТЁР");
@@ -164,8 +171,8 @@ public class Buttons extends Keyboards {
 //                .addRow(recommendationCat)
 //                .addRow(callVoluntier)
 //                .addRow(chooseCat);
-        keyboards.wantToTakeCatButtonKeyboard();
-        sendMessage.replyMarkup(keyboards);
+        wantToTakeCatButtonKeyboard();
+        sendMessage.replyMarkup(keyboards.wantToTakeCatButtonKeyboard());
         telegramBot.execute(sendMessage);
     }
 
