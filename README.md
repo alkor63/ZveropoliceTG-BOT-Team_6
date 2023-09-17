@@ -14,7 +14,7 @@
  * Корниенко Алексей, github: [Alkor](https://github.com/alkor63) (alkor63);
  * Насибуллин Роман, github: [Roman-1901](https://github.com/Roman-1901);
  * Попова Елизавета, github: [elizaveta-popova](https://github.com/elizaveta-popova);
- * Руднева Анастасия, github: [RuAna](https://github.com/Stellareign) (Stellareign)
+ * Руднева Анастасия, github: [Hummingbird](https://github.com/Stellareign) (Stellareign)
    
 *****************************
 
