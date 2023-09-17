@@ -14,17 +14,17 @@ import java.util.Optional;
 public class CatService {
 
     @Resource
-    private CatRepository catsCrud;
+    private final CatRepository catsCrud;
 
     public CatService(CatRepository catsCrud) {
         this.catsCrud = catsCrud;
     }
 
-
-    public void addCat(PetsSex petsSex, PetsType petsType, Cat cat) {
+    public Cat addCat(PetsSex petsSex, PetsType petsType, Cat cat) {
         cat.setPetsType(petsType);
         cat.setPetsSex(petsSex);
         catsCrud.save(cat);
+        return cat;
     }
 
     public Cat findCat(long id) {
@@ -37,7 +37,6 @@ public class CatService {
         if (cat != null) catsCrud.deleteById(id);
         return cat;
     }
-
 
     public List<Cat> allCats() {
         return catsCrud.findAll();

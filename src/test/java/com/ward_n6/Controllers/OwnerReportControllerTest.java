@@ -1,137 +1,184 @@
 package com.ward_n6.Controllers;
 
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ward_n6.entity.reports.OwnerReport;
 import com.ward_n6.enums.PetsType;
+import com.ward_n6.repository.reports.OwnerReportRepository;
 import com.ward_n6.service.interfaces.OwnerReportService;
-import org.hamcrest.Matchers;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.List;
 
-import static org.hamcrest.Matchers.hasSize;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static com.ward_n6.enums.PetsType.DOG;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-// @ExtendWith(SpringExtension.class)
+@TestExecutionListeners
+@ExtendWith(MockitoExtension.class)
+
 @WebMvcTest(OwnerReportController.class)
 public class OwnerReportControllerTest {
 
     @Autowired
-    private MockMvc mockMvc;
+    MockMvc mockMvc;
     @Autowired
-    private ObjectMapper objectMapper;
+    ObjectMapper mapper;
+
     @MockBean
+    private OwnerReportRepository ownerReportRepository;
+
+    @InjectMocks
+    private OwnerReportController ownerReportController;
+    @Autowired
     private OwnerReportService ownerReportService;
 
-    private OwnerReport ownerReport;
 
-    @BeforeEach
-    public void setup() {
-        ownerReport = new OwnerReport(10l, 10l, LocalDateTime.now(), PetsType.DOG,true,
-                "Pedigree","health","behavior", 1L);
+    // создаем несколько объектов тестируемого класса
+    OwnerReport ownerReport1 = new OwnerReport(1, 1, LocalDateTime.now(), DOG, true,
+            "Pedigree", "good", "Ok", 1);
+    OwnerReport ownerReport2 = new OwnerReport(2, 2, LocalDateTime.now(), DOG, true,
+            "meat", "very good", "Ok", 2);
+    OwnerReport ownerReport3 = new OwnerReport(3, 3, LocalDateTime.now(), PetsType.CAT, false,
+            "fish", "normal", "Ok", 3);
+    List<OwnerReport> ownerReports = new ArrayList<>();
+
+
+    @Test // работает
+    public void addOwnerReportTest() throws Exception {
+        OwnerReport newOwnerReport = new OwnerReport();
+        newOwnerReport.setId(1);
+        newOwnerReport.setOwnerId(1);
+        newOwnerReport.setPetsType(PetsType.CAT);
+        newOwnerReport.setHavePhoto(true);
+        newOwnerReport.setNutrition("Good");
+        newOwnerReport.setPetsHealth("Excellent");
+        newOwnerReport.setPetsBehavior("Friendly");
+        newOwnerReport.setPetId(1);
+// мокаем репортСервис
+        OwnerReportService ownerReportService = Mockito.mock(OwnerReportService.class);
+
+        Mockito.when(ownerReportService.addOwnerReportFromController(1, PetsType.CAT, true,
+                        "Good", "Excellent", "Friendly", 1))
+                .thenReturn(newOwnerReport);
+// добавляем репортСервис
+        OwnerReportController ownerReportController = new OwnerReportController(ownerReportService);
+
+        ResponseEntity<OwnerReport> response = ownerReportController.addOwnerReport(1, PetsType.CAT,
+                true, "Good", "Excellent", "Friendly", 1);
+
+
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertEquals(newOwnerReport, response.getBody());
     }
 
     @Test
-    public void testGetAllOwnerReportsList() throws Exception {
-        Mockito.when(ownerReportService.getAllOwnerReports()).thenReturn(Collections.singletonList(ownerReport));
-        mockMvc.perform(MockMvcRequestBuilders
-                        .get("/report"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$").isArray());
-    }
-    //            Mockito.when(ownerReportService.getOwnerReportById(1)).
-//                    thenReturn(ownerReport1);
-//            mockMvc.perform(MockMvcRequestBuilders
-//                            .get("/report/1")
-//                            .contentType(MediaType.APPLICATION_JSON))
-//                    .andExpect(status().isOk())
-//                    .andExpect(jsonPath("$", notNullValue()));
-    @Test
-    public void testGetOwnerReportById() throws Exception {
-        Mockito.when(ownerReportService.getOwnerReportById(10)).thenReturn(ownerReport);
-        mockMvc.perform(MockMvcRequestBuilders
-                        .get("/report/10"))
-//                    .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.nutrition", Matchers.is("Pedigree")))
-                .andExpect(jsonPath("$.id", Matchers.is(10)))
-                .andExpect(jsonPath("$").isNotEmpty());
+    public void getOwnerReportById() throws Exception { //working
+
+        // Mock the owner report service
+        OwnerReportService ownerReportService = Mockito.mock(OwnerReportService.class);
+        Mockito.when(ownerReportService.getOwnerReportById(1)).thenReturn(ownerReport1);
+
+        OwnerReportController ownerReportController = new OwnerReportController(ownerReportService);
+
+        ResponseEntity<OwnerReport> response = ownerReportController.getOwnerReportById(1);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(ownerReport1, response.getBody());
     }
 
     @Test
-    public void testAddOwnerReport() throws Exception {
-        //тест для метода save()
-        OwnerReport ownerReport2 = OwnerReport.builder()
-                .id(20L)
-                .reportDateTime(LocalDateTime.now())
-                .havePhoto(true)
-                .nutrition("Whiskas")
-                .petsHealth("good")
-                .petsBehavior("Ok")
-                .petId(2L)
-                .ownerId(3L)
-                .build();
-        Mockito.when(ownerReportService.addOwnerReport(ownerReport2)).thenReturn(ownerReport2);
-        mockMvc.perform(MockMvcRequestBuilders.
-                        post("/report")
-                        .content(this.objectMapper.writeValueAsString(ownerReport2))
-                        .contentType(MediaType.APPLICATION_JSON)
-                )
-//                    .andDo(print())
-                .andExpect(status().isCreated())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.petsHealth", Matchers.is("good")))
-                .andExpect(jsonPath("$.id", Matchers.is(20)))
-                .andExpect(jsonPath("$").isNotEmpty());
-    }
+    public void getAllOwnerReportsTest() throws Exception { //рабочий
 
+        ownerReports.add(ownerReport1);
+        ownerReports.add(ownerReport2);
+
+        OwnerReportService ownerReportService = Mockito.mock(OwnerReportService.class);
+        Mockito.when(ownerReportService.getAllOwnerReports()).thenReturn(ownerReports);
+
+        OwnerReportController ownerReportController = new OwnerReportController(ownerReportService);
+
+        ResponseEntity<List<OwnerReport>> response = ownerReportController.getAllOwnerReports();
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(ownerReports, response.getBody());
+    }
 
     @Test
-    public void testDeleteOwnerReportById() throws Exception {
-        Mockito.when(ownerReportService.deleteOwnerReportById(Math.toIntExact(ownerReport.getId()))).thenReturn(true);
-        mockMvc.perform(MockMvcRequestBuilders
-                        .delete("/report/" + ownerReport.getId()))
-//                    .andDo(print())
-                .andExpect(status().isOk());
+    public void deleteOwnerReportByIdTest() throws Exception {
+
+        Integer ownerReportId = 1;
+        boolean deleteOwnerReportById = true;
+
+        OwnerReportService ownerReportService = Mockito.mock(OwnerReportService.class);
+        Mockito.when(ownerReportService.deleteOwnerReportById(ownerReportId)).thenReturn(deleteOwnerReportById);
+
+        OwnerReportController ownerReportController = new OwnerReportController(ownerReportService);
+
+        ResponseEntity<String> response = ownerReportController.deleteOwnerReportById(ownerReportId);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("OwnerReport id = " + ownerReportId + "успешно удален из базы", response.getBody());
     }
-//        @Test
-//        public void editOwnerReportByIdTest() throws Exception {
-//            //тест для метода editById()
-//            OwnerReport editedOwnerReport = OwnerReport.builder()
-//                    .id(10L)
-//                    .reportDateTime(LocalDateTime.now())
-//                    .havePhoto(true)
-//                    .nutrition("Whiskas")
-//                    .petsHealth("good")
-//                    .petsBehavior("Ok")
-//                    .petId(1L)
-//                    .ownerId(3L)
-//                    .build();
-//
-//            Mockito.when(ownerReportService.getOwnerReportById(Math.toIntExact(ownerReport.getId()))).
-//                    thenReturn(ownerReport);
-//            Mockito.when(ownerReportService.addOwnerReport(editedOwnerReport)).thenReturn(editedOwnerReport);
-//
-//            MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/report")
-//                    .contentType(MediaType.APPLICATION_JSON)
-//                    .accept(MediaType.APPLICATION_JSON)
-//                    .content(this.objectMapper.writeValueAsString(editedOwnerReport));
-//
-//            mockMvc.perform(mockRequest)
-//                    .andExpect(status().isOk())
-//                    .andExpect(jsonPath("$", notNullValue()))
-//                    .andExpect(jsonPath("$.nutrition", Matchers.is("Whiskas")));
-//        }
+
+    @Test
+    public void testDeleteOwnerReportById_WithError() {
+
+        long ownerReportId = 1;
+        boolean deleteOwnerReportById = false;
+        OwnerReportService ownerReportService = Mockito.mock(OwnerReportService.class);
+        Mockito.when(ownerReportService.deleteOwnerReportById(ownerReportId)).thenReturn(deleteOwnerReportById);
+
+        OwnerReportController ownerReportController = new OwnerReportController(ownerReportService);
+
+
+        ResponseEntity<String> result = ownerReportController.deleteOwnerReportById(ownerReportId);
+
+
+        assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
+        assertEquals("Ошибка при попытке удалить запись OwnerReport ID = " + ownerReportId, result.getBody());
+        Mockito.verify(ownerReportService, Mockito.times(1)).deleteOwnerReportById(ownerReportId);
+    }
+
+    @Test
+    public void editOwnerReportByIdTest() throws Exception {
+
+        int ownerReportId = 1;
+        boolean photo = true;
+        String nutrition = "Good";
+        String health = "Excellent";
+        String behavior = "Friendly";
+        ownerReport1.setHavePhoto(photo);
+        ownerReport1.setNutrition(nutrition);
+        ownerReport1.setPetsBehavior(behavior);
+        ownerReport1.setPetsHealth(health);
+
+        OwnerReportService ownerReportService = Mockito.mock(OwnerReportService.class);
+
+        OwnerReport editedOwnerReport = ownerReport1;
+        Mockito.when(ownerReportService.editOwnerReportByIdFromController(ownerReportId, photo, nutrition, health,
+                behavior)).thenReturn(editedOwnerReport);
+
+        OwnerReportController ownerReportController = new OwnerReportController(ownerReportService);
+
+        OwnerReport response = ownerReportController.editOwnerReportById(ownerReportId, photo, nutrition, health, behavior);
+
+        assertEquals(ownerReportId, response.getId());
+        assertEquals(photo, response.isHavePhoto());
+        assertEquals(nutrition, response.getNutrition());
+        assertEquals(health, response.getPetsHealth());
+        assertEquals(behavior, response.getPetsBehavior());
+    }
 }

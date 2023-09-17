@@ -7,13 +7,14 @@ import com.ward_n6.entity.owners.PetsOwner;
 import com.ward_n6.entity.pets.Cat;
 import com.ward_n6.listener.PetsOwnerFactories;
 import com.ward_n6.repository.pets.CatRepository;
-import com.ward_n6.service.PetsOwnerServiceImpl;
+import com.ward_n6.service.owners.PetsOwnerServiceImpl;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.function.Consumer;
 
 import static com.ward_n6.listener.MessageStringsConstants.PET_ID_REQUEST_FOR_PET_BOOKING;
-
+@Component
 public class CatOwnerHandler implements EventHandler {
     private final PetsOwnerServiceImpl petsOwnerServiceImpl;
     private final TelegramBot telegramBot;
@@ -22,7 +23,7 @@ public class CatOwnerHandler implements EventHandler {
     private PetsOwnerFactories petsOwnerFactories;
 
     private Consumer<Update> actionOnNextMessage;
-    private String PET_NOT_FOUND = "Питомец с указанным ID отсутствует в нашем приюте. Уточните ID интересующего Вас питомца. /ID";
+    private String PET_NOT_FOUND = "Питомец с указанным ID отсутствует в нашем приюте. Уточните ID интересующего Вас питомца. \n /ID";
     private Cat cat = new Cat();
     private PetsOwner petsOwner = new PetsOwner();
 
@@ -54,7 +55,7 @@ public class CatOwnerHandler implements EventHandler {
                         if (idMessage.matches("\\d+")) { // проверяем, что число
                             long petId = Long.parseLong(idMessage); // парсим строку в число
                             cat = petsOwnerFactories.catFactory(petId, ownerId);
-                            if (cat != null && cat.getOwnerId() == null) {
+                            if (cat != null && (cat.getOwnerId() == null || cat.getOwnerId() == 0)) {
                                 cat.setOwnerId(ownerId);
                                 catRepository.save(cat);
                                 petsOwner.setId(petId);
@@ -91,8 +92,8 @@ public class CatOwnerHandler implements EventHandler {
                     catRepository.save(cat); // обновляем кошку
                     telegramBot.execute(new SendMessage(update.message().chat().id(),
                             "Питомец " + cat.toString() + "\n" +
-                                    "забронирован за Вами. Скоро с Вами свяжется волонтёр, чтобы " +
-                                    "обсудить подробности переезда питомца в Ваш дом и" +
+                                    " забронирован за Вами. Скоро с Вами свяжется волонтёр, чтобы " +
+                                    "обсудить подробности переезда питомца в Ваш дом и " +
                                     "оформить документы!"));
                     return true;
             }

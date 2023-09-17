@@ -22,4 +22,7 @@ public class Cat extends Pet {
         super(petsType, petsSex, petName, petBirthDay, bread);
     }
 
+    public Cat(long id, PetsType petsType, PetsSex petsSex, String petName, LocalDate petBirthDay, String bread, Long ownerId) {
+        super(id, petsType, petsSex, petName, petBirthDay, bread, ownerId);
+    }
 }

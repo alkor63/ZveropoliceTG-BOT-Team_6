@@ -9,20 +9,22 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Optional;
+
 @Service
 public class DogService {
     @Resource
-    private DogRepository dogsCrud;
+    private final DogRepository dogsCrud;
 
     public DogService(DogRepository dogsCrud) {
         this.dogsCrud = dogsCrud;
     }
 
 
-    public void addDog(PetsSex petsSex, PetsType petsType, Dog dog) {
+    public Dog addDog(PetsSex petsSex, PetsType petsType, Dog dog) {
         dog.setPetsType(petsType);
         dog.setPetsSex(petsSex);
         dogsCrud.save(dog);
+        return dog;
     }
 
     public Dog findDog(long id) {

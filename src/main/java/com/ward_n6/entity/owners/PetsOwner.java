@@ -22,13 +22,9 @@ import java.util.Objects;
 
 public class PetsOwner {
 
-//
-//    @Column(name = "id", nullable = false)
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "pet_id", nullable = false)
     private long id;
-
 
     @Column(name = "owner_id", nullable = false)
     private Long ownerId;

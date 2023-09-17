@@ -7,18 +7,18 @@ import com.pengrad.telegrambot.model.CallbackQuery;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
 import com.vdurmont.emoji.EmojiParser;
-import com.ward_n6.entity.Photo;
 import com.ward_n6.entity.owners.Owner;
 import com.ward_n6.entity.owners.PetsOwner;
+import com.ward_n6.entity.reports.Photo;
 import com.ward_n6.entity.shelters.PetShelter;
 import com.ward_n6.listener.handlers.*;
-import com.ward_n6.repository.PhotoRepository;
 import com.ward_n6.repository.pets.CatRepository;
 import com.ward_n6.repository.pets.DogRepository;
+import com.ward_n6.repository.reports.PhotoRepository;
 import com.ward_n6.service.BotMessageService;
-import com.ward_n6.service.OwnerReportServiceImpl;
-import com.ward_n6.service.OwnerServiceImpl;
-import com.ward_n6.service.PetsOwnerServiceImpl;
+import com.ward_n6.service.owners.OwnerReportServiceImpl;
+import com.ward_n6.service.owners.OwnerServiceImpl;
+import com.ward_n6.service.owners.PetsOwnerServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -28,6 +28,8 @@ import java.util.List;
 
 import static com.ward_n6.listener.MessageStringsConstants.PERSONAL_DATA_REQUEST;
 import static com.ward_n6.listener.MessageStringsConstants.REPORT;
+import static com.ward_n6.listener.handlers.ReportHandler.isCatId;
+import static com.ward_n6.listener.handlers.ReportHandler.isDogId;
 
 
 @Component
@@ -113,11 +115,17 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                     switch (data) {
                         case "КНОПКА_ПРИЮТ_ДЛЯ_СОБАК":
                             dogSelect = true;
+                            catSelect = false;
+                            isCatId = false;
+                            isDogId = false;
                             buttons.dogButton(chatId);
                             break;
 
                         case "КНОПКА_ПРИЮТ_ДЛЯ_КОШЕК":
                             catSelect = true;
+                            dogSelect = false;
+                            isCatId = false;
+                            isDogId = false;
                             buttons.catButton(chatId);
                             break;
 
@@ -175,6 +183,9 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
 
                         case "/dogs":
                             dogSelect = true;
+                            catSelect = false;
+                            isCatId = false;
+                            isDogId = false;
                             if (startSelected) {
                                 buttons.dogButton(chatId);
                             }
@@ -182,25 +193,28 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
 
                         case "/cats":
                             catSelect = true;
+                            dogSelect = false;
+                            isCatId = false;
+                            isDogId = false;
                             if (startSelected) {
                                 buttons.catButton(chatId);
                             }
                             break;
 
                         case "/photo":
-                            if (ReportHandler.isId) {
+                            if (isCatId || isDogId) {
                                 chatMessager.sendMessage(chatId, "Загрузите фото");
                                 currentHandler = new PhotoHandler(telegramBot, photoRepository, ownerReportServiceImpl);
-                            } else chatMessager.sendMessage(chatId, "Сначала укажите ID питомца");
+                            } else chatMessager.sendMessage(chatId, "Сначала укажите ID питомца \n /ID");
                             break;
 
                         case "/report":
                             if (dogSelect || catSelect) {
                                 reportSelect = true;
 
-                                    currentHandler = new ReportHandler(ownerReportServiceImpl, telegramBot, photoRepository,
-                                            petsOwnerFactories);
-                                    chatMessager.sendMessage(chatId, EmojiParser.parseToUnicode(REPORT));
+                                currentHandler = new ReportHandler(ownerReportServiceImpl, telegramBot, photoRepository,
+                                        petsOwnerFactories);
+                                chatMessager.sendMessage(chatId, EmojiParser.parseToUnicode(REPORT));
 
                             } else {
                                 chatMessager.sendMessage(chatId, """
@@ -236,14 +250,11 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                                             Пожалуйста, сначала зарегистрируйтесь в нашем приюте:
                                             /myData""");
                                 }
-                                break;
                             }
                             break;
 
-
                         case "/volunteer":
-                            chatMessager.sendMessage(chatId,
-                                    petShelter.getCallVolonteer());
+                            buttons.callVoluntier(chatId);
                             break;
                     }
                 }

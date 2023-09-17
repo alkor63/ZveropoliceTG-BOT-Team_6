@@ -14,6 +14,7 @@ public class CatsShelter extends PetShelter {
     public CatsShelter() {
         super();
     }
+
     public CatsShelter(String shelterName, String shelterAddress, Map<Integer, Pet> petsInSelter) {
         super(shelterName, shelterAddress, petsInSelter);
     }

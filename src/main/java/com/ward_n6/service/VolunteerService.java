@@ -13,8 +13,11 @@ import javax.annotation.Resource;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
+
+/**
+ *
+ */
 @Service
 public class VolunteerService {
     // класс с функционалом волонтёра
@@ -24,16 +27,16 @@ public class VolunteerService {
     // приговор в методе endOfProbationPeriod
     // вызов этого метода из Таймера и его обработка - ниже, в ownersVerdict
 
-
     private final PetsOwnerRepository petsOwnerRepository;
     private final PetsOwnerService petsOwnerService;
-    //    @Resource
+    //        @Resource
     private final OwnerReportService ownerReportService;
-@Resource
+    @Resource
     private final PetBaseRepository petBaseRepository;
 
-    public VolunteerService(PetsOwnerRepository petsOwnerRepository, PetsOwnerService petsOwnerService,
-                            OwnerReportService ownerReportService, PetBaseRepository petBaseRepository) {
+    public VolunteerService(PetsOwnerRepository petsOwnerRepository,
+                            PetsOwnerService petsOwnerService, OwnerReportService ownerReportService,
+                            PetBaseRepository petBaseRepository) {
         this.petsOwnerRepository = petsOwnerRepository;
         this.petsOwnerService = petsOwnerService;
         this.ownerReportService = ownerReportService;
@@ -56,7 +59,7 @@ public class VolunteerService {
         // запрос на просмотр отчетов может прийти, например, в 21:01
         // чтоб не потерять отчеты, пришедшие с 21:00 по 21:01, время задаём здесь
         LocalDateTime startTime = LocalDateTime.of(date.minusDays(1), time);
-        LocalDateTime stopTime = LocalDateTime.of(date, time).plusNanos(1); // т.к. методы isAfter и isBefore не включают equals
+        LocalDateTime stopTime = LocalDateTime.of(date, time).minusNanos(1); // т.к. методы isAfter и isBefore не включают equals
 
         List<OwnerReport> allOwnerReports = ownerReportService.getAllOwnerReports();
         for (OwnerReport ownerReport : allOwnerReports) {
@@ -64,14 +67,14 @@ public class VolunteerService {
             if (dateTime.isAfter(startTime) && dateTime.isBefore(stopTime))
                 num++; // есть отчёт в искомом интервале времени
         }
-        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+//        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
         String ss = "";
         if (num > 0) ss = ", все отчеты обработаны";
-        return "С " + startTime.format(fmt) + " по " + stopTime.format(fmt) + " поступило " + num + " отчетов усыновителей"+ss;
+        return "С " + startTime + " по " + stopTime.plusNanos(1) + " поступило " + num + " отчетов усыновителей" + ss;
         // num - количество отчетов за 24 часа до 21:00 указанной даты
     }
 
-public int endOfProbationPeriod(PetsOwner petWithOwner) {
+    public int endOfProbationPeriod(PetsOwner petWithOwner) {
 
 // Исходим из того, что запрос на "приговор" приходит в день окончания испытательного срока
 // т.е. дата = localDate.now()
@@ -120,7 +123,7 @@ public int endOfProbationPeriod(PetsOwner petWithOwner) {
                     throw new RuntimeException(e);
                 }
 
-                return "Вы очень редко присылали отчеты Испытательный срок продлен на 30 дней";
+                return "Вы очень редко присылали отчеты. Испытательный срок продлен на 30 дней";
             case 2:
                 // продлить испытательный срок на 14 дней
                 LocalDate newEndDate14 = LocalDate.now().plusDays(14);
@@ -130,7 +133,7 @@ public int endOfProbationPeriod(PetsOwner petWithOwner) {
                 } catch (NotFoundException e) {
                     throw new RuntimeException(e);
                 }
-                return "Вы очень редко присылали отчеты Испытательный срок продлен на 14 дней";
+                return "Вы очень редко присылали отчеты. Испытательный срок продлен на 14 дней";
             case 3:
                 // поздравить с успешным прохождением испытательного срока
                 try {
@@ -163,7 +166,7 @@ public int endOfProbationPeriod(PetsOwner petWithOwner) {
         return n;
     }
 
-    public String reportExpertise(OwnerReport ownerReport){
+    public String reportExpertise(OwnerReport ownerReport) {
         // проверяем как заполнены поля отчёта и возвращаем соответствующий ответ
         int n = verifyReport(ownerReport);
         return switch (n) {
@@ -218,6 +221,7 @@ public int endOfProbationPeriod(PetsOwner petWithOwner) {
             default -> "Некорректное значение кода отчета. Разработчик что-то накосячил";
         };
     }
+
     public static boolean nullString(String s) {
         return (s == null || s.isEmpty() || s.isBlank());
     }

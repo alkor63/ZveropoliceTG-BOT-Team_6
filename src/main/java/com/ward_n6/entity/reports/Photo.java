@@ -1,4 +1,4 @@
-package com.ward_n6.entity;
+package com.ward_n6.entity.reports;
 
 import com.pengrad.telegrambot.model.PhotoSize;
 import lombok.*;
@@ -29,6 +29,7 @@ public class Photo {
     @Column(name ="file_name")
     private String fileName;
 
+//    @Lob
     @Column(name = "photo", nullable = false)
     private PhotoSize photo;
 
@@ -38,6 +39,7 @@ public class Photo {
     @Column(name = "owner_Id")
 
     private long ownerId;
+
     @Column(name = "pet_Id")
 
     private long petId;

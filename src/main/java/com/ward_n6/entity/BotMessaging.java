@@ -20,6 +20,7 @@ public class BotMessaging {
 
     @Column(name = "chat_id", nullable = false)
     private long chatId;
+
     private String userName;
 
 

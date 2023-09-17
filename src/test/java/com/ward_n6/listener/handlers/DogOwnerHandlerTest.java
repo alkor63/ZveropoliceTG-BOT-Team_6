@@ -6,7 +6,7 @@ import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.response.SendResponse;
-import com.ward_n6.entity.owners.Owner;
+import com.ward_n6.entity.owners.PetsOwner;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,21 +16,19 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-
 @ExtendWith(MockitoExtension.class)
-class OwnerHandlerTest {
-    //     Создание моков для зависимостей
+class DogOwnerHandlerTest {
+
     @Mock
     private TelegramBot telegramBot;
+
     @InjectMocks
-    private OwnerHandler ownerHandler;
+    private DogOwnerHandler dogOwnerHandler;
 
     @BeforeEach
     void setUp() {
         when(telegramBot.execute(any(SendMessage.class))).thenReturn(mock(SendResponse.class));
     }
-
-
     @Test
     public void testHandle() {
         // Создание моков для зависимостей
@@ -40,15 +38,15 @@ class OwnerHandlerTest {
 
         // Установка поведения моков
         when(update.message()).thenReturn(message);
-        when(message.text()).thenReturn("/ln");
+        when(message.text()).thenReturn("/ID");
         when(message.chat()).thenReturn(chat);
-        when(chat.id()).thenReturn(123456789L);
-        Owner owner = new Owner();
+        when(chat.id()).thenReturn(32L);
+        PetsOwner PetOwner = new PetsOwner();
 
         // Вызов метода для тестирования
-        ownerHandler.handle(update);
+        dogOwnerHandler.handle(update);
         // Проверка вызовов методов для зависимостей
         verify(telegramBot).execute(any(SendMessage.class));
+
     }
 }
-

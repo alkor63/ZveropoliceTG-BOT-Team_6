@@ -4,13 +4,13 @@ import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.GetFile;
 import com.pengrad.telegrambot.request.SendMessage;
-import com.ward_n6.entity.Photo;
 import com.ward_n6.entity.reports.OwnerReport;
+import com.ward_n6.entity.reports.Photo;
 import com.ward_n6.enums.PetsType;
 import com.ward_n6.listener.TelegramBotPetShelterUpdatesListener;
-import com.ward_n6.repository.PhotoRepository;
-import com.ward_n6.service.OwnerReportServiceImpl;
-import org.springframework.beans.factory.annotation.Value;
+import com.ward_n6.repository.reports.PhotoRepository;
+import com.ward_n6.service.owners.OwnerReportServiceImpl;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 
 import static com.ward_n6.listener.handlers.ReportHandler.petIdForPhoto;
 
-
+@Component
 public class PhotoHandler implements EventHandler {
     private final TelegramBot telegramBot;
     private final PhotoRepository photoRepository;
@@ -34,9 +34,7 @@ public class PhotoHandler implements EventHandler {
         this.ownerReportServiceImpl = ownerReportServiceImpl;
     }
 
-    @Value("${path.to.file}")
-    String folderPath; // путь к файлам
-
+    String folderPath = "src/main/resources/photos"; // путь к файлам
     @Override
     public boolean handle(Update update) {
         if (update.message() != null && (update.message().photo() != null || update.message().text() != null)) {

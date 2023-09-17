@@ -1,17 +1,16 @@
-package com.ward_n6.service;
+package com.ward_n6.service.owners;
 
 import com.ward_n6.entity.owners.PetsOwner;
 import com.ward_n6.repository.owner.PetsOwnerRepository;
 import com.ward_n6.service.interfaces.PetsOwnerService;
 import javassist.NotFoundException;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.Optional;
 
 @Service
-@Repository
+
 public class PetsOwnerServiceImpl implements PetsOwnerService {
     private final PetsOwnerRepository petsOwnerRepository;
 
@@ -21,10 +20,10 @@ public class PetsOwnerServiceImpl implements PetsOwnerService {
     }
 
     @Override
-    public PetsOwner editDateEndPetsOwnerById(int petsOwnerId, LocalDate newDateEnd)
+    public PetsOwner editDateEndPetsOwnerById(long petsOwnerId, LocalDate newDateEnd)
             throws NotFoundException {
-        long longId = petsOwnerId;
-        Optional optionalPetsOwner = petsOwnerRepository.findById(longId);
+
+        Optional optionalPetsOwner = petsOwnerRepository.findById(petsOwnerId);
         if (!optionalPetsOwner.isPresent()) {
             throw new NotFoundException("Невозможно изменить запись, т.к. в базе pets_owner нет id = " + petsOwnerId);
         }
@@ -34,11 +33,8 @@ public class PetsOwnerServiceImpl implements PetsOwnerService {
     }
 
 
-
-
-/////************************* методы репозитория **************
+    //************************* методы репозитория **************
     public void save(PetsOwner petsOwner) {
         petsOwnerRepository.save(petsOwner);
-
     }
 }

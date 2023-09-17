@@ -4,7 +4,7 @@ import com.pengrad.telegrambot.TelegramBot;
 import com.ward_n6.entity.owners.PetsOwner;
 import com.ward_n6.entity.reports.OwnerReport;
 import com.ward_n6.repository.BotMessagingRepository;
-import com.ward_n6.repository.owner.OwnerReportRepository;
+import com.ward_n6.repository.reports.OwnerReportRepository;
 import com.ward_n6.repository.owner.PetsOwnerRepository;
 import com.ward_n6.service.VolunteerService;
 import org.slf4j.LoggerFactory;
@@ -21,7 +21,6 @@ public class OwnerTrialPeriodTimer {
     private final TelegramBot telegramBot;
     private final VolunteerService volunteerService;
     private final PetsOwnerRepository petsOwnerRepository;
-
     private final OwnerReportRepository ownerReportRepository;
 
     private Logger logger = (Logger) LoggerFactory.getLogger(OwnerTrialPeriodTimer.class);
@@ -30,8 +29,7 @@ public class OwnerTrialPeriodTimer {
                                  TelegramBot telegramBot,
                                  VolunteerService volunteerService,
                                  PetsOwnerRepository petsOwnerRepository,
-                                 OwnerReportRepository ownerReportRepository)
-    {
+                                 OwnerReportRepository ownerReportRepository) {
         this.botMessagingRepository = botMessagingRepository;
         this.telegramBot = telegramBot;
         this.volunteerService = volunteerService;
@@ -46,7 +44,6 @@ public class OwnerTrialPeriodTimer {
     // проверка качества отчётов
 
 
-    //    @Scheduled(cron = "1 00 21 * * *") //вызов каждый день в 21:00
     @Scheduled(cron = "11 13 21 * * *") //вызов каждый день в мм чч на время отладки
 
     public void task() {
@@ -68,7 +65,7 @@ public class OwnerTrialPeriodTimer {
         // можно выбрать только отчёты с конкретным id животного и/или хозяина
         List<OwnerReport> allOwnerReports = ownerReportRepository.findAll();
         for (OwnerReport ownerReport : allOwnerReports) {
-            String verdict = "Verdict "+ownerReport.getId()+" = " + volunteerService.reportExpertise(ownerReport);
+            String verdict = "Verdict " + ownerReport.getId() + " = " + volunteerService.reportExpertise(ownerReport);
             logger.info(" \n *** " + verdict);
 //            long chatId = petsOwner.getOwnerId();
 //            telegramBot.execute(new SendMessage(chatId, verdict));
@@ -87,5 +84,4 @@ public class OwnerTrialPeriodTimer {
             }
         }
     }
-
 }

@@ -21,10 +21,10 @@ public class OwnerController {
     @Autowired
     private OwnerService ownerService;
 
-
     @Operation(summary = "Добавление посетителя в список",
-            description = "нужно заполнить все поля карточки посетителя в Body, телефон указать в форматк 8-ХХХ-ХХХ-ХХ-ХХ")
-    @PostMapping("createOwner")
+            description = "нужно заполнить все поля карточки посетителя в Body, телефон указать в формате 8-ХХХ-ХХХ-ХХ-ХХ. \n" +
+                    "В качестве ID укажите номер телефона без дефисов.")
+    @PostMapping("/createOwner")
     public ResponseEntity<Owner> createOwner(@RequestBody @Valid Owner owner) {
 
         Owner newOwner = ownerService.createOwner(owner);
@@ -33,16 +33,16 @@ public class OwnerController {
 
     @Operation(summary = "Показать одного усыновителя по id",
             description = "нужно указать id усыновителя")
-    @GetMapping("getOwner")
-    public ResponseEntity<Owner> getOwner(@PathVariable Integer id) {
-        return ResponseEntity.ok().body(ownerService.getOwnerById(id));
+    @GetMapping("/getOwner/{id}")
+    public ResponseEntity<Owner> getOwner(@PathVariable long id) {
+        return ResponseEntity.ok().body(ownerService.findOwnerById(id));
     }
 
 
     @Operation(summary = "Отредактировать карточку усыновителя",
             description = "нужно указать id и заполнить все поля карточки усыновителя в Body")
-    @PutMapping("editOwner")
-    public Owner editOwnerById(@PathVariable int id,
+    @PutMapping("/editOwner/{id}")
+    public Owner editOwnerById(@PathVariable long id,
                                @RequestBody @Valid Owner owner) {
         return ownerService.editOwnerById(id, owner);
     }
@@ -50,20 +50,19 @@ public class OwnerController {
 
     @Operation(summary = "Удалить одного усыновителя из списка",
             description = "нужно указать id усыновителя")
-    @DeleteMapping("deleteOwner")
-    public ResponseEntity<String> deleteOwnerById(@PathVariable Integer id) {
+    @DeleteMapping("/deleteOwner/{id}")
+    public ResponseEntity<String> deleteOwnerById(@PathVariable long id) {
         boolean deleteOwnerById = ownerService.deleteOwnerById(id);
         if (deleteOwnerById) {
-            return new ResponseEntity<>(("Owner id = " + id + "удален"), HttpStatus.OK);
+            return new ResponseEntity<>(("Owner id = " + id + " удален"), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(("Ошибка ID = " + id), HttpStatus.BAD_REQUEST);
         }
     }
 
     @Operation(summary = "Показать всех усыновителей приюта")
-    @GetMapping("getAllOwners")
-    public ResponseEntity<List<Owner>> getAllOwners()
-    {
+    @GetMapping("/getAllOwners")
+    public ResponseEntity<List<Owner>> getAllOwners() {
         return ResponseEntity.ok().body(ownerService.getAllOwners());
     }
 

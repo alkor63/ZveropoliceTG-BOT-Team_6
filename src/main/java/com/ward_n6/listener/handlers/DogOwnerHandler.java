@@ -8,13 +8,14 @@ import com.ward_n6.entity.pets.Dog;
 import com.ward_n6.listener.ChatMessager;
 import com.ward_n6.listener.PetsOwnerFactories;
 import com.ward_n6.repository.pets.DogRepository;
-import com.ward_n6.service.PetsOwnerServiceImpl;
+import com.ward_n6.service.owners.PetsOwnerServiceImpl;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.function.Consumer;
 
 import static com.ward_n6.listener.MessageStringsConstants.PET_ID_REQUEST_FOR_PET_BOOKING;
-
+@Component
 public class DogOwnerHandler implements EventHandler {
     private final PetsOwnerServiceImpl petsOwnerServiceImpl;
     private final TelegramBot telegramBot;
@@ -24,7 +25,7 @@ public class DogOwnerHandler implements EventHandler {
     private PetsOwnerFactories petsOwnerFactories;
     private Consumer<Update> actionOnNextMessage;
     private ChatMessager chatMessager;
-    private String PET_NOT_FOUND = "Питомец с указанным ID отсутствует в нашем приюте. Уточните ID интересующего Вас питомца.";
+    private String PET_NOT_FOUND = "Питомец с указанным ID отсутствует в нашем приюте. Уточните ID интересующего Вас питомца. \n /ID";
 
     public DogOwnerHandler(PetsOwnerServiceImpl petsOwnerServiceImpl, TelegramBot telegramBot, DogRepository dogRepository, PetsOwnerFactories petsOwnerFactories, ChatMessager chatMessager) {
         this.petsOwnerServiceImpl = petsOwnerServiceImpl;
@@ -61,7 +62,7 @@ public class DogOwnerHandler implements EventHandler {
                         else {
                             petId = Long.parseLong(idMessage); // парсим строку в число
                             dog = petsOwnerFactories.dogFactory(petId, ownerId);
-                            if (dog != null && dog.getOwnerId() == null) { // проверяем, что такая собака есть в приюте
+                            if (dog != null && (dog.getOwnerId() == null || dog.getOwnerId() == 0)) { // проверяем, что такая собака есть в приюте
                                 dog.setOwnerId(ownerId); // записываем id овнера питомцу
                                 petsOwner.setId(petId); // записываем ID питомца
 
@@ -94,9 +95,9 @@ public class DogOwnerHandler implements EventHandler {
                     petsOwnerServiceImpl.save(petsOwner);
                     dogRepository.save(dog);
                     telegramBot.execute(new SendMessage(update.message().chat().id(),
-                            "Питомец" + dog.toString() +
-                                    "забронирован за Вами. Скоро с Вами свяжется волонтёр, чтобы " +
-                                    "обсудить подробности переезда питомца в Ваш дом и" +
+                            "Питомец " + dog.toString() +
+                                    " забронирован за Вами. Скоро с Вами свяжется волонтёр, чтобы " +
+                                    "обсудить подробности переезда питомца в Ваш дом и " +
                                     "оформить документы!"));
                     return true;
             }

@@ -18,7 +18,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -29,30 +28,27 @@ import static org.mockito.Mockito.when;
 class VolunteerServiceTest {
     String firstName = "Саня";
 
-    private final OwnerReport ownerReport1 = new OwnerReport(11L, 2L,LocalDateTime.now().minusDays(1),
-            PetsType.DOG,false,"nutrition","health", "behavior",2L);
+    private final OwnerReport ownerReport1 = new OwnerReport(11L, 2L, LocalDateTime.now().minusDays(1),
+            PetsType.DOG, false, "nutrition", "health", "behavior", 2L);
     private final OwnerReport ownerReport2 = new OwnerReport(12L, 21L, LocalDateTime.now(), PetsType.CAT,
             true, "food", "health2", "behavior2", 2L);
     @Mock
-    private OwnerReportService ownerReportService;
+    PetsOwnerRepository petsOwnerRepository;
     @Mock
-    private PetBaseRepository petRepository;
+    PetsOwnerService petsOwnerService;
     @Mock
-    private PetsOwnerRepository petsOwnerRepository;
+    OwnerReportService ownerReportService;
     @Mock
-    private PetsOwnerService petsOwnerService;
-    @Spy
-    final VolunteerService volunteerMock = spy(new VolunteerService(
-            petsOwnerRepository,
-            petsOwnerService,
-            ownerReportService,
-            petRepository));
+    private PetBaseRepository petBaseRepository;
+    @Spy // частичный мок
+    final VolunteerService volunteerMock = spy(new VolunteerService(petsOwnerRepository, petsOwnerService,
+            ownerReportService, petBaseRepository));
 
     @InjectMocks
     private VolunteerService volunteer;
 
-    PetsOwner petWithOwner = new PetsOwner(2,2L,LocalDate.now().minusDays(30), LocalDate.now().plusDays(30) );
-
+    PetsOwner petWithOwner = new PetsOwner(2L, 2L, LocalDate.now().minusDays(30),
+            LocalDate.now());
 
     @Test
     void shouldCallVolunteerTest() {
@@ -64,13 +60,14 @@ class VolunteerServiceTest {
     @Test
     void viewAllReportsTest() {
         when(ownerReportService.getAllOwnerReports()).thenReturn(Arrays.asList(ownerReport1, ownerReport2));
-        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+//        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
         LocalTime time = LocalTime.of(21, 0);
         // запрос на просмотр отчетов может прийти, например, в 21:01
         // чтоб не потерять отчеты, пришедшие с 21:00 по 21:01, время задаём здесь
         LocalDateTime startTime = LocalDateTime.of(LocalDate.now().minusDays(1), time);
         LocalDateTime stopTime = LocalDateTime.of(LocalDate.now(), time);
-        String s = "С " + startTime.format(fmt) + " по " + stopTime.format(fmt) +
+//        String s = "С " + startTime.format(fmt) + " по " + stopTime.format(fmt) +
+        String s = "С " + startTime + " по " + stopTime +
                 " поступило 1 отчетов усыновителей, все отчеты обработаны";
         assertEquals(s, volunteer.viewAllReports(LocalDate.now()));
     }
@@ -82,7 +79,7 @@ class VolunteerServiceTest {
     }
 
     @Test
-    void shouldReactionByOwnersVerdict_1()  {
+    void shouldReactionByOwnersVerdict_1() {
         when(ownerReportService.getAllOwnerReports()).thenReturn(Arrays.asList(ownerReport1, ownerReport2));
 
         assertEquals("Вы очень редко присылали отчеты Испытательный срок продлен на 30 дней",
@@ -100,5 +97,4 @@ class VolunteerServiceTest {
         assertEquals(("Вы забыли прислать фото питомца. Заполните, пожалуйста, это поле"),
                 volunteer.reportExpertise(ownerReport1));
     }
-
 }
