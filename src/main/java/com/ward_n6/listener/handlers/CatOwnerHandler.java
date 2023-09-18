@@ -8,6 +8,7 @@ import com.ward_n6.entity.pets.Cat;
 import com.ward_n6.listener.PetsOwnerFactories;
 import com.ward_n6.repository.pets.CatRepository;
 import com.ward_n6.service.owners.PetsOwnerServiceImpl;
+import org.springframework.jdbc.core.BatchUpdateUtils;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -85,20 +86,24 @@ public class CatOwnerHandler implements EventHandler {
                     break;
 
                 case "/Booking":
-                    petsOwner.setOwnerId(update.message().chat().id()); // присваиваем ID пользователя
-                    petsOwner.setStartDate(LocalDate.now());
-                    petsOwner.setEndDate(LocalDate.now().plusDays(30));
-                    petsOwnerServiceImpl.save(petsOwner);
-                    catRepository.save(cat); // обновляем кошку
-                    telegramBot.execute(new SendMessage(update.message().chat().id(),
-                            "Питомец " + cat.toString() + "\n" +
-                                    " забронирован за Вами. Скоро с Вами свяжется волонтёр, чтобы " +
-                                    "обсудить подробности переезда питомца в Ваш дом и " +
-                                    "оформить документы!"));
+                    bookingCat(update);
                     return true;
             }
         }
         return false;
+    }
+    private Cat bookingCat (Update update) {
+        petsOwner.setOwnerId(update.message().chat().id()); // присваиваем ID пользователя
+        petsOwner.setStartDate(LocalDate.now());
+        petsOwner.setEndDate(LocalDate.now().plusDays(30));
+        petsOwnerServiceImpl.save(petsOwner);
+        catRepository.save(cat); // обновляем кошку
+        telegramBot.execute(new SendMessage(update.message().chat().id(),
+                "Питомец " + cat.toString() + "\n" +
+                        " забронирован за Вами. Скоро с Вами свяжется волонтёр, чтобы " +
+                        "обсудить подробности переезда питомца в Ваш дом и " +
+                        "оформить документы!"));
+        return cat;
     }
 }
 
