@@ -14,7 +14,15 @@ public class MessageStringsConstants {
             /photo
                                                 
             """;
-
+    public static String REPORT_WITHOUT_ID = """
+            Команды для текстового отчёта (нажмите или введите):\n
+            1. /action - отчёт о поведении питомца\n
+            2. /health - отчёт о здоровье питомца\n
+            3. /feed - отчёт о питании питомца\n
+            4. /save - сохранить отчёт\n
+            Для загрузки фото нажмите или введите команду:\n
+            /photo                                             
+            """;
 
     public static String PERSONAL_DATA_REQUEST = """
             Пожалуйста, укажите Ваши контактные данные, чтобы мы могли связаться с Вами (нажмите или введите команду):
