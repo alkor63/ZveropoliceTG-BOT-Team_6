@@ -1,0 +1,17 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="TGBotPetShelterApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+    <option name="ACTIVE_PROFILES" />
+    <module name="telegram-bot" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="com.ward_n6.TGBotPetShelterApplication" />
+    <option name="VM_PARAMETERS" value="-Dtelegram.bot.token=6390193296:AAHILFc14KHNZxGQ-7s9GRr6ndZMJheBJyI" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="com.ward_n6.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

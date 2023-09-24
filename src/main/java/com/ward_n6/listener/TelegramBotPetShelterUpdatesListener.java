@@ -202,7 +202,7 @@ public class TelegramBotPetShelterUpdatesListener implements UpdatesListener {
                             }
                             break;
 
-                        case "/photo":
+                        case "/photos":
                             if (isCatId || isDogId) {
                                 chatMessager.sendMessage(chatId, "Загрузите фото");
                                 currentHandler = new PhotoHandler(telegramBot, photoRepository, ownerReportServiceImpl);

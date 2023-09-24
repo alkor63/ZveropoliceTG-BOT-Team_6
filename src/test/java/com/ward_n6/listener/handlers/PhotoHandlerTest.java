@@ -42,7 +42,7 @@ class PhotoHandlerTest {
 
         // Установка поведения моков
         when(update.message()).thenReturn(message);
-        when(message.text()).thenReturn("/photo");
+        when(message.text()).thenReturn("/photos");
         when(message.chat()).thenReturn(chat);
         when(chat.id()).thenReturn(123456789L);
 
