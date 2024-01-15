@@ -1,8 +1,5 @@
 <h1 align="center"> ZveropoliceTG-BOT-Team_Ward_N6 </h2>
-<h2 align="center"> Учебный проект</h2>
-<h3 align="center"> группа SkyPro JAVA-14</h3>
 <h3 align="center"> Командная работа </h3>
-<br /> Курс 4
 <br /> 2023 г.
 <br /> Разработал: команда ПАЛАТА № 6 
 
